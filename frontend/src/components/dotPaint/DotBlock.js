@@ -51,7 +51,7 @@ const DotBlock = ({
   fillDotLeftColor,
   fillDotRightColor,
 }) => {
-  const [dotColor, setDotColor] = useState(dotColor);
+  //   const [dotColor, setDotColor] = useState(dotColor);
 
   return <>asdasda</>;
 };

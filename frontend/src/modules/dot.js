@@ -48,9 +48,9 @@ const dot = handleActions(
           : dotLine.map((dot, idx) => (idx !== key2 ? dot : color)),
       ),
     }),
-    [COMMIT_DOTSET]: () => ({
+    [COMMIT_DOTSET]: (state) => ({
       ...state,
-      dotSet: dotTemp,
+      dotSet: state,
     }),
     [CLEAR_DOT]: () => ({
       initalState,
