@@ -23,7 +23,7 @@ const DotPaintLineBlock = styled.div`
 const DotPaint = ({
   dotSet,
   border,
-  size,
+  dotSize,
   fillDotLeftColor,
   fillDotRightColor,
 }) => {
@@ -38,7 +38,7 @@ const DotPaint = ({
                   key={[idx, colorIdx]}
                   number={[idx, colorIdx]}
                   dotColor={color}
-                  size={size}
+                  dotSize={dotSize}
                   border={border}
                   fillDotLeftColor={fillDotLeftColor}
                   fillDotRightColor={fillDotRightColor}

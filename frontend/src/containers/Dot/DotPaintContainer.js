@@ -1,14 +1,15 @@
 import React from 'react';
 import DotPaint from '../../components/dotPaint/DotPaint';
+import DotBlock from '../../components/dotPaint/DotBlock';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeDot } from '../../modules/dot';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();
-  const { dotSet, border, size, dotColor } = useSelector(({ dot }) => ({
+  const { dotSet, border, dotSize, dotColor } = useSelector(({ dot }) => ({
     dotSet: dot.dotSet,
     border: dot.border,
-    size: dot.size,
+    dotSize: dot.dotSize,
     dotColor: dot.dotColor,
     width: dot.width,
     height: dot.height,
@@ -26,16 +27,16 @@ const DotpaintContainer = () => {
   const fillDotRightColor = (key1, key2) => {
     dispatch(changeDot({ key1: key1, key2: key2, color: colorRight }));
   };
-
   return (
     <>
       <DotPaint
         dotSet={dotSet}
         border={border}
-        size={size}
+        dotSize={dotSize}
         fillDotLeftColor={fillDotLeftColor}
         fillDotRightColor={fillDotRightColor}
       />
+      {/* <DotBlock /> */}
     </>
   );
 };

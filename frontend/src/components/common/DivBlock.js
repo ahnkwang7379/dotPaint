@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import PropTypes from 'prop-types';
 
 const divStyled = css`
   border: none;
@@ -8,16 +9,26 @@ const divStyled = css`
   margin: 0 auto;
   color: white;
   font-size: 1rem;
-  width: 0.5rem;
-  height: 0.5rem;
   box-sizing: border-box;
-
   ${(props) =>
-    props.size &&
     css`
-      width: ${props.size};
-      height: ${props.size};
+      width: ${props.dotSize}rem;
+      height: ${props.dotSize}rem;
+      background: ${props.dotColor};
+      border: 0.01rem solid ${props.border};
     `}
+  
+
+  /* ${(props) =>
+    props.size
+      ? css`
+          width: ${props.size}rem;
+          height: ${props.size}rem;
+        `
+      : css`
+          width: 0.5rem;
+          height: 0.5rem;
+        `}
 
   ${(props) =>
     props.dotColor &&
@@ -29,9 +40,8 @@ const divStyled = css`
     props.border &&
     css`
       border: 0.01rem solid ${props.border};
-    `}
+    `} */
 `;
-
 const StyledDivBlock = styled.div`
   ${divStyled}
 `;
@@ -39,25 +49,35 @@ const StyledDivBlock = styled.div`
 const DivBlock = ({
   number,
   dotColor,
-  size,
+  dotSize,
   border,
   fillDotLeftColor,
   fillDotRightColor,
 }) => {
   return (
-    <>
-      <StyledDivBlock
-        dotColor={dotColor}
-        size={size}
-        border={border}
-        onClick={() => fillDotLeftColor(number[0], number[1])}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          fillDotRightColor(number[0], number[1]);
-        }}
-      />
-    </>
+    <StyledDivBlock
+      dotColor={dotColor}
+      dotSize={dotSize}
+      border={border}
+      onClick={() => fillDotLeftColor(number[0], number[1])}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        fillDotRightColor(number[0], number[1]);
+      }}
+    />
   );
+};
+
+DivBlock.defaultProps = {
+  dotColor: '#f0f0f0',
+  dotSize: '0.5',
+  border: '#d6d6f1',
+};
+
+DivBlock.propTypes = {
+  dotColor: PropTypes.string,
+  dotSize: PropTypes.string,
+  border: PropTypes.string,
 };
 
 export default React.memo(DivBlock);

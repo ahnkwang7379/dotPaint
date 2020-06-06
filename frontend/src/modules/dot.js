@@ -1,12 +1,13 @@
 import { createAction, handleActions } from 'redux-actions';
 
 const CHANGE_DOT = 'dot/CHANGE_DOT';
+const COMMIT_DOTSET = 'dot/COMMIT_DOTSET';
 const CLEAR_DOT = 'dot/CLEAR_DOT';
 
 // default 세팅
-const WIDTH = 25;
-const HEIGHT = 25;
-const SIZE = '1rem';
+const WIDTH = 30;
+const HEIGHT = 30;
+const DOTSIZE = '1';
 const DOTCOLOR = '#f0f0f0';
 const BORDER = 'blue';
 
@@ -16,6 +17,7 @@ export const changeDot = createAction(CHANGE_DOT, ({ key1, key2, color }) => ({
   color,
 }));
 export const clearDot = createAction(CLEAR_DOT);
+export const commitDotSet = createAction(COMMIT_DOTSET);
 
 function defaultDotMaker(width, height, color) {
   const dotSet = [];
@@ -28,8 +30,9 @@ function defaultDotMaker(width, height, color) {
 
 const initalState = {
   dotSet: defaultDotMaker(WIDTH, HEIGHT, DOTCOLOR),
+  dotTemp: defaultDotMaker(WIDTH, HEIGHT, DOTCOLOR),
   border: BORDER,
-  size: SIZE,
+  dotSize: DOTSIZE,
   dotColor: DOTCOLOR,
   width: WIDTH,
   height: HEIGHT,
@@ -39,11 +42,15 @@ const dot = handleActions(
   {
     [CHANGE_DOT]: (state, { payload: { key1, key2, color } }) => ({
       ...state,
-      dotSet: state.dotSet.map((dotLine, lineIdx) =>
+      dotTemp: state.dotSet.map((dotLine, lineIdx) =>
         lineIdx !== key1
           ? dotLine
           : dotLine.map((dot, idx) => (idx !== key2 ? dot : color)),
       ),
+    }),
+    [COMMIT_DOTSET]: () => ({
+      ...state,
+      dotSet: dotTemp,
     }),
     [CLEAR_DOT]: () => ({
       initalState,
