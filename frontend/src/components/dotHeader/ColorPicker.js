@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { SketchPicker } from 'react-color';
 
 const ColorBlock = styled.div`
@@ -34,11 +34,11 @@ const Cover = styled.div`
 
 const ColorPicker = ({ backgroundColor, onChangeColor }) => {
   const [color, setColor] = useState(backgroundColor);
+  const [localColor, setLocalColor] = useState(backgroundColor);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
   const handleChange = (pick) => {
     setColor(pick.hex);
-    onChangeColor(pick.hex);
   };
 
   const handleClick = () => {
@@ -47,12 +47,16 @@ const ColorPicker = ({ backgroundColor, onChangeColor }) => {
 
   const handleClose = () => {
     setDisplayColorPicker(false);
+    if (color !== localColor) {
+      setLocalColor(color);
+      onChangeColor(color);
+    }
   };
 
   return (
     <div>
       <ColorBlock onClick={handleClick}>
-        <Color backgroundColor={backgroundColor}>{color}</Color>
+        <Color backgroundColor={color}>{color}</Color>
       </ColorBlock>
       {displayColorPicker ? (
         <ColorPickerBlock>

@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import DivBlock from '../common/DivBlock';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const DotPaintBlock = styled.div`
   display: flex;
-  justify-content: flex-start;
+  /* justify-content: flex-start; */
   flex-direction: column;
-  width: auto;
-  height: auto;
+  /* width: auto; */
+  /* height: auto; */
   margin: 0 auto;
   padding: 0;
   border: 1px solid black;
@@ -24,32 +24,48 @@ const DotPaint = ({
   dotSet,
   border,
   dotSize,
+  colorLeft,
+  colorRight,
   fillDotLeftColor,
   fillDotRightColor,
 }) => {
-  return (
-    <DotPaintBlock>
-      {dotSet.map((dot, idx) => {
-        return (
-          <DotPaintLineBlock key={idx}>
-            {dot.map((color, colorIdx) => {
-              return (
-                <DivBlock
-                  key={[idx, colorIdx]}
-                  number={[idx, colorIdx]}
-                  dotColor={color}
-                  dotSize={dotSize}
-                  border={border}
-                  fillDotLeftColor={fillDotLeftColor}
-                  fillDotRightColor={fillDotRightColor}
-                />
-              );
-            })}
-          </DotPaintLineBlock>
-        );
-      })}
-    </DotPaintBlock>
+  const Dots = useMemo(
+    () => (
+      <DotPaintBlock>
+        {dotSet.map((dot, idx) => {
+          return (
+            <DotPaintLineBlock key={idx}>
+              {dot.map((color, colorIdx) => {
+                return (
+                  <DivBlock
+                    key={[idx, colorIdx]}
+                    number={[idx, colorIdx]}
+                    dotColor={color}
+                    dotSize={dotSize}
+                    border={border}
+                    colorLeft={colorLeft}
+                    colorRight={colorRight}
+                    fillDotLeftColor={fillDotLeftColor}
+                    fillDotRightColor={fillDotRightColor}
+                  />
+                );
+              })}
+            </DotPaintLineBlock>
+          );
+        })}
+      </DotPaintBlock>
+    ),
+    [
+      dotSet,
+      border,
+      dotSize,
+      colorLeft,
+      colorRight,
+      fillDotLeftColor,
+      fillDotRightColor,
+    ],
   );
+  return <>{Dots}</>;
 };
 
 export default DotPaint;

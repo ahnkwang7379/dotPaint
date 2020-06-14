@@ -1,12 +1,18 @@
 import React from 'react';
 import DotPaintContainer from '../containers/Dot/DotPaintContainer';
-import ColorPickerContainer from '../containers/ColorPickerContainer';
+import ColorPickerContainer from '../containers/Dot/ColorPickerContainer';
+import DotBorderContainer from '../containers/Dot/DotBorderContainer';
+import DotSizeContainer from '../containers/Dot/DotSizeContainer';
+import DotAreaContainer from '../containers/Dot/DotAreaContainer';
 
 const DotPaintpage = () => {
   return (
     <>
-      <DotPaintContainer />
       <ColorPickerContainer />
+      <DotBorderContainer />
+      <DotAreaContainer />
+      <DotSizeContainer />
+      <DotPaintContainer />
     </>
   );
 };
