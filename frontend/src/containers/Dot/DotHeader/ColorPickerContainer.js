@@ -1,7 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import ColorPicker from '../../components/dotHeader/ColorPicker';
+import React, { useCallback } from 'react';
+import ColorPicker from '../../../components/common/SketchPicker';
 import { useDispatch } from 'react-redux';
-import { changeColorLeft, changeColorRight } from '../../modules/colorPicker';
+import {
+  changeColorLeft,
+  changeColorRight,
+} from '../../../modules/colorPicker';
 import styled from 'styled-components';
 
 const ColorPickerBlock = styled.div`

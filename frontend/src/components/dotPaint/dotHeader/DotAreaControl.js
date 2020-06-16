@@ -10,6 +10,7 @@ const DotAreaControl = ({
   height,
   onChangeWidth,
   onChangeHeight,
+  dotClear,
 }) => {
   return (
     <>
@@ -17,6 +18,7 @@ const DotAreaControl = ({
         <AreaInput value={width} onChange={onChangeWidth} />
         <AreaInput value={height} onChange={onChangeHeight} />
         <button onClick={onChangeArea}>커밋</button>
+        <button onClick={dotClear}>초기화버튼임</button>
       </DotAreaBlock>
     </>
   );

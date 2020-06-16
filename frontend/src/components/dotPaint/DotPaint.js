@@ -4,14 +4,15 @@ import styled from 'styled-components';
 
 const DotPaintBlock = styled.div`
   display: flex;
-  /* justify-content: flex-start; */
+  justify-content: flex-start;
   flex-direction: column;
-  /* width: auto; */
-  /* height: auto; */
+  width: auto;
+  height: auto;
   margin: 0 auto;
   padding: 0;
   border: 1px solid black;
   box-sizing: border-box;
+  overflow: hidden;
 `;
 
 const DotPaintLineBlock = styled.div`

@@ -8,14 +8,14 @@ const DotSizeChanger = ({ dotSize, onChange }) => {
   return (
     <>
       <DotSizeBlock>
-        <span>{dotSize}</span>
+        <span>도트 크기{dotSize}</span>
         <DotSizeRangeBar
           type="range"
-          min="5"
-          max="30"
+          min="4"
+          max="20"
           value={dotSize * 10}
           onChange={onChange}
-          step="5"
+          step="2"
         />
       </DotSizeBlock>
     </>

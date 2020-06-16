@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeDotArea } from '../../modules/dot';
-import DotAreaControl from '../../components/dotHeader/DotAreaControl';
+import { changeDotArea, clearDot } from '../../../modules/dot';
+import DotAreaControl from '../../../components/dotPaint/dotHeader/DotAreaControl';
 
 const DotAreaContainer = () => {
   const dispatch = useDispatch();
@@ -22,6 +22,10 @@ const DotAreaContainer = () => {
   const onChangeArea = () =>
     dispatch(changeDotArea({ width: areaWidth, height: areaHeight }));
 
+  const handleDotClear = useCallback(() => {
+    dispatch(clearDot());
+  }, [dispatch]);
+
   return (
     <>
       <DotAreaControl
@@ -30,6 +34,7 @@ const DotAreaContainer = () => {
         height={areaHeight}
         onChangeWidth={handleOnWidthChange}
         onChangeHeight={handleOnHeightChange}
+        dotClear={handleDotClear}
       />
     </>
   );

@@ -10,6 +10,7 @@ const divStyled = css`
   color: white;
   font-size: 1rem;
   box-sizing: border-box;
+  transition: all 0.5s linear, width 0.3s linear, height 0.3s linear;
   ${(props) =>
     css`
       width: ${props.dotSize}rem;
@@ -19,7 +20,7 @@ const divStyled = css`
   ${(props) =>
     props.border &&
     css`
-      border: 0.01rem solid #a4a4f1;
+      border: ${props.border.size}px solid ${props.border.color};
     `}
 `;
 const StyledDivBlock = styled.div`
@@ -53,7 +54,6 @@ const DivBlock = ({
   const Dot = (
     <StyledDivBlock
       dotColor={dotColor}
-      dotColor={backgroundColor}
       dotSize={dotSize}
       border={border}
       onClick={onLeftClick}
@@ -66,13 +66,13 @@ const DivBlock = ({
 DivBlock.defaultProps = {
   dotColor: '#f0f0f0',
   dotSize: 0.5,
-  border: true,
+  border: { size: 0.5, color: '#d0d0fc' },
 };
 
 DivBlock.propTypes = {
   dotColor: PropTypes.string,
   dotSize: PropTypes.number,
-  border: PropTypes.bool,
+  border: PropTypes.object,
 };
 
 export default DivBlock;

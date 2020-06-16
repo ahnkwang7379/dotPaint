@@ -10,11 +10,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './modules';
 import { createLogger } from 'redux-logger';
 
-const logger = createLogger();
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(logger)),
-);
+const store = createStore(rootReducer, composeWithDevTools());
 
 ReactDOM.render(
   <Provider store={store}>
