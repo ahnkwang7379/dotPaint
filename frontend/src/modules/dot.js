@@ -10,8 +10,8 @@ const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
 const SELECT_DOT = 'dot/SELECT_DOT';
 
 // default 세팅
-const WIDTH = 2;
-const HEIGHT = 2;
+const WIDTH = 32;
+const HEIGHT = 32;
 const DOTSIZE = 1;
 const DOTCOLOR = '#f0f0f0';
 const BORDER = { size: 0.5, color: '#d0d0fc' };
@@ -59,7 +59,7 @@ function defaultDotMaker(width, height, color) {
 const initalState = {
   dotSet: defaultDotMaker(WIDTH, HEIGHT, DOTCOLOR),
   dotTemp: defaultDotMaker(WIDTH, HEIGHT, DOTCOLOR),
-  selectedDot: [],
+  selectedDot: { rowIdx: -1, columnIdx: -1, direct: '' },
   border: BORDER,
   dotSize: DOTSIZE,
   width: WIDTH,
@@ -103,7 +103,12 @@ const dot = handleActions(
     }),
     [SELECT_DOT]: (state, { payload: { rowIdx, columnIdx, direct } }) => ({
       ...state,
-      selectedDot: [rowIdx, columnIdx, direct],
+      selectedDot: {
+        ...state.selectedDot,
+        rowIdx: rowIdx,
+        columnIdx: columnIdx,
+        direct: direct,
+      },
     }),
     // [COMMIT_DOTSET]: (state) => ({
     //   ...state,

@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
-import DivBlock from '../common/DivBlock';
+import React from 'react';
 import styled from 'styled-components';
+import DotPaintLine from './DotPaintLine';
 
 const DotPaintBlock = styled.div`
   display: flex;
@@ -30,43 +30,24 @@ const DotPaint = ({
   fillDotLeftColor,
   fillDotRightColor,
 }) => {
-  const Dots = useMemo(
-    () => (
-      <DotPaintBlock>
-        {dotSet.map((dot, idx) => {
-          return (
-            <DotPaintLineBlock key={idx}>
-              {dot.map((color, colorIdx) => {
-                return (
-                  <DivBlock
-                    key={[idx, colorIdx]}
-                    number={[idx, colorIdx]}
-                    dotColor={color}
-                    dotSize={dotSize}
-                    border={border}
-                    colorLeft={colorLeft}
-                    colorRight={colorRight}
-                    fillDotLeftColor={fillDotLeftColor}
-                    fillDotRightColor={fillDotRightColor}
-                  />
-                );
-              })}
-            </DotPaintLineBlock>
-          );
-        })}
-      </DotPaintBlock>
-    ),
-    [
-      dotSet,
-      border,
-      dotSize,
-      colorLeft,
-      colorRight,
-      fillDotLeftColor,
-      fillDotRightColor,
-    ],
+  const DotLines = (
+    <DotPaintBlock>
+      {dotSet.map((dotLine, idx) => {
+        return (
+          <DotPaintLine
+            key={idx}
+            dotLine={dotLine}
+            dotLineIdx={idx}
+            dotSize={dotSize}
+            border={border}
+            fillDotLeftColor={fillDotLeftColor}
+            fillDotRightColor={fillDotRightColor}
+          />
+        );
+      })}
+    </DotPaintBlock>
   );
-  return <>{Dots}</>;
+  return <>{DotLines}</>;
 };
 
 export default DotPaint;

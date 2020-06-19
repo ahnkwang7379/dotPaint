@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
-import PropTypes from 'prop-types';
 
-const divStyled = css`
+const DotStyled = styled.div`
   border: none;
   cursor: pointer;
   padding: 0;
@@ -23,39 +22,31 @@ const divStyled = css`
       border: ${props.border.size}px solid ${props.border.color};
     `}
 `;
-const StyledDivBlock = styled.div`
-  ${divStyled}
-`;
 
 const DivBlock = ({
-  number,
+  rowIdx,
+  columnIdx,
   dotColor,
   dotSize,
   border,
-  colorLeft,
-  colorRight,
   fillDotLeftColor,
   fillDotRightColor,
 }) => {
-  const [backgroundColor, setBackGroundColor] = useState(dotColor);
   const onLeftClick = () => {
-    if (backgroundColor !== colorLeft) {
-      setBackGroundColor(colorLeft);
-      fillDotLeftColor(number[0], number[1]);
-    }
+    fillDotLeftColor(rowIdx, columnIdx);
   };
   const onRightClick = (e) => {
     e.preventDefault();
-    if (backgroundColor !== colorRight) {
-      setBackGroundColor(colorRight);
-      fillDotRightColor(number[0], number[1]);
-    }
+    fillDotRightColor(rowIdx, columnIdx);
   };
   const Dot = (
-    <StyledDivBlock
+    <DotStyled
       dotColor={dotColor}
       dotSize={dotSize}
       border={border}
+      onMouseDown={onLeftClick}
+      onFocus={onLeftClick}
+      onMouseOver={onLeftClick}
       onClick={onLeftClick}
       onContextMenu={onRightClick}
     />
@@ -63,16 +54,4 @@ const DivBlock = ({
   return <>{Dot} </>;
 };
 
-DivBlock.defaultProps = {
-  dotColor: '#f0f0f0',
-  dotSize: 0.5,
-  border: { size: 0.5, color: '#d0d0fc' },
-};
-
-DivBlock.propTypes = {
-  dotColor: PropTypes.string,
-  dotSize: PropTypes.number,
-  border: PropTypes.object,
-};
-
-export default DivBlock;
+export default React.memo(DivBlock);
