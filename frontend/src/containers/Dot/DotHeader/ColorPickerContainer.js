@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import ColorPicker from '../../../components/common/SketchPicker';
+import ColorPicker from '../../../components/common/ColorPicker';
 import { useDispatch } from 'react-redux';
 import {
   changeColorLeft,

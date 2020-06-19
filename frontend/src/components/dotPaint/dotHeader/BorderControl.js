@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import SketchPicker from '../../common/SketchPicker';
+import SketchPicker from '../../common/ColorPicker';
 
 const BorderBox = styled.div`
   display: flex;

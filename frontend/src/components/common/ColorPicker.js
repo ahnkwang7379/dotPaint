@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SketchPicker } from 'react-color';
+import { SketchPicker, Chrome, Compact } from 'react-color';
 
 const ColorBlock = styled.div`
   margin: 0 auto;
@@ -61,7 +61,8 @@ const ColorPicker = ({ backgroundColor, onChangeColor }) => {
       {displayColorPicker ? (
         <ColorPickerBlock>
           <Cover onClick={handleClose} />
-          <SketchPicker color={color} onChange={handleChange} />
+          <SketchPicker disableAlpha color={color} onChange={handleChange} />
+          <SketchPicker disableAlpha color={color} onChange={handleChange} />
         </ColorPickerBlock>
       ) : null}
     </div>

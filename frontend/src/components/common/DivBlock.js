@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { INITIAL_DOT_COLOR } from '../../modules/dot';
 
 const DotStyled = styled.div`
   border: none;
@@ -14,7 +15,7 @@ const DotStyled = styled.div`
     css`
       width: ${props.dotSize}rem;
       height: ${props.dotSize}rem;
-      background: ${props.dotColor};
+      background: ${props.dotColor || INITIAL_DOT_COLOR};
     `}
   ${(props) =>
     props.border &&
