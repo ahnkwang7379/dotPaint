@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import dot from './dot';
 import colorPicker from './colorPicker';
-import nonoGram from './nonoGram';
+import colorPalette from './colorPalette';
 
-const rootReducer = combineReducers({ dot, colorPicker, nonoGram });
+const rootReducer = combineReducers({ dot, colorPicker, colorPalette });
 
 export default rootReducer;

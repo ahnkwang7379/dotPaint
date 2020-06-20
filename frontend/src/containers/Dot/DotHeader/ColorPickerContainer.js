@@ -35,11 +35,6 @@ const ColorPickerContainer = () => {
         backgroundColor="#ffffff"
         onChangeColor={onChangeLeftColor}
       />
-      오른쪽
-      <ColorPicker
-        backgroundColor="#000000"
-        onChangeColor={onChangeRightColor}
-      />
     </ColorPickerBlock>
   );
 };
