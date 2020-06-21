@@ -1,41 +1,47 @@
 import { createAction, handleActions } from 'redux-actions';
 
 // palette 세로줄 수와 가로 색 갯수 지정 (짝수는 +1 해줘야함)
-const ROW = 5;
-const COLUMN = 3;
+export const PALETTE_ROW = 5;
+export const PALETTE_COLUMN = 5;
+const COLOR = '#FFFFF2';
 const COLORSET = [
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
-  '#f2c9d2',
+  '#9DC8C8',
+  '#30A9DE',
+  '#EFDC05',
+  '#E53A40',
+  '#FBFFB9',
+  '#FDD692',
+  '#8EC0E4',
+  '#F8F8FF',
+  '#f199bc',
+  '#a3c9c7',
+  '#fffff5',
+  '#eb9f9f',
+  '#7f9eb2',
+  '#1c140d',
+  '#fbd14b',
+  '#45d9fd',
+  '#D1B6E1',
+  '#519D9E',
+  '#A593E0',
+  '#E0E3DA',
+  '#566270',
+  '#EC7357',
+  '#754F44',
 ];
 
 function paletteMaker(row, column) {
-  var resultLength = 0;
-  var resultArray = [];
-  for (let i = 0; i < column; i++) {
-    resultLength += i % 2 !== 1 ? row : row + 1;
-  }
+  var resultLength = row * column + Math.floor(column / 2);
+  var resultArray = new Array(resultLength).fill(COLOR);
+
   // 준비된 colorSet보다 크게 만들면 남은 칸은 대충 채운다
   if (resultLength > COLORSET.length) {
-    for (let x = 0; x < resultLength; x++) {
-      resultArray.push(COLORSET[x]);
+    for (let x = 0; x < COLORSET.length; x++) {
+      resultArray[x] = COLORSET[x];
     }
   } else {
     for (let y = 0; y < resultLength; y++) {
-      resultArray.push(COLORSET[y]);
+      resultArray[y] = COLORSET[y];
     }
   }
   return resultArray;
@@ -53,25 +59,8 @@ export const changePaletteColor = createAction(
 // palette에 이미 있는 색상이라면 추가 안함
 
 const initialState = {
-  paletteSet: [
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-    '#f2c9d2',
-  ],
-  selectedId: '',
+  paletteSet: paletteMaker(PALETTE_ROW, PALETTE_COLUMN),
+  selectedId: 0,
 };
 
 const colorPalette = handleActions(

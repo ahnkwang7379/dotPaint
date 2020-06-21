@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ColorPalette from '../../../components/dotPaint/colorPalette/ColorPalette';
 import styled from 'styled-components';
 import { selectColor, changePaletteColor } from '../../../modules/colorPalette';
@@ -14,9 +14,16 @@ const ColorPaletteContainer = () => {
     paletteSet: colorPalette.paletteSet,
     selectedId: colorPalette.selectedId,
   }));
+  const onSelectedColor = useCallback((selectId) => {
+    dispatch(selectColor(selectId));
+  }, []);
   return (
     <ColorPaletteBlock>
-      <ColorPalette paletteSet={paletteSet} selectedId={selectedId} />
+      <ColorPalette
+        paletteSet={paletteSet}
+        selectedId={selectedId}
+        onSelectedColor={onSelectedColor}
+      />
     </ColorPaletteBlock>
   );
 };

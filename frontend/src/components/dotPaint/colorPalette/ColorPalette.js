@@ -1,8 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import ColorCell from './ColorCell';
+import { PALETTE_ROW, PALETTE_COLUMN } from '../../../modules/colorPalette';
 
 const PaletteWrapper = styled.div`
-  /* background: rgba(10, 10, 10, 0.7); */
+  background: rgba(10, 10, 10, 0.2);
   display: flex;
 `;
 
@@ -15,88 +17,49 @@ const ColorBlock = styled.div`
     `}
 `;
 
-const ColorCell = styled.div`
-  cursor: pointer;
-  box-sizing: border-box;
-  position: relative;
-  width: 17.32px;
-  height: 30px;
-  background-color: ${(props) => props.color || '#f2c9d2'};
-  margin: 3px 0;
-  border-top: solid 3px ${(props) => props.selected || 'transparent'};
-  border-bottom: solid 3px ${(props) => props.selected || 'transparent'};
-
-  :before,
-  :after {
-    content: '';
-    box-sizing: border-box;
-    position: absolute;
-    z-index: 1;
-    width: 21.21px;
-    height: 21.21px;
-    -webkit-transform: scaleX(0.5774) rotate(45deg);
-    -ms-transform: scaleX(0.5774) rotate(45deg);
-    transform: scaleX(0.5774) rotate(45deg);
-    background-color: inherit;
-    top: 1.3934px;
-  }
-
-  :before {
-    right: -10.6066px;
-    border-top: solid 4.2426px ${(props) => props.selected || 'transparent'};
-    border-right: solid 4.2426px ${(props) => props.selected || 'transparent'};
-  }
-
-  :after {
-    left: -10.6066px;
-    border-bottom: solid 4.2426px ${(props) => props.selected || 'transparent'};
-    border-left: solid 4.2426px ${(props) => props.selected || 'transparent'};
-  }
-`;
-
 // 팔레트 배치를 어떤 방식으로 할 지 고민해야함
-function paletteMaker(paletteSet) {
-  const paletteLength = paletteSet.length;
 
-  return '';
-}
-
-const ColorPalette = ({ paletteSet, selectedId }) => {
+const ColorPalette = ({ paletteSet, selectedId, onSelectedColor }) => {
+  const Cell = (color, idx) =>
+    idx === selectedId ? (
+      <ColorCell
+        color={color}
+        key={idx}
+        id={idx}
+        onSelectedColor={onSelectedColor}
+        selected
+      />
+    ) : (
+      <ColorCell
+        color={color}
+        key={idx}
+        id={idx}
+        onSelectedColor={onSelectedColor}
+      />
+    );
+  const OddBlock = (startIdx) => {
+    let result = [];
+    for (let i = startIdx; i < startIdx + PALETTE_COLUMN; i++) {
+      result.push(Cell(paletteSet[i], i));
+    }
+    return result;
+  };
+  const EvenBlock = (startIdx) => {
+    let result = [];
+    for (let i = startIdx; i < startIdx + PALETTE_COLUMN + 1; i++) {
+      result.push(Cell(paletteSet[i], i));
+    }
+    return result;
+  };
   return (
     <PaletteWrapper>
-      <ColorBlock odd>
-        <ColorCell />
-        <ColorCell />
-        <ColorCell selected="black" />
-        <ColorCell />
-      </ColorBlock>
-      <ColorBlock>
-        <ColorCell />
-        <ColorCell />
-        <ColorCell />
-        <ColorCell />
-        <ColorCell />
-      </ColorBlock>
-      <ColorBlock odd>
-        <ColorCell />
-        <ColorCell />
-        <ColorCell />
-        <ColorCell />
-      </ColorBlock>
-      <ColorBlock>
-        <ColorCell />
-        <ColorCell />
-        <ColorCell />
-        <ColorCell />
-        <ColorCell />
-      </ColorBlock>
-      <ColorBlock>
-        {paletteSet.map((color, idx) => {
-          return <ColorCell color={color} key={idx} id={idx} />;
-        })}
-      </ColorBlock>
+      <ColorBlock odd>{OddBlock(0)}</ColorBlock>
+      <ColorBlock>{EvenBlock(5)}</ColorBlock>
+      <ColorBlock odd>{OddBlock(11)}</ColorBlock>
+      <ColorBlock>{EvenBlock(16)}</ColorBlock>
+      <ColorBlock odd>{OddBlock(22)}</ColorBlock>
     </PaletteWrapper>
   );
 };
 
-export default ColorPalette;
+export default React.memo(ColorPalette);
