@@ -13,8 +13,7 @@ const DotPaintLine = ({
   dotLineIdx,
   border,
   dotSize,
-  fillDotLeftColor,
-  fillDotRightColor,
+  onDotSelect,
 }) => {
   const Dots = (
     <DotLine>
@@ -27,8 +26,7 @@ const DotPaintLine = ({
             dotColor={color}
             dotSize={dotSize}
             border={border}
-            fillDotLeftColor={fillDotLeftColor}
-            fillDotRightColor={fillDotRightColor}
+            onDotSelect={onDotSelect}
           />
         );
       })}

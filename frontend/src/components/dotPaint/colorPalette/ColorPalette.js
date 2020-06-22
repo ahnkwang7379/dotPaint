@@ -4,7 +4,6 @@ import ColorCell from './ColorCell';
 import { PALETTE_ROW, PALETTE_COLUMN } from '../../../modules/colorPalette';
 
 const PaletteWrapper = styled.div`
-  background: rgba(10, 10, 10, 0.2);
   display: flex;
 `;
 
@@ -16,8 +15,6 @@ const ColorBlock = styled.div`
       margin-top: 17px;
     `}
 `;
-
-// 팔레트 배치를 어떤 방식으로 할 지 고민해야함
 
 const ColorPalette = ({ paletteSet, selectedId, onSelectedColor }) => {
   const Cell = (color, idx) =>

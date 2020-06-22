@@ -26,7 +26,7 @@ const Cell = styled.div`
     -webkit-transform: scaleX(0.5774) rotate(45deg);
     -ms-transform: scaleX(0.5774) rotate(45deg);
     transform: scaleX(0.5774) rotate(45deg);
-    background-color: inherit;
+    background-color: ${(props) => props.color || '#f2c9d2'};
     top: 1.3934px;
     transition: all 0.5s linear;
   }

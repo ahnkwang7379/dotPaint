@@ -10,28 +10,21 @@ const DotpaintContainer = () => {
     border,
     dotSize,
     selectedDot,
-    colorLeft,
-    colorRight,
-  } = useSelector(({ dot, colorPicker }) => ({
+    paletteSet,
+    selectedId,
+  } = useSelector(({ dot, colorPalette }) => ({
     dotSet: dot.dotSet,
     border: dot.border,
     dotSize: dot.dotSize,
     selectedDot: dot.selectedDot,
-    colorLeft: colorPicker.colorLeft,
-    colorRight: colorPicker.colorRight,
+    paletteSet: colorPalette.paletteSet,
+    selectedId: colorPalette.selectedId,
   }));
 
-  const fillDotLeftColor = useCallback(
+  const onDotSelect = useCallback(
     (rowIdx, columnIdx) =>
       dispatch(
         selectDot({ rowIdx: rowIdx, columnIdx: columnIdx, direct: 'Left' }),
-      ),
-    [],
-  );
-  const fillDotRightColor = useCallback(
-    (rowIdx, columnIdx) =>
-      dispatch(
-        selectDot({ rowIdx: rowIdx, columnIdx: columnIdx, direct: 'Right' }),
       ),
     [],
   );
@@ -41,7 +34,7 @@ const DotpaintContainer = () => {
       changeDot({
         rowIdx: selectedDot['rowIdx'],
         columnIdx: selectedDot['columnIdx'],
-        color: selectedDot['direct'] === 'Left' ? colorLeft : colorRight,
+        color: paletteSet[selectedId],
       }),
     );
   }, [selectedDot]);
@@ -52,8 +45,7 @@ const DotpaintContainer = () => {
         dotSet={dotSet}
         border={border}
         dotSize={dotSize}
-        fillDotLeftColor={fillDotLeftColor}
-        fillDotRightColor={fillDotRightColor}
+        onDotSelect={onDotSelect}
       />
     </>
   );

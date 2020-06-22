@@ -21,15 +21,7 @@ const DotPaintLineBlock = styled.div`
   padding: 0;
 `;
 
-const DotPaint = ({
-  dotSet,
-  border,
-  dotSize,
-  colorLeft,
-  colorRight,
-  fillDotLeftColor,
-  fillDotRightColor,
-}) => {
+const DotPaint = ({ dotSet, border, dotSize, onDotSelect }) => {
   const DotLines = (
     <DotPaintBlock>
       {dotSet.map((dotLine, idx) => {
@@ -40,8 +32,7 @@ const DotPaint = ({
             dotLineIdx={idx}
             dotSize={dotSize}
             border={border}
-            fillDotLeftColor={fillDotLeftColor}
-            fillDotRightColor={fillDotRightColor}
+            onDotSelect={onDotSelect}
           />
         );
       })}

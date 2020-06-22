@@ -30,15 +30,10 @@ const DivBlock = ({
   dotColor,
   dotSize,
   border,
-  fillDotLeftColor,
-  fillDotRightColor,
+  onDotSelect,
 }) => {
   const onLeftClick = () => {
-    fillDotLeftColor(rowIdx, columnIdx);
-  };
-  const onRightClick = (e) => {
-    e.preventDefault();
-    fillDotRightColor(rowIdx, columnIdx);
+    onDotSelect(rowIdx, columnIdx);
   };
   const Dot = (
     <DotStyled
@@ -46,10 +41,8 @@ const DivBlock = ({
       dotSize={dotSize}
       border={border}
       onMouseDown={onLeftClick}
-      onFocus={onLeftClick}
       onMouseOver={onLeftClick}
       onClick={onLeftClick}
-      onContextMenu={onRightClick}
     />
   );
   return <>{Dot} </>;

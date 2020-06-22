@@ -1,10 +1,7 @@
 import React, { useCallback } from 'react';
 import ColorPicker from '../../../components/common/ColorPicker';
 import { useDispatch } from 'react-redux';
-import {
-  changeColorLeft,
-  changeColorRight,
-} from '../../../modules/colorPicker';
+import { changeColorLeft } from '../../../modules/colorPicker';
 import styled from 'styled-components';
 
 const ColorPickerBlock = styled.div`
@@ -17,13 +14,6 @@ const ColorPickerContainer = () => {
   const onChangeLeftColor = useCallback(
     (pick) => {
       dispatch(changeColorLeft(pick));
-    },
-    [dispatch],
-  );
-
-  const onChangeRightColor = useCallback(
-    (pick) => {
-      dispatch(changeColorRight(pick));
     },
     [dispatch],
   );

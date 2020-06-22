@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { SketchPicker, ChromePicker } from 'react-color';
 
@@ -36,6 +36,10 @@ const ColorPicker = ({ backgroundColor, onChangeColor }) => {
   const [color, setColor] = useState(backgroundColor);
   const [localColor, setLocalColor] = useState(backgroundColor);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
+
+  useEffect(() => {
+    setColor(backgroundColor);
+  }, [backgroundColor]);
 
   const handleChange = (pick) => {
     setColor(pick.hex);

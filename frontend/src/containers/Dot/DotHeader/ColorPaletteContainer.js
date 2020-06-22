@@ -3,9 +3,11 @@ import ColorPalette from '../../../components/dotPaint/colorPalette/ColorPalette
 import styled from 'styled-components';
 import { selectColor, changePaletteColor } from '../../../modules/colorPalette';
 import { useSelector, useDispatch } from 'react-redux';
+import ColorPicker from '../../../components/common/ColorPicker';
 
 const ColorPaletteBlock = styled.div`
-  /* display: flex; */
+  background: rgba(10, 10, 10, 0.2);
+  display: flex;
 `;
 
 const ColorPaletteContainer = () => {
@@ -17,12 +19,23 @@ const ColorPaletteContainer = () => {
   const onSelectedColor = useCallback((selectId) => {
     dispatch(selectColor(selectId));
   }, []);
+  const onChangeColor = useCallback(
+    (color) => {
+      dispatch(changePaletteColor({ id: selectedId, newColor: color }));
+    },
+    [selectedId],
+  );
+
   return (
     <ColorPaletteBlock>
       <ColorPalette
         paletteSet={paletteSet}
         selectedId={selectedId}
         onSelectedColor={onSelectedColor}
+      />
+      <ColorPicker
+        backgroundColor={paletteSet[selectedId]}
+        onChangeColor={onChangeColor}
       />
     </ColorPaletteBlock>
   );
