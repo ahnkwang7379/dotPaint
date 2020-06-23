@@ -9,8 +9,8 @@ const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
 const SELECT_DOT = 'dot/SELECT_DOT';
 
 // initialState
-export const INITIAL_ROW = 32;
-export const INITIAL_COLUMN = 32;
+export const INITIAL_ROW = 64;
+export const INITIAL_COLUMN = 64;
 export const INITIAL_DOT_DOTSIZE = 1;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
