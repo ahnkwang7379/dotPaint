@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import DotPaint from '../../components/dotPaint/DotPaint';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeDot, selectDot } from '../../modules/dot';
+import { changeDot, selectDot, changePaintState } from '../../modules/dot';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();
@@ -10,6 +10,7 @@ const DotpaintContainer = () => {
     border,
     dotSize,
     selectedDot,
+    paintState,
     paletteSet,
     selectedId,
   } = useSelector(({ dot, colorPalette }) => ({
@@ -17,16 +18,15 @@ const DotpaintContainer = () => {
     border: dot.border,
     dotSize: dot.dotSize,
     selectedDot: dot.selectedDot,
+    paintState: dot.paintState,
     paletteSet: colorPalette.paletteSet,
     selectedId: colorPalette.selectedId,
   }));
 
   const onDotSelect = useCallback(
     (rowIdx, columnIdx) =>
-      dispatch(
-        selectDot({ rowIdx: rowIdx, columnIdx: columnIdx, direct: 'Left' }),
-      ),
-    [],
+      dispatch(selectDot({ rowIdx: rowIdx, columnIdx: columnIdx })),
+    [dispatch],
   );
 
   useEffect(() => {
@@ -37,7 +37,27 @@ const DotpaintContainer = () => {
         color: paletteSet[selectedId],
       }),
     );
-  }, [selectedDot]);
+  }, [dispatch, selectedDot, paletteSet, selectedId]);
+
+  const onChangePaintState = useCallback(
+    (paintState) => dispatch(changePaintState(paintState)),
+    [dispatch],
+  );
+
+  const onChangeDot = useCallback(
+    (rowIdx, columnIdx) => {
+      if (paintState === 'DRAGGING') {
+        dispatch(
+          changeDot({
+            rowIdx: rowIdx,
+            columnIdx: columnIdx,
+            color: paletteSet[selectedId],
+          }),
+        );
+      }
+    },
+    [dispatch, paintState, paletteSet, selectedId],
+  );
 
   return (
     <>
@@ -45,7 +65,8 @@ const DotpaintContainer = () => {
         dotSet={dotSet}
         border={border}
         dotSize={dotSize}
-        onDotSelect={onDotSelect}
+        onChangePaintState={onChangePaintState}
+        onChangeDot={onChangeDot}
       />
     </>
   );

@@ -13,26 +13,27 @@ const DotPaintLine = ({
   dotLineIdx,
   border,
   dotSize,
-  onDotSelect,
+  onChangePaintState,
+  onChangeDot,
 }) => {
-  const Dots = (
+  return (
     <DotLine>
       {dotLine.map((color, columnIdx) => {
         return (
           <DivBlock
-            key={[dotLineIdx, columnIdx]}
+            key={columnIdx}
             rowIdx={dotLineIdx}
             columnIdx={columnIdx}
             dotColor={color}
             dotSize={dotSize}
             border={border}
-            onDotSelect={onDotSelect}
+            onChangePaintState={onChangePaintState}
+            onChangeDot={onChangeDot}
           />
         );
       })}
     </DotLine>
   );
-  return <>{Dots}</>;
 };
 
 export default React.memo(DotPaintLine);

@@ -15,30 +15,31 @@ const DotPaintBlock = styled.div`
   overflow: hidden;
 `;
 
-const DotPaintLineBlock = styled.div`
-  display: flex;
-  margin: 0 auto;
-  padding: 0;
-`;
-
-const DotPaint = ({ dotSet, border, dotSize, onDotSelect }) => {
-  const DotLines = (
+const DotPaint = ({
+  dotSet,
+  border,
+  dotSize,
+  onDotSelect,
+  onChangePaintState,
+  onChangeDot,
+}) => {
+  return (
     <DotPaintBlock>
       {dotSet.map((dotLine, idx) => {
         return (
           <DotPaintLine
-            key={idx}
             dotLine={dotLine}
+            key={idx}
             dotLineIdx={idx}
             dotSize={dotSize}
             border={border}
-            onDotSelect={onDotSelect}
+            onChangePaintState={onChangePaintState}
+            onChangeDot={onChangeDot}
           />
         );
       })}
     </DotPaintBlock>
   );
-  return <>{DotLines}</>;
 };
 
 export default DotPaint;

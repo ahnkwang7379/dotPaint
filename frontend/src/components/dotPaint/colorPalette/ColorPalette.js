@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import ColorCell from './ColorCell';
 import { PALETTE_ROW, PALETTE_COLUMN } from '../../../modules/colorPalette';
+import ColorPicker from '../../../components/common/ColorPicker';
 
 const PaletteWrapper = styled.div`
   display: flex;
@@ -16,7 +17,12 @@ const ColorBlock = styled.div`
     `}
 `;
 
-const ColorPalette = ({ paletteSet, selectedId, onSelectedColor }) => {
+const ColorPalette = ({
+  paletteSet,
+  selectedId,
+  onSelectedColor,
+  onChangeColor,
+}) => {
   const Cell = (color, idx) =>
     idx === selectedId ? (
       <ColorCell
@@ -55,6 +61,10 @@ const ColorPalette = ({ paletteSet, selectedId, onSelectedColor }) => {
       <ColorBlock odd>{OddBlock(11)}</ColorBlock>
       <ColorBlock>{EvenBlock(16)}</ColorBlock>
       <ColorBlock odd>{OddBlock(22)}</ColorBlock>
+      <ColorPicker
+        backgroundColor={paletteSet[selectedId]}
+        onChangeColor={onChangeColor}
+      />
     </PaletteWrapper>
   );
 };

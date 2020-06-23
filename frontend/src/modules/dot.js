@@ -7,10 +7,11 @@ const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
 const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
 const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
 const SELECT_DOT = 'dot/SELECT_DOT';
+const CHANGE_PAINT_STATE = 'dot/CHANGE_PAINT_STATE';
 
 // initialState
-export const INITIAL_ROW = 64;
-export const INITIAL_COLUMN = 64;
+export const INITIAL_ROW = 32;
+export const INITIAL_COLUMN = 32;
 export const INITIAL_DOT_DOTSIZE = 1;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
@@ -40,9 +41,13 @@ export const changeDotArea = createAction(
   CHANGE_DOT_AREA,
   ({ width, height }) => ({ width, height }),
 );
-export const selectDot = createAction(
-  SELECT_DOT,
-  ({ rowIdx, columnIdx, direct }) => ({ rowIdx, columnIdx, direct }),
+export const selectDot = createAction(SELECT_DOT, ({ rowIdx, columnIdx }) => ({
+  rowIdx,
+  columnIdx,
+}));
+export const changePaintState = createAction(
+  CHANGE_PAINT_STATE,
+  (paintState) => paintState,
 );
 
 const defaultDotSetMaker = (row, column) => {
@@ -52,11 +57,12 @@ const defaultDotSetMaker = (row, column) => {
 const initialState = {
   dotSet: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
   dotTemp: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
-  selectedDot: { rowIdx: -1, columnIdx: -1, direct: '' },
+  selectedDot: { rowIdx: -1, columnIdx: -1 },
   border: INITIAL_DOT_BORDER,
   dotSize: INITIAL_DOT_DOTSIZE,
   row: INITIAL_ROW,
   column: INITIAL_COLUMN,
+  paintState: 'IDLE',
 };
 
 const dot = handleActions(
@@ -94,13 +100,16 @@ const dot = handleActions(
       width: width,
       height: height,
     }),
-    [SELECT_DOT]: (state, { payload: { rowIdx, columnIdx, direct } }) => ({
+    [CHANGE_PAINT_STATE]: (state, { payload: paintState }) => ({
+      ...state,
+      paintState: paintState,
+    }),
+    [SELECT_DOT]: (state, { payload: { rowIdx, columnIdx } }) => ({
       ...state,
       selectedDot: {
         ...state.selectedDot,
         rowIdx: rowIdx,
         columnIdx: columnIdx,
-        direct: direct,
       },
     }),
     [CLEAR_DOT]: (state) => ({

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { SketchPicker, ChromePicker } from 'react-color';
+import { ChromePicker } from 'react-color';
 
 const ColorBlock = styled.div`
   margin: 0 auto;
@@ -72,4 +72,4 @@ const ColorPicker = ({ backgroundColor, onChangeColor }) => {
   );
 };
 
-export default ColorPicker;
+export default React.memo(ColorPicker);

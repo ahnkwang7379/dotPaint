@@ -4,7 +4,7 @@ import { INITIAL_DOT_COLOR } from '../../modules/dot';
 
 const DotStyled = styled.div`
   border: none;
-  cursor: pointer;
+  cursor: cell;
   padding: 0;
   margin: 0 auto;
   color: white;
@@ -30,22 +30,33 @@ const DivBlock = ({
   dotColor,
   dotSize,
   border,
-  onDotSelect,
+  onChangePaintState,
+  onChangeDot,
 }) => {
-  const onLeftClick = () => {
-    onDotSelect(rowIdx, columnIdx);
+  const onMouseDownHandler = (e) => {
+    e.preventDefault();
+    onChangePaintState('DRAGGING');
+    onChangeDot(rowIdx, columnIdx);
   };
-  const Dot = (
+  const onMouseUpHandler = (e) => {
+    e.preventDefault();
+    onChangePaintState('IDLE');
+  };
+  const onMouseOverHandler = (e) => {
+    e.preventDefault();
+    onChangeDot(rowIdx, columnIdx);
+  };
+  return (
     <DotStyled
       dotColor={dotColor}
       dotSize={dotSize}
       border={border}
-      onMouseDown={onLeftClick}
-      onMouseOver={onLeftClick}
-      onClick={onLeftClick}
+      onMouseDown={onMouseDownHandler}
+      onMouseOver={onMouseOverHandler}
+      onMouseUp={onMouseUpHandler}
+      onFocus={onMouseOverHandler}
     />
   );
-  return <>{Dot} </>;
 };
 
 export default React.memo(DivBlock);

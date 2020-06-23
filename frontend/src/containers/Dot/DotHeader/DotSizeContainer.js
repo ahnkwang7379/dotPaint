@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import DotSizeChanger from '../../../components/dotPaint/dotHeader/DotSizeChanger';
 import { changeDotSize } from '../../../modules/dot';
 import { useDispatch, useSelector } from 'react-redux';

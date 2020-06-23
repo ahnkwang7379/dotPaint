@@ -49,9 +49,9 @@ const Cell = styled.div`
 `;
 
 const ColorCell = ({ color, id, onSelectedColor, selected }) => {
-  const onSelectClick = useCallback(() => {
+  const onSelectClick = () => {
     onSelectedColor(id);
-  }, [id]);
+  };
   return <Cell color={color} selected={selected} onClick={onSelectClick} />;
 };
 
