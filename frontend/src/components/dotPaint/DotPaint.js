@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import DotPaintLine from './DotPaintLine';
 
@@ -6,7 +6,7 @@ const DotPaintBlock = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  width: auto;
+  width: auto;  
   height: auto;
   margin: 0 auto;
   padding: 0;
@@ -19,12 +19,33 @@ const DotPaint = ({
   dotSet,
   border,
   dotSize,
-  onDotSelect,
   onChangePaintState,
   onChangeDot,
 }) => {
+  const onMouseDownHandler = useCallback(
+    (e, rowIdx, columnIdx) => {
+      e.preventDefault();
+      onChangePaintState('DRAGGING');
+      onChangeDot(rowIdx, columnIdx);
+    },
+    [onChangePaintState, onChangeDot],
+  );
+  const onMouseUpHandler = useCallback(
+    (e) => {
+      e.preventDefault();
+      onChangePaintState('IDLE');
+    },
+    [onChangePaintState],
+  );
+  const onMouseOverHandler = useCallback(
+    (e, rowIdx, columnIdx) => {
+      e.preventDefault();
+      onChangeDot(rowIdx, columnIdx);
+    },
+    [onChangeDot],
+  );
   return (
-    <DotPaintBlock>
+    <DotPaintBlock onMouseLeave={onMouseUpHandler}>
       {dotSet.map((dotLine, idx) => {
         return (
           <DotPaintLine
@@ -33,8 +54,9 @@ const DotPaint = ({
             dotLineIdx={idx}
             dotSize={dotSize}
             border={border}
-            onChangePaintState={onChangePaintState}
-            onChangeDot={onChangeDot}
+            onMouseDownHandler={onMouseDownHandler}
+            onMouseUpHandler={onMouseUpHandler}
+            onMouseOverHandler={onMouseOverHandler}
           />
         );
       })}

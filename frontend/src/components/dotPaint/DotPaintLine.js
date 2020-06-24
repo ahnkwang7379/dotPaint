@@ -13,8 +13,9 @@ const DotPaintLine = ({
   dotLineIdx,
   border,
   dotSize,
-  onChangePaintState,
-  onChangeDot,
+  onMouseDownHandler,
+  onMouseUpHandler,
+  onMouseOverHandler,
 }) => {
   return (
     <DotLine>
@@ -27,8 +28,9 @@ const DotPaintLine = ({
             dotColor={color}
             dotSize={dotSize}
             border={border}
-            onChangePaintState={onChangePaintState}
-            onChangeDot={onChangeDot}
+            onMouseDownHandler={onMouseDownHandler}
+            onMouseUpHandler={onMouseUpHandler}
+            onMouseOverHandler={onMouseOverHandler}
           />
         );
       })}

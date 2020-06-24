@@ -30,31 +30,18 @@ const DivBlock = ({
   dotColor,
   dotSize,
   border,
-  onChangePaintState,
-  onChangeDot,
+  onMouseDownHandler,
+  onMouseUpHandler,
+  onMouseOverHandler,
 }) => {
-  const onMouseDownHandler = (e) => {
-    e.preventDefault();
-    onChangePaintState('DRAGGING');
-    onChangeDot(rowIdx, columnIdx);
-  };
-  const onMouseUpHandler = (e) => {
-    e.preventDefault();
-    onChangePaintState('IDLE');
-  };
-  const onMouseOverHandler = (e) => {
-    e.preventDefault();
-    onChangeDot(rowIdx, columnIdx);
-  };
   return (
     <DotStyled
       dotColor={dotColor}
       dotSize={dotSize}
       border={border}
-      onMouseDown={onMouseDownHandler}
-      onMouseOver={onMouseOverHandler}
-      onMouseUp={onMouseUpHandler}
-      onFocus={onMouseOverHandler}
+      onMouseDown={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}
+      onMouseOver={(e) => onMouseOverHandler(e, rowIdx, columnIdx)}
+      onMouseUp={(e) => onMouseUpHandler(e)}
     />
   );
 };

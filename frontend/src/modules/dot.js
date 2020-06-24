@@ -56,12 +56,11 @@ const defaultDotSetMaker = (row, column) => {
 
 const initialState = {
   dotSet: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
-  dotTemp: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
-  selectedDot: { rowIdx: -1, columnIdx: -1 },
   border: INITIAL_DOT_BORDER,
   dotSize: INITIAL_DOT_DOTSIZE,
   row: INITIAL_ROW,
   column: INITIAL_COLUMN,
+  selectedDot: { rowIdx: -1, columnIdx: -1 },
   paintState: 'IDLE',
 };
 
@@ -69,13 +68,23 @@ const dot = handleActions(
   {
     [CHANGE_DOT]: (state, { payload: { rowIdx, columnIdx, color } }) => ({
       ...state,
-      dotSet: state.dotSet.map((dotLine, lineIdx) =>
-        lineIdx !== rowIdx
-          ? dotLine
-          : dotLine.map((originColor, idx) =>
-              idx !== columnIdx ? originColor : color,
-            ),
-      ),
+      // dotSet: state.dotSet.map((dotLine, lineIdx) =>
+      //   lineIdx !== rowIdx
+      //     ? dotLine
+      //     : dotLine.map((originColor, idx) =>
+      //         idx !== columnIdx ? originColor : color,
+      //       ),
+      // ),
+      dotSet:
+        state.paintState === 'DRAGGING'
+          ? state.dotSet.map((dotLine, lineIdx) =>
+              lineIdx !== rowIdx
+                ? dotLine
+                : dotLine.map((originColor, idx) =>
+                    idx !== columnIdx ? originColor : color,
+                  ),
+            )
+          : [...state.dotSet],
     }),
     [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) => ({
       ...state,
