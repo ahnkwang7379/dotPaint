@@ -6,7 +6,7 @@ const DotPaintBlock = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  width: auto;  
+  width: auto;
   height: auto;
   margin: 0 auto;
   padding: 0;
@@ -20,15 +20,15 @@ const DotPaint = ({
   border,
   dotSize,
   onChangePaintState,
-  onChangeDot,
+  onDotActionHandle,
 }) => {
   const onMouseDownHandler = useCallback(
     (e, rowIdx, columnIdx) => {
       e.preventDefault();
       onChangePaintState('DRAGGING');
-      onChangeDot(rowIdx, columnIdx);
+      onDotActionHandle(rowIdx, columnIdx);
     },
-    [onChangePaintState, onChangeDot],
+    [onChangePaintState, onDotActionHandle],
   );
   const onMouseUpHandler = useCallback(
     (e) => {
@@ -40,9 +40,9 @@ const DotPaint = ({
   const onMouseOverHandler = useCallback(
     (e, rowIdx, columnIdx) => {
       e.preventDefault();
-      onChangeDot(rowIdx, columnIdx);
+      onDotActionHandle(rowIdx, columnIdx);
     },
-    [onChangeDot],
+    [onDotActionHandle],
   );
   return (
     <DotPaintBlock onMouseLeave={onMouseUpHandler}>

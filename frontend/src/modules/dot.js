@@ -6,8 +6,6 @@ const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
 const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
 const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
 const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
-const SELECT_DOT = 'dot/SELECT_DOT';
-const CHANGE_PAINT_STATE = 'dot/CHANGE_PAINT_STATE';
 
 // initialState
 export const INITIAL_ROW = 32;
@@ -41,14 +39,6 @@ export const changeDotArea = createAction(
   CHANGE_DOT_AREA,
   ({ width, height }) => ({ width, height }),
 );
-export const selectDot = createAction(SELECT_DOT, ({ rowIdx, columnIdx }) => ({
-  rowIdx,
-  columnIdx,
-}));
-export const changePaintState = createAction(
-  CHANGE_PAINT_STATE,
-  (paintState) => paintState,
-);
 
 const defaultDotSetMaker = (row, column) => {
   return new Array(column).fill().map(() => new Array(row).fill(''));
@@ -62,19 +52,13 @@ const initialState = {
   column: INITIAL_COLUMN,
   selectedDot: { rowIdx: -1, columnIdx: -1 },
   paintState: 'IDLE',
+  paintTool: 'DOT',
 };
 
 const dot = handleActions(
   {
     [CHANGE_DOT]: (state, { payload: { rowIdx, columnIdx, color } }) => ({
       ...state,
-      // dotSet: state.dotSet.map((dotLine, lineIdx) =>
-      //   lineIdx !== rowIdx
-      //     ? dotLine
-      //     : dotLine.map((originColor, idx) =>
-      //         idx !== columnIdx ? originColor : color,
-      //       ),
-      // ),
       dotSet:
         state.paintState === 'DRAGGING'
           ? state.dotSet.map((dotLine, lineIdx) =>
@@ -108,18 +92,6 @@ const dot = handleActions(
       ...state,
       width: width,
       height: height,
-    }),
-    [CHANGE_PAINT_STATE]: (state, { payload: paintState }) => ({
-      ...state,
-      paintState: paintState,
-    }),
-    [SELECT_DOT]: (state, { payload: { rowIdx, columnIdx } }) => ({
-      ...state,
-      selectedDot: {
-        ...state.selectedDot,
-        rowIdx: rowIdx,
-        columnIdx: columnIdx,
-      },
     }),
     [CLEAR_DOT]: (state) => ({
       ...state,

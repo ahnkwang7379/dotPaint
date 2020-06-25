@@ -1,36 +1,30 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import DotPaint from '../../components/dotPaint/DotPaint';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeDot, selectDot, changePaintState } from '../../modules/dot';
+import { changePaintState } from '../../modules/paintTool';
+import { dotActions } from '../../modules/index';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();
-  const { dotSet, border, dotSize, paletteSet, selectedId } = useSelector(
-    ({ dot, colorPalette }) => ({
-      dotSet: dot.dotSet,
-      border: dot.border,
-      dotSize: dot.dotSize,
-      paletteSet: colorPalette.paletteSet,
-      selectedId: colorPalette.selectedId,
-    }),
-  );
+  const { dotSet, border, dotSize } = useSelector(({ dot }) => ({
+    dotSet: dot.dotSet,
+    border: dot.border,
+    dotSize: dot.dotSize,
+  }));
 
   const onChangePaintState = useCallback(
     (paintState) => dispatch(changePaintState(paintState)),
     [dispatch],
   );
-
-  const onChangeDot = useCallback(
-    (rowIdx, columnIdx) => {
+  const onDotActionHandle = useCallback(
+    (rowIdx, columnIdx) =>
       dispatch(
-        changeDot({
+        dotActions({
           rowIdx: rowIdx,
           columnIdx: columnIdx,
-          color: paletteSet[selectedId],
         }),
-      );
-    },
-    [dispatch, paletteSet, selectedId],
+      ),
+    [dispatch],
   );
   return (
     <div>
@@ -39,7 +33,7 @@ const DotpaintContainer = () => {
         border={border}
         dotSize={dotSize}
         onChangePaintState={onChangePaintState}
-        onChangeDot={onChangeDot}
+        onDotActionHandle={onDotActionHandle}
       />
     </div>
   );

@@ -56,8 +56,6 @@ export const changePaletteColor = createAction(
   ({ id, newColor }) => ({ id, newColor }),
 );
 
-// palette에 이미 있는 색상이라면 추가 안함
-
 const initialState = {
   paletteSet: paletteMaker(PALETTE_ROW, PALETTE_COLUMN),
   selectedId: 0,
