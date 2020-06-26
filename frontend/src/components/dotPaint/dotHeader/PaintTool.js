@@ -1,48 +1,48 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { DOT, BUCKET, PICKER, ERASER } from '../../../modules/paintTool';
+import PaintToolButton from '../../common/PaintToolButton';
+import { TiPencil, TiPipette } from 'react-icons/ti';
+import { BsFillBucketFill } from 'react-icons/bs';
+import { FaEraser } from 'react-icons/fa';
 
 const PaintToolBlock = styled.div`
   display: flex;
+  margin-top: 5px;
+  margin-bottom: 5px;
 `;
-
-const PaintToolBox = styled.div`
-  width: 50px;
-  height: 50px;
-  background: #0f0f0f;
-  ${(props) =>
-    props.selected &&
-    css`
-      background: skyblue;
-    `}
-`;
-
-const PaintTool = ({
-  onChangePaintTool,
-  paintToolSet,
-  selectedPaintTool,
-  onTogglePaintTool,
-}) => {
+const PaintTool = ({ onChangePaintTool, selectedPaintTool }) => {
   return (
-    <>
-      <PaintToolBlock>
-        <PaintToolBox onClick={() => onTogglePaintTool(BUCKET)} />
-        {/* {paintToolSet.map((paintTool) =>
-          paintTool === selectedPaintTool ? (
-            <PaintToolBox
-              selected
-              key={paintTool}
-              onClick={() => onChangePaintTool(paintTool)}
-            />
-          ) : (
-            <PaintToolBox
-              key={paintTool}
-              onClick={() => onChangePaintTool(paintTool)}
-            />
-          ),
-        )} */}
-      </PaintToolBlock>
-    </>
+    <PaintToolBlock>
+      <PaintToolButton
+        paintTool={DOT}
+        selected={selectedPaintTool === DOT}
+        onClick={() => onChangePaintTool(DOT)}
+      >
+        <TiPencil />
+      </PaintToolButton>
+      <PaintToolButton
+        paintTool={BUCKET}
+        selected={selectedPaintTool === BUCKET}
+        onClick={() => onChangePaintTool(BUCKET)}
+      >
+        <BsFillBucketFill />
+      </PaintToolButton>
+      <PaintToolButton
+        paintTool={PICKER}
+        selected={selectedPaintTool === PICKER}
+        onClick={() => onChangePaintTool(PICKER)}
+      >
+        <TiPipette />
+      </PaintToolButton>
+      <PaintToolButton
+        paintTool={ERASER}
+        selected={selectedPaintTool === ERASER}
+        onClick={() => onChangePaintTool(ERASER)}
+      >
+        <FaEraser />
+      </PaintToolButton>
+    </PaintToolBlock>
   );
 };
 

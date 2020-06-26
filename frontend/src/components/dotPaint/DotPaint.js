@@ -44,6 +44,14 @@ const DotPaint = ({
     },
     [onDotActionHandle],
   );
+  // const onMouseClickHandler = useCallback(
+  //   (e, rowIdx, columnIdx) => {
+  //     e.preventDefault();
+  //     onChangePaintState('CLICK');
+  //     onDotActionHandle(rowIdx, columnIdx);
+  //   },
+  //   [onChangePaintState, onDotActionHandle],
+  // );
   return (
     <DotPaintBlock onMouseLeave={onMouseUpHandler}>
       {dotSet.map((dotLine, idx) => {

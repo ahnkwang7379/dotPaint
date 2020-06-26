@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 
-const CHANGE_DOT = 'dot/CHANGE_DOT';
+// const CHANGE_DOT = 'dot/CHANGE_DOT';
 const CLEAR_DOT = 'dot/CLEAR_DOT';
 const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
 const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
@@ -14,14 +14,14 @@ export const INITIAL_DOT_DOTSIZE = 1;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
 
-export const changeDot = createAction(
-  CHANGE_DOT,
-  ({ rowIdx, columnIdx, color }) => ({
-    rowIdx,
-    columnIdx,
-    color,
-  }),
-);
+// export const changeDot = createAction(
+//   CHANGE_DOT,
+//   ({ rowIdx, columnIdx, color }) => ({
+//     rowIdx,
+//     columnIdx,
+//     color,
+//   }),
+// );
 export const clearDot = createAction(CLEAR_DOT);
 export const changeDotBorderSize = createAction(
   CHANGE_DOT_BORDER_SIZE,
@@ -50,26 +50,23 @@ const initialState = {
   dotSize: INITIAL_DOT_DOTSIZE,
   row: INITIAL_ROW,
   column: INITIAL_COLUMN,
-  selectedDot: { rowIdx: -1, columnIdx: -1 },
-  paintState: 'IDLE',
-  paintTool: 'DOT',
+  // selectedDot: { rowIdx: -1, columnIdx: -1 },
+  // paintState: 'IDLE',
+  // paintTool: 'DOT',
 };
 
 const dot = handleActions(
   {
-    [CHANGE_DOT]: (state, { payload: { rowIdx, columnIdx, color } }) => ({
-      ...state,
-      dotSet:
-        state.paintState === 'DRAGGING'
-          ? state.dotSet.map((dotLine, lineIdx) =>
-              lineIdx !== rowIdx
-                ? dotLine
-                : dotLine.map((originColor, idx) =>
-                    idx !== columnIdx ? originColor : color,
-                  ),
-            )
-          : [...state.dotSet],
-    }),
+    // [CHANGE_DOT]: (state, { payload: { rowIdx, columnIdx, color } }) => ({
+    //   ...state,
+    //   dotSet: state.dotSet.map((dotLine, lineIdx) =>
+    //     lineIdx !== rowIdx
+    //       ? dotLine
+    //       : dotLine.map((originColor, idx) =>
+    //           idx !== columnIdx ? originColor : color,
+    //         ),
+    //   ),
+    // }),
     [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) => ({
       ...state,
       border: {

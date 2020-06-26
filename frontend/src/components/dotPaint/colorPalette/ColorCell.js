@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useCallback } from 'react';
 
 const Cell = styled.div`
   cursor: pointer;
