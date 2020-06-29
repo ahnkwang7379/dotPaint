@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const PaintTool = styled.button`
+const ToggleButtonStyled = styled.button`
   font-size: 20px;
   width: 40px;
   height: 40px;
@@ -35,8 +35,8 @@ const PaintTool = styled.button`
   }
 `;
 
-const PaintToolButton = ({ children, ...rest }) => {
-  return <PaintTool {...rest}>{children}</PaintTool>;
+const ToggleButton = ({ children, ...rest }) => {
+  return <ToggleButtonStyled {...rest}>{children}</ToggleButtonStyled>;
 };
 
-export default PaintToolButton;
+export default ToggleButton;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { DOT, BUCKET, PICKER, ERASER } from '../../../modules/paintTool';
-import PaintToolButton from '../../common/PaintToolButton';
+import PaintToolButton from '../../common/ToggleButton';
 import { TiPencil, TiPipette } from 'react-icons/ti';
 import { BsFillBucketFill } from 'react-icons/bs';
 import { FaEraser } from 'react-icons/fa';

@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import produce from 'immer';
 
 // const CHANGE_DOT = 'dot/CHANGE_DOT';
 const CLEAR_DOT = 'dot/CLEAR_DOT';
@@ -14,14 +15,6 @@ export const INITIAL_DOT_DOTSIZE = 1;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
 
-// export const changeDot = createAction(
-//   CHANGE_DOT,
-//   ({ rowIdx, columnIdx, color }) => ({
-//     rowIdx,
-//     columnIdx,
-//     color,
-//   }),
-// );
 export const clearDot = createAction(CLEAR_DOT);
 export const changeDotBorderSize = createAction(
   CHANGE_DOT_BORDER_SIZE,
@@ -37,7 +30,7 @@ export const changeDotSize = createAction(
 );
 export const changeDotArea = createAction(
   CHANGE_DOT_AREA,
-  ({ width, height }) => ({ width, height }),
+  ({ newRow, newColumn }) => ({ newRow, newColumn }),
 );
 
 const defaultDotSetMaker = (row, column) => {
@@ -50,23 +43,10 @@ const initialState = {
   dotSize: INITIAL_DOT_DOTSIZE,
   row: INITIAL_ROW,
   column: INITIAL_COLUMN,
-  // selectedDot: { rowIdx: -1, columnIdx: -1 },
-  // paintState: 'IDLE',
-  // paintTool: 'DOT',
 };
 
 const dot = handleActions(
   {
-    // [CHANGE_DOT]: (state, { payload: { rowIdx, columnIdx, color } }) => ({
-    //   ...state,
-    //   dotSet: state.dotSet.map((dotLine, lineIdx) =>
-    //     lineIdx !== rowIdx
-    //       ? dotLine
-    //       : dotLine.map((originColor, idx) =>
-    //           idx !== columnIdx ? originColor : color,
-    //         ),
-    //   ),
-    // }),
     [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) => ({
       ...state,
       border: {
@@ -85,11 +65,38 @@ const dot = handleActions(
       ...state,
       dotSize: dotSize,
     }),
-    [CHANGE_DOT_AREA]: (state, { payload: { width, height } }) => ({
-      ...state,
-      width: width,
-      height: height,
-    }),
+    [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
+      produce(state, (draft) => {
+        let originRow = draft.row;
+        let originColumn = draft.column;
+
+        if (newColumn > originColumn) {
+          for (let i = originColumn; i < newColumn; i++) {
+            draft.dotSet.map((column) => column.push(''));
+          }
+        }
+
+        if (newColumn < originColumn) {
+          for (let i = newColumn; i < originColumn; i++) {
+            draft.dotSet.map((column) => column.pop());
+          }
+        }
+
+        if (newRow > originRow) {
+          for (let i = originRow; i < newRow; i++) {
+            draft.dotSet.push(new Array(newColumn).fill(''));
+          }
+        }
+
+        if (newRow < originRow) {
+          for (let i = newRow; i < originRow; i++) {
+            draft.dotSet.pop();
+          }
+        }
+
+        draft.row = newRow;
+        draft.column = newColumn;
+      }),
     [CLEAR_DOT]: (state) => ({
       ...state,
       dotSet: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
