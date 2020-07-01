@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const selectBorder = '#000000';
 const defaultBorder = '#ffffff';
@@ -11,12 +11,17 @@ const Cell = styled.div`
   width: 17.32px;
   height: 30px;
   background-color: ${(props) => props.color || '#f2c9d2'};
-  margin: 3px 0;
+  margin-left: 11px;
   border-top: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
   border-bottom: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
   transition: all 0.5s linear;
+  ${(props) =>
+    props.odd &&
+    css`
+      margin-top: -17px;
+    `}
 
   :before,
   :after {
@@ -51,11 +56,13 @@ const Cell = styled.div`
   }
 `;
 
-const ColorCell = ({ color, id, onSelectedColor, selected }) => {
+const PaletteCell = ({ color, id, onSelectedColor, selected, odd }) => {
   const onSelectClick = () => {
     onSelectedColor(id);
   };
-  return <Cell color={color} selected={selected} onClick={onSelectClick} />;
+  return (
+    <Cell color={color} selected={selected} onClick={onSelectClick} odd={odd} />
+  );
 };
 
-export default React.memo(ColorCell);
+export default React.memo(PaletteCell);

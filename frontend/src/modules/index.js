@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
+import { all } from 'redux-saga/effects';
 import { createAction, handleActions } from 'redux-actions';
-import dot from './dot';
+import dot, { dotSaga } from './dot';
 import colorPalette from './colorPalette';
+import palette from './palette';
 import paintTool, { DOT, BUCKET, PICKER, ERASER } from './paintTool';
+import loading from './loading';
 
 const DOT_ACTIONS = 'index/DOT_ACTIONS';
 
@@ -18,6 +21,8 @@ const combineReducer = combineReducers({
   dot: dot,
   colorPalette: colorPalette,
   paintTool: paintTool,
+  palette: palette,
+  loading,
 });
 
 const dotActionsHandler = (
@@ -104,6 +109,10 @@ function rootReducer(state, action) {
   const intermediateState = combineReducer(state, action);
   const finalState = crossSilceReducer(intermediateState, action);
   return finalState;
+}
+
+export function* rootSaga() {
+  yield all([dotSaga()]);
 }
 
 export default rootReducer;
