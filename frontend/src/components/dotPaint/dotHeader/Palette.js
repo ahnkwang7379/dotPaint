@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
-import PaletteCell from '../../common/PaletteCell';
+import styled, { css } from 'styled-components';
 import NickBlock from './NickBlock';
+import PaletteCell from '../../common/PaletteCell';
 
 const PaletteWrapper = styled.div`
   padding-top: 15px;
@@ -10,26 +10,61 @@ const PaletteWrapper = styled.div`
   background: rgba(10, 10, 10, 0.2);
 `;
 const PaletteBlock = styled.div`
-  display: flex;
+  display: inherit;
+`;
+const PaletteSet = styled.div`
+  display: inherit;
   & + & {
-    margin-top: 3px;
+    margin-top: 10px;
   }
+  ${(props) =>
+    props.odd &&
+    css`
+      margin-left: 17px;
+    `}
 `;
 
-const Palette = ({ paletteSet }) => {
+const Palette = ({
+  paletteSet,
+  onSelectColor,
+  onInsertColor,
+  onChangeNick,
+  onDeletePalette,
+  selectColorId,
+}) => {
   return (
     <PaletteWrapper>
       {paletteSet.map((palette) => (
-        <PaletteBlock key={palette.id}>
-          <NickBlock palette={palette} />
-          {palette.colors.map((color, idx) =>
-            idx % 2 === 0 ? (
-              <PaletteCell key={idx} color={color} />
+        <PaletteSet key={palette.id} odd={palette.id % 2 === 0}>
+          <NickBlock
+            palette={palette}
+            onChangeNick={onChangeNick}
+            onDeletePalette={onDeletePalette}
+          />
+          <PaletteBlock>
+            {palette.colors.map((color, idx) => (
+              <PaletteCell
+                key={idx}
+                color={color}
+                selectData={{ palette: palette.id, color: idx }}
+                onSelectColor={onSelectColor}
+                selected={
+                  palette.id === selectColorId.paletteId &&
+                  idx === selectColorId.colorId
+                }
+              />
+            ))}
+            {/* palette 색은 최대 10개까지 */}
+            {palette.colors.length <= 10 ? (
+              <PaletteCell
+                selectData={{ palette: palette.id }}
+                onInsertColor={onInsertColor}
+              />
             ) : (
-              <PaletteCell key={idx} color={color} odd />
-            ),
-          )}
-        </PaletteBlock>
+              ''
+            )}
+          </PaletteBlock>
+        </PaletteSet>
       ))}
     </PaletteWrapper>
   );

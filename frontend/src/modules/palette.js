@@ -60,16 +60,73 @@ const DEFAULT_PALETTE = [
 
 const SELECT_COLOR = 'palette/SELECT_COLOR';
 const CHANGE_COLOR = 'palette/CHANGE_COLOR';
+const INSERT_COLOR = 'palette/INSERT_COLOR';
+const DELETE_COLOR = 'palette/DELETE_COLOR';
+const CHANGE_NICK = 'palette/CHANGE_NICK';
+const INSERT_PALETTE = 'palette/INSERT_PALETTE';
+const DELETE_PALETTE = 'palette/DELETE_PALETTE';
 
-export const selectColor = createAction(SELECT_COLOR);
+export const selectColor = createAction(
+  SELECT_COLOR,
+  (selectData) => selectData,
+);
 export const changeColor = createAction(CHANGE_COLOR);
+export const insertColor = createAction(INSERT_COLOR, (paletteId) => paletteId);
+export const deleteColor = createAction(DELETE_COLOR);
+export const changeNick = createAction(
+  CHANGE_NICK,
+  ({ paletteId, newNick }) => ({ paletteId, newNick }),
+);
+export const insertPalette = createAction(INSERT_PALETTE);
+export const deletePalette = createAction(
+  DELETE_PALETTE,
+  (paletteId) => paletteId,
+);
 
 const initialState = {
   paletteSet: DEFAULT_PALETTE,
   paletteSetCount: '',
-  selectColorId: 0,
+  selectColorId: {
+    paletteId: 0,
+    colorId: 0,
+  },
 };
 
-const palette = handleActions({}, initialState);
+const palette = handleActions(
+  {
+    [SELECT_COLOR]: (state, { payload: selectData }) =>
+      produce(state, (draft) => {
+        draft.selectColorId = {
+          paletteId: selectData.palette,
+          colorId: selectData.color,
+        };
+      }),
+    [CHANGE_COLOR]: () => {},
+    [INSERT_COLOR]: (state, { payload: paletteId }) =>
+      produce(state, (draft) => {
+        draft.paletteSet.map((paletteSet) =>
+          paletteSet.id === paletteId
+            ? paletteSet.colors.push('#ffffff')
+            : paletteSet,
+        );
+      }),
+    [CHANGE_NICK]: (state, { payload: { paletteId, newNick } }) =>
+      produce(state, (draft) => {
+        draft.paletteSet.map((paletteSet) =>
+          paletteSet.id === paletteId
+            ? (paletteSet.nick = newNick)
+            : paletteSet,
+        );
+      }),
+    [INSERT_PALETTE]: () => ({}),
+    [DELETE_PALETTE]: (state, { payload: paletteId }) =>
+      produce(state, (draft) => {
+        draft.paletteSet = draft.paletteSet.filter(
+          (paletteSet) => paletteSet.id !== paletteId,
+        );
+      }),
+  },
+  initialState,
+);
 
 export default palette;

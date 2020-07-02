@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { RiAddLine } from 'react-icons/ri';
 
 const selectBorder = '#000000';
 const defaultBorder = '#ffffff';
@@ -8,13 +9,13 @@ const Cell = styled.div`
   cursor: pointer;
   box-sizing: border-box;
   position: relative;
-  width: 17.32px;
-  height: 30px;
+  width: 30px;
+  height: 17.32px;
+  margin-left: 3px;
   background-color: ${(props) => props.color || '#f2c9d2'};
-  margin-left: 11px;
-  border-top: solid 3px
+  border-left: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
-  border-bottom: solid 3px
+  border-right: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
   transition: all 0.5s linear;
   ${(props) =>
@@ -31,16 +32,16 @@ const Cell = styled.div`
     z-index: 1;
     width: 21.21px;
     height: 21.21px;
-    -webkit-transform: scaleX(0.5774) rotate(45deg);
-    -ms-transform: scaleX(0.5774) rotate(45deg);
-    transform: scaleX(0.5774) rotate(45deg);
+    -webkit-transform: scaleY(0.5774) rotate(-45deg);
+    -ms-transform: scaleY(0.5774) rotate(-45deg);
+    transform: scaleY(0.5774) rotate(-45deg);
     background-color: ${(props) => props.color || '#f2c9d2'};
-    top: 1.3934px;
+    left: 1.3934px;
     transition: all 0.5s linear;
   }
 
   :before {
-    right: -10.6066px;
+    top: -10.6066px;
     border-top: solid 4.2426px
       ${(props) => (props.selected ? selectBorder : defaultBorder)};
     border-right: solid 4.2426px
@@ -48,20 +49,47 @@ const Cell = styled.div`
   }
 
   :after {
-    left: -10.6066px;
+    bottom: -10.6066px;
     border-bottom: solid 4.2426px
       ${(props) => (props.selected ? selectBorder : defaultBorder)};
     border-left: solid 4.2426px
       ${(props) => (props.selected ? selectBorder : defaultBorder)};
   }
+
+  &:hover {
+    color: white;
+  }
 `;
 
-const PaletteCell = ({ color, id, onSelectedColor, selected, odd }) => {
+const AddIcon = styled(RiAddLine)`
+  z-index: 2;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  &:hover {
+    color: white;
+  }
+`;
+
+const PaletteCell = ({
+  color,
+  selectData,
+  onInsertColor,
+  onSelectColor,
+  selected,
+}) => {
   const onSelectClick = () => {
-    onSelectedColor(id);
+    if (selected !== true) onSelectColor(selectData);
   };
-  return (
-    <Cell color={color} selected={selected} onClick={onSelectClick} odd={odd} />
+  const onInsertClick = () => {
+    onInsertColor(selectData.palette);
+  };
+  return color === undefined ? (
+    <Cell color="rgba(0,0,0,0)" onClick={onInsertClick}>
+      <AddIcon />
+    </Cell>
+  ) : (
+    <Cell color={color} selected={selected} onClick={onSelectClick} />
   );
 };
 
