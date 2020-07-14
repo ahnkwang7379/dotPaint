@@ -1,11 +1,12 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
+import shortid from 'shortid';
 import { put, throttle, takeLatest } from 'redux-saga/effects';
 
 // 하나의 palette에 최대 10개의 색 까지. palette는 10개까지
 const DEFAULT_PALETTE = [
   {
-    id: 0,
+    id: shortid.generate(),
     nick: 'Forest',
     colors: [
       '#393b2d',
@@ -20,17 +21,17 @@ const DEFAULT_PALETTE = [
     ],
   },
   {
-    id: 1,
+    id: shortid.generate(),
     nick: 'Ocean',
     colors: ['#4b73a4', '#667883', '#937e6a', '#b89d80', '#dadbd6', '#faf9fb'],
   },
   {
-    id: 2,
+    id: shortid.generate(),
     nick: 'City',
     colors: ['#03070a', '#374552', '#3c8999', '#959ea7', '#9ccce3', '#b8cde0'],
   },
   {
-    id: 3,
+    id: shortid.generate(),
     nick: 'Robot',
     colors: [
       '#171516',
@@ -43,7 +44,7 @@ const DEFAULT_PALETTE = [
     ],
   },
   {
-    id: 4,
+    id: shortid.generate(),
     nick: 'Lizard',
     colors: [
       '#1d0e0b',
@@ -72,7 +73,10 @@ export const selectColor = createAction(
 );
 export const changeColor = createAction(CHANGE_COLOR);
 export const insertColor = createAction(INSERT_COLOR, (paletteId) => paletteId);
-export const deleteColor = createAction(DELETE_COLOR);
+export const deleteColor = createAction(
+  DELETE_COLOR,
+  (selectData) => selectData,
+);
 export const changeNick = createAction(
   CHANGE_NICK,
   ({ paletteId, newNick }) => ({ paletteId, newNick }),
@@ -87,10 +91,22 @@ const initialState = {
   paletteSet: DEFAULT_PALETTE,
   paletteSetCount: '',
   selectColorId: {
-    paletteId: 0,
+    paletteId: DEFAULT_PALETTE[0]['id'],
     colorId: 0,
   },
 };
+
+function randomColor(arrayLength) {
+  let resultArr = [];
+  for (let i = 0; i < arrayLength; i++) {
+    resultArr.push('#' + Math.round(Math.random() * 0xffffff).toString(16));
+  }
+  return resultArr;
+}
+
+// palette나 color를 삭제하는 경우 삭제 후
+// selectColorId 관리와 오류를 방지하기 위해 호출해줄 함수
+function checkPalette() {}
 
 const palette = handleActions(
   {
@@ -106,9 +122,30 @@ const palette = handleActions(
       produce(state, (draft) => {
         draft.paletteSet.map((paletteSet) =>
           paletteSet.id === paletteId
-            ? paletteSet.colors.push('#ffffff')
+            ? paletteSet.colors.push(randomColor(1))
             : paletteSet,
         );
+      }),
+    [DELETE_COLOR]: (state, { payload: selectData }) =>
+      produce(state, (draft) => {
+        const palette = draft.paletteSet.find(
+          (paletteSet) => paletteSet.id === selectData.palette,
+        );
+        palette.colors = palette.colors.filter(
+          (color, idx) => idx !== selectData.color,
+        );
+
+        // 파레트 colors 길이가 0보다 크면 해당 파레트에서 선택한 paletteCell을 바꿔줌
+        if (palette.colors.length > 0) {
+          // 선택되있던 Cell이 0보다 크면 그 값에서 -1
+          selectData.color > 0
+            ? (draft.selectColorId.color = selectData.color - 1)
+            : (draft.selectColorId.color = 0);
+        } else {
+          // 만약 palette.colors의 길이가 0이 되어버렸다면?
+          palette.colors.push(randomColor(1));
+          draft.selectColorId.color = 0;
+        }
       }),
     [CHANGE_NICK]: (state, { payload: { paletteId, newNick } }) =>
       produce(state, (draft) => {
@@ -118,7 +155,14 @@ const palette = handleActions(
             : paletteSet,
         );
       }),
-    [INSERT_PALETTE]: () => ({}),
+    [INSERT_PALETTE]: (state) =>
+      produce(state, (draft) => {
+        draft.paletteSet.push({
+          id: shortid.generate(),
+          nick: 'New Palette',
+          colors: randomColor(5),
+        });
+      }),
     [DELETE_PALETTE]: (state, { payload: paletteId }) =>
       produce(state, (draft) => {
         draft.paletteSet = draft.paletteSet.filter(

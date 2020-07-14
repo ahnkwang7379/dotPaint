@@ -31,21 +31,25 @@ const NickButton = styled.button`
   padding: 0;
 `;
 
-const NickBlock = ({ palette, onChangeNick, onDeletePalette }) => {
-  const [nick, setNick] = useState(palette.nick);
+const NickBlock = ({
+  paletteId,
+  paletteNick,
+  onChangeNick,
+  onDeletePalette,
+}) => {
+  const [nick, setNick] = useState(paletteNick);
   const onChangeInput = (e) => {
     setNick(e.target.value);
   };
   const changeNick = () => {
-    if (palette.nick !== nick) onChangeNick(palette.id, nick);
+    if (paletteNick !== nick) onChangeNick(paletteId, nick);
   };
   const deletePalette = () => {
-    onDeletePalette(palette.id);
+    onDeletePalette(paletteId);
   };
   return (
     <>
       <NickBox>
-        <NickButton />
         <NickButton onClick={deletePalette}>
           <RiDeleteBinLine />
         </NickButton>

@@ -1,10 +1,13 @@
 import React, { useCallback } from 'react';
 import Palette from '../../../components/dotPaint/dotHeader/Palette';
+import PaletteMenu from '../../../components/dotPaint/dotHeader/PaletteMenu';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectColor,
   insertColor,
+  deleteColor,
   changeNick,
+  insertPalette,
   deletePalette,
 } from '../../../modules/palette';
 
@@ -26,12 +29,21 @@ const PaletteContainer = () => {
     },
     [dispatch],
   );
+  const onDeleteColor = useCallback(
+    (selectData) => {
+      dispatch(deleteColor(selectData));
+    },
+    [dispatch],
+  );
   const onChangeNick = useCallback(
     (paletteId, newNick) => {
       dispatch(changeNick({ paletteId: paletteId, newNick: newNick }));
     },
     [dispatch],
   );
+  const onInsertPalette = useCallback(() => {
+    dispatch(insertPalette());
+  }, [dispatch]);
   const onDeletePalette = useCallback(
     (paletteId) => {
       dispatch(deletePalette(paletteId));
@@ -40,11 +52,14 @@ const PaletteContainer = () => {
   );
   return (
     <>
+      <PaletteMenu />
       <Palette
         paletteSet={paletteSet}
         onSelectColor={onSelectColor}
         onInsertColor={onInsertColor}
+        onDeleteColor={onDeleteColor}
         onChangeNick={onChangeNick}
+        onInsertPalette={onInsertPalette}
         onDeletePalette={onDeletePalette}
         selectColorId={selectColorId}
       />

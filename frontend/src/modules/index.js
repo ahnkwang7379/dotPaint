@@ -6,6 +6,7 @@ import colorPalette from './colorPalette';
 import palette from './palette';
 import paintTool, { DOT, BUCKET, PICKER, ERASER } from './paintTool';
 import loading from './loading';
+import { produce } from 'immer';
 
 const DOT_ACTIONS = 'index/DOT_ACTIONS';
 
@@ -35,9 +36,13 @@ const dotActionsHandler = (
   // selectedPaintTool -> PaintToolState -> rowIdx, columnIdx 체크 순
   switch (paintTool) {
     case DOT:
-      const color =
-        state.colorPalette.paletteSet[state.colorPalette.selectedId];
       if (paintToolState === 'DRAGGING') {
+        const paletteId = state.palette.selectColorId.paletteId;
+        const colorId = state.palette.selectColorId.colorId;
+        const palette = state.palette.paletteSet.filter(
+          (val) => val['id'] === paletteId,
+        );
+        const color = palette[0]['colors'][colorId];
         return {
           ...state,
           dot: {
@@ -51,24 +56,26 @@ const dotActionsHandler = (
             ),
           },
         };
-      }
-      return { ...state };
+      } else return { ...state };
     case BUCKET: // 아직...
       return { ...state };
     case PICKER:
       if (paintToolState === 'DRAGGING') {
         const color = state.dot.dotSet[rowIdx][columnIdx];
-        return {
-          ...state,
-          colorPalette: {
-            ...state.colorPalette,
-            paletteSet: state.colorPalette.paletteSet.map((originColor, idx) =>
-              idx === state.colorPalette.selectedId ? color : originColor,
-            ),
-          },
-        };
+        // 색이 없는 셀을 클릭했다면
+        if (!color) return { ...state };
+        else
+          return produce(state, (draft) => {
+            const paletteId = draft.palette.selectColorId.paletteId;
+            const colorId = draft.palette.selectColorId.colorId;
+            const palette = draft.palette.paletteSet.find(
+              (palette) => palette['id'] === paletteId,
+            );
+            palette['colors'][colorId] = color;
+          });
+      } else {
+        return { ...state };
       }
-      return { ...state };
     case ERASER:
       if (paintToolState === 'DRAGGING') {
         return {

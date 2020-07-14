@@ -12,7 +12,7 @@ const Cell = styled.div`
   width: 30px;
   height: 17.32px;
   margin-left: 3px;
-  background-color: ${(props) => props.color || '#f2c9d2'};
+  background-color: ${(props) => props.color || ''};
   border-left: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
   border-right: solid 3px
@@ -35,7 +35,7 @@ const Cell = styled.div`
     -webkit-transform: scaleY(0.5774) rotate(-45deg);
     -ms-transform: scaleY(0.5774) rotate(-45deg);
     transform: scaleY(0.5774) rotate(-45deg);
-    background-color: ${(props) => props.color || '#f2c9d2'};
+    background-color: ${(props) => props.color || ''};
     left: 1.3934px;
     transition: all 0.5s linear;
   }
@@ -74,12 +74,17 @@ const AddIcon = styled(RiAddLine)`
 const PaletteCell = ({
   color,
   selectData,
-  onInsertColor,
   onSelectColor,
+  onDeleteColor,
+  onInsertColor,
   selected,
 }) => {
   const onSelectClick = () => {
     if (selected !== true) onSelectColor(selectData);
+  };
+  const onDeleteDoubleClick = () => {
+    // 만일을 위해 셀렉이 된 경우만 삭제되게
+    if (selected === true) onDeleteColor(selectData);
   };
   const onInsertClick = () => {
     onInsertColor(selectData.palette);
@@ -89,7 +94,12 @@ const PaletteCell = ({
       <AddIcon />
     </Cell>
   ) : (
-    <Cell color={color} selected={selected} onClick={onSelectClick} />
+    <Cell
+      color={color}
+      selected={selected}
+      onClick={onSelectClick}
+      onDoubleClick={onDeleteDoubleClick}
+    />
   );
 };
 
