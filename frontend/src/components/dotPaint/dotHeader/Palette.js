@@ -7,8 +7,17 @@ import { RiHeartAddLine } from 'react-icons/ri';
 const PaletteWrapper = styled.div`
   padding-top: 15px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   background: rgba(10, 10, 10, 0.2);
+`;
+const PaletteBody = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const PaletteNav = styled.div`
+  width: 200px;
+  height: 200px;
+  background: black;
 `;
 const PaletteBlock = styled.div`
   display: inherit;
@@ -27,22 +36,21 @@ const PaletteSet = styled.div`
 
 const AddPaletteButton = styled.button`
   box-sizing: border-box;
-  position: relative;
+  outline: none;
   padding: 0;
   margin: 0;
   border-radius: 1rem;
-  border: 2px solid red;
-  color: red;
-  width: 30px;
+  border: 2px solid black;
+  color: black;
+  width: 100px;
   height: 30px;
   background: white;
   cursor: pointer;
-  /* transition: all 0.5s ease-in; */
 
-  &:hover {
+  /* &:hover {
     color: black;
     border: 2px solid black;
-  }
+  } */
 `;
 
 const Palette = ({
@@ -91,14 +99,17 @@ const Palette = ({
 
   return (
     <PaletteWrapper>
-      {Palettes}
-      {count < 10 ? (
-        <PaletteSet odd={++count % 2 === 0}>
-          <AddPaletteButton onClick={onInsertPalette}>
-            <RiHeartAddLine />
-          </AddPaletteButton>
-        </PaletteSet>
-      ) : null}
+      <PaletteBody>
+        {Palettes}
+        {count < 10 ? (
+          <PaletteSet odd={++count % 2 === 0}>
+            <AddPaletteButton onClick={onInsertPalette}>
+              <RiHeartAddLine />
+            </AddPaletteButton>
+          </PaletteSet>
+        ) : null}
+      </PaletteBody>
+      <PaletteNav></PaletteNav>
     </PaletteWrapper>
   );
 };

@@ -2,8 +2,15 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import DotPaintLine from './DotPaintLine';
 
-const DotPaintBlock = styled.div`
+const DotPaintWrapper = styled.div`
   display: flex;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 30px;
+`;
+const DotPaintBlock = styled.div`
+  display: inline-flex;
   justify-content: flex-start;
   flex-direction: column;
   width: auto;
@@ -53,22 +60,27 @@ const DotPaint = ({
   //   [onChangePaintState, onDotActionHandle],
   // );
   return (
-    <DotPaintBlock onMouseLeave={onMouseUpHandler}>
-      {dotSet.map((dotLine, idx) => {
-        return (
-          <DotPaintLine
-            dotLine={dotLine}
-            key={idx}
-            dotLineIdx={idx}
-            dotSize={dotSize}
-            border={border}
-            onMouseDownHandler={onMouseDownHandler}
-            onMouseUpHandler={onMouseUpHandler}
-            onMouseOverHandler={onMouseOverHandler}
-          />
-        );
-      })}
-    </DotPaintBlock>
+    <DotPaintWrapper
+      onMouseLeave={(e) => onMouseUpHandler(e)}
+      onMouseUp={(e) => onMouseUpHandler(e)}
+    >
+      <DotPaintBlock>
+        {dotSet.map((dotLine, idx) => {
+          return (
+            <DotPaintLine
+              dotLine={dotLine}
+              key={idx}
+              dotLineIdx={idx}
+              dotSize={dotSize}
+              border={border}
+              onMouseDownHandler={onMouseDownHandler}
+              onMouseUpHandler={onMouseUpHandler}
+              onMouseOverHandler={onMouseOverHandler}
+            />
+          );
+        })}
+      </DotPaintBlock>
+    </DotPaintWrapper>
   );
 };
 

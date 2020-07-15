@@ -104,10 +104,6 @@ function randomColor(arrayLength) {
   return resultArr;
 }
 
-// palette나 color를 삭제하는 경우 삭제 후
-// selectColorId 관리와 오류를 방지하기 위해 호출해줄 함수
-function checkPalette() {}
-
 const palette = handleActions(
   {
     [SELECT_COLOR]: (state, { payload: selectData }) =>
@@ -134,7 +130,6 @@ const palette = handleActions(
         palette.colors = palette.colors.filter(
           (color, idx) => idx !== selectData.color,
         );
-
         // 파레트 colors 길이가 0보다 크면 해당 파레트에서 선택한 paletteCell을 바꿔줌
         if (palette.colors.length > 0) {
           // 선택되있던 Cell이 0보다 크면 그 값에서 -1
@@ -168,6 +163,21 @@ const palette = handleActions(
         draft.paletteSet = draft.paletteSet.filter(
           (paletteSet) => paletteSet.id !== paletteId,
         );
+
+        // palette 삭제 후 paletteSet에 아무것도 없다면 새로 추가
+        if (draft.paletteSet.length === 0) {
+          draft.paletteSet.push({
+            id: shortid.generate(),
+            nick: 'Must Have One',
+            colors: randomColor(5),
+          });
+        }
+
+        // 새로 selectColorId 지정
+        draft.selectColorId = {
+          paletteId: draft.paletteSet[0].id,
+          colorId: 0,
+        };
       }),
   },
   initialState,
