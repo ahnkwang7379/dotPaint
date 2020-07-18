@@ -1,22 +1,4 @@
-const Koa = require('Koa');
+/* exlint-disable no-global-assign */
 
-const app = new Koa();
-
-app.use((ctx, next) => {
-  console.log(ctx.url);
-  console.log(1);
-  next();
-});
-
-app.use((ctx, next) => {
-  console.log(2);
-  next();
-});
-
-app.use((ctx) => {
-  ctx.body = 'hello world';
-});
-
-app.listen(4000, () => {
-  console.log('Listening to port 4000');
-});
+require = require('esm')(module /*, options*/);
+module.exports = require('./main.js');
