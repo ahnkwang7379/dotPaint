@@ -1,126 +1,173 @@
-import shortid from 'shortid';
+import Palette from '../../models/palette';
+import mongoose from 'mongoose';
+import Joi from 'joi';
 
-const palettes = [
+const { ObjectId } = mongoose.Types;
+
+export const getPaletteById = async (ctx, next) => {
+  const { id } = ctx.params;
+  if (!ObjectId.isValid(id)) {
+    ctx.status = 400;
+    return;
+  }
+  try {
+    const palette = await Palette.findById(id);
+    if (!palette) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.state.palette = palette;
+    return next();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+// 수정, 삭제 시 id 체크
+export const checkOwnPalette = (ctx, next) => {
+  const { user, palette } = ctx.state;
+  if (palette.user._id.toString() !== user._id) {
+    ctx.status = 403;
+    return;
+  }
+  return next();
+};
+
+/*
+  POST /api/palettes
   {
-    id: shortid.generate(),
-    nick: 'Forest',
-    colors: [
-      '#393b2d',
-      '#75651a',
-      '#775b1c',
-      '#788260',
-      '#bab887',
-      '#dfd6c5',
-      '#e6e6e6',
-      '#eee6d1',
-      '#f8eacf',
-    ],
-  },
-];
-
-/**
- * 신규 palette 추가
- * POST /api/palettes
- * { nick, colors }
+    nick: 'palette이름',
+    colors: ['#색', '#색2' ...]
+    tags: ['#태그1', '#태그2' ...]
+   }
  */
-export const addPalette = (ctx) => {
-  const { nick, colors } = ctx.request.body;
-  const paletteId = shortid.generate();
-  const palette = { id: paletteId, nick, colors };
-  palettes.push(palette);
-  ctx.body = palette;
+export const addPalette = async (ctx) => {
+  const schema = Joi.object().keys({
+    // 검증 로직
+    nick: Joi.string().required().max(30),
+    colors: Joi.array().items(Joi.string()).required().max(10),
+    tags: Joi.array().items(Joi.string()).max(10),
+  });
+
+  // 검증 후 에러 처리
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  const { nick, colors, tags } = ctx.request.body;
+  const palette = new Palette({
+    nick,
+    colors,
+    tags,
+    user: ctx.state.user,
+  });
+  try {
+    await palette.save();
+    ctx.body = palette;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
 
-/**
- * palette 전체 조회
- * GET /api/palettes
+/*
+   GET /api/Palettes?username=&tag=&page=
  */
-export const palettesList = (ctx) => {
-  ctx.body = palettes;
+export const palettesList = async (ctx) => {
+  // 페이지네이션
+  const page = parseInt(ctx.query.page || '1', 10);
+
+  if (page < 1) {
+    ctx.status = 400;
+    return;
+  }
+
+  const { tag, username } = ctx.query;
+  // tag, username 값이 유효할 시 넣고 그렇지 않으면 넣지 않음
+  const query = {
+    ...(username ? { 'user.username': username } : {}),
+    ...(tag ? { tags: tag } : {}),
+  };
+
+  try {
+    const palettes = await Palette.find(query)
+      .limit(10)
+      .skip((page - 1) * 10)
+      .exec();
+    const paletteCount = await Palette.countDocuments(query).exec();
+    ctx.set('Last-page', Math.ceil(paletteCount / 10));
+    ctx.body = palettes;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
 
-/**
- * nick 으로 검색
- * GET /api/palettes/:nick
+/*
+  GET /api/palettes/:nick
  */
-export const findPaletteWithNick = (ctx) => {
+export const findPaletteWithNick = async (ctx) => {
   const { nick } = ctx.params;
-  const palettesFoundNick = palettes.find((palette) => palette.nick === nick);
-  if (!palettesFoundNick) {
-    ctx.body = {
-      message: 'Not Fount Palette',
-    };
-    return;
+  try {
+    const palette = await Palette.findByNick(nick).exec();
+    if (!nick) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = palette;
+  } catch (e) {
+    ctx.thorw(500, e);
   }
-  ctx.body = palettesFoundNick;
 };
 
-/**
- * 특정 palette 제거
- * DELETE /api/palettes/:id
+/*
+  DELETE /api/palettes/:id
  */
-export const removePaletteWithId = (ctx) => {
+export const removePaletteWithId = async (ctx) => {
   const { id } = ctx.params;
-  // 해당 id의 palette의 index확인
-  const index = palettes.findIndex((palette) => palette.id === id);
-  // 없으면 에러 반환
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '존재하지 않는 파레트입니다.',
-    };
-    return;
+  try {
+    await Palette.findByIdAndRemove(id).exec();
+    ctx.status = 204; // NO CONTENT
+  } catch (e) {
+    ctx.throw(500, e);
   }
-  // palette 제거
-  palettes.splice(index, 1);
-  ctx.status = 204;
 };
 
-/**
- * palette 수정
- * PUT /api/palettes/:id
- * { nick, colors }
+/*
+  PATCH /api/palettes/:id
+  {
+    nick: '새 닉네임',
+    colors: ['바뀐 색상들'...],
+    tags: ['바뀐 태그들'...],
+  }
  */
-export const replacePalette = (ctx) => {
-  // 전체 정보를 교체한다
+export const updatePalette = async (ctx) => {
   const { id } = ctx.params;
-  const index = palettes.findIndex((palette) => palette.id === id);
 
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '존재하지 않는 파레트입니다.',
-    };
+  const schema = Joi.object().keys({
+    nick: Joi.string().max(30),
+    colors: Joi.array().items(Joi.string()).max(10),
+    tags: Joi.array().items(Joi.string()).max(10),
+  });
+
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
     return;
   }
-  // 전체 객체를 덮어 씌움
-  palettes[index] = {
-    id,
-    ...ctx.request.body,
-  };
-  ctx.body = palettes[index];
-};
 
-/**
- * palette nick, colors 수정
- * PATCH /api/palettes/:id
- * { nick, colors }
- */
-export const updatePalette = (ctx) => {
-  // PATCH 메서드는 주어진 필드만 교체하게
-  const { id } = ctx.params;
-  const index = palettes.findIndex((palette) => palette.id === id);
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '존재하지 않는 파레트입니다.',
-    };
-    return;
+  try {
+    const palette = await Palette.findByIdAndUpdate(id, ctx.request.body, {
+      new: true, // 업데이트 된 후의 새로운 데이터를 반환
+    }).exec();
+    if (!palette) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = palette;
+  } catch (e) {
+    ctx.thorw(500, e);
   }
-  // 기존 값에 덮어씌움
-  palettes[index] = {
-    ...palettes[index],
-    ...ctx.request.body,
-  };
-  ctx.body = palettes[index];
 };
