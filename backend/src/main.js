@@ -7,8 +7,6 @@ import mongoose from 'mongoose';
 import api from './api';
 import jwtMiddleware from './lib/jwtMiddleware';
 
-import createFakeData from './createFakeData';
-
 // process.env 내부 값에 대한 레퍼런스 만들기
 const { PORT, MONGO_URI } = process.env;
 
@@ -16,7 +14,6 @@ mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => {
     console.log('Connected to MongoDB');
-    // createFakeData();
   })
   .catch((e) => {
     console.log(e);

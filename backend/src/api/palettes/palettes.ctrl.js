@@ -37,7 +37,7 @@ export const checkOwnPalette = (ctx, next) => {
   POST /api/palettes
   {
     nick: 'palette이름',
-    colors: ['#색', '#색2' ...]
+    colors: ['#색', '#색2' ...],
     tags: ['#태그1', '#태그2' ...]
    }
  */

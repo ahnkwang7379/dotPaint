@@ -3,11 +3,14 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const PaletteSchema = new Schema({
-  id: String,
   nick: String,
   colors: [String],
   tags: [String],
   publishedDate: {
+    type: Date,
+    default: Date.now,
+  },
+  lastUpdateDate: {
     type: Date,
     default: Date.now,
   },
