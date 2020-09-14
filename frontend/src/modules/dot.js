@@ -14,8 +14,8 @@ const INCREASE_DOT_AREA = 'dot/INCREASE_DOT_AREA';
 const INCREASE_ASYNC = 'dot/INCREASE_ASYNC';
 
 // initialState
-export const INITIAL_ROW = 32;
-export const INITIAL_COLUMN = 32;
+export const INITIAL_ROW = 10;
+export const INITIAL_COLUMN = 10;
 export const INITIAL_DOT_DOTSIZE = 1;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };

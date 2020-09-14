@@ -2,23 +2,15 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const PaletteSetSchema = new Schema({
-  user: {
-    _id: mongoose.Types.ObjectId,
-    username: String,
+const PaletteSetSchema = new Schema(
+  {
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    palette: [{ type: Schema.Types.ObjectId, ref: 'Palette' }],
   },
-  palette: [
-    {
-      _id: mongoose.Types.ObjectId,
-      nick: String,
-      colors: [String],
-    },
-  ],
-  lastUpdateDate: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true },
+);
 
 const PaletteSet = mongoose.model('PaletteSet', PaletteSetSchema);
 export default PaletteSet;
+
+// 사용 안할듯

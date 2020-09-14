@@ -12,12 +12,12 @@ const jwtMiddleware = async (ctx, next) => {
     };
     // 토큰의 남은 유효기간 체크
     const now = Math.floor(Date.now() / 1000);
-    if (decoded.exp - now < 60 * 60 * 6) {
-      // 6시간 이내로 남았으면 재발행
+    if (decoded.exp - now < 60 * 60 * 24 * 1) {
+      // 하루 이내로 남았으면 재발행
       const user = await User.findById(decoded._id);
       const token = user.generateToken();
       ctx.cookies.set('access_token', token, {
-        maxAge: 1000 * 60 * 60 * 24, // 1day
+        maxAge: 1000 * 60 * 60 * 24 * 3, // 3day
         httpOnly: true,
       });
     }

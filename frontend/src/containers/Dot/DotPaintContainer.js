@@ -1,15 +1,17 @@
 import React, { useCallback } from 'react';
 import DotPaint from '../../components/dotPaint/DotPaint';
+import Preview from '../../components/dotPaint/Preview';
 import { useSelector, useDispatch } from 'react-redux';
 import { changePaintState } from '../../modules/paintTool';
 import { dotActions } from '../../modules/index';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();
-  const { dotSet, border, dotSize } = useSelector(({ dot }) => ({
+  const { dotSet, border, dotSize, column } = useSelector(({ dot }) => ({
     dotSet: dot.dotSet,
     border: dot.border,
     dotSize: dot.dotSize,
+    column: dot.column,
   }));
 
   const onChangePaintState = useCallback(
@@ -28,6 +30,7 @@ const DotpaintContainer = () => {
   );
   return (
     <div>
+      <Preview dotSet={dotSet} column={column} />
       <DotPaint
         dotSet={dotSet}
         border={border}

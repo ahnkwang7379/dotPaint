@@ -4,6 +4,7 @@ import Joi from 'joi';
 
 const { ObjectId } = mongoose.Types;
 
+// ObjectId로 palette를 찾아서 state에 넣어 사용할 수 있게 해줌
 export const getPaletteById = async (ctx, next) => {
   const { id } = ctx.params;
   if (!ObjectId.isValid(id)) {
@@ -23,7 +24,7 @@ export const getPaletteById = async (ctx, next) => {
   }
 };
 
-// 수정, 삭제 시 id 체크
+// 수정, 삭제 시 palette와 현재 접속한 id 체크
 export const checkOwnPalette = (ctx, next) => {
   const { user, palette } = ctx.state;
   if (palette.user._id.toString() !== user._id) {
@@ -34,7 +35,7 @@ export const checkOwnPalette = (ctx, next) => {
 };
 
 /*
-  POST /api/palettes
+  POST /api/palette
   {
     nick: 'palette이름',
     colors: ['#색', '#색2' ...],
@@ -73,9 +74,9 @@ export const addPalette = async (ctx) => {
 };
 
 /*
-   GET /api/Palettes?username=&tag=&page=
+   GET /api/palette?username=&tag=&page=
  */
-export const palettesList = async (ctx) => {
+export const paletteList = async (ctx) => {
   // 페이지네이션
   const page = parseInt(ctx.query.page || '1', 10);
 
@@ -92,20 +93,20 @@ export const palettesList = async (ctx) => {
   };
 
   try {
-    const palettes = await Palette.find(query)
+    const palette = await Palette.find(query)
       .limit(10)
       .skip((page - 1) * 10)
       .exec();
     const paletteCount = await Palette.countDocuments(query).exec();
     ctx.set('Last-page', Math.ceil(paletteCount / 10));
-    ctx.body = palettes;
+    ctx.body = palette;
   } catch (e) {
     ctx.throw(500, e);
   }
 };
 
 /*
-  GET /api/palettes/:nick
+  GET /api/palette/:nick
  */
 export const findPaletteWithNick = async (ctx) => {
   const { nick } = ctx.params;
@@ -122,7 +123,7 @@ export const findPaletteWithNick = async (ctx) => {
 };
 
 /*
-  DELETE /api/palettes/:id
+  DELETE /api/palette/:id
  */
 export const removePaletteWithId = async (ctx) => {
   const { id } = ctx.params;
@@ -135,7 +136,7 @@ export const removePaletteWithId = async (ctx) => {
 };
 
 /*
-  PATCH /api/palettes/:id
+  PATCH /api/palette/:id
   {
     nick: '새 닉네임',
     colors: ['바뀐 색상들'...],

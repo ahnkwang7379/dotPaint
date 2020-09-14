@@ -2,10 +2,30 @@ import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-const UserSchema = new Schema({
-  username: String,
-  hashedPassword: String,
-});
+const UserSchema = new Schema(
+  {
+    username: String,
+    hashedPassword: String,
+    // preset은 3개 정도 등록할 수 있게
+    palettePreset: [{ type: Schema.Types.ObjectId, ref: 'Palette' }],
+    // 도트판도 3개정도 작업하던게 저장 가능하게
+    dotArtPreset: [
+      {
+        name: { type: String, default: 'Dot Art' },
+        dotFrame: [
+          {
+            dotSet: [String],
+            border: { borderSize: String, color: String },
+            dotSize: String,
+            row: String,
+            column: String,
+          },
+        ],
+      },
+    ],
+  },
+  { timestamps: true },
+);
 
 UserSchema.methods.setPassword = async function (password) {
   const hash = await bcrypt.hash(password, 10);
