@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import DotSizeChanger from '../../../components/dotPaint/dotHeader/DotSizeChanger';
-import { changeDotSize } from '../../../modules/dot';
+import DotSizeChanger from '../../components/dotPaint/dotHeader/DotSizeChanger';
+import { changeDotSize } from '../../modules/dot';
 import { useDispatch, useSelector } from 'react-redux';
 
 const DotSizeContainer = () => {

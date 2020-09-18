@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
-import DotPaint from '../../components/dotPaint/DotPaint';
-import Preview from '../../components/dotPaint/Preview';
+import DotPaint from '../components/dotPaint/DotPaint';
+import Preview from '../components/dotPaint/Preview';
 import { useSelector, useDispatch } from 'react-redux';
-import { changePaintState } from '../../modules/paintTool';
-import { dotActions } from '../../modules/index';
+import { changePaintState } from '../modules/paintTool';
+import { dotActions } from '../modules/index';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();

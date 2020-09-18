@@ -46,6 +46,15 @@ export const getDotArtById = async (ctx, next) => {
   }
 };
 
+export const checkOwnDotArt = (ctx, next) => {
+  const { user, dotArt } = ctx.state;
+  if (dotArt.user.toString() !== user._id) {
+    ctx.status = 403;
+    return;
+  }
+  return next();
+};
+
 /*
   GET /api/dotArt:id
 */
@@ -60,7 +69,7 @@ export const getDotArt = async (ctx, next) => {
       dotFrame: [
           {
               dotSet: ['#색1', '#색2' ...],
-              border: { size: '1', color: '#색상' },
+              border: { borderSize: '1', color: '#색상' },
               dotSize: '1',
               row: '16',
               column: '16',
@@ -103,6 +112,62 @@ export const createDotArt = async (ctx, next) => {
   });
   try {
     await dotArt.save();
+    ctx.body = dotArt;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+/*
+  PATCH /api/dotArt/:id
+  {
+    name: "다른이름",
+    dotFrame: [
+      {
+        dotSet: ["색상코드를 배열로 넣어준다", "#000000", "ffffff" ...],
+        border: { borderSize: "1", color: "1"},
+        dotSize: "1",
+        row: "1",
+        column: "1",
+      },
+    ],
+    openArt: true or false // 공개여부
+  }
+ */
+export const saveDotArt = async (ctx, next) => {
+  const schema = Joi.object().keys({
+    name: Joi.string().max(100),
+    dotFrame: Joi.array().items(
+      Joi.object().keys({
+        dotSet: Joi.array(),
+        border: Joi.object().keys({
+          borderSize: Joi.string(),
+          color: Joi.string(),
+        }),
+        dotSize: Joi.string(),
+        row: Joi.string(),
+        column: Joi.string(),
+      }),
+    ),
+    openArt: Joi.boolean(),
+  });
+
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  try {
+    const { id } = ctx.params;
+    const dotArt = await DotArt.findByIdAndUpdate(id, ctx.request.body, {
+      new: true,
+    }).exec();
+    if (!dotArt) {
+      ctx.status = 404;
+      return;
+    }
     ctx.body = dotArt;
   } catch (e) {
     ctx.throw(500, e);

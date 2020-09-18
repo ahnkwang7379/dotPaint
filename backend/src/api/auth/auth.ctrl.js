@@ -2,13 +2,13 @@ import Joi from 'joi';
 import User from '../../models/user';
 
 /*  
-  POST /api/auth/register
+  POST /api/auth/signup
   {
       username: 'name',
       password: 'pas'
   }
  */
-export const register = async (ctx) => {
+export const signup = async (ctx) => {
   // Request Body 검증
   const schema = Joi.object().keys({
     username: Joi.string().alphanum().min(3).max(20).required(),

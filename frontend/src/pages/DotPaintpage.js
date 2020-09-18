@@ -1,11 +1,11 @@
 import React from 'react';
-import DotPaintContainer from '../containers/Dot/DotPaintContainer';
-import DotBorderContainer from '../containers/Dot/DotHeader/DotBorderContainer';
-import DotSizeContainer from '../containers/Dot/DotHeader/DotSizeContainer';
-import DotAreaContainer from '../containers/Dot/DotHeader/DotAreaContainer';
+import DotPaintContainer from '../containers/DotPaintContainer';
+import DotBorderContainer from '../containers/DotHeader/DotBorderContainer';
+import DotSizeContainer from '../containers/DotHeader/DotSizeContainer';
+import DotAreaContainer from '../containers/DotHeader/DotAreaContainer';
 // import ColorPaletteContainer from '../containers/Dot/DotHeader/ColorPaletteContainer';
-import PaintToolContainer from '../containers/Dot/DotHeader/PaintToolContainer';
-import Palette from '../containers/Dot/DotHeader/PaletteContainer';
+import PaintToolContainer from '../containers/DotHeader/PaintToolContainer';
+import Palette from '../containers/DotHeader/PaletteContainer';
 
 const DotPaintpage = () => {
   return (

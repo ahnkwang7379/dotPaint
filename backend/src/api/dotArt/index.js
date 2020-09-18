@@ -12,6 +12,12 @@ dotArt.get(
 );
 
 dotArt.post('/', checkLoggedIn, dotArtCtrl.createDotArt);
-dotArt.patch('/');
+dotArt.patch(
+  '/:id',
+  checkLoggedIn,
+  dotArtCtrl.getDotArtById,
+  dotArtCtrl.checkOwnDotArt,
+  dotArtCtrl.saveDotArt,
+);
 
 export default dotArt;

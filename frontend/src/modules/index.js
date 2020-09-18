@@ -6,6 +6,8 @@ import colorPalette from './colorPalette';
 import palette from './palette';
 import paintTool, { DOT, BUCKET, PICKER, ERASER } from './paintTool';
 import loading from './loading';
+import auth, { authSaga } from './auth';
+import user, { userSaga } from './user';
 import { produce } from 'immer';
 
 const DOT_ACTIONS = 'index/DOT_ACTIONS';
@@ -23,6 +25,8 @@ const combineReducer = combineReducers({
   colorPalette: colorPalette,
   paintTool: paintTool,
   palette: palette,
+  auth: auth,
+  user,
   loading,
 });
 
@@ -119,7 +123,7 @@ function rootReducer(state, action) {
 }
 
 export function* rootSaga() {
-  yield all([dotSaga()]);
+  yield all([dotSaga(), authSaga(), userSaga()]);
 }
 
 export default rootReducer;

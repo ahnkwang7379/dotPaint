@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import Palette from '../../../components/dotPaint/dotHeader/Palette';
-import PaletteMenu from '../../../components/dotPaint/dotHeader/PaletteMenu';
+import Palette from '../../components/dotPaint/dotHeader/Palette';
+import PaletteMenu from '../../components/dotPaint/dotHeader/PaletteMenu';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectColor,
@@ -9,7 +9,7 @@ import {
   changeNick,
   insertPalette,
   deletePalette,
-} from '../../../modules/palette';
+} from '../../modules/palette';
 
 const PaletteContainer = () => {
   const dispatch = useDispatch();

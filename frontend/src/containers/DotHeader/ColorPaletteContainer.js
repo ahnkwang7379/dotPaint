@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
-import ColorPalette from '../../../components/dotPaint/colorPalette/ColorPalette';
-import styled from 'styled-components';
-import { selectColor, changePaletteColor } from '../../../modules/colorPalette';
+import ColorPalette from '../../components/dotPaint/colorPalette/ColorPalette';
+import styled from './styled-components';
+import { selectColor, changePaletteColor } from '../../modules/colorPalette';
 import { useSelector, useDispatch } from 'react-redux';
 
 const ColorPaletteBlock = styled.div`

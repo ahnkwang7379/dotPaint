@@ -1,10 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  changeDotBorderSize,
-  changeDotBorderColor,
-} from '../../../modules/dot';
-import BorderControl from '../../../components/dotPaint/dotHeader/BorderControl';
+import { changeDotBorderSize, changeDotBorderColor } from '../../modules/dot';
+import BorderControl from '../../components/dotPaint/dotHeader/BorderControl';
 
 const DotBorderContainer = () => {
   const dispatch = useDispatch();

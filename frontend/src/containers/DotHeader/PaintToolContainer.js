@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { changePaintTool } from '../../../modules/paintTool';
-import PaintTool from '../../../components/dotPaint/dotHeader/PaintTool';
+import { changePaintTool } from '../../modules/paintTool';
+import PaintTool from '../../components/dotPaint/dotHeader/PaintTool';
 import { useSelector, useDispatch } from 'react-redux';
 
 const PaintToolContainer = () => {
