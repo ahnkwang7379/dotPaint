@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import DotPaintPage from './pages/DotPaintPage';
+import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import IndexPage from './pages/IndexPage';
@@ -27,7 +27,7 @@ const App = () => {
           <Route path="/" component={IndexPage} exact />
           <Route component={LoginPage} path="/login" exact />
           <Route component={SignUpPage} path="/signup" exact />
-          <Route component={DotPaintPage} path="/dot" exact />
+          <Route component={MainPage} path="/main" />
           <Route
             render={({ location }) => (
               <div>

@@ -14,11 +14,6 @@ const PaletteBody = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const PaletteNav = styled.div`
-  width: 200px;
-  height: 200px;
-  background: black;
-`;
 const PaletteBlock = styled.div`
   display: inherit;
 `;
@@ -109,7 +104,6 @@ const Palette = ({
           </PaletteSet>
         ) : null}
       </PaletteBody>
-      <PaletteNav></PaletteNav>
     </PaletteWrapper>
   );
 };

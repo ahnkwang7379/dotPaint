@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import Palette from '../../components/dotPaint/dotHeader/Palette';
-import PaletteMenu from '../../components/dotPaint/dotHeader/PaletteMenu';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectColor,
@@ -52,7 +51,6 @@ const PaletteContainer = () => {
   );
   return (
     <>
-      <PaletteMenu />
       <Palette
         paletteSet={paletteSet}
         onSelectColor={onSelectColor}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Paper, Container, Typography } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
@@ -12,10 +12,16 @@ import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(20),
+    marginTop: theme.spacing(10),
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     display: 'flex',
@@ -37,11 +43,61 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthTemplate = ({ type, onSubmit, onChange, form, history }) => {
+const titleMap = {
+  login: 'Login',
+  signup: 'SignUp',
+};
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const AuthTemplate = ({
+  type,
+  onSubmit,
+  onChange,
+  form,
+  history,
+  validError,
+  userAuthError,
+}) => {
+  const title = titleMap[type];
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (userAuthError) {
+      setOpen(true);
+    }
+  }, [userAuthError]);
 
   return (
     <React.Fragment>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{title} fail</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            {userAuthError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Container maxWidth="xs">
         <CssBaseline />
         <Paper className={classes.paper}>
@@ -60,6 +116,8 @@ const AuthTemplate = ({ type, onSubmit, onChange, form, history }) => {
               name="username"
               label="User"
               id="username"
+              helperText={validError.username}
+              error={validError.username ? true : false}
               autoFocus
               InputProps={{
                 endAdornment: (
@@ -80,6 +138,8 @@ const AuthTemplate = ({ type, onSubmit, onChange, form, history }) => {
               label="Password"
               type="password"
               id="password"
+              helperText={validError.password}
+              error={validError.password ? true : false}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -100,6 +160,8 @@ const AuthTemplate = ({ type, onSubmit, onChange, form, history }) => {
                 label="PasswordConfirm"
                 type="password"
                 id="passwordConfirm"
+                helperText={validError.passwordConfirm}
+                error={validError.passwordConfirm ? true : false}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">

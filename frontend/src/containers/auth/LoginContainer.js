@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, login } from '../../modules/auth';
 import AuthTemplate from '../../components/common/AuthTemplate';
@@ -7,6 +7,8 @@ import { check } from '../../modules/user';
 
 const LoginContainer = ({ history }) => {
   const dispatch = useDispatch();
+  const [validError, setValidError] = useState({ username: '', password: '' });
+  const [userAuthError, setUserAuthError] = useState('');
   const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
     form: auth.login,
     auth: auth.auth,
@@ -16,6 +18,13 @@ const LoginContainer = ({ history }) => {
 
   const onChange = (e) => {
     const { value, name } = e.target;
+
+    // error 제거
+    let newError = { ...validError };
+    newError[name] = '';
+    setValidError(newError);
+    setUserAuthError('');
+
     dispatch(
       changeField({
         form: 'login',
@@ -27,7 +36,19 @@ const LoginContainer = ({ history }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setUserAuthError('');
+
     const { username, password } = form;
+
+    let err = '';
+    if (username === '') err = { ...err, username: 'User is blank' };
+    if (password === '') err = { ...err, password: 'Password is blank' };
+
+    if (err) {
+      setValidError(err);
+      return;
+    }
+
     dispatch(login({ username, password }));
   };
 
@@ -37,8 +58,11 @@ const LoginContainer = ({ history }) => {
 
   useEffect(() => {
     if (authError) {
-      console.log('오류 발생');
-      console.log(authError);
+      if (authError.response.status === 401) {
+        setUserAuthError('Email and Password did not match.');
+        dispatch(changeField({ form: 'login', key: 'password', value: '' }));
+        return;
+      }
     }
     if (auth) {
       console.log('login');
@@ -48,6 +72,11 @@ const LoginContainer = ({ history }) => {
 
   useEffect(() => {
     if (user) {
+      try {
+        localStorage.setItem('dotArt_user', JSON.stringify(user));
+      } catch (e) {
+        console.log('localStorage is not working!');
+      }
       history.push('/');
     }
   }, [history, user]);
@@ -58,6 +87,8 @@ const LoginContainer = ({ history }) => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      validError={validError}
+      userAuthError={userAuthError}
     />
   );
 };
