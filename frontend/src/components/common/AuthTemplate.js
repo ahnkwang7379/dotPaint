@@ -60,6 +60,7 @@ const AuthTemplate = ({
   history,
   validError,
   userAuthError,
+  onResetAuthError,
 }) => {
   const title = titleMap[type];
   const classes = useStyles();
@@ -67,6 +68,7 @@ const AuthTemplate = ({
 
   const handleClose = () => {
     setOpen(false);
+    onResetAuthError();
   };
 
   useEffect(() => {

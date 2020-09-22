@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeField, initializeForm, login } from '../../modules/auth';
+import {
+  changeField,
+  initializeForm,
+  login,
+  resetError,
+} from '../../modules/auth';
 import AuthTemplate from '../../components/common/AuthTemplate';
 import { withRouter } from 'react-router-dom';
 import { check } from '../../modules/user';
@@ -52,6 +57,11 @@ const LoginContainer = ({ history }) => {
     dispatch(login({ username, password }));
   };
 
+  const onResetAuthError = () => {
+    setUserAuthError('');
+    dispatch(resetError());
+  };
+
   useEffect(() => {
     dispatch(initializeForm('login'));
   }, [dispatch]);
@@ -89,6 +99,7 @@ const LoginContainer = ({ history }) => {
       onSubmit={onSubmit}
       validError={validError}
       userAuthError={userAuthError}
+      onResetAuthError={onResetAuthError}
     />
   );
 };

@@ -8,6 +8,7 @@ import * as authAPI from '../lib/auth';
 
 const CHANGE_FILED = 'auth/CHANGE_FILED';
 const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
+const RESET_ERROR = 'auth/RESET_ERROR';
 
 const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] = createRequestActionTypes(
   'auth/SIGNUP',
@@ -27,7 +28,7 @@ export const changeField = createAction(
 );
 
 export const initializeForm = createAction(INITIALIZE_FORM, (form) => form);
-
+export const resetError = createAction(RESET_ERROR);
 export const signup = createAction(SIGNUP, ({ username, password }) => ({
   username,
   password,
@@ -64,7 +65,12 @@ const auth = handleActions(
       }),
     [INITIALIZE_FORM]: (state, { payload: form }) => ({
       ...state,
+      authError: null,
       [form]: initialState[form],
+    }),
+    [RESET_ERROR]: (state) => ({
+      ...state,
+      authError: null,
     }),
     [SIGNUP_SUCCESS]: (state, { payload: auth }) => ({
       ...state,
