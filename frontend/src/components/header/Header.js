@@ -21,12 +21,19 @@ import ShareIcon from '@material-ui/icons/Share';
 import Container from '@material-ui/core/Container';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Button from '@material-ui/core/Button';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
   },
   drawer: {
     width: drawerWidth,
@@ -85,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = ({ window, children, path, history }) => {
+const Header = ({ window, children, path, history, user, onLogout, asd }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -175,9 +182,21 @@ const Header = ({ window, children, path, history }) => {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" className={classes.title} noWrap>
             Dot Art
           </Typography>
+          {user ? (
+            <>
+              <Typography variant="h6">{user.username}</Typography>
+              <Button color="inherit" onClick={onLogout}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button color="inherit" onClick={() => history.push('/login')}>
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
 
@@ -233,4 +252,4 @@ const Header = ({ window, children, path, history }) => {
   );
 };
 
-export default withRouter(Header);
+export default React.memo(withRouter(Header));

@@ -7,6 +7,7 @@ import RightMenuContainer from '../containers/dotArtTools/RightMenuContainer';
 const DotArtPage = () => {
   return (
     <React.Fragment>
+      <RightMenuContainer />
       <DotPaintContainer />
       <PaintToolContainer />
       <Palette />

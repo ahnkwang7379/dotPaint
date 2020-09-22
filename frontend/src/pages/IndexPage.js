@@ -10,7 +10,7 @@ const IndexPage = (props) => {
     if (!token) {
       props.history.push('/login');
     } else {
-      props.history.push('/main');
+      props.history.push('/main/dot');
     }
   }, []);
   return <div></div>;
