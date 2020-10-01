@@ -14,11 +14,11 @@ const LoginContainer = ({ history }) => {
   const dispatch = useDispatch();
   const [validError, setValidError] = useState({ username: '', password: '' });
   const [userAuthError, setUserAuthError] = useState('');
-  const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
-    form: auth.login,
-    auth: auth.auth,
-    authError: auth.authError,
-    user: user.user,
+  const { form, auth, authError, user } = useSelector(({ present }) => ({
+    form: present.auth.login,
+    auth: present.auth.auth,
+    authError: present.auth.authError,
+    user: present.user.user,
   }));
 
   const onChange = (e) => {

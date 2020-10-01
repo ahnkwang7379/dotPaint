@@ -7,11 +7,11 @@ import { dotActions } from '../modules/index';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();
-  const { dotSet, border, dotSize, column } = useSelector(({ dot }) => ({
-    dotSet: dot.dotSet,
-    border: dot.border,
-    dotSize: dot.dotSize,
-    column: dot.column,
+  const { dotSet, border, dotSize, column } = useSelector(({ present }) => ({
+    dotSet: present.dot.dotSet,
+    border: present.dot.border,
+    dotSize: present.dot.dotSize,
+    column: present.dot.column,
   }));
 
   const onChangePaintState = useCallback(

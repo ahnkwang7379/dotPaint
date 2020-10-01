@@ -3,14 +3,18 @@ import DotPaintContainer from '../containers/DotPaintContainer';
 import PaintToolContainer from '../containers/DotHeader/PaintToolContainer';
 import Palette from '../containers/DotHeader/PaletteContainer';
 import RightMenuContainer from '../containers/dotArtTools/RightMenuContainer';
+import BottomToolsContainer from '../containers/dotArtTools/BottomToolsContainer';
+import UndoRedoContainer from '../containers/dotArtTools/UndoRedoContainer';
 
 const DotArtPage = () => {
   return (
     <React.Fragment>
-      <RightMenuContainer />
+      {/* <RightMenuContainer /> */}
       <DotPaintContainer />
       <PaintToolContainer />
-      <Palette />
+      {/* <Palette /> */}
+      <UndoRedoContainer />
+      <BottomToolsContainer />
     </React.Fragment>
   );
 };

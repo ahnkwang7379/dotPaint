@@ -11,9 +11,9 @@ const ColorPaletteBlock = styled.div`
 
 const ColorPaletteContainer = () => {
   const dispatch = useDispatch();
-  const { paletteSet, selectedId } = useSelector(({ colorPalette }) => ({
-    paletteSet: colorPalette.paletteSet,
-    selectedId: colorPalette.selectedId,
+  const { paletteSet, selectedId } = useSelector(({ present }) => ({
+    paletteSet: present.colorPalette.paletteSet,
+    selectedId: present.colorPalette.selectedId,
   }));
   const onSelectedColor = useCallback(
     (selectId) => {

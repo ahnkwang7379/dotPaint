@@ -8,16 +8,29 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
-import rootReducer, { rootSaga } from './modules';
+import rootReducer, { rootSaga, DOT_ACTIONS } from './modules';
 import { createLogger } from 'redux-logger';
 import { check, tempSetUser } from './modules/user';
+import undoable, { includeAction } from 'redux-undo';
 
 const sagaMiddleware = createSagaMiddleware();
 const logger = createLogger();
+
+const createIncludedActions = () => includeAction([DOT_ACTIONS]);
+
 const store = createStore(
-  rootReducer,
+  undoable(rootReducer, {
+    filter: createIncludedActions(),
+    debug: true,
+    ignoreInitialState: true,
+  }),
   composeWithDevTools(applyMiddleware(sagaMiddleware)),
 );
+
+// const store = createStore(
+//   rootReducer,
+//   composeWithDevTools(applyMiddleware(sagaMiddleware)),
+// );
 
 function loadUser() {
   try {

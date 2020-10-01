@@ -5,9 +5,9 @@ import DotAreaControl from '../../components/dotPaint/dotHeader/DotAreaControl';
 
 const DotAreaContainer = () => {
   const dispatch = useDispatch();
-  const { row, column } = useSelector(({ dot }) => ({
-    row: dot.row,
-    column: dot.column,
+  const { row, column } = useSelector(({ present }) => ({
+    row: present.dot.row,
+    column: present.dot.column,
   }));
 
   const onChangeArea = useCallback(

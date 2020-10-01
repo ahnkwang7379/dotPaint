@@ -88,11 +88,11 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    // padding: theme.spacing(3),
   },
 }));
 
-const Header = ({ window, children, path, history, user, onLogout, asd }) => {
+const Header = ({ window, children, path, history, user, onLogout }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
