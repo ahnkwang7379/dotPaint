@@ -12,10 +12,11 @@ import {
 
 const PaletteContainer = () => {
   const dispatch = useDispatch();
-  const { paletteSet, selectColorId } = useSelector(({ present }) => ({
-    paletteSet: present.palette.paletteSet,
-    selectColorId: present.palette.selectColorId,
+  const { paletteSet, selectColorId } = useSelector(({ dotArt }) => ({
+    paletteSet: dotArt.present.palette.paletteSet,
+    selectColorId: dotArt.present.palette.selectColorId,
   }));
+
   const onSelectColor = useCallback(
     (selectData) => {
       dispatch(selectColor(selectData));

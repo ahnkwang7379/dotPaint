@@ -5,7 +5,8 @@ import { logout } from '../../modules/user';
 
 const HeaderContainer = ({ children, path }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector(({ present }) => ({ user: present.user.user }));
+  // const { user } = useSelector(({ present }) => ({ user: present.user.user }));
+  const { user } = useSelector(({ user }) => ({ user: user.user }));
   const onLogout = useCallback(() => {
     dispatch(logout());
   }, [dispatch]);

@@ -9,6 +9,7 @@ import loading from './loading';
 import auth, { authSaga } from './auth';
 import user, { userSaga } from './user';
 import { produce } from 'immer';
+import undoable from 'redux-undo';
 
 export const DOT_ACTIONS = 'index/DOT_ACTIONS';
 
@@ -20,11 +21,19 @@ export const dotActions = createAction(
   }),
 );
 
-const combineReducer = combineReducers({
+// undo redo 기능을 활용할 부분만 따로 combine
+const combineDotArt = combineReducers({
   dot: dot,
+  palette: palette,
+});
+
+const combineReducer = combineReducers({
+  dotArt: undoable(combineDotArt, {
+    debug: true,
+    ignoreInitialState: true,
+  }),
   colorPalette: colorPalette,
   paintTool: paintTool,
-  palette: palette,
   auth: auth,
   user,
   loading,
@@ -105,30 +114,40 @@ const dotActionsHandler = (
   columnIdx,
 ) => {
   // selectedPaintTool -> PaintToolState -> rowIdx, columnIdx 체크 순
+  if (paintToolState === 'IDLE') return { ...state };
   switch (paintTool) {
     case DOT:
       if (paintToolState === 'DRAGGING') {
-        const paletteId = state.palette.selectColorId.paletteId;
-        const colorId = state.palette.selectColorId.colorId;
-        const palette = state.palette.paletteSet.filter(
-          (val) => val['id'] === paletteId,
+        const palette = state.dotArt.present.palette;
+        const { paletteId, colorId } = palette.selectColorId;
+
+        // 선택된 색상 추출
+        const color = palette.paletteSet.reduce(
+          (acc, palette) =>
+            palette['id'] === paletteId ? palette['colors'][colorId] : acc,
+          [],
         );
-        const color = palette[0]['colors'][colorId];
+
         return produce(state, (draft) => {
-          draft.dot.dotSet[rowIdx][columnIdx] = color;
+          draft.dotArt.present.dot.dotSet[rowIdx][columnIdx] = color;
         });
       } else return { ...state };
     case BUCKET:
       if (paintToolState === 'DRAGGING') {
-        const paletteId = state.palette.selectColorId.paletteId;
-        const colorId = state.palette.selectColorId.colorId;
-        const palette = state.palette.paletteSet.filter(
-          (val) => val['id'] === paletteId,
+        const palette = state.dotArt.present.palette;
+
+        const { paletteId, colorId } = palette.selectColorId;
+        const paletteColor = palette.paletteSet.reduce(
+          (acc, palette) =>
+            palette['id'] === paletteId ? palette['colors'][colorId] : acc,
+          [],
         );
-        const paletteColor = palette[0]['colors'][colorId];
-        const rowCount = state.dot.row;
-        const columnCount = state.dot.column;
-        const dotArt = state.dot.dotSet.reduce((acc, cur) => acc.concat(cur));
+
+        const dot = state.dotArt.present.dot;
+
+        const { rowCount, columnCount } = dot;
+        // 2차배열 1차배열로 풀어서 넣어줌
+        const dotArt = dot.dotSet.reduce((acc, cur) => acc.concat(cur));
         const selectedDotId = rowIdx * columnCount + columnIdx;
         const dotColor = dotArt[selectedDotId];
         const newDotArt = bucketDotArt(
@@ -152,43 +171,37 @@ const dotActionsHandler = (
           row = [];
         }
         return produce(state, (draft) => {
-          draft.dot.dotSet = returnDotArt;
+          draft.dotArt.present.dot.dotSet = returnDotArt;
         });
       } else {
         return { ...state };
       }
     case PICKER:
       if (paintToolState === 'DRAGGING') {
-        const color = state.dot.dotSet[rowIdx][columnIdx];
+        const dotColor = state.dotArt.present.dot.dotSet[rowIdx][columnIdx];
         // 색이 없는 셀을 클릭했다면
-        if (!color) return { ...state };
-        else
+        if (!dotColor) return { ...state };
+        else {
+          const palette = state.dotArt.present.palette;
+          const { paletteId, colorId } = palette.selectColorId;
           return produce(state, (draft) => {
-            const paletteId = draft.palette.selectColorId.paletteId;
-            const colorId = draft.palette.selectColorId.colorId;
-            const palette = draft.palette.paletteSet.find(
-              (palette) => palette['id'] === paletteId,
+            draft.dotArt.present.palette.paletteSet.reduce(
+              (acc, cur) =>
+                cur['id'] === paletteId
+                  ? acc.concat((cur['colors'][colorId] = dotColor))
+                  : acc.concat(cur),
+              [],
             );
-            palette['colors'][colorId] = color;
           });
+        }
       } else {
         return { ...state };
       }
     case ERASER:
       if (paintToolState === 'DRAGGING') {
-        return {
-          ...state,
-          dot: {
-            ...state.dot,
-            dotSet: state.dot.dotSet.map((dotLine, lineIdx) =>
-              lineIdx !== rowIdx
-                ? dotLine
-                : dotLine.map((originColor, idx) =>
-                    idx !== columnIdx ? originColor : '',
-                  ),
-            ),
-          },
-        };
+        return produce(state, (draft) => {
+          draft.dotArt.present.dot.dotSet[rowIdx][columnIdx] = '';
+        });
       }
       return { ...state };
     default:

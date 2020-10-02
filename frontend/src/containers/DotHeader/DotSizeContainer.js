@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const DotSizeContainer = () => {
   const dispatch = useDispatch();
-  const { dotSize } = useSelector(({ present }) => ({
-    dotSize: present.dot.dotSize,
+  const { dotSize } = useSelector(({ dotArt }) => ({
+    dotSize: dotArt.present.dot.dotSize,
   }));
 
   const handleOnChange = useCallback(

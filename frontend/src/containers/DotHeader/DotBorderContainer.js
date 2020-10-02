@@ -5,9 +5,9 @@ import BorderControl from '../../components/dotPaint/dotHeader/BorderControl';
 
 const DotBorderContainer = () => {
   const dispatch = useDispatch();
-  const { borderSize, borderColor } = useSelector(({ present }) => ({
-    borderSize: present.dot.border.size,
-    borderColor: present.dot.border.color,
+  const { borderSize, borderColor } = useSelector(({ dotArt }) => ({
+    borderSize: dotArt.present.dot.border.size,
+    borderColor: dotArt.present.dot.border.color,
   }));
 
   const onSizeChange = useCallback(

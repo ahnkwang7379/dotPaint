@@ -18,11 +18,11 @@ const SignUpContainer = ({ history }) => {
     password: '',
     passwordConfirm: '',
   });
-  const { form, auth, authError, user } = useSelector(({ present }) => ({
-    form: present.auth.signup,
-    auth: present.auth.auth,
-    authError: present.auth.authError,
-    user: present.user.user,
+  const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
+    form: auth.signup,
+    auth: auth.auth,
+    authError: auth.authError,
+    user: user.user,
   }));
 
   const onChange = (e) => {

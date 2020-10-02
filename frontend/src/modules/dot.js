@@ -59,8 +59,8 @@ const initialState = {
   dotSet: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
   border: INITIAL_DOT_BORDER,
   dotSize: INITIAL_DOT_DOTSIZE,
-  row: INITIAL_ROW,
-  column: INITIAL_COLUMN,
+  rowCount: INITIAL_ROW,
+  columnCount: INITIAL_COLUMN,
 };
 
 const dot = handleActions(
@@ -85,8 +85,8 @@ const dot = handleActions(
     }),
     [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
       produce(state, (draft) => {
-        let originRow = draft.row;
-        let originColumn = draft.column;
+        let originRow = draft.rowCount;
+        let originColumn = draft.columnCount;
 
         if (newColumn > originColumn) {
           for (let i = originColumn; i < newColumn; i++) {
@@ -112,8 +112,8 @@ const dot = handleActions(
           }
         }
 
-        draft.row = newRow;
-        draft.column = newColumn;
+        draft.rowCount = newRow;
+        draft.columnCount = newColumn;
       }),
     [CLEAR_DOT]: (state) => ({
       ...state,

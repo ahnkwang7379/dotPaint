@@ -7,17 +7,20 @@ import { dotActions } from '../modules/index';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();
-  const { dotSet, border, dotSize, column } = useSelector(({ present }) => ({
-    dotSet: present.dot.dotSet,
-    border: present.dot.border,
-    dotSize: present.dot.dotSize,
-    column: present.dot.column,
-  }));
+  const { dotSet, border, dotSize, column } = useSelector(({ dotArt: { present: { dot }}}) => 
+    ({
+      dotSet: dot.dotSet,
+      border: dot.border,
+      dotSize: dot.dotSize,
+      column: dot.columnCount,
+    }),
+  ); // prettier-ignore
 
   const onChangePaintState = useCallback(
     (paintState) => dispatch(changePaintState(paintState)),
     [dispatch],
   );
+
   const onDotActionHandle = useCallback(
     (rowIdx, columnIdx) =>
       dispatch(
