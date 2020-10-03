@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import { createAction, handleActions } from 'redux-actions';
-import dot, { dotSaga } from './dot';
+import dot from './dot';
 import colorPalette from './colorPalette';
 import palette from './palette';
 import paintTool, { DOT, BUCKET, PICKER, ERASER } from './paintTool';
@@ -38,6 +38,18 @@ const combineReducer = combineReducers({
   user,
   loading,
 });
+
+// const combineReducer = (state, action) => ({
+//   dotArt: undoable(pipeReducers([dot, palette])(state, action), {
+//     debug: true,
+//     ignoreInitialState: true,
+//   }),
+//   colorPalette: colorPalette,
+//   paintTool: paintTool,
+//   auth: auth,
+//   user,
+//   loading,
+// });
 
 const floodFill = (dotArt, dotId, color, rowCount, columnCount) => {
   const cellCollection = [];
@@ -230,7 +242,7 @@ function rootReducer(state, action) {
 }
 
 export function* rootSaga() {
-  yield all([dotSaga(), authSaga(), userSaga()]);
+  yield all([authSaga(), userSaga()]);
 }
 
 export default rootReducer;

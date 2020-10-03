@@ -12,7 +12,7 @@ const IndexPage = (props) => {
     } else {
       props.history.push('/main/dot');
     }
-  }, []);
+  }, [props.history]);
   return <div></div>;
 };
 

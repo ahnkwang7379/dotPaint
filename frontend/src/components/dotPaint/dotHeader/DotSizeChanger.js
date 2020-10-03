@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 const DotSizeBlock = styled.div``;
 const DotSizeRangeBar = styled.input``;

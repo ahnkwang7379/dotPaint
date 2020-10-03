@@ -8,10 +8,9 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
-import rootReducer, { rootSaga, DOT_ACTIONS } from './modules';
+import rootReducer, { rootSaga } from './modules';
 import { createLogger } from 'redux-logger';
 import { check, tempSetUser } from './modules/user';
-import undoable, { includeAction } from 'redux-undo';
 
 const sagaMiddleware = createSagaMiddleware();
 const logger = createLogger();

@@ -73,9 +73,6 @@ const useStyles = makeStyles((theme) => ({
   hide: {
     display: 'none',
   },
-  menuButton: {
-    marginRight: 36,
-  },
   toolbar: {
     display: 'flex',
     alignItems: 'center',

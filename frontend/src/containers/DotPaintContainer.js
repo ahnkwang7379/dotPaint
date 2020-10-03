@@ -9,7 +9,8 @@ const DotpaintContainer = () => {
   const dispatch = useDispatch();
   const { dotSet, border, dotSize, column } = useSelector(({ dotArt: { present: { dot }}}) => 
     ({
-      dotSet: dot.dotSet,
+      // dotSet: dot.dotSet,
+      dotSet: dot.dotList[dot.activeIdx].dot,
       border: dot.border,
       dotSize: dot.dotSize,
       column: dot.columnCount,

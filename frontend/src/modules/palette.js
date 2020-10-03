@@ -1,7 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import shortid from 'shortid';
-import { put, throttle, takeLatest } from 'redux-saga/effects';
 
 // 하나의 palette에 최대 10개의 색 까지. palette는 10개까지
 const DEFAULT_PALETTE = [

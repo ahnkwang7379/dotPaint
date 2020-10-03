@@ -1,21 +1,17 @@
 import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
-import { put, throttle, takeLatest } from 'redux-saga/effects';
+import shortid from 'shortid';
 
 const CLEAR_DOT = 'dot/CLEAR_DOT';
 const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
 const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
 const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
 const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
-
-// 실험
-const INCREASE_DOT_AREA = 'dot/INCREASE_DOT_AREA';
-
-const INCREASE_ASYNC = 'dot/INCREASE_ASYNC';
+const CHANGE_ACTIVE_IDX = 'dotSet/CHANGE_ACTIVE_IDX';
 
 // initialState
 export const INITIAL_ROW = 10;
-export const INITIAL_COLUMN = 10;
+export const INITIAL_COLUMN = 15;
 export const INITIAL_DOT_DOTSIZE = 1;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
@@ -37,26 +33,41 @@ export const changeDotArea = createAction(
   CHANGE_DOT_AREA,
   ({ newRow, newColumn }) => ({ newRow, newColumn }),
 );
-export const increaseDotArea = createAction(INCREASE_DOT_AREA);
-
-// saga
-export const increaseAsync = createAction(INCREASE_ASYNC, () => undefined);
-
-function* increaseSaga() {
-  yield put(increaseDotArea());
-}
-
-export function* dotSaga() {
-  yield throttle(500, INCREASE_ASYNC, increaseSaga);
-  // yield takeLatest(INCREASE_ASYNC, increaseSaga);
-}
+export const changeActiveIdx = createAction(CHANGE_ACTIVE_IDX, (idx) => idx);
 
 const defaultDotSetMaker = (row, column) => {
-  return new Array(column).fill().map(() => new Array(row).fill(''));
+  return new Array(row).fill().map(() => new Array(column).fill(''));
+};
+
+const defaultDotMaker = (row, column) => {
+  return new Array(row).fill().map(() => new Array(column).fill(''));
 };
 
 const initialState = {
   dotSet: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
+  dotList: [
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+  ],
+  activeIdx: 0,
   border: INITIAL_DOT_BORDER,
   dotSize: INITIAL_DOT_DOTSIZE,
   rowCount: INITIAL_ROW,
@@ -65,20 +76,18 @@ const initialState = {
 
 const dot = handleActions(
   {
-    [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) => ({
+    [CLEAR_DOT]: (state) => ({
       ...state,
-      border: {
-        ...state.border,
-        size: size,
-      },
+      dotSet: defaultDotSetMaker(state.rowCount, state.columnCount),
     }),
-    [CHANGE_DOT_BORDER_COLOR]: (state, { payload: color }) => ({
-      ...state,
-      border: {
-        ...state.border,
-        color: color,
-      },
-    }),
+    [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) =>
+      produce(state, (draft) => {
+        draft.border.size = size;
+      }),
+    [CHANGE_DOT_BORDER_COLOR]: (state, { payload: color }) =>
+      produce(state, (draft) => {
+        draft.border.color = color;
+      }),
     [CHANGE_DOT_SIZE]: (state, { payload: dotSize }) => ({
       ...state,
       dotSize: dotSize,
@@ -88,44 +97,39 @@ const dot = handleActions(
         let originRow = draft.rowCount;
         let originColumn = draft.columnCount;
 
-        if (newColumn > originColumn) {
-          for (let i = originColumn; i < newColumn; i++) {
-            draft.dotSet.map((column) => column.push(''));
+        draft.dotList.map((dotSet) => {
+          if (newColumn > originColumn) {
+            for (let i = originColumn; i < newColumn; i++) {
+              dotSet.dot.map((column) => column.push(''));
+            }
           }
-        }
 
-        if (newColumn < originColumn) {
-          for (let i = newColumn; i < originColumn; i++) {
-            draft.dotSet.map((column) => column.pop());
+          if (newColumn < originColumn) {
+            for (let i = newColumn; i < originColumn; i++) {
+              dotSet.dot.map((column) => column.pop());
+            }
           }
-        }
 
-        if (newRow > originRow) {
-          for (let i = originRow; i < newRow; i++) {
-            draft.dotSet.push(new Array(newColumn).fill(''));
+          if (newRow > originRow) {
+            for (let i = originRow; i < newRow; i++) {
+              dotSet.dot.push(new Array(newColumn).fill(''));
+            }
           }
-        }
 
-        if (newRow < originRow) {
-          for (let i = newRow; i < originRow; i++) {
-            draft.dotSet.pop();
+          if (newRow < originRow) {
+            for (let i = newRow; i < originRow; i++) {
+              dotSet.dot.pop();
+            }
           }
-        }
+        });
 
         draft.rowCount = newRow;
         draft.columnCount = newColumn;
       }),
-    [CLEAR_DOT]: (state) => ({
+    [CHANGE_ACTIVE_IDX]: (state, { payload: idx }) => ({
       ...state,
-      dotSet: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
+      activeIdx: idx,
     }),
-    [INCREASE_DOT_AREA]: (state) =>
-      produce(state, (draft) => {
-        draft.dotSet.pop();
-      }),
-    // [INCREASE_DOT_AREA]: (state) => ({
-    //   dotSet: defaultDotSetMaker(1, 1),
-    // }),
   },
   initialState,
 );

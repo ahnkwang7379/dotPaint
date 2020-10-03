@@ -112,7 +112,7 @@ const SignUpContainer = ({ history }) => {
       }
       history.push('/');
     }
-  }, [user]);
+  }, [user, history]);
 
   return (
     <AuthTemplate
