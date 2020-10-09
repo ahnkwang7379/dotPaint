@@ -140,8 +140,11 @@ const dotActionsHandler = (
           [],
         );
 
+        const activeIdx = state.dotArt.present.dot.activeIdx;
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotSet[rowIdx][columnIdx] = color;
+          draft.dotArt.present.dot.dotList[activeIdx].dot[rowIdx][
+            columnIdx
+          ] = color;
         });
       } else return { ...state };
     case BUCKET:
@@ -156,10 +159,13 @@ const dotActionsHandler = (
         );
 
         const dot = state.dotArt.present.dot;
+        const activeIdx = dot.activeIdx;
 
         const { rowCount, columnCount } = dot;
         // 2차배열 1차배열로 풀어서 넣어줌
-        const dotArt = dot.dotSet.reduce((acc, cur) => acc.concat(cur));
+        const dotArt = dot.dotList[activeIdx].dot.reduce((acc, cur) =>
+          acc.concat(cur),
+        );
         const selectedDotId = rowIdx * columnCount + columnIdx;
         const dotColor = dotArt[selectedDotId];
         const newDotArt = bucketDotArt(
@@ -182,15 +188,18 @@ const dotActionsHandler = (
           returnDotArt.push(row);
           row = [];
         }
+
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotSet = returnDotArt;
+          draft.dotArt.present.dot.dotList[activeIdx].dot = returnDotArt;
         });
       } else {
         return { ...state };
       }
     case PICKER:
       if (paintToolState === 'DRAGGING') {
-        const dotColor = state.dotArt.present.dot.dotSet[rowIdx][columnIdx];
+        const dot = state.dotArt.present.dot;
+        const activeIdx = dot.activeIdx;
+        const dotColor = dot.dotList[activeIdx].dot[rowIdx][columnIdx];
         // 색이 없는 셀을 클릭했다면
         if (!dotColor) return { ...state };
         else {
@@ -211,8 +220,10 @@ const dotActionsHandler = (
       }
     case ERASER:
       if (paintToolState === 'DRAGGING') {
+        const activeIdx = state.dotArt.present.dot.activeIdx;
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotSet[rowIdx][columnIdx] = '';
+          draft.dotArt.present.dot.dotList[activeIdx].dot[rowIdx][columnIdx] =
+            '';
         });
       }
       return { ...state };
