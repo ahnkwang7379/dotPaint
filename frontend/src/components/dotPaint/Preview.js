@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { generatePixelDrawCss } from '../../util/cssParser';
 
-const Preview = ({ dotSet, column }) => {
+const Preview = ({ dotSet, column, size }) => {
   const [dotArr, setDotArr] = useState([]);
   useEffect(() => {
     const newArr = dotSet.reduce((acc, cur) => acc.concat(cur));
@@ -10,15 +10,15 @@ const Preview = ({ dotSet, column }) => {
 
   const generatePreview = () => {
     const columns = column;
-    const cellSize = 10;
+    const cellSize = size;
 
     const styles = {
       previewWrapper: {
         height: cellSize,
         width: cellSize,
         position: 'absolute',
-        top: '-5px',
-        left: '-5px',
+        // top: '-5px',
+        // left: '-5px',
       },
     };
 

@@ -66,6 +66,51 @@ const initialState = {
       dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
       interval: 25,
     },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 25,
+    },
   ],
   activeIdx: 0,
   border: INITIAL_DOT_BORDER,

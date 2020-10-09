@@ -34,7 +34,7 @@ const DotpaintContainer = () => {
   );
   return (
     <div>
-      <Preview dotSet={dotSet} column={column} />
+      {/* <Preview dotSet={dotSet} column={column} /> */}
       <DotPaint
         dotSet={dotSet}
         border={border}

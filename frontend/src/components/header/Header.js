@@ -84,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
   },
   content: {
+    width: `calc(100% - ${drawerWidth}px)`,
     flexGrow: 1,
     // padding: theme.spacing(3),
   },
