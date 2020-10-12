@@ -29,6 +29,7 @@ const combineDotArt = combineReducers({
 
 const combineReducer = combineReducers({
   dotArt: undoable(combineDotArt, {
+    limit: 100,
     debug: true,
     ignoreInitialState: true,
   }),

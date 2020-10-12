@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { DOT, BUCKET, PICKER, ERASER } from '../../../modules/paintTool';
-import PaintToolButton from '../../common/ToggleButton';
+import CustomButton from '../../common/CustomButton';
 import { TiPencil, TiPipette } from 'react-icons/ti';
 import { BsFillBucketFill } from 'react-icons/bs';
 import { FaEraser } from 'react-icons/fa';
@@ -10,38 +10,40 @@ const PaintToolBlock = styled.div`
   display: flex;
   margin-top: 5px;
   margin-bottom: 5px;
+  width: 300px;
+  height: 50px;
 `;
 const PaintTool = ({ onChangePaintTool, selectedPaintTool }) => {
   return (
     <PaintToolBlock>
-      <PaintToolButton
+      <CustomButton
         paintTool={DOT}
         selected={selectedPaintTool === DOT}
         onClick={() => onChangePaintTool(DOT)}
       >
         <TiPencil />
-      </PaintToolButton>
-      <PaintToolButton
+      </CustomButton>
+      <CustomButton
         paintTool={BUCKET}
         selected={selectedPaintTool === BUCKET}
         onClick={() => onChangePaintTool(BUCKET)}
       >
         <BsFillBucketFill />
-      </PaintToolButton>
-      <PaintToolButton
+      </CustomButton>
+      <CustomButton
         paintTool={PICKER}
         selected={selectedPaintTool === PICKER}
         onClick={() => onChangePaintTool(PICKER)}
       >
         <TiPipette />
-      </PaintToolButton>
-      <PaintToolButton
+      </CustomButton>
+      <CustomButton
         paintTool={ERASER}
         selected={selectedPaintTool === ERASER}
         onClick={() => onChangePaintTool(ERASER)}
       >
         <FaEraser />
-      </PaintToolButton>
+      </CustomButton>
     </PaintToolBlock>
   );
 };

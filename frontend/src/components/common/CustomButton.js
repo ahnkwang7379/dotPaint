@@ -1,16 +1,20 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const ToggleButtonStyled = styled.button`
+const CustomButtonStyled = styled.button`
   font-size: 20px;
-  width: 40px;
-  height: 40px;
+  /* width: 40px;
+  height: 40px; */
+  /* width: 100%;
+  height: 100%; */
+  width: ${(props) => props.width ? `${props.width}` : `190%`};
+  height: ${props => props.height ? `${props.height}` : `auto`};
   border: 1px solid #225ea7;
   outline: none;
   border-radius: 0.5rem;
   text-align: center;
   box-shadow: 0 0.3rem #999;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
   &:hover {
     color: #fff;
     background: skyblue;
@@ -35,8 +39,8 @@ const ToggleButtonStyled = styled.button`
   }
 `;
 
-const ToggleButton = ({ children, ...rest }) => {
-  return <ToggleButtonStyled {...rest}>{children}</ToggleButtonStyled>;
+const CustomButton = ({ children, ...rest }) => {
+  return <CustomButtonStyled {...rest}>{children}</CustomButtonStyled>;
 };
 
-export default ToggleButton;
+export default CustomButton;

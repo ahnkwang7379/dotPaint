@@ -7,7 +7,10 @@ const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
 const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
 const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
 const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
-const CHANGE_ACTIVE_IDX = 'dotSet/CHANGE_ACTIVE_IDX';
+const CHANGE_ACTIVE_IDX = 'dot/CHANGE_ACTIVE_IDX';
+const REMOVE_ACTIVE_DOT_ART = 'dot/REMOVE_ACTIVE_DOT_ART';
+const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
+const ADD_NEW_DOT_ART = 'dot/ADD_NEW_DOT_ART';
 
 // initialState
 export const INITIAL_ROW = 10;
@@ -34,6 +37,9 @@ export const changeDotArea = createAction(
   ({ newRow, newColumn }) => ({ newRow, newColumn }),
 );
 export const changeActiveIdx = createAction(CHANGE_ACTIVE_IDX, (idx) => idx);
+export const removeActiveDotArt = createAction(REMOVE_ACTIVE_DOT_ART, (idx) => idx);
+export const copyActiveDotArt = createAction(COPY_ACTIVE_DOT_ART, (idx) => idx);
+export const addNewDotArt = createAction(ADD_NEW_DOT_ART);
 
 const defaultDotSetMaker = (row, column) => {
   return new Array(row).fill().map(() => new Array(column).fill(''));
@@ -175,6 +181,50 @@ const dot = handleActions(
       ...state,
       activeIdx: idx,
     }),
+    [REMOVE_ACTIVE_DOT_ART]: (state, { payload: idx }) => 
+        produce(state, (draft) => {
+          if (draft.dotList.length === 1) {
+            draft.dotList = [
+              {
+                id: shortid.generate(),
+                dot: defaultDotMaker(draft.rowCount, draft.columnCount),
+                interval: 25,
+              }
+            ]
+          } else {
+            let dotList = draft.dotList;
+            let tempDotList = dotList.slice(idx + 1, dotList.length);
+    
+            dotList = dotList.slice(0, idx);
+            dotList = dotList.concat(tempDotList);
+            draft.dotList = dotList;
+            draft.activeIdx = idx > dotList.length - 1 ? idx - 1 : idx;
+          }
+        }),
+    [COPY_ACTIVE_DOT_ART]: (state, { payload: idx }) => 
+      produce(state, (draft) => {
+        let dotList = draft.dotList;
+        let copyDotArt = {
+          ...dotList[idx],
+          id: shortid.generate(),
+        };
+
+        let tempDotList = dotList.slice(idx + 1, dotList.length);
+        dotList = dotList.slice(0, idx + 1);
+        dotList = dotList.concat(copyDotArt);
+        dotList = dotList.concat(tempDotList);
+        draft.dotList = dotList;
+        draft.activeIdx = idx + 1;
+      }),
+    [ADD_NEW_DOT_ART]: (state) => 
+      produce(state, (draft) => {
+        draft.dotList.push({
+          id: shortid.generate(),
+          dot: defaultDotMaker(draft.rowCount, draft.columnCount),
+          interval: 25,
+        });
+        draft.activeIdx = draft.dotList.length-1;
+      }),
   },
   initialState,
 );

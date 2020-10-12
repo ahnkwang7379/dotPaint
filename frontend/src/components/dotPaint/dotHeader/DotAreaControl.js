@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ToggleButton from '../../common/ToggleButton';
+import CustomButton from '../../common/CustomButton';
 import { TiPlusOutline, TiMinusOutline } from 'react-icons/ti';
 
-const DotAreaBlock = styled.div``;
+const DotAreaBlock = styled.div`
+  display: flex;
+  width: 120px;
+  height: 40px;
+`;
 const AreaInput = styled.input`
   font-size: 20px;
   width: 40px;
@@ -31,42 +35,42 @@ const DotAreaControl = ({ onChangeArea, row, column, dotClear }) => {
   return (
     <>
       <DotAreaBlock>
-        <ToggleButton
+        <CustomButton
           onClick={() => {
             setRowCount(rowCount + 1);
             onChangeArea(rowCount + 1, columnCount);
           }}
         >
           <TiPlusOutline />
-        </ToggleButton>
+        </CustomButton>
         <AreaInput value={rowCount} onChange={onChangeRow} />
-        <ToggleButton
+        <CustomButton
           onClick={() => {
             setRowCount(rowCount - 1);
             onChangeArea(rowCount - 1, columnCount);
           }}
         >
           <TiMinusOutline />
-        </ToggleButton>
+        </CustomButton>
       </DotAreaBlock>
       <DotAreaBlock>
-        <ToggleButton
+        <CustomButton
           onClick={() => {
             setColumnCount(columnCount + 1);
             onChangeArea(rowCount, columnCount + 1);
           }}
         >
           <TiPlusOutline />
-        </ToggleButton>
+        </CustomButton>
         <AreaInput value={columnCount} onChange={onChangeColumn} />
-        <ToggleButton
+        <CustomButton
           onClick={() => {
             setColumnCount(columnCount - 1);
             onChangeArea(rowCount, columnCount - 1);
           }}
         >
           <TiMinusOutline />
-        </ToggleButton>
+        </CustomButton>
       </DotAreaBlock>
       <DotAreaBlock>
         <button onClick={() => onChangeArea(rowCount, columnCount)}>
