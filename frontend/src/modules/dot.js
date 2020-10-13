@@ -37,7 +37,10 @@ export const changeDotArea = createAction(
   ({ newRow, newColumn }) => ({ newRow, newColumn }),
 );
 export const changeActiveIdx = createAction(CHANGE_ACTIVE_IDX, (idx) => idx);
-export const removeActiveDotArt = createAction(REMOVE_ACTIVE_DOT_ART, (idx) => idx);
+export const removeActiveDotArt = createAction(
+  REMOVE_ACTIVE_DOT_ART,
+  (idx) => idx,
+);
 export const copyActiveDotArt = createAction(COPY_ACTIVE_DOT_ART, (idx) => idx);
 export const addNewDotArt = createAction(ADD_NEW_DOT_ART);
 
@@ -181,27 +184,27 @@ const dot = handleActions(
       ...state,
       activeIdx: idx,
     }),
-    [REMOVE_ACTIVE_DOT_ART]: (state, { payload: idx }) => 
-        produce(state, (draft) => {
-          if (draft.dotList.length === 1) {
-            draft.dotList = [
-              {
-                id: shortid.generate(),
-                dot: defaultDotMaker(draft.rowCount, draft.columnCount),
-                interval: 25,
-              }
-            ]
-          } else {
-            let dotList = draft.dotList;
-            let tempDotList = dotList.slice(idx + 1, dotList.length);
-    
-            dotList = dotList.slice(0, idx);
-            dotList = dotList.concat(tempDotList);
-            draft.dotList = dotList;
-            draft.activeIdx = idx > dotList.length - 1 ? idx - 1 : idx;
-          }
-        }),
-    [COPY_ACTIVE_DOT_ART]: (state, { payload: idx }) => 
+    [REMOVE_ACTIVE_DOT_ART]: (state, { payload: idx }) =>
+      produce(state, (draft) => {
+        if (draft.dotList.length === 1) {
+          draft.dotList = [
+            {
+              id: shortid.generate(),
+              dot: defaultDotMaker(draft.rowCount, draft.columnCount),
+              interval: 25,
+            },
+          ];
+        } else {
+          let dotList = draft.dotList;
+          let tempDotList = dotList.slice(idx + 1, dotList.length);
+
+          dotList = dotList.slice(0, idx);
+          dotList = dotList.concat(tempDotList);
+          draft.dotList = dotList;
+          draft.activeIdx = idx > dotList.length - 1 ? idx - 1 : idx;
+        }
+      }),
+    [COPY_ACTIVE_DOT_ART]: (state, { payload: idx }) =>
       produce(state, (draft) => {
         let dotList = draft.dotList;
         let copyDotArt = {
@@ -216,14 +219,14 @@ const dot = handleActions(
         draft.dotList = dotList;
         draft.activeIdx = idx + 1;
       }),
-    [ADD_NEW_DOT_ART]: (state) => 
+    [ADD_NEW_DOT_ART]: (state) =>
       produce(state, (draft) => {
         draft.dotList.push({
           id: shortid.generate(),
           dot: defaultDotMaker(draft.rowCount, draft.columnCount),
           interval: 25,
         });
-        draft.activeIdx = draft.dotList.length-1;
+        draft.activeIdx = draft.dotList.length - 1;
       }),
   },
   initialState,
