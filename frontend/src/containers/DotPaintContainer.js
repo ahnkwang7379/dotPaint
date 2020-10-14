@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import DotPaint from '../components/dotPaint/DotPaint';
-import Preview from '../components/dotPaint/Preview';
+import Preview from '../components/common/Preview';
 import { useSelector, useDispatch } from 'react-redux';
 import { changePaintState } from '../modules/paintTool';
 import { dotActions } from '../modules/index';

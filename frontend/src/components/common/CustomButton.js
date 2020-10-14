@@ -4,6 +4,12 @@ import styled, { css } from 'styled-components';
 const CustomButtonStyled = styled.button`
   font-size: 20px;
   color: #6e6e6e;
+  ${(props) =>
+    props.baseColor &&
+    css`
+      background: ${props.baseColor};
+      color: #fff;
+    `}
   width: ${(props) => (props.width ? `${props.width}` : `100%`)};
   height: ${(props) => (props.height ? `${props.height}` : `auto`)};
   border: 1px solid #225ea7;
@@ -14,11 +20,11 @@ const CustomButtonStyled = styled.button`
   transition: all 0.1s ease-in-out;
   &:hover {
     color: #fff;
-    background: skyblue;
+    background: ${(props) => (props.color ? `${props.color}` : `skyblue`)};
   }
   &:active {
     color: #fff;
-    background: skyblue;
+    background: ${(props) => (props.color ? `${props.color}` : `skyblue`)};
     box-shadow: 0 0.1rem #666;
     transform: translateY(4px);
   }
@@ -27,7 +33,8 @@ const CustomButtonStyled = styled.button`
     props.selected === true &&
     css`
       color: #fff;
-      background: skyblue;
+      background: ${(props) =>
+        props.selectColor ? `${props.selectColor}` : `skyblue`};
       box-shadow: 0 0.1rem #666;
       transform: translateY(4px);
     `}

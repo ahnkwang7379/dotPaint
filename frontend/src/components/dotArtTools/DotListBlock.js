@@ -1,5 +1,5 @@
 import React from 'react';
-import Preview from '../../components/dotPaint/Preview';
+import Preview from '../../components/common/Preview';
 import styled, { css } from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
@@ -50,7 +50,7 @@ const StyleButton = styled.div`
     `}
 `;
 
-const PreViewBlock = ({
+const DotListBlock = ({
   active,
   idx,
   dot,
@@ -61,7 +61,7 @@ const PreViewBlock = ({
 }) => {
   return active === true ? (
     <CardDiv active={true}>
-      <Preview dotSet={dot} column={columnCount} size={2.5} />
+      <Preview dotSet={dot} column={columnCount} size={2} />
       <CustomDiv>
         <StyleButton onClick={() => handleRemoveDotArt(idx)}>
           <DeleteIcon fontSize="inherit" />
@@ -86,4 +86,4 @@ const PreViewBlock = ({
   );
 };
 
-export default React.memo(PreViewBlock);
+export default React.memo(DotListBlock);

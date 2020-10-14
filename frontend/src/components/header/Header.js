@@ -111,11 +111,11 @@ const Header = ({ window, children, path, history, user, onLogout }) => {
   const drawer = (
     <div>
       <Divider />
-      <Container>
+      {/* <Container>
         {(open || mobileOpen) && (
           <PaletteIcon color="primary" style={{ fontSize: 170 }} />
         )}
-      </Container>
+      </Container> */}
       <Divider />
       <List>
         <ListItem

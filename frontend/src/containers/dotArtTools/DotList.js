@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import PreViewBlock from '../../components/dotArtTools/PreViewBlock';
+import DotListBlock from '../../components/dotArtTools/DotListBlock';
 import CustomButton from '../../components/common/CustomButton';
 import { useDispatch } from 'react-redux';
 import {
@@ -11,7 +11,7 @@ import {
 } from '../../modules/dot';
 import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
 
-const DotListBlock = styled.div`
+const DotListDiv = styled.div`
   display: flex;
 `;
 
@@ -70,14 +70,14 @@ const DotList = ({ dotList, activeIdx, columnCount }) => {
   }, [dispatch]);
 
   return (
-    <DotListBlock>
+    <DotListDiv>
       <CustomButton width="40px" onClick={() => handleAddDotArt()}>
         <AddToPhotosIcon />
       </CustomButton>
       <ScrollCustom>
         {dotList.map((dot, idx) => {
           return activeIdx === idx ? (
-            <PreViewBlock
+            <DotListBlock
               key={dot.id}
               active={true}
               idx={idx}
@@ -87,7 +87,7 @@ const DotList = ({ dotList, activeIdx, columnCount }) => {
               handleRemoveDotArt={handleRemoveDotArt}
             />
           ) : (
-            <PreViewBlock
+            <DotListBlock
               key={dot.id}
               idx={idx}
               dot={dot.dot}
@@ -97,7 +97,7 @@ const DotList = ({ dotList, activeIdx, columnCount }) => {
           );
         })}
       </ScrollCustom>
-    </DotListBlock>
+    </DotListDiv>
   );
 };
 
