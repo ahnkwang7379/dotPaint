@@ -10,7 +10,7 @@ const DotStyled = styled.div`
   color: white;
   font-size: 1rem;
   box-sizing: border-box;
-  transition: all 0.3s linear, width 0.1s linear, height 0.1s linear;
+  /* transition: all 0.3s linear, width 0.1s linear, height 0.1s linear; */
   ${(props) =>
     css`
       width: ${props.dotSize}rem;

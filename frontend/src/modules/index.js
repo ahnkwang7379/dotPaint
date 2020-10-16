@@ -164,9 +164,8 @@ const dotActionsHandler = (
 
         const { rowCount, columnCount } = dot;
         // 2차배열 1차배열로 풀어서 넣어줌
-        const dotArt = dot.dotList[activeIdx].dot.reduce((acc, cur) =>
-          acc.concat(cur),
-        );
+        const dotArt = dot.dotList[activeIdx].dot.flat();
+
         const selectedDotId = rowIdx * columnCount + columnIdx;
         const dotColor = dotArt[selectedDotId];
         const newDotArt = bucketDotArt(

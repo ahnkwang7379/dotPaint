@@ -33,7 +33,7 @@ const PreviewBlock = styled.div`
       : `${props.rowCount * 8 + 16}px`};
 `;
 
-const PreViewTools = ({ dotSet, rowCount, columnCount }) => {
+const PreViewTools = ({ dotSet, dotList, rowCount, columnCount, duration }) => {
   const [play, setPlay] = useState(false);
   const [zoomIn, setZoomIn] = useState(false);
 
@@ -71,7 +71,14 @@ const PreViewTools = ({ dotSet, rowCount, columnCount }) => {
         rowCount={rowCount}
         columnCount={columnCount}
       >
-        <Preview dotSet={dotSet} column={columnCount} size={zoomIn ? 16 : 8} />
+        <Preview
+          dotSet={dotSet}
+          dotList={dotList}
+          column={columnCount}
+          size={zoomIn ? 16 : 8}
+          animation={play}
+          duration={duration}
+        />
       </PreviewBlock>
     </Box>
   );

@@ -48,4 +48,4 @@ const PaintTool = ({ onChangePaintTool, selectedPaintTool }) => {
   );
 };
 
-export default PaintTool;
+export default React.memo(PaintTool);

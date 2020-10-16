@@ -73,7 +73,7 @@ const DotListBlock = ({
     </CardDiv>
   ) : (
     <CardDiv active={false} onClick={() => handleChangeIdx(idx)}>
-      <Preview dotSet={dot} column={columnCount} size={2.5} />
+      <Preview dotSet={dot} column={columnCount} size={2} />
       <CustomDiv>
         <StyleButton disabled={true}>
           <DeleteIcon fontSize="inherit" />

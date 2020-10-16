@@ -4,17 +4,22 @@ import PreViewTools from '../../components/dotArtTools/PreViewTools';
 
 const PreViewContainer = () => {
   const dispatch = useDispatch();
-  const { dotSet, rowCount, columnCount } = useSelector(({ dotArt }) => ({
-    dotSet: dotArt.present.dot.dotList[dotArt.present.dot.activeIdx].dot,
-    rowCount: dotArt.present.dot.rowCount,
-    columnCount: dotArt.present.dot.columnCount,
-  }));
+  const { dotSet, dotList, rowCount, columnCount } = useSelector(
+    ({ dotArt }) => ({
+      dotSet: dotArt.present.dot.dotList[dotArt.present.dot.activeIdx].dot,
+      dotList: dotArt.present.dot.dotList,
+      rowCount: dotArt.present.dot.rowCount,
+      columnCount: dotArt.present.dot.columnCount,
+    }),
+  );
 
   return (
     <PreViewTools
       dotSet={dotSet}
+      dotList={dotList}
       rowCount={rowCount}
       columnCount={columnCount}
+      duration="2"
     />
   );
 };

@@ -63,12 +63,17 @@ const initialState = {
     {
       id: shortid.generate(),
       dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
-      interval: 25,
+      interval: 50,
     },
     {
       id: shortid.generate(),
       dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
-      interval: 25,
+      interval: 75,
+    },
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 100,
     },
   ],
   activeIdx: 0,
