@@ -44,47 +44,35 @@ export const removeActiveDotArt = createAction(
 export const copyActiveDotArt = createAction(COPY_ACTIVE_DOT_ART, (idx) => idx);
 export const addNewDotArt = createAction(ADD_NEW_DOT_ART);
 
-const defaultDotMaker = (row, column) => {
-  return new Array(row).fill().map(() => new Array(column).fill(''));
-};
+// const defaultDotMaker = (row, column) => {
+//   return new Array(row).fill().map(() => new Array(column).fill(''));
+// };
 
-function converter(dotSet) {
-  let returnDotArt = [];
-  let idx = 0;
-  for (let i = 0; i < 16; i++) {
-    let row = [];
-    for (let j = 0; j < 16; j++) {
-      row.push(dotSet[idx]);
-      idx++;
-    }
-    returnDotArt.push(row);
-    row = [];
-  }
-  console.log(returnDotArt);
-  return returnDotArt;
-}
+const defaultDotMaker = (row, column) => {
+  return new Array(row * column).fill('');
+};
 
 const initialState = {
   dotSet: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
   dotList: [
     {
       id: shortid.generate(),
-      dot: converter(["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"]), // prettier-ignore
+      dot: ["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"], // prettier-ignore
       interval: 25,
     },
     {
       id: shortid.generate(),
-      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN), // prettier-ignore
+      dot: ["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"], // prettier-ignore
       interval: 50,
     },
     {
       id: shortid.generate(),
-      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN), // prettier-ignore
+      dot: ["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"], // prettier-ignore
       interval: 75,
     },
     {
       id: shortid.generate(),
-      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN), // prettier-ignore
+      dot: ["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"], // prettier-ignore
       interval: 100,
     },
   ],
@@ -118,28 +106,75 @@ const dot = handleActions(
         let originRow = draft.rowCount;
         let originColumn = draft.columnCount;
 
+        // draft.dotList.map((dotSet) => {
+        //   if (newColumn > originColumn) {
+        //     for (let i = originColumn; i < newColumn; i++) {
+        //       dotSet.dot.map((column) => column.push(''));
+        //     }
+        //   }
+
+        //   if (newColumn < originColumn) {
+        //     for (let i = newColumn; i < originColumn; i++) {
+        //       dotSet.dot.map((column) => column.pop());
+        //     }
+        //   }
+
+        //   if (newRow > originRow) {
+        //     for (let i = originRow; i < newRow; i++) {
+        //       dotSet.dot.push(new Array(newColumn).fill(''));
+        //     }
+        //   }
+
+        //   if (newRow < originRow) {
+        //     for (let i = newRow; i < originRow; i++) {
+        //       dotSet.dot.pop();
+        //     }
+        //   }
+        // });
+
         draft.dotList.map((dotSet) => {
           if (newColumn > originColumn) {
-            for (let i = originColumn; i < newColumn; i++) {
-              dotSet.dot.map((column) => column.push(''));
+            // for (let i = originColumn; i < newColumn; i++) {
+            //   dotSet.dot.map((column) => column.push(''));
+            // }
+            let newDotSet = [];
+            for (let i = 0; i < originRow; i++) {
+              newDotSet = newDotSet
+                .concat(
+                  dotSet.dot.slice(i * originColumn, (i + 1) * originColumn),
+                )
+                .concat(new Array(newColumn - originColumn).fill(''));
             }
+            dotSet.dot = newDotSet;
           }
 
           if (newColumn < originColumn) {
-            for (let i = newColumn; i < originColumn; i++) {
-              dotSet.dot.map((column) => column.pop());
+            // for (let i = newColumn; i < originColumn; i++) {
+            //   dotSet.dot.map((column) => column.pop());
+            // }
+            let newDotSet = [];
+            for (let i = 0; i < originRow; i++) {
+              newDotSet = newDotSet.concat(
+                dotSet.dot.slice(
+                  i * originColumn,
+                  (i + 1) * originColumn - (originColumn - newColumn),
+                ),
+              );
             }
+            dotSet.dot = newDotSet;
           }
 
           if (newRow > originRow) {
             for (let i = originRow; i < newRow; i++) {
-              dotSet.dot.push(new Array(newColumn).fill(''));
+              // dotSet.dot.push(new Array(newColumn).fill(''));
+              dotSet.dot = dotSet.dot.concat(new Array(newColumn).fill(''));
             }
           }
 
           if (newRow < originRow) {
             for (let i = newRow; i < originRow; i++) {
-              dotSet.dot.pop();
+              // dotSet.dot.pop();
+              dotSet.dot = dotSet.dot.slice(0, newRow * newColumn);
             }
           }
         });
@@ -158,7 +193,7 @@ const dot = handleActions(
             {
               id: shortid.generate(),
               dot: defaultDotMaker(draft.rowCount, draft.columnCount),
-              interval: 25,
+              interval: 100,
             },
           ];
         } else {

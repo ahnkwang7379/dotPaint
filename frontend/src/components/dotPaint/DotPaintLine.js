@@ -13,6 +13,7 @@ const DotPaintLine = ({
   dotLineIdx,
   border,
   dotSize,
+  columnCount,
   onMouseDownHandler,
   onMouseUpHandler,
   onMouseOverHandler,
@@ -23,8 +24,9 @@ const DotPaintLine = ({
         return (
           <DivBlock
             key={columnIdx}
-            rowIdx={dotLineIdx}
-            columnIdx={columnIdx}
+            // rowIdx={dotLineIdx}
+            // columnIdx={columnIdx}
+            dotIdx={columnCount * dotLineIdx + columnIdx}
             dotColor={color}
             dotSize={dotSize}
             border={border}

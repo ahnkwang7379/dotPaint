@@ -41,8 +41,9 @@ const DotStyled = styled.div.attrs(({ dotColor, dotSize, border }) => ({
 `;
 
 const DivBlock = ({
-  rowIdx,
-  columnIdx,
+  // rowIdx,
+  // columnIdx,
+  dotIdx,
   dotColor,
   dotSize,
   border,
@@ -56,8 +57,10 @@ const DivBlock = ({
       dotSize={dotSize}
       border={border}
       onContextMenu={(e) => e.preventDefault()}
-      onMouseDown={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}
-      onMouseOver={(e) => onMouseOverHandler(e, rowIdx, columnIdx)}
+      // onMouseDown={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}
+      // onMouseOver={(e) => onMouseOverHandler(e, rowIdx, columnIdx)}
+      onMouseDown={(e) => onMouseDownHandler(e, dotIdx)}
+      onMouseOver={(e) => onMouseOverHandler(e, dotIdx)}
       onMouseUp={(e) => onMouseUpHandler(e)}
     />
   );

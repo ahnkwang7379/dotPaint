@@ -15,9 +15,12 @@ export const DOT_ACTIONS = 'index/DOT_ACTIONS';
 
 export const dotActions = createAction(
   DOT_ACTIONS,
-  ({ rowIdx, columnIdx }) => ({
-    rowIdx,
-    columnIdx,
+  // ({ rowIdx, columnIdx }) => ({
+  //   rowIdx,
+  //   columnIdx,
+  // }),
+  ({ dotIdx }) => ({
+    dotIdx,
   }),
 );
 
@@ -81,13 +84,15 @@ const floodFill = (dotArt, dotId, color, rowCount, columnCount) => {
 
 const bucketDotArt = (
   dotArt,
-  selectedDotId,
+  // selectedDotId,
+  dotIdx,
   dotColor,
   paletteColor,
   rowCount,
   columnCount,
 ) => {
-  const queue = [selectedDotId];
+  // const queue = [selectedDotId];
+  const queue = [dotIdx];
   let newDotArt = dotArt.slice();
   let currentId;
   let adjacents;
@@ -123,8 +128,9 @@ const dotActionsHandler = (
   state,
   paintTool,
   paintToolState,
-  rowIdx,
-  columnIdx,
+  // rowIdx,
+  // columnIdx,
+  dotIdx,
 ) => {
   // selectedPaintTool -> PaintToolState -> rowIdx, columnIdx 체크 순
   if (paintToolState === 'IDLE') return { ...state };
@@ -143,9 +149,10 @@ const dotActionsHandler = (
 
         const activeIdx = state.dotArt.present.dot.activeIdx;
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotList[activeIdx].dot[rowIdx][
-            columnIdx
-          ] = color;
+          // draft.dotArt.present.dot.dotList[activeIdx].dot[rowIdx][
+          //   columnIdx
+          // ] = color;
+          draft.dotArt.present.dot.dotList[activeIdx].dot[dotIdx] = color;
         });
       } else return { ...state };
     case BUCKET:
@@ -164,33 +171,37 @@ const dotActionsHandler = (
 
         const { rowCount, columnCount } = dot;
         // 2차배열 1차배열로 풀어서 넣어줌
-        const dotArt = dot.dotList[activeIdx].dot.flat();
+        // const dotArt = dot.dotList[activeIdx].dot.flat();
+        const dotArt = dot.dotList[activeIdx].dot;
 
-        const selectedDotId = rowIdx * columnCount + columnIdx;
-        const dotColor = dotArt[selectedDotId];
+        // const selectedDotId = rowIdx * columnCount + columnIdx;
+        // const dotColor = dotArt[selectedDotId];
+        const dotColor = dotArt[dotIdx];
         const newDotArt = bucketDotArt(
           dotArt,
-          selectedDotId,
+          // selectedDotId,
+          dotIdx,
           dotColor,
           paletteColor,
           rowCount,
           columnCount,
         );
 
-        let returnDotArt = [];
-        let idx = 0;
-        for (let i = 0; i < rowCount; i++) {
-          let row = [];
-          for (let j = 0; j < columnCount; j++) {
-            row.push(newDotArt[idx]);
-            idx++;
-          }
-          returnDotArt.push(row);
-          row = [];
-        }
+        // let returnDotArt = [];
+        // let idx = 0;
+        // for (let i = 0; i < rowCount; i++) {
+        //   let row = [];
+        //   for (let j = 0; j < columnCount; j++) {
+        //     row.push(newDotArt[idx]);
+        //     idx++;
+        //   }
+        //   returnDotArt.push(row);
+        //   row = [];
+        // }
 
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotList[activeIdx].dot = returnDotArt;
+          // draft.dotArt.present.dot.dotList[activeIdx].dot = returnDotArt;
+          draft.dotArt.present.dot.dotList[activeIdx].dot = newDotArt;
         });
       } else {
         return { ...state };
@@ -199,7 +210,8 @@ const dotActionsHandler = (
       if (paintToolState === 'DRAGGING') {
         const dot = state.dotArt.present.dot;
         const activeIdx = dot.activeIdx;
-        const dotColor = dot.dotList[activeIdx].dot[rowIdx][columnIdx];
+        // const dotColor = dot.dotList[activeIdx].dot[rowIdx][columnIdx];
+        const dotColor = dot.dotList[activeIdx].dot[dotIdx];
         // 색이 없는 셀을 클릭했다면
         if (!dotColor) return { ...state };
         else {
@@ -222,8 +234,9 @@ const dotActionsHandler = (
       if (paintToolState === 'DRAGGING') {
         const activeIdx = state.dotArt.present.dot.activeIdx;
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotList[activeIdx].dot[rowIdx][columnIdx] =
-            '';
+          // draft.dotArt.present.dot.dotList[activeIdx].dot[rowIdx][columnIdx] =
+          //   '';
+          draft.dotArt.present.dot.dotList[activeIdx].dot[dotIdx] = '';
         });
       }
       return { ...state };
@@ -234,13 +247,15 @@ const dotActionsHandler = (
 
 const crossSilceReducer = handleActions(
   {
-    [DOT_ACTIONS]: (state, { payload: { rowIdx, columnIdx } }) =>
+    // [DOT_ACTIONS]: (state, { payload: { rowIdx, columnIdx } }) =>
+    [DOT_ACTIONS]: (state, { payload: { dotIdx } }) =>
       dotActionsHandler(
         state,
         state.paintTool.selectedPaintTool,
         state.paintTool.paintState,
-        rowIdx,
-        columnIdx,
+        // rowIdx,
+        // columnIdx,
+        dotIdx,
       ),
   },
   {},

@@ -26,14 +26,17 @@ const DotPaint = ({
   dotSet,
   border,
   dotSize,
+  columnCount,
   onChangePaintState,
   onDotActionHandle,
 }) => {
   const onMouseDownHandler = useCallback(
-    (e, rowIdx, columnIdx) => {
+    // (e, rowIdx, columnIdx) => {
+    (e, dotIdx) => {
       e.preventDefault();
       onChangePaintState('DRAGGING');
-      onDotActionHandle(rowIdx, columnIdx);
+      onDotActionHandle(dotIdx);
+      // onDotActionHandle(rowIdx, columnIdx);
     },
     [onChangePaintState, onDotActionHandle],
   );
@@ -45,9 +48,11 @@ const DotPaint = ({
     [onChangePaintState],
   );
   const onMouseOverHandler = useCallback(
-    (e, rowIdx, columnIdx) => {
+    // (e, rowIdx, columnIdx) => {
+    (e, dotIdx) => {
       e.preventDefault();
-      onDotActionHandle(rowIdx, columnIdx);
+      // onDotActionHandle(rowIdx, columnIdx);
+      onDotActionHandle(dotIdx);
     },
     [onDotActionHandle],
   );
@@ -65,20 +70,22 @@ const DotPaint = ({
       onMouseUp={(e) => onMouseUpHandler(e)}
     >
       <DotPaintBlock>
-        {dotSet.map((dotLine, idx) => {
-          return (
-            <DotPaintLine
-              dotLine={dotLine}
-              key={idx}
-              dotLineIdx={idx}
-              dotSize={dotSize}
-              border={border}
-              onMouseDownHandler={onMouseDownHandler}
-              onMouseUpHandler={onMouseUpHandler}
-              onMouseOverHandler={onMouseOverHandler}
-            />
-          );
-        })}
+        {dotSet &&
+          dotSet.map((dotLine, idx) => {
+            return (
+              <DotPaintLine
+                dotLine={dotLine}
+                key={idx}
+                dotLineIdx={idx}
+                columnCount={columnCount}
+                dotSize={dotSize}
+                border={border}
+                onMouseDownHandler={onMouseDownHandler}
+                onMouseUpHandler={onMouseUpHandler}
+                onMouseOverHandler={onMouseOverHandler}
+              />
+            );
+          })}
       </DotPaintBlock>
     </DotPaintWrapper>
   );

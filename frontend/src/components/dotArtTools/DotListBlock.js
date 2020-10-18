@@ -53,7 +53,7 @@ const StyleButton = styled.div`
 const IntervalDiv = styled.div`
   width: auto;
   height: 24px;
-  background: black;
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const DotListBlock = ({
@@ -61,6 +61,7 @@ const DotListBlock = ({
   idx,
   dot,
   columnCount,
+  interval,
   handleChangeIdx,
   handleCopyDotArt,
   handleRemoveDotArt,
@@ -76,7 +77,7 @@ const DotListBlock = ({
           <FileCopyRoundedIcon fontSize="inherit" />
         </StyleButton>
       </CustomDiv>
-      <IntervalDiv></IntervalDiv>
+      <IntervalDiv>{interval}</IntervalDiv>
     </CardDiv>
   ) : (
     <CardDiv active={false} onClick={() => handleChangeIdx(idx)}>
@@ -89,7 +90,7 @@ const DotListBlock = ({
           <FileCopyRoundedIcon fontSize="inherit" />
         </StyleButton>
       </CustomDiv>
-      <IntervalDiv></IntervalDiv>
+      <IntervalDiv>{interval}</IntervalDiv>
     </CardDiv>
   );
 };

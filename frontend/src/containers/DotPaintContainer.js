@@ -1,20 +1,36 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import DotPaint from '../components/dotPaint/DotPaint';
 import { useSelector, useDispatch } from 'react-redux';
 import { changePaintState } from '../modules/paintTool';
 import { dotActions } from '../modules/index';
 
 const DotpaintContainer = () => {
+  const [dotSet, setDotSet] = useState('');
   const dispatch = useDispatch();
-  const { dotSet, border, dotSize, column } = useSelector(({ dotArt: { present: { dot }}}) => 
+  const { dot, border, dotSize, columnCount } = useSelector(({ dotArt: { present: { dot }}}) => 
     ({
       // dotSet: dot.dotSet,
-      dotSet: dot.dotList[dot.activeIdx].dot,
+      dot: dot.dotList[dot.activeIdx].dot,
       border: dot.border,
       dotSize: dot.dotSize,
-      column: dot.columnCount,
+      columnCount: dot.columnCount,
     }),
   ); // prettier-ignore
+
+  useEffect(() => {
+    let returnDotArt = [];
+    let idx = 0;
+    for (let i = 0; i < dot.length / columnCount; i++) {
+      let row = [];
+      for (let j = 0; j < columnCount; j++) {
+        row.push(dot[idx]);
+        idx++;
+      }
+      returnDotArt.push(row);
+      row = [];
+    }
+    setDotSet(returnDotArt);
+  }, [dot]);
 
   const onChangePaintState = useCallback(
     (paintState) => dispatch(changePaintState(paintState)),
@@ -22,25 +38,29 @@ const DotpaintContainer = () => {
   );
 
   const onDotActionHandle = useCallback(
-    (rowIdx, columnIdx) =>
-      dispatch(
-        dotActions({
-          rowIdx: rowIdx,
-          columnIdx: columnIdx,
-        }),
-      ),
+    // (rowIdx, columnIdx) =>
+    //   dispatch(
+    //     dotActions({
+    //       rowIdx: rowIdx,
+    //       columnIdx: columnIdx,
+    //     }),
+    //   ),
+    (dotIdx) => dispatch(dotActions({ dotIdx: dotIdx })),
     [dispatch],
   );
   return (
-    <div>
-      <DotPaint
-        dotSet={dotSet}
-        border={border}
-        dotSize={dotSize}
-        onChangePaintState={onChangePaintState}
-        onDotActionHandle={onDotActionHandle}
-      />
-    </div>
+    dotSet && (
+      <div>
+        <DotPaint
+          dotSet={dotSet}
+          border={border}
+          dotSize={dotSize}
+          columnCount={columnCount}
+          onChangePaintState={onChangePaintState}
+          onDotActionHandle={onDotActionHandle}
+        />
+      </div>
+    )
   );
 };
 

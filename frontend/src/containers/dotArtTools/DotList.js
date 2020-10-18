@@ -82,6 +82,7 @@ const DotList = ({ dotList, activeIdx, columnCount }) => {
               active={true}
               idx={idx}
               dot={dot.dot}
+              interval={dot.interval}
               columnCount={columnCount}
               handleCopyDotArt={handleCopyDotArt}
               handleRemoveDotArt={handleRemoveDotArt}
@@ -92,6 +93,7 @@ const DotList = ({ dotList, activeIdx, columnCount }) => {
               idx={idx}
               dot={dot.dot}
               columnCount={columnCount}
+              interval={dot.interval}
               handleChangeIdx={handleChangeIdx}
             />
           );
