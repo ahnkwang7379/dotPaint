@@ -8,7 +8,7 @@ const CustomDiv = styled.div`
   position: relative;
   display: grid;
   width: 16px;
-  left: 40px;
+  left: 48px;
   margin: 0px;
   padding: 0px;
   & > * + * {
@@ -50,6 +50,12 @@ const StyleButton = styled.div`
     `}
 `;
 
+const IntervalDiv = styled.div`
+  width: auto;
+  height: 24px;
+  background: black;
+`;
+
 const DotListBlock = ({
   active,
   idx,
@@ -70,6 +76,7 @@ const DotListBlock = ({
           <FileCopyRoundedIcon fontSize="inherit" />
         </StyleButton>
       </CustomDiv>
+      <IntervalDiv></IntervalDiv>
     </CardDiv>
   ) : (
     <CardDiv active={false} onClick={() => handleChangeIdx(idx)}>
@@ -82,6 +89,7 @@ const DotListBlock = ({
           <FileCopyRoundedIcon fontSize="inherit" />
         </StyleButton>
       </CustomDiv>
+      <IntervalDiv></IntervalDiv>
     </CardDiv>
   );
 };

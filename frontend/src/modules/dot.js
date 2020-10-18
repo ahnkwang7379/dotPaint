@@ -13,8 +13,8 @@ const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
 const ADD_NEW_DOT_ART = 'dot/ADD_NEW_DOT_ART';
 
 // initialState
-export const INITIAL_ROW = 10;
-export const INITIAL_COLUMN = 15;
+export const INITIAL_ROW = 16;
+export const INITIAL_COLUMN = 16;
 export const INITIAL_DOT_DOTSIZE = 1;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
@@ -44,35 +44,47 @@ export const removeActiveDotArt = createAction(
 export const copyActiveDotArt = createAction(COPY_ACTIVE_DOT_ART, (idx) => idx);
 export const addNewDotArt = createAction(ADD_NEW_DOT_ART);
 
-const defaultDotSetMaker = (row, column) => {
-  return new Array(row).fill().map(() => new Array(column).fill(''));
-};
-
 const defaultDotMaker = (row, column) => {
   return new Array(row).fill().map(() => new Array(column).fill(''));
 };
 
+function converter(dotSet) {
+  let returnDotArt = [];
+  let idx = 0;
+  for (let i = 0; i < 16; i++) {
+    let row = [];
+    for (let j = 0; j < 16; j++) {
+      row.push(dotSet[idx]);
+      idx++;
+    }
+    returnDotArt.push(row);
+    row = [];
+  }
+  console.log(returnDotArt);
+  return returnDotArt;
+}
+
 const initialState = {
-  dotSet: defaultDotSetMaker(INITIAL_ROW, INITIAL_COLUMN),
+  dotSet: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
   dotList: [
     {
       id: shortid.generate(),
-      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      dot: converter(["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"]), // prettier-ignore
       interval: 25,
     },
     {
       id: shortid.generate(),
-      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN), // prettier-ignore
       interval: 50,
     },
     {
       id: shortid.generate(),
-      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN), // prettier-ignore
       interval: 75,
     },
     {
       id: shortid.generate(),
-      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN), // prettier-ignore
       interval: 100,
     },
   ],
@@ -87,7 +99,7 @@ const dot = handleActions(
   {
     [CLEAR_DOT]: (state) => ({
       ...state,
-      dotSet: defaultDotSetMaker(state.rowCount, state.columnCount),
+      dotSet: defaultDotMaker(state.rowCount, state.columnCount),
     }),
     [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) =>
       produce(state, (draft) => {

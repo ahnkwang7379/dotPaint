@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import styled, { keyframes, css } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 import {
   generateAnimationCSSData,
   generatePixelDrawCss,
 } from '../../util/cssParser';
+import Animation from './Animation';
 
 const PreViewWrapper = styled.div.attrs(({ cellSize, cssString }) => ({
   style: {
@@ -15,18 +16,6 @@ const PreViewWrapper = styled.div.attrs(({ cellSize, cssString }) => ({
   },
 }))`
   position: absolute;
-`;
-
-const AnimationKeyFrames = (animationData) =>
-  keyframes`
-    ${animationData}
-  `;
-
-const AnimationPreViewWrapper = styled.div`
-  position: absolute;
-  animation: ${(props) => css`
-    ${AnimationKeyFrames(props.animationData)} ${props.duration}s infinite
-  `};
 `;
 
 const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
@@ -41,19 +30,12 @@ const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
         height: cellSize,
         width: cellSize,
         position: 'absolute',
-        // top: '-5px',
-        // left: '-5px',
       },
     };
 
     if (animation) {
       animationData = generateAnimationCSSData(dotList, columns, cellSize);
-      return (
-        <AnimationPreViewWrapper
-          duration={duration}
-          animationData={animationData}
-        />
-      );
+      return <Animation boxShadow={animationData} duration={duration} />;
     } else {
       cssString = generatePixelDrawCss(dotSet, columns, cellSize, 'string');
 

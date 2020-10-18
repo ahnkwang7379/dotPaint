@@ -24,9 +24,9 @@ const ScrollCustom = styled.div`
   flex-wrap: nowrap;
   overflow: auto;
   & > * {
-    min-width: 64px;
+    min-width: 72px;
     margin: 8px 0px 8px 8px;
-    height: 64px;
+    height: 88px;
   }
   & > :last-child {
     margin-right: 8px;

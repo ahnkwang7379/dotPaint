@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import DotPaint from '../components/dotPaint/DotPaint';
-import Preview from '../components/common/Preview';
 import { useSelector, useDispatch } from 'react-redux';
 import { changePaintState } from '../modules/paintTool';
 import { dotActions } from '../modules/index';
@@ -34,7 +33,6 @@ const DotpaintContainer = () => {
   );
   return (
     <div>
-      {/* <Preview dotSet={dotSet} column={column} /> */}
       <DotPaint
         dotSet={dotSet}
         border={border}
