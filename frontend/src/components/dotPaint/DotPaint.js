@@ -31,12 +31,10 @@ const DotPaint = ({
   onDotActionHandle,
 }) => {
   const onMouseDownHandler = useCallback(
-    // (e, rowIdx, columnIdx) => {
     (e, dotIdx) => {
       e.preventDefault();
       onChangePaintState('DRAGGING');
       onDotActionHandle(dotIdx);
-      // onDotActionHandle(rowIdx, columnIdx);
     },
     [onChangePaintState, onDotActionHandle],
   );
@@ -48,22 +46,12 @@ const DotPaint = ({
     [onChangePaintState],
   );
   const onMouseOverHandler = useCallback(
-    // (e, rowIdx, columnIdx) => {
     (e, dotIdx) => {
       e.preventDefault();
-      // onDotActionHandle(rowIdx, columnIdx);
       onDotActionHandle(dotIdx);
     },
     [onDotActionHandle],
   );
-  // const onMouseClickHandler = useCallback(
-  //   (e, rowIdx, columnIdx) => {
-  //     e.preventDefault();
-  //     onChangePaintState('CLICK');
-  //     onDotActionHandle(rowIdx, columnIdx);
-  //   },
-  //   [onChangePaintState, onDotActionHandle],
-  // );
   return (
     <DotPaintWrapper
       onMouseLeave={(e) => onMouseUpHandler(e)}

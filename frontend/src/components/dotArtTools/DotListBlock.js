@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Preview from '../../components/common/Preview';
 import styled, { css } from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -50,10 +50,18 @@ const StyleButton = styled.div`
     `}
 `;
 
-const IntervalDiv = styled.div`
-  width: auto;
+const IntervalInput = styled.input`
+  width: 72px;
   height: 24px;
   background: rgba(0, 0, 0, 0.5);
+  text-align: center;
+
+  -moz-appearance: textfield;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
 const DotListBlock = ({
@@ -65,7 +73,31 @@ const DotListBlock = ({
   handleChangeIdx,
   handleCopyDotArt,
   handleRemoveDotArt,
+  handleChangeInterval,
+  lastIndex,
 }) => {
+  const [aniInterval, setAniInterval] = useState(interval);
+
+  useEffect(() => {
+    setAniInterval(interval);
+  }, [interval]);
+
+  const onChangeInput = (e) => {
+    setAniInterval(e.target.value);
+  };
+
+  const onBlurHandle = useCallback(
+    (e) => {
+      if (e.target.value.length === 0) {
+        setAniInterval(interval);
+        return;
+      } else {
+        handleChangeInterval(Math.round(e.target.value * 100) / 100, idx);
+      }
+    },
+    [handleChangeInterval, idx, interval],
+  );
+
   return active === true ? (
     <CardDiv active={true}>
       <Preview dotSet={dot} column={columnCount} size={2} />
@@ -77,7 +109,14 @@ const DotListBlock = ({
           <FileCopyRoundedIcon fontSize="inherit" />
         </StyleButton>
       </CustomDiv>
-      <IntervalDiv>{interval}</IntervalDiv>
+      <IntervalInput
+        value={aniInterval}
+        type="number"
+        onChange={onChangeInput}
+        onBlur={(e) => onBlurHandle(e)}
+        disabled={lastIndex} // 애니메이션의 마지막은 100%로 고정
+        step="0.1"
+      />
     </CardDiv>
   ) : (
     <CardDiv active={false} onClick={() => handleChangeIdx(idx)}>
@@ -90,7 +129,7 @@ const DotListBlock = ({
           <FileCopyRoundedIcon fontSize="inherit" />
         </StyleButton>
       </CustomDiv>
-      <IntervalDiv>{interval}</IntervalDiv>
+      <IntervalInput value={interval} disabled />
     </CardDiv>
   );
 };

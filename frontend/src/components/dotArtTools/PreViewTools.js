@@ -22,6 +22,7 @@ const ButtonBox = styled.div`
 `;
 
 const PreviewBlock = styled.div`
+  margin-top: 5px;
   background: rgb(150, 150, 150);
   width: ${(props) =>
     props.zoomIn

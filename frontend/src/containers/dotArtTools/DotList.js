@@ -8,6 +8,7 @@ import {
   removeActiveDotArt,
   copyActiveDotArt,
   addNewDotArt,
+  changeAnimationInterval,
 } from '../../modules/dot';
 import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
 
@@ -24,6 +25,7 @@ const ScrollCustom = styled.div`
   flex-wrap: nowrap;
   overflow: auto;
   & > * {
+    width: 72px;
     min-width: 72px;
     margin: 8px 0px 8px 8px;
     height: 88px;
@@ -68,6 +70,12 @@ const DotList = ({ dotList, activeIdx, columnCount }) => {
   const handleAddDotArt = useCallback(() => {
     dispatch(addNewDotArt());
   }, [dispatch]);
+  const handleChangeInterval = useCallback(
+    (interval, activeIdx) => {
+      dispatch(changeAnimationInterval(interval, activeIdx));
+    },
+    [dispatch],
+  );
 
   return (
     <DotListDiv>
@@ -75,29 +83,34 @@ const DotList = ({ dotList, activeIdx, columnCount }) => {
         <AddToPhotosIcon />
       </CustomButton>
       <ScrollCustom>
-        {dotList.map((dot, idx) => {
-          return activeIdx === idx ? (
-            <DotListBlock
-              key={dot.id}
-              active={true}
-              idx={idx}
-              dot={dot.dot}
-              interval={dot.interval}
-              columnCount={columnCount}
-              handleCopyDotArt={handleCopyDotArt}
-              handleRemoveDotArt={handleRemoveDotArt}
-            />
-          ) : (
-            <DotListBlock
-              key={dot.id}
-              idx={idx}
-              dot={dot.dot}
-              columnCount={columnCount}
-              interval={dot.interval}
-              handleChangeIdx={handleChangeIdx}
-            />
-          );
-        })}
+        {dotList &&
+          dotList.map((dot, idx) => {
+            console.log(dot);
+            return activeIdx === idx ? (
+              <DotListBlock
+                key={dot.id}
+                active={true}
+                idx={idx}
+                dot={dot.dot}
+                interval={dot.interval}
+                columnCount={columnCount}
+                handleCopyDotArt={handleCopyDotArt}
+                handleRemoveDotArt={handleRemoveDotArt}
+                handleChangeInterval={handleChangeInterval}
+                lastIndex={dotList.length - 1 === idx}
+              />
+            ) : (
+              <DotListBlock
+                key={dot.id}
+                idx={idx}
+                dot={dot.dot}
+                columnCount={columnCount}
+                interval={dot.interval}
+                handleChangeIdx={handleChangeIdx}
+                lastIndex={dotList.length - 1 === idx}
+              />
+            );
+          })}
       </ScrollCustom>
     </DotListDiv>
   );

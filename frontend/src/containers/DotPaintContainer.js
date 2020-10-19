@@ -30,7 +30,7 @@ const DotpaintContainer = () => {
       row = [];
     }
     setDotSet(returnDotArt);
-  }, [dot]);
+  }, [dot, columnCount]);
 
   const onChangePaintState = useCallback(
     (paintState) => dispatch(changePaintState(paintState)),
@@ -38,13 +38,6 @@ const DotpaintContainer = () => {
   );
 
   const onDotActionHandle = useCallback(
-    // (rowIdx, columnIdx) =>
-    //   dispatch(
-    //     dotActions({
-    //       rowIdx: rowIdx,
-    //       columnIdx: columnIdx,
-    //     }),
-    //   ),
     (dotIdx) => dispatch(dotActions({ dotIdx: dotIdx })),
     [dispatch],
   );

@@ -11,6 +11,7 @@ const CHANGE_ACTIVE_IDX = 'dot/CHANGE_ACTIVE_IDX';
 const REMOVE_ACTIVE_DOT_ART = 'dot/REMOVE_ACTIVE_DOT_ART';
 const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
 const ADD_NEW_DOT_ART = 'dot/ADD_NEW_DOT_ART';
+const CHANGE_ANIMATION_INTERVAL = 'dot/CHANGE_ANIMATION_INTERVAL';
 
 // initialState
 export const INITIAL_ROW = 16;
@@ -43,6 +44,10 @@ export const removeActiveDotArt = createAction(
 );
 export const copyActiveDotArt = createAction(COPY_ACTIVE_DOT_ART, (idx) => idx);
 export const addNewDotArt = createAction(ADD_NEW_DOT_ART);
+export const changeAnimationInterval = createAction(
+  CHANGE_ANIMATION_INTERVAL,
+  (interval, activeIdx) => ({ interval, activeIdx }),
+);
 
 // const defaultDotMaker = (row, column) => {
 //   return new Array(row).fill().map(() => new Array(column).fill(''));
@@ -83,6 +88,18 @@ const initialState = {
   columnCount: INITIAL_COLUMN,
 };
 
+const intervalSetter = (dotList) =>
+  produce(dotList, (draft) => {
+    const quotient = 100 / draft.length;
+    draft.map(
+      (dotSet, idx) =>
+        (dotSet.interval =
+          idx === dotList.length
+            ? 100
+            : Math.round((idx + 1) * quotient * 100) / 100),
+    );
+  });
+
 const dot = handleActions(
   {
     [CLEAR_DOT]: (state) => ({
@@ -106,37 +123,8 @@ const dot = handleActions(
         let originRow = draft.rowCount;
         let originColumn = draft.columnCount;
 
-        // draft.dotList.map((dotSet) => {
-        //   if (newColumn > originColumn) {
-        //     for (let i = originColumn; i < newColumn; i++) {
-        //       dotSet.dot.map((column) => column.push(''));
-        //     }
-        //   }
-
-        //   if (newColumn < originColumn) {
-        //     for (let i = newColumn; i < originColumn; i++) {
-        //       dotSet.dot.map((column) => column.pop());
-        //     }
-        //   }
-
-        //   if (newRow > originRow) {
-        //     for (let i = originRow; i < newRow; i++) {
-        //       dotSet.dot.push(new Array(newColumn).fill(''));
-        //     }
-        //   }
-
-        //   if (newRow < originRow) {
-        //     for (let i = newRow; i < originRow; i++) {
-        //       dotSet.dot.pop();
-        //     }
-        //   }
-        // });
-
         draft.dotList.map((dotSet) => {
           if (newColumn > originColumn) {
-            // for (let i = originColumn; i < newColumn; i++) {
-            //   dotSet.dot.map((column) => column.push(''));
-            // }
             let newDotSet = [];
             for (let i = 0; i < originRow; i++) {
               newDotSet = newDotSet
@@ -149,9 +137,6 @@ const dot = handleActions(
           }
 
           if (newColumn < originColumn) {
-            // for (let i = newColumn; i < originColumn; i++) {
-            //   dotSet.dot.map((column) => column.pop());
-            // }
             let newDotSet = [];
             for (let i = 0; i < originRow; i++) {
               newDotSet = newDotSet.concat(
@@ -166,14 +151,12 @@ const dot = handleActions(
 
           if (newRow > originRow) {
             for (let i = originRow; i < newRow; i++) {
-              // dotSet.dot.push(new Array(newColumn).fill(''));
               dotSet.dot = dotSet.dot.concat(new Array(newColumn).fill(''));
             }
           }
 
           if (newRow < originRow) {
             for (let i = newRow; i < originRow; i++) {
-              // dotSet.dot.pop();
               dotSet.dot = dotSet.dot.slice(0, newRow * newColumn);
             }
           }
@@ -202,7 +185,7 @@ const dot = handleActions(
 
           dotList = dotList.slice(0, idx);
           dotList = dotList.concat(tempDotList);
-          draft.dotList = dotList;
+          draft.dotList = intervalSetter(dotList);
           draft.activeIdx = idx > dotList.length - 1 ? idx - 1 : idx;
         }
       }),
@@ -218,7 +201,7 @@ const dot = handleActions(
         dotList = dotList.slice(0, idx + 1);
         dotList = dotList.concat(copyDotArt);
         dotList = dotList.concat(tempDotList);
-        draft.dotList = dotList;
+        draft.dotList = intervalSetter(dotList);
         draft.activeIdx = idx + 1;
       }),
     [ADD_NEW_DOT_ART]: (state) =>
@@ -229,6 +212,28 @@ const dot = handleActions(
           interval: 25,
         });
         draft.activeIdx = draft.dotList.length - 1;
+        draft.dotList = intervalSetter(draft.dotList);
+      }),
+    [CHANGE_ANIMATION_INTERVAL]: (
+      state,
+      { payload: { interval, activeIdx } },
+    ) =>
+      produce(state, (draft) => {
+        const dotList = draft.dotList;
+        if (dotList[activeIdx + 1].interval < interval) {
+          // 현재 interval이 다음 animation보다 늦어선 안되므로 최대치로 조정해준다
+          dotList[activeIdx].interval = dotList[activeIdx + 1].interval;
+          return;
+        } else {
+          if (activeIdx === 0) {
+            dotList[activeIdx].interval = interval <= 0 ? 0.1 : interval;
+          } else {
+            dotList[activeIdx].interval =
+              dotList[activeIdx - 1].interval > interval
+                ? dotList[activeIdx - 1].interval
+                : interval;
+          }
+        }
       }),
   },
   initialState,

@@ -24,8 +24,6 @@ const DotPaintLine = ({
         return (
           <DivBlock
             key={columnIdx}
-            // rowIdx={dotLineIdx}
-            // columnIdx={columnIdx}
             dotIdx={columnCount * dotLineIdx + columnIdx}
             dotColor={color}
             dotSize={dotSize}

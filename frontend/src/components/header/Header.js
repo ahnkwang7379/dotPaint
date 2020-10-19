@@ -15,10 +15,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import PaletteIcon from '@material-ui/icons/Palette';
 import GridOnIcon from '@material-ui/icons/GridOn';
 import ShareIcon from '@material-ui/icons/Share';
-import Container from '@material-ui/core/Container';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Button from '@material-ui/core/Button';
@@ -111,11 +109,6 @@ const Header = ({ window, children, path, history, user, onLogout }) => {
   const drawer = (
     <div>
       <Divider />
-      {/* <Container>
-        {(open || mobileOpen) && (
-          <PaletteIcon color="primary" style={{ fontSize: 170 }} />
-        )}
-      </Container> */}
       <Divider />
       <List>
         <ListItem

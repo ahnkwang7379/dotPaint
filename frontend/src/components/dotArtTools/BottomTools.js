@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     width: '100%',
-    position: 'fixed',
+    // position: 'fixed',
     bottom: '0px',
     height: '250px',
   },
