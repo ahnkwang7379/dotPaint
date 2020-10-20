@@ -88,17 +88,31 @@ const initialState = {
   columnCount: INITIAL_COLUMN,
 };
 
-const intervalSetter = (dotList) =>
-  produce(dotList, (draft) => {
-    const quotient = 100 / draft.length;
-    draft.map(
-      (dotSet, idx) =>
-        (dotSet.interval =
-          idx === dotList.length
-            ? 100
-            : Math.round((idx + 1) * quotient * 100) / 100),
-    );
+// const intervalSetter = (dotList) =>
+//   produce(dotList, (draft) => {
+//     const quotient = 100 / draft.length;
+//     draft.map(
+//       (dotSet, idx) =>
+//         (dotSet.interval =
+//           idx === dotList.length
+//             ? 100
+//             : Math.round((idx + 1) * quotient * 100) / 100),
+//     );
+//   });
+
+const intervalSetter = (dotList) => {
+  const quotient = 100 / dotList.length;
+  const returnDotList = dotList.map((dotSet, idx) => {
+    return {
+      ...dotSet,
+      interval:
+        idx === dotList.length
+          ? 100
+          : Math.round((idx + 1) * quotient * 100) / 100,
+    };
   });
+  return returnDotList;
+};
 
 const dot = handleActions(
   {
@@ -211,8 +225,8 @@ const dot = handleActions(
           dot: defaultDotMaker(draft.rowCount, draft.columnCount),
           interval: 25,
         });
-        draft.activeIdx = draft.dotList.length - 1;
         draft.dotList = intervalSetter(draft.dotList);
+        draft.activeIdx = draft.dotList.length - 1;
       }),
     [CHANGE_ANIMATION_INTERVAL]: (
       state,

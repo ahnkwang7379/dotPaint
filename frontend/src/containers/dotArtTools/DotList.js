@@ -1,16 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import DotListBlock from '../../components/dotArtTools/DotListBlock';
 import CustomButton from '../../components/common/CustomButton';
-import { useDispatch } from 'react-redux';
-import {
-  changeActiveIdx,
-  removeActiveDotArt,
-  copyActiveDotArt,
-  addNewDotArt,
-  changeAnimationInterval,
-} from '../../modules/dot';
 import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
+import { useSelector, useDispatch } from 'react-redux';
 
 const DotListDiv = styled.div`
   display: flex;
@@ -47,36 +40,16 @@ const ScrollCustom = styled.div`
   }
 `;
 
-const DotList = ({ dotList, activeIdx, columnCount }) => {
-  const dispatch = useDispatch();
-  const handleChangeIdx = useCallback(
-    (idx) => {
-      dispatch(changeActiveIdx(idx));
-    },
-    [dispatch],
-  );
-  const handleRemoveDotArt = useCallback(
-    (idx) => {
-      dispatch(removeActiveDotArt(idx));
-    },
-    [dispatch],
-  );
-  const handleCopyDotArt = useCallback(
-    (idx) => {
-      dispatch(copyActiveDotArt(idx));
-    },
-    [dispatch],
-  );
-  const handleAddDotArt = useCallback(() => {
-    dispatch(addNewDotArt());
-  }, [dispatch]);
-  const handleChangeInterval = useCallback(
-    (interval, activeIdx) => {
-      dispatch(changeAnimationInterval(interval, activeIdx));
-    },
-    [dispatch],
-  );
-
+const DotList = ({
+  dotList,
+  activeIdx,
+  columnCount,
+  handleChangeIdx,
+  handleRemoveDotArt,
+  handleCopyDotArt,
+  handleAddDotArt,
+  handleChangeInterval,
+}) => {
   return (
     <DotListDiv>
       <CustomButton width="40px" onClick={() => handleAddDotArt()}>
@@ -85,27 +58,17 @@ const DotList = ({ dotList, activeIdx, columnCount }) => {
       <ScrollCustom>
         {dotList &&
           dotList.map((dot, idx) => {
-            console.log(dot);
-            return activeIdx === idx ? (
+            return (
               <DotListBlock
-                key={dot.id}
-                active={true}
+                active={activeIdx === idx}
                 idx={idx}
+                key={dot.id}
                 dot={dot.dot}
                 interval={dot.interval}
                 columnCount={columnCount}
                 handleCopyDotArt={handleCopyDotArt}
                 handleRemoveDotArt={handleRemoveDotArt}
                 handleChangeInterval={handleChangeInterval}
-                lastIndex={dotList.length - 1 === idx}
-              />
-            ) : (
-              <DotListBlock
-                key={dot.id}
-                idx={idx}
-                dot={dot.dot}
-                columnCount={columnCount}
-                interval={dot.interval}
                 handleChangeIdx={handleChangeIdx}
                 lastIndex={dotList.length - 1 === idx}
               />
