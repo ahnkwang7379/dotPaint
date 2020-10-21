@@ -53,9 +53,15 @@ const StyleButton = styled.div`
 const IntervalInput = styled.input`
   width: 72px;
   height: 24px;
-  background: rgba(0, 0, 0, 0.5);
+  font-size: 16px;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.7);
   text-align: center;
-
+  color: white;
+  &:focus {
+    background: rgba(230, 230, 230, 1);
+    color: rgba(0, 0, 0, 0.7);
+  }
   -moz-appearance: textfield;
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
@@ -92,6 +98,7 @@ const DotListBlock = ({
         setAniInterval(interval);
         return;
       } else {
+        setAniInterval(interval);
         handleChangeInterval(Math.round(e.target.value * 100) / 100, idx);
       }
     },

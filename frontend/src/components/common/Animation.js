@@ -1,10 +1,8 @@
 import React from 'react';
 import { keyframes } from 'styled-components';
-// import randomString from '../utils/random';
 
 const Animation = (props) => {
   const { boxShadow, duration, name } = props;
-  //   const keyframeName = name !== undefined ? name : 'test';
   const keyframeName = 'PreviewAnimation';
   const keyframeRules = keyframes`${boxShadow}`.rules;
   const style = {

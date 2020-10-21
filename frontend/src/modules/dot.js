@@ -88,18 +88,6 @@ const initialState = {
   columnCount: INITIAL_COLUMN,
 };
 
-// const intervalSetter = (dotList) =>
-//   produce(dotList, (draft) => {
-//     const quotient = 100 / draft.length;
-//     draft.map(
-//       (dotSet, idx) =>
-//         (dotSet.interval =
-//           idx === dotList.length
-//             ? 100
-//             : Math.round((idx + 1) * quotient * 100) / 100),
-//     );
-//   });
-
 const intervalSetter = (dotList) => {
   const quotient = 100 / dotList.length;
   const returnDotList = dotList.map((dotSet, idx) => {

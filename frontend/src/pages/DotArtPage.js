@@ -1,4 +1,5 @@
 import React from 'react';
+import DialogContainer from '../containers/dotArtTools/DialogContainer';
 import DotListContainer from '../containers/dotArtTools/DotListContainer';
 import PreViewContainer from '../containers/dotArtTools/PreViewContainer';
 import DotPaintContainer from '../containers/DotPaintContainer';
@@ -14,6 +15,7 @@ const ToolBox = styled.div`
 const DotArtPage = () => {
   return (
     <React.Fragment>
+      <DialogContainer />
       <DotListContainer />
       {/* <RightMenuContainer /> */}
       <DotPaintContainer />

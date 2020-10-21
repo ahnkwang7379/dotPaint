@@ -8,6 +8,7 @@ import paintTool, { DOT, BUCKET, PICKER, ERASER } from './paintTool';
 import loading from './loading';
 import auth, { authSaga } from './auth';
 import user, { userSaga } from './user';
+import dialog from './dialog';
 import { produce } from 'immer';
 import undoable from 'redux-undo';
 
@@ -39,6 +40,7 @@ const combineReducer = combineReducers({
   colorPalette: colorPalette,
   paintTool: paintTool,
   auth: auth,
+  dialog: dialog,
   user,
   loading,
 });

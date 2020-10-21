@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import DotListBlock from '../../components/dotArtTools/DotListBlock';
 import CustomButton from '../../components/common/CustomButton';
 import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
-import { useSelector, useDispatch } from 'react-redux';
 
 const DotListDiv = styled.div`
   display: flex;

@@ -21,7 +21,7 @@ const PreViewWrapper = styled.div.attrs(({ cellSize, cssString }) => ({
 const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
   const generatePreview = () => {
     const columns = column;
-    const cellSize = size;
+    const cellSize = typeof size === 'string' ? parseFloat(size) : size;
     let cssString;
     let animationData;
 
