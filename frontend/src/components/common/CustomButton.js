@@ -10,8 +10,8 @@ const CustomButtonStyled = styled.button`
       background: ${props.baseColor};
       color: #fff;
     `}
-  width: ${(props) => (props.width ? `${props.width}` : `100%`)};
-  height: ${(props) => (props.height ? `${props.height}` : `auto`)};
+  width: ${(props) => (props.width ? `${props.width}px` : `100%`)};
+  height: ${(props) => (props.height ? `${props.height}px` : `auto`)};
   border: 1px solid #225ea7;
   outline: none;
   border-radius: 0.5rem;

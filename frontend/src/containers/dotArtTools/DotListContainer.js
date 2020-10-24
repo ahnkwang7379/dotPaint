@@ -11,11 +11,14 @@ import {
 
 const DotListContainer = () => {
   const dispatch = useDispatch();
-  const { dotList, activeIdx, columnCount } = useSelector(({ dotArt }) => ({
-    dotList: dotArt.present.dot.dotList,
-    activeIdx: dotArt.present.dot.activeIdx,
-    columnCount: dotArt.present.dot.columnCount,
-  }));
+  const { dotList, activeIdx, columnCount, rowCount } = useSelector(
+    ({ dotArt }) => ({
+      dotList: dotArt.present.dot.dotList,
+      activeIdx: dotArt.present.dot.activeIdx,
+      columnCount: dotArt.present.dot.columnCount,
+      rowCount: dotArt.present.dot.rowCount,
+    }),
+  );
   const handleChangeIdx = useCallback(
     (idx) => {
       dispatch(changeActiveIdx(idx));
@@ -49,6 +52,7 @@ const DotListContainer = () => {
       dotList={dotList}
       activeIdx={activeIdx}
       columnCount={columnCount}
+      rowCount={rowCount}
       handleChangeIdx={handleChangeIdx}
       handleRemoveDotArt={handleRemoveDotArt}
       handleCopyDotArt={handleCopyDotArt}

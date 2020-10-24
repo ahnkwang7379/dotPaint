@@ -43,6 +43,7 @@ const DotList = ({
   dotList,
   activeIdx,
   columnCount,
+  rowCount,
   handleChangeIdx,
   handleRemoveDotArt,
   handleCopyDotArt,
@@ -51,7 +52,7 @@ const DotList = ({
 }) => {
   return (
     <DotListDiv>
-      <CustomButton width="40px" onClick={() => handleAddDotArt()}>
+      <CustomButton width="40" onClick={() => handleAddDotArt()}>
         <AddToPhotosIcon />
       </CustomButton>
       <ScrollCustom>
@@ -65,6 +66,7 @@ const DotList = ({
                 dot={dot.dot}
                 interval={dot.interval}
                 columnCount={columnCount}
+                rowCount={rowCount}
                 handleCopyDotArt={handleCopyDotArt}
                 handleRemoveDotArt={handleRemoveDotArt}
                 handleChangeInterval={handleChangeInterval}

@@ -75,6 +75,7 @@ const DotListBlock = ({
   idx,
   dot,
   columnCount,
+  rowCount,
   interval,
   handleChangeIdx,
   handleCopyDotArt,

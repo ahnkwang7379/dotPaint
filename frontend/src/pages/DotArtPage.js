@@ -1,5 +1,5 @@
 import React from 'react';
-import DialogContainer from '../containers/dotArtTools/DialogContainer';
+import DialogContainer from '../containers/dialog/DialogContainer';
 import DotListContainer from '../containers/dotArtTools/DotListContainer';
 import PreViewContainer from '../containers/dotArtTools/PreViewContainer';
 import DotPaintContainer from '../containers/DotPaintContainer';

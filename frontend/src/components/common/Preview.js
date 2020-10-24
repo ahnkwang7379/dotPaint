@@ -13,35 +13,31 @@ const PreViewWrapper = styled.div.attrs(({ cellSize, cssString }) => ({
     boxShadow: cssString,
     MozBoxShadow: cssString,
     WebkitBoxShadow: cssString,
+    // top: `-${cellSize}px`,
+    // left: `-${cellSize}px`,
   },
 }))`
   position: absolute;
 `;
 
 const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
+  const cellSize = typeof size === 'string' ? parseFloat(size) : size;
+
   const generatePreview = () => {
     const columns = column;
-    const cellSize = typeof size === 'string' ? parseFloat(size) : size;
+    // const cellSize = typeof size === 'string' ? parseFloat(size) : size;
     let cssString;
     let animationData;
 
-    const styles = {
-      previewWrapper: {
-        height: cellSize,
-        width: cellSize,
-        position: 'absolute',
-      },
-    };
-
     if (animation) {
       animationData = generateAnimationCSSData(dotList, columns, cellSize);
-      return <Animation boxShadow={animationData} duration={duration} />;
+      return (
+        <React.Fragment>
+          <Animation boxShadow={animationData} duration={duration} />
+        </React.Fragment>
+      );
     } else {
       cssString = generatePixelDrawCss(dotSet, columns, cellSize, 'string');
-
-      styles.previewWrapper.boxShadow = cssString;
-      styles.previewWrapper.MozBoxShadow = cssString;
-      styles.previewWrapper.WebkitBoxShadow = cssString;
 
       return <PreViewWrapper cssString={cssString} cellSize={cellSize} />;
     }
@@ -49,6 +45,8 @@ const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
 
   const style = {
     position: 'relative',
+    top: `-${cellSize}px`,
+    left: `-${cellSize}px`,
   };
 
   return (

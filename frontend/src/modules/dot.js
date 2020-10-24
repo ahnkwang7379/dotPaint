@@ -12,6 +12,7 @@ const REMOVE_ACTIVE_DOT_ART = 'dot/REMOVE_ACTIVE_DOT_ART';
 const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
 const ADD_NEW_DOT_ART = 'dot/ADD_NEW_DOT_ART';
 const CHANGE_ANIMATION_INTERVAL = 'dot/CHANGE_ANIMATION_INTERVAL';
+const CHANGE_ANIMATION_DURATION = 'dot/CHANGE_ANIMATION_DURATION';
 
 // initialState
 export const INITIAL_ROW = 16;
@@ -47,6 +48,10 @@ export const addNewDotArt = createAction(ADD_NEW_DOT_ART);
 export const changeAnimationInterval = createAction(
   CHANGE_ANIMATION_INTERVAL,
   (interval, activeIdx) => ({ interval, activeIdx }),
+);
+export const changeAnimationDuration = createAction(
+  CHANGE_ANIMATION_DURATION,
+  (duration) => duration,
 );
 
 // const defaultDotMaker = (row, column) => {
@@ -86,6 +91,7 @@ const initialState = {
   dotSize: INITIAL_DOT_DOTSIZE,
   rowCount: INITIAL_ROW,
   columnCount: INITIAL_COLUMN,
+  animationDuration: 2,
 };
 
 const intervalSetter = (dotList) => {
@@ -237,6 +243,10 @@ const dot = handleActions(
           }
         }
       }),
+    [CHANGE_ANIMATION_DURATION]: (state, { payload: duration }) => ({
+      ...state,
+      animationDuration: duration,
+    }),
   },
   initialState,
 );

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
+import { changeAnimationDuration } from '../../modules/dot';
 import PreViewTools from '../../components/dotArtTools/PreViewTools';
 
 const PreViewContainer = () => {
@@ -16,7 +17,14 @@ const PreViewContainer = () => {
 
   const handleOpenDialog = useCallback(
     (type) => {
-      changeTypeAndOpen(type);
+      dispatch(changeTypeAndOpen(type));
+    },
+    [dispatch],
+  );
+
+  const handleChangeAnimationDuration = useCallback(
+    (duration) => {
+      dispatch(changeAnimationDuration(duration));
     },
     [dispatch],
   );
@@ -28,6 +36,7 @@ const PreViewContainer = () => {
       rowCount={rowCount}
       columnCount={columnCount}
       handleOpenDialog={handleOpenDialog}
+      handleChangeAnimationDuration={handleChangeAnimationDuration}
     />
   );
 };
