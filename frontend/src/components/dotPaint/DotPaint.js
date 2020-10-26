@@ -8,6 +8,7 @@ const DotPaintWrapper = styled.div`
   height: 100%;
   box-sizing: border-box;
   padding: 30px;
+  touch-action: none;
 `;
 const DotPaintBlock = styled.div`
   display: inline-flex;
@@ -52,10 +53,27 @@ const DotPaint = ({
     },
     [onDotActionHandle],
   );
+  const onTouchStartHandler = useCallback(
+    (e) => {
+      e.preventDefault();
+      onChangePaintState('DRAGGING');
+    },
+    [onChangePaintState],
+  );
+  const onTouchMoveHandler = useCallback(
+    (e, dotIdx) => {
+      e.preventDefault();
+      onDotActionHandle(dotIdx);
+    },
+    [onDotActionHandle],
+  );
   return (
     <DotPaintWrapper
       onMouseLeave={(e) => onMouseUpHandler(e)}
       onMouseUp={(e) => onMouseUpHandler(e)}
+      onTouchStart={(e) => onTouchStartHandler(e)}
+      // onTouchMove={(e) => onTouchMoveHandler(e)}
+      onTouchEnd={(e) => onMouseUpHandler(e)}
     >
       <DotPaintBlock>
         {dotSet &&
@@ -71,6 +89,7 @@ const DotPaint = ({
                 onMouseDownHandler={onMouseDownHandler}
                 onMouseUpHandler={onMouseUpHandler}
                 onMouseOverHandler={onMouseOverHandler}
+                onTouchMoveHandler={onTouchMoveHandler}
               />
             );
           })}

@@ -1,9 +1,11 @@
 import React from 'react';
 import { keyframes } from 'styled-components';
+import shortid from 'shortid';
 
 const Animation = (props) => {
-  const { boxShadow, duration, name } = props;
-  const keyframeName = 'PreviewAnimation';
+  const { boxShadow, duration } = props;
+  const name = `anim-${shortid.generate()}`;
+  const keyframeName = `${name}`;
   const keyframeRules = keyframes`${boxShadow}`.rules;
   const style = {
     position: 'absolute',

@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Preview from '../common/Preview';
 import CustomButton from '../common/CustomButton';
 import styled from 'styled-components';
 import { MdPlayArrow, MdPause } from 'react-icons/md';
 import TextField from '@material-ui/core/TextField';
-
-const useStyles = makeStyles((theme) => ({
-  textField: {
-    margin: theme.spacing(1),
-  },
-}));
 
 const Wrapper = styled.div`
   display: flex;
@@ -55,7 +48,6 @@ const PreviewDialog = ({
   animationDuration,
   handleChangeAnimationDuration,
 }) => {
-  const classes = useStyles();
   const [animation, setAnimation] = useState(false);
   const [pixelSize, setpixelSize] = useState(10);
   const toggleAnimation = () => {

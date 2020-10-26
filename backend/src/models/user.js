@@ -12,15 +12,18 @@ const UserSchema = new Schema(
     dotArtPreset: [
       {
         name: { type: String, default: 'Dot Art' },
-        dotFrame: [
+        dotList: [
           {
-            dotSet: [String],
-            border: { borderSize: String, color: String },
-            dotSize: String,
-            row: String,
-            column: String,
+            id: String,
+            dot: [String],
+            interval: Number,
           },
         ],
+        border: { borderSize: Number, color: String },
+        dotSize: Number,
+        rowCount: Number,
+        columnCount: Number,
+        animationDuration: Number,
       },
     ],
   },

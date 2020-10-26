@@ -4,15 +4,18 @@ const DotArtSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, default: 'Dot Art' },
-    dotFrame: [
+    dotList: [
       {
-        dotSet: [String],
-        border: { borderSize: String, color: String },
-        dotSize: String,
-        row: String,
-        column: String,
+        id: String,
+        dot: [String],
+        interval: Number,
       },
     ],
+    border: { borderSize: Number, color: String },
+    dotSize: Number,
+    rowCount: Number,
+    columnCount: Number,
+    animationDuration: Number,
     openArt: { type: Boolean, default: true },
   },
   { timestamps: true },

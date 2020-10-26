@@ -88,7 +88,6 @@ export const deletePalette = createAction(
 
 const initialState = {
   paletteSet: DEFAULT_PALETTE,
-  paletteSetCount: '',
   selectColorId: {
     paletteId: DEFAULT_PALETTE[0]['id'],
     colorId: 0,

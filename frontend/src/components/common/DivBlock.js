@@ -27,6 +27,7 @@ const DivBlock = ({
   onMouseDownHandler,
   onMouseUpHandler,
   onMouseOverHandler,
+  onTouchMoveHandler,
 }) => {
   return (
     <DotStyled
@@ -37,6 +38,8 @@ const DivBlock = ({
       onMouseDown={(e) => onMouseDownHandler(e, dotIdx)}
       onMouseOver={(e) => onMouseOverHandler(e, dotIdx)}
       onMouseUp={(e) => onMouseUpHandler(e)}
+      onTouchStart={(e) => onMouseDownHandler(e, dotIdx)}
+      onTouchMove={(e) => onTouchMoveHandler(e, dotIdx)}
     />
   );
 };

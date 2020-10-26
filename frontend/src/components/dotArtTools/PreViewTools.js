@@ -57,12 +57,12 @@ const PreViewTools = ({
   dotList,
   rowCount,
   columnCount,
+  animationDuration,
   handleOpenDialog,
   handleChangeAnimationDuration,
 }) => {
   const [play, setPlay] = useState(false);
   const [zoomIn, setZoomIn] = useState(false);
-  const [duration, setDuration] = useState(2);
 
   const togglePlay = () => {
     setPlay(!play);
@@ -72,16 +72,12 @@ const PreViewTools = ({
     setZoomIn(!zoomIn);
   };
 
-  const onChangeDuration = (e) => {
-    if (play) togglePlay();
-    setDuration(e.target.value);
-  };
-  const onBlurDuration = (e) => {
+  const onChangeAnimationDuration = (e) => {
+    setPlay(false);
     if (e.target.value <= 0 || e.target.value === '') {
-      setDuration(0.1);
-      handleChangeAnimationDuration(0.1);
+      handleChangeAnimationDuration(0);
     } else {
-      handleChangeAnimationDuration(parseFloat(duration));
+      handleChangeAnimationDuration(e.target.value);
     }
   };
 
@@ -118,16 +114,15 @@ const PreViewTools = ({
             column={columnCount}
             size={zoomIn ? 8 : 4}
             animation={play}
-            duration={duration}
+            duration={animationDuration}
           />
         </PreviewBlock>
       </Box>
       <PreviewControlBlock>
         <InputStyle
-          value={duration}
+          value={animationDuration}
           type="number"
-          onChange={(e) => onChangeDuration(e)}
-          onBlur={(e) => onBlurDuration(e)}
+          onChange={(e) => onChangeAnimationDuration(e)}
         />
       </PreviewControlBlock>
     </PreviewWrapper>

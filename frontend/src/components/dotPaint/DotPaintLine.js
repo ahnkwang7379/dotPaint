@@ -17,6 +17,7 @@ const DotPaintLine = ({
   onMouseDownHandler,
   onMouseUpHandler,
   onMouseOverHandler,
+  onTouchMoveHandler,
 }) => {
   return (
     <DotLine>
@@ -31,6 +32,7 @@ const DotPaintLine = ({
             onMouseDownHandler={onMouseDownHandler}
             onMouseUpHandler={onMouseUpHandler}
             onMouseOverHandler={onMouseOverHandler}
+            onTouchMoveHandler={onTouchMoveHandler}
           />
         );
       })}

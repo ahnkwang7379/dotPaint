@@ -9,6 +9,7 @@ import loading from './loading';
 import auth, { authSaga } from './auth';
 import user, { userSaga } from './user';
 import dialog from './dialog';
+import snackbar from './snackbar';
 import { produce } from 'immer';
 import undoable from 'redux-undo';
 
@@ -41,6 +42,7 @@ const combineReducer = combineReducers({
   paintTool: paintTool,
   auth: auth,
   dialog: dialog,
+  snackbar: snackbar,
   user,
   loading,
 });
