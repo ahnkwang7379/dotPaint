@@ -22,6 +22,10 @@ export function initialStorage(storage) {
   );
 }
 
+export function clearSavedDotArtFromStorage(storage) {
+  storage.removeItem(STORAGE_KEY);
+}
+
 export function getDataFromStorage(storage) {
   try {
     const data = storage.getItem(STORAGE_KEY);

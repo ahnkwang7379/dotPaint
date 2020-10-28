@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import DialogContainer from '../containers/dialog/DialogContainer';
 import DotListContainer from '../containers/dotArtTools/DotListContainer';
 import PreViewContainer from '../containers/dotArtTools/PreViewContainer';
@@ -7,8 +7,6 @@ import PaintToolContainer from '../containers/DotHeader/PaintToolContainer';
 import BottomToolsContainer from '../containers/dotArtTools/BottomToolsContainer';
 import UndoRedoContainer from '../containers/dotArtTools/UndoRedoContainer';
 import SaveLoadContainer from '../containers/dotArtTools/SaveLoadContainer';
-// import { useDispatch } from 'react-redux';
-// import { changePaintState } from '../modules/paintTool';
 import styled from 'styled-components';
 
 const ToolBox = styled.div`
@@ -16,19 +14,10 @@ const ToolBox = styled.div`
 `;
 
 const DotArtPage = () => {
-  // const dispatch = useDispatch();
-  // const onTouchEnd = () => {
-  //   dispatch(changePaintState('IDLE'));
-  // };
-  // const onTouchCancel = () => {
-  //   dispatch(changePaintState('IDLE'));
-  // };
   return (
-    // <div onTouchEnd={onTouchEnd} onTouchCancel={onTouchCancel}>
-    <div>
+    <React.Fragment>
       <DialogContainer />
       <DotListContainer />
-      <DotPaintContainer />
       <ToolBox>
         <div>
           <SaveLoadContainer />
@@ -37,8 +26,9 @@ const DotArtPage = () => {
         </div>
         <PreViewContainer />
       </ToolBox>
+      <DotPaintContainer />
       <BottomToolsContainer />
-    </div>
+    </React.Fragment>
   );
 };
 

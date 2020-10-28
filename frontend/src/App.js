@@ -6,6 +6,7 @@ import SignUpPage from './pages/SignUpPage';
 import IndexPage from './pages/IndexPage';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import { SnackbarProvider } from 'notistack';
 
 const theme = createMuiTheme({
   palette: {
@@ -24,22 +25,27 @@ const theme = createMuiTheme({
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" component={IndexPage} exact />
-          <Route component={LoginPage} path="/login" exact />
-          <Route component={SignUpPage} path="/signup" exact />
-          <Route component={MainPage} path="/main" />
-          <Route
-            render={({ location }) => (
-              <div>
-                <h1>4 0 4</h1>
-                <p>{location.pathname}는 없는 주소입니다</p>
-              </div>
-            )}
-          />
-        </Switch>
-      </BrowserRouter>
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" component={IndexPage} exact />
+            <Route component={LoginPage} path="/login" exact />
+            <Route component={SignUpPage} path="/signup" exact />
+            <Route component={MainPage} path="/main" />
+            <Route
+              render={({ location }) => (
+                <div>
+                  <h1>4 0 4</h1>
+                  <p>{location.pathname}는 없는 주소입니다</p>
+                </div>
+              )}
+            />
+          </Switch>
+        </BrowserRouter>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };

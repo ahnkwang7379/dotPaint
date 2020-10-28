@@ -2,14 +2,12 @@ import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import { createAction, handleActions } from 'redux-actions';
 import dot from './dot';
-import colorPalette from './colorPalette';
 import palette from './palette';
 import paintTool, { DOT, BUCKET, PICKER, ERASER } from './paintTool';
 import loading from './loading';
 import auth, { authSaga } from './auth';
 import user, { userSaga } from './user';
 import dialog from './dialog';
-import snackbar from './snackbar';
 import { produce } from 'immer';
 import undoable from 'redux-undo';
 
@@ -38,11 +36,9 @@ const combineReducer = combineReducers({
     // debug: true,
     ignoreInitialState: true,
   }),
-  colorPalette: colorPalette,
   paintTool: paintTool,
   auth: auth,
   dialog: dialog,
-  snackbar: snackbar,
   user,
   loading,
 });
@@ -52,7 +48,6 @@ const combineReducer = combineReducers({
 //     debug: true,
 //     ignoreInitialState: true,
 //   }),
-//   colorPalette: colorPalette,
 //   paintTool: paintTool,
 //   auth: auth,
 //   user,

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import PublishIcon from '@material-ui/icons/Publish';
 import CustomButton from '../common/CustomButton';
-import Snackbar from '@material-ui/core/Snackbar';
+import { useSnackbar } from 'notistack';
 
 const SaveLoadBlock = styled.div`
   display: flex;
@@ -11,49 +11,25 @@ const SaveLoadBlock = styled.div`
   height: 40px;
 `;
 
-const SaveLoad = ({ saveHandler, snackbarHandler }) => {
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('');
+const SaveLoad = ({ saveHandler, loadHandler }) => {
+  const { enqueueSnackbar } = useSnackbar();
 
   const onClickSave = () => {
     if (saveHandler()) {
-      // setMessage('Save Your LocalStorage Success');
-      snackbarHandler('Save Your LocalStorage Success', 'success');
+      enqueueSnackbar('Save DotArt To LocalStorage', { variant: 'success' });
     } else {
-      // setMessage('Save Fail!');
-      snackbarHandler('Save Fail!', 'error');
+      enqueueSnackbar('Save Fail!', { variant: 'error' });
     }
-    // setOpen(true);
   };
 
-  const onOpenHandle = () => {
-    setOpen(true);
-  };
-  const onCloseHandle = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
   return (
     <SaveLoadBlock>
-      {/* <CustomButton onClick={onOpenHandle}> */}
       <CustomButton onClick={onClickSave}>
         <PublishIcon />
       </CustomButton>
-      <CustomButton>
+      <CustomButton onClick={() => loadHandler('Load')}>
         <GetAppIcon />
       </CustomButton>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        open={open}
-        onClose={onCloseHandle}
-        autoHideDuration={3000}
-        message={message}
-      />
     </SaveLoadBlock>
   );
 };

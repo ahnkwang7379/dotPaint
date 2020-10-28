@@ -16,10 +16,10 @@ const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   & > * {
     margin: 8px;
-    max-width: 150px;
+    max-width: 160px;
   }
 `;
 
@@ -37,7 +37,7 @@ const PreviewBlock = styled.div.attrs(
     },
   }),
 )`
-  margin-top: 5px;
+  margin-top: 8px;
 `;
 
 const PreviewDialog = ({

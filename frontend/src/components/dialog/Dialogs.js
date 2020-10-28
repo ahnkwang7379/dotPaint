@@ -5,6 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import PreviewDialogContainer from '../../containers/dialog/PreviewDialogContainer';
+import LoadDialogContainer from '../../containers/dialog/LoadDialogContainer';
 import { useSelector } from 'react-redux';
 import MuiDialog from '@material-ui/core/Dialog';
 
@@ -78,6 +79,8 @@ const Dialogs = ({ dialogType, open, handleCloseDialog }) => {
                   );
                 case 'Css':
                   return <div />;
+                case 'Load':
+                  return <LoadDialogContainer />;
                 case 'Test':
                   return (
                     <div>

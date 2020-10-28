@@ -3,6 +3,7 @@ import produce from 'immer';
 import shortid from 'shortid';
 
 const CLEAR_DOT = 'dot/CLEAR_DOT';
+const LOAD_DOT_ART = 'dot/LOAD_DOT_ART';
 const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
 const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
 const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
@@ -22,6 +23,10 @@ export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
 
 export const clearDot = createAction(CLEAR_DOT);
+export const loadDotArt = createAction(
+  LOAD_DOT_ART,
+  (loadedData) => loadedData,
+);
 export const changeDotBorderSize = createAction(
   CHANGE_DOT_BORDER_SIZE,
   (size) => size,
@@ -54,16 +59,11 @@ export const changeAnimationDuration = createAction(
   (duration) => duration,
 );
 
-// const defaultDotMaker = (row, column) => {
-//   return new Array(row).fill().map(() => new Array(column).fill(''));
-// };
-
 const defaultDotMaker = (row, column) => {
   return new Array(row * column).fill('');
 };
 
 const initialState = {
-  dotSet: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
   dotList: [
     {
       id: shortid.generate(),
@@ -110,9 +110,16 @@ const intervalSetter = (dotList) => {
 
 const dot = handleActions(
   {
-    [CLEAR_DOT]: (state) => ({
+    [CLEAR_DOT]: (state) =>
+      produce(state, (draft) => {
+        draft.dotList[draft.activeIdx].dot = defaultDotMaker(
+          draft.rowCount,
+          draft.columnCount,
+        );
+      }),
+    [LOAD_DOT_ART]: (state, { payload: loadedData }) => ({
       ...state,
-      dotSet: defaultDotMaker(state.rowCount, state.columnCount),
+      ...loadedData,
     }),
     [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) =>
       produce(state, (draft) => {

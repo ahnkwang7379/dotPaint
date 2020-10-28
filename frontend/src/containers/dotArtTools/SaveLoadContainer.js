@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import SaveLoad from '../../components/dotArtTools/SaveLoad';
 import { saveDotArtToStorage } from '../../util/localStorage';
 import { useDispatch, useSelector } from 'react-redux';
-import { openSnackbar } from '../../modules/snackbar';
+import { changeTypeAndOpen } from '../../modules/dialog';
 import shortid from 'shortid';
 
 const SaveLoadContainer = () => {
@@ -23,9 +23,9 @@ const SaveLoadContainer = () => {
     animationDuration: dot.animationDuration,
   }));
 
-  const snackbarHandler = useCallback(
-    (message, type) => {
-      dispatch(openSnackbar(message, type));
+  const loadHandler = useCallback(
+    (type) => {
+      dispatch(changeTypeAndOpen(type));
     },
     [dispatch],
   );
@@ -44,9 +44,7 @@ const SaveLoadContainer = () => {
     return saveDotArtToStorage(localStorage, saveDotArtData);
   };
 
-  return (
-    <SaveLoad saveHandler={saveHandler} snackbarHandler={snackbarHandler} />
-  );
+  return <SaveLoad saveHandler={saveHandler} loadHandler={loadHandler} />;
 };
 
 export default React.memo(SaveLoadContainer);
