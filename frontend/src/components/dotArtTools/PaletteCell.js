@@ -1,6 +1,6 @@
 import React from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import styled, { css } from 'styled-components';
-import { RiAddLine } from 'react-icons/ri';
 
 const selectBorder = '#000000';
 const defaultBorder = '#ffffff';
@@ -11,18 +11,13 @@ const Cell = styled.div`
   position: relative;
   width: 30px;
   height: 17.32px;
-  margin-left: 3px;
+  margin-left: 0px;
   background-color: ${(props) => props.color || ''};
   border-left: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
   border-right: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
   /* transition: all 0.5s linear; */
-  ${(props) =>
-    props.odd &&
-    css`
-      margin-top: -17px;
-    `}
 
   :before,
   :after {
@@ -61,46 +56,26 @@ const Cell = styled.div`
   }
 `;
 
-const AddIcon = styled(RiAddLine)`
-  z-index: 2;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  &:hover {
-    color: white;
-  }
-`;
-
-const PaletteCell = ({
-  color,
-  selectData,
-  onSelectColor,
-  onDeleteColor,
-  onInsertColor,
-  selected,
-}) => {
-  const onSelectClick = () => {
-    if (selected !== true) onSelectColor(selectData);
-  };
-  const onDeleteDoubleClick = () => {
-    // 만일을 위해 셀렉이 된 경우만 삭제되게
-    if (selected === true) onDeleteColor(selectData);
-  };
-  const onInsertClick = () => {
-    onInsertColor(selectData.palette);
-  };
-  return color === undefined ? (
-    <Cell color="rgba(0,0,0,0)" onClick={onInsertClick}>
-      <AddIcon />
-    </Cell>
+const PaletteCell = ({ color, paletteId, cellIdx, selected, clone }) => {
+  return clone ? (
+    <Cell />
   ) : (
-    <Cell
-      color={color}
-      selected={selected}
-      onClick={onSelectClick}
-      onDoubleClick={onDeleteDoubleClick}
-    />
+    <Draggable
+      key={cellIdx}
+      draggableId={`${paletteId}-${cellIdx}`}
+      index={cellIdx}
+    >
+      {(provided, snapshot) => (
+        <Cell
+          color={color}
+          selected={selected}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        />
+      )}
+    </Draggable>
   );
 };
 
-export default React.memo(PaletteCell);
+export default PaletteCell;

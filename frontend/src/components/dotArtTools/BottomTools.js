@@ -9,6 +9,7 @@ import PaletteContainer from '../../containers/DotHeader/PaletteContainer';
 import DotBorderContainer from '../../containers/DotHeader/DotBorderContainer';
 import DotSizeContainer from '../../containers/DotHeader/DotSizeContainer';
 import DotAreaContainer from '../../containers/DotHeader/DotAreaContainer';
+import PalettesConatiner from '../../containers/dotArtTools/PalettesContainer';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -83,7 +84,7 @@ const BottomTools = () => {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <PaletteContainer />
+          {/* <PalettesConatiner /> */}
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <DotBorderContainer />
@@ -91,7 +92,7 @@ const BottomTools = () => {
           <DotAreaContainer />
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
-          Item Three
+          <PaletteContainer />
         </TabPanel>
       </SwipeableViews>
     </div>

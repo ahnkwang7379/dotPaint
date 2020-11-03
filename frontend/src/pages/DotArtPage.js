@@ -7,6 +7,7 @@ import PaintToolContainer from '../containers/DotHeader/PaintToolContainer';
 import BottomToolsContainer from '../containers/dotArtTools/BottomToolsContainer';
 import UndoRedoContainer from '../containers/dotArtTools/UndoRedoContainer';
 import SaveLoadContainer from '../containers/dotArtTools/SaveLoadContainer';
+import PalettesContainer from '../containers/dotArtTools/PalettesContainer';
 import styled from 'styled-components';
 
 const ToolBox = styled.div`
@@ -27,7 +28,8 @@ const DotArtPage = () => {
         <PreViewContainer />
       </ToolBox>
       <DotPaintContainer />
-      <BottomToolsContainer />
+      <PalettesContainer />
+      {/* <BottomToolsContainer /> */}
     </React.Fragment>
   );
 };
