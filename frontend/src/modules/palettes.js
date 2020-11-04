@@ -64,6 +64,8 @@ const DEFAULT_PALETTE = [
 
 const REORDER_PALETTES = 'palettes/REDORDER_PALETTES';
 const REORDER_PALETTE_CELL = 'palettes/REORDER_PALETTE_CELL';
+const MOVE_PALETTE_TO_TRASH_CAN = 'palettes/MOVE_PALETTE_TO_TRASH_CAN';
+const MOVE_CELL_TO_TRASH_CAN = 'palettes/MOVE_CELL_TO_TRASH_CAN';
 
 export const reorderPalettes = createAction(
   REORDER_PALETTES,
@@ -74,11 +76,25 @@ export const reorderPalettes = createAction(
 );
 export const reorderPaletteCell = createAction(
   REORDER_PALETTE_CELL,
-  ({ paletteId, startIdx, endIdx }) => ({ paletteId, startIdx, endIdx }),
+  ({ startPaletteId, endPaletteId, startIdx, endIdx }) => ({
+    startPaletteId,
+    endPaletteId,
+    startIdx,
+    endIdx,
+  }),
+);
+export const movePaletteToTrashCan = createAction(
+  MOVE_PALETTE_TO_TRASH_CAN,
+  ({ selectIdx }) => ({ selectIdx }),
+);
+export const moveCellToTrashCan = createAction(
+  MOVE_CELL_TO_TRASH_CAN,
+  ({ paletteId, selectIdx }) => ({ paletteId, selectIdx }),
 );
 
 const initialState = {
   palettes: DEFAULT_PALETTE,
+  trashCan: [],
 };
 
 const palettes = handleActions(
@@ -98,24 +114,45 @@ const palettes = handleActions(
     //   }),
     [REORDER_PALETTE_CELL]: (
       state,
-      { payload: { paletteId, startIdx, endIdx } },
+      { payload: { startPaletteId, endPaletteId, startIdx, endIdx } },
     ) =>
-      // {
-      //   console.log(paletteId);
-      //   const paletteIdx = state.palettes.reduce(
-      //     (acc, cur, idx) => (cur.id === paletteId ? idx : acc),
-      //     [],
-      //   );
-      //   console.log(paletteIdx);
-      //   return { ...state };
-      // },
       produce(state, (draft) => {
-        const paletteIdx = draft.palettes.reduce(
-          (acc, cur, idx) => (cur.id === paletteId ? idx : acc),
+        if (startPaletteId === endPaletteId) {
+          const paletteIdx = draft.palettes.reduce(
+            (acc, cur, idx) => (cur.id === endPaletteId ? idx : acc),
+            [],
+          );
+          const [removed] = draft.palettes[paletteIdx].colors.splice(
+            startIdx,
+            1,
+          );
+          draft.palettes[paletteIdx].colors.splice(endIdx, 0, removed);
+        } else {
+          const color = draft.palettes.reduce(
+            (acc, cur) =>
+              cur.id === startPaletteId ? cur.colors.splice(startIdx, 1) : acc,
+            [],
+          );
+          draft.palettes.map((palette) =>
+            palette.id === endPaletteId
+              ? palette.colors.splice(endIdx, 0, color)
+              : '',
+          );
+        }
+      }),
+    [MOVE_PALETTE_TO_TRASH_CAN]: (state, { payload: { selectIdx } }) =>
+      produce(state, (draft) => {
+        const removed = draft.palettes.splice(selectIdx, 1);
+        removed[0].colors.map((color) => draft.trashCan.push(color));
+      }),
+    [MOVE_CELL_TO_TRASH_CAN]: (state, { payload: { paletteId, selectIdx } }) =>
+      produce(state, (draft) => {
+        const color = draft.palettes.reduce(
+          (acc, cur) =>
+            cur.id === paletteId ? cur.colors.splice(selectIdx, 1) : acc,
           [],
         );
-        const [removed] = draft.palettes[paletteIdx].colors.splice(startIdx, 1);
-        draft.palettes[paletteIdx].colors.splice(endIdx, 0, removed);
+        draft.trashCan.push(color[0]);
       }),
   },
   initialState,

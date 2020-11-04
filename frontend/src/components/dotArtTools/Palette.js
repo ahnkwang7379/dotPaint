@@ -23,7 +23,7 @@ const DraggBlock = styled.div`
   display: flex;
 `;
 
-function customStyle(style, snapshot, odd, selectIdx) {
+function customStyle(style, snapshot, odd, smallThenSelectIdx) {
   if (snapshot.isDragging) {
     return style;
   }
@@ -38,14 +38,14 @@ function customStyle(style, snapshot, odd, selectIdx) {
     ...style,
     marginLeft: `0px`,
     transform: `${style.transform.slice(0, 9)}(${
-      selectIdx ? (odd ? 16 : 0) : odd ? 0 : 16
+      smallThenSelectIdx ? (odd ? 16 : 0) : odd ? 0 : 16
     }${style.transform.slice(11)}`,
   };
 }
 
 const Palette = ({ palette, idx, selectIdx }) => {
   return (
-    <Draggable key={palette.id} draggableId={palette.id} index={idx}>
+    <Draggable key={palette.id} draggableId={`pale-${palette.id}`} index={idx}>
       {(provided, snapshot) => (
         <PaletteBlock
           {...provided.draggableProps}

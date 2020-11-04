@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import Palette from './Palette';
+import TrashCan from './TrashCan';
 import PaletteCell from './PaletteCell';
 import styled from 'styled-components';
 
@@ -21,8 +22,16 @@ const CloneBlock = styled.div`
   margin-left: 32px;
 `;
 
-const Palettes = ({ palettes, handleReorderPalettes, handleReorderCell }) => {
+const Palettes = ({
+  palettes,
+  trashCan,
+  handleReorderPalettes,
+  handleReorderCell,
+  handleMovePaletteToTrashCan,
+  handleMoveCellToTrashCan,
+}) => {
   const [selectIdx, setSeletIdx] = useState(0);
+  const [dragType, setDragType] = useState('pale');
   const onDragEnd = (result) => {
     console.log(result);
     if (!result.destination) {
@@ -30,42 +39,53 @@ const Palettes = ({ palettes, handleReorderPalettes, handleReorderCell }) => {
     }
 
     if (result.type === 'palettes') {
-      handleReorderPalettes(result.source.index, result.destination.index);
+      if (result.destination.droppableId === 'PaletteTrashCan') {
+        handleMovePaletteToTrashCan(result.source.index);
+      } else {
+        handleReorderPalettes(result.source.index, result.destination.index);
+      }
     } else if (result.type === 'cell') {
-      console.log(result);
-      console.log(result.source.index);
-      console.log(result.destination.index);
-      console.log(result.destination.droppableId);
-      handleReorderCell(
-        result.destination.droppableId,
-        result.source.index,
-        result.destination.index,
-      );
-    } else if (result.type === 'temp') {
-      console.log(result);
-      console.log(result.source.index);
-      console.log(result.destination.index);
-      console.log(result.destination.droppableId);
+      if (result.destination.droppableId === 'CellTrashCan') {
+        handleMoveCellToTrashCan(
+          result.source.droppableId,
+          result.source.index,
+        );
+      } else {
+        handleReorderCell(
+          result.source.droppableId,
+          result.destination.droppableId,
+          result.source.index,
+          result.destination.index,
+        );
+      }
     } else {
       console.log(result);
     }
   };
 
-  const onDragBefore = (result) => {
+  const onBeforeDragStart = (result) => {
     setSeletIdx(result.source.index);
   };
 
+  const onBeforeCapture = (result) => {
+    setDragType(result.draggableId.substring(0, 4));
+  };
+
   return (
-    <DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={onDragBefore}>
+    <DragDropContext
+      onDragEnd={onDragEnd}
+      onBeforeDragStart={onBeforeDragStart}
+      onBeforeCapture={onBeforeCapture}
+    >
+      <TrashCan dragType={dragType} />
       <Droppable
         droppableId="palettes"
         type="palettes"
-        renderClone={(provided, snapshot, rubric) => (
+        renderClone={(provided) => (
           <CloneBlock
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
-            // onClick={console.log({ rubric })}
           >
             <PaletteCell clone={true} />
             <PaletteCell clone={true} />
@@ -81,7 +101,7 @@ const Palettes = ({ palettes, handleReorderPalettes, handleReorderCell }) => {
           </CloneBlock>
         )}
       >
-        {(provided, snapshot) => (
+        {(provided) => (
           <DraggablePaletteBlock
             ref={provided.innerRef}
             {...provided.droppableProps}
@@ -98,14 +118,6 @@ const Palettes = ({ palettes, handleReorderPalettes, handleReorderCell }) => {
           </DraggablePaletteBlock>
         )}
       </Droppable>
-      {/* <Droppable droppableId="temp" type="temp">
-        {(provided, snapshot) => (
-          <TempBlock ref={provided.innerRef} {...provided.droppableProps}>
-            <div>test</div>
-            {provided.placeholder}
-          </TempBlock>
-        )}
-      </Droppable> */}
     </DragDropContext>
   );
 };

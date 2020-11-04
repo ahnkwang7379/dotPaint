@@ -62,7 +62,7 @@ const PaletteCell = ({ color, paletteId, cellIdx, selected, clone }) => {
   ) : (
     <Draggable
       key={cellIdx}
-      draggableId={`${paletteId}-${cellIdx}`}
+      draggableId={`cell-${paletteId}-${cellIdx}`}
       index={cellIdx}
     >
       {(provided, snapshot) => (
