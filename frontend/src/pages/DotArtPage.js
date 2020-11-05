@@ -29,7 +29,7 @@ const DotArtPage = () => {
       </ToolBox>
       <DotPaintContainer />
       <PalettesContainer />
-      {/* <BottomToolsContainer /> */}
+      <BottomToolsContainer />
     </React.Fragment>
   );
 };

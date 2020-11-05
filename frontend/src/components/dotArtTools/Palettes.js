@@ -3,18 +3,13 @@ import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import Palette from './Palette';
 import TrashCan from './TrashCan';
 import PaletteCell from './PaletteCell';
+import TempBlock from './TempBlock';
 import styled from 'styled-components';
 
 const DraggablePaletteBlock = styled.div`
-  padding: grid;
-  margin: 16px;
+  padding: 8px;
+  margin: 8px;
   background: gray;
-`;
-
-const TempBlock = styled.div`
-  width: 200px;
-  height: 200px;
-  background: skyblue;
 `;
 
 const CloneBlock = styled.div`
@@ -22,15 +17,25 @@ const CloneBlock = styled.div`
   margin-left: 32px;
 `;
 
+const TrashBlock = styled.div`
+  display: flex;
+`;
+
+const getListStyle = (isDraggingOver) => ({
+  background: isDraggingOver ? 'lightblue' : 'lightgrey',
+});
+
 const Palettes = ({
   palettes,
   trashCan,
+  selectColorId,
   handleReorderPalettes,
   handleReorderCell,
   handleMovePaletteToTrashCan,
   handleMoveCellToTrashCan,
+  handleSelectColorCell,
 }) => {
-  const [selectIdx, setSeletIdx] = useState(0);
+  const [dragIdx, setDragIdx] = useState(0);
   const [dragType, setDragType] = useState('pale');
   const onDragEnd = (result) => {
     console.log(result);
@@ -64,7 +69,7 @@ const Palettes = ({
   };
 
   const onBeforeDragStart = (result) => {
-    setSeletIdx(result.source.index);
+    setDragIdx(result.source.index);
   };
 
   const onBeforeCapture = (result) => {
@@ -77,7 +82,10 @@ const Palettes = ({
       onBeforeDragStart={onBeforeDragStart}
       onBeforeCapture={onBeforeCapture}
     >
-      <TrashCan dragType={dragType} />
+      <TrashBlock>
+        <TrashCan dragType={dragType} />
+        <TempBlock trashCan={trashCan} />
+      </TrashBlock>
       <Droppable
         droppableId="palettes"
         type="palettes"
@@ -101,17 +109,20 @@ const Palettes = ({
           </CloneBlock>
         )}
       >
-        {(provided) => (
+        {(provided, snapshot) => (
           <DraggablePaletteBlock
             ref={provided.innerRef}
             {...provided.droppableProps}
+            style={getListStyle(snapshot.isDraggingOver)}
           >
             {palettes.map((palette, idx) => (
               <Palette
                 palette={palette}
                 key={palette.id}
                 idx={idx}
-                selectIdx={selectIdx}
+                dragIdx={dragIdx}
+                selectColorId={selectColorId}
+                handleSelectColorCell={handleSelectColorCell}
               />
             ))}
             {provided.placeholder}

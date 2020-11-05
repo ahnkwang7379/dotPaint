@@ -34,7 +34,6 @@ export const exampleCat = {
 export const examplePalette = [
   {
     id: shortid.generate(),
-    nick: 'Forest',
     colors: [
       '#393b2d',
       '#75651a',
@@ -49,17 +48,14 @@ export const examplePalette = [
   },
   {
     id: shortid.generate(),
-    nick: 'Ocean',
     colors: ['#4b73a4', '#667883', '#937e6a', '#b89d80', '#dadbd6', '#faf9fb'],
   },
   {
     id: shortid.generate(),
-    nick: 'City',
     colors: ['#03070a', '#374552', '#3c8999', '#959ea7', '#9ccce3', '#b8cde0'],
   },
   {
     id: shortid.generate(),
-    nick: 'Robot',
     colors: [
       '#171516',
       '#303030',
@@ -72,7 +68,6 @@ export const examplePalette = [
   },
   {
     id: shortid.generate(),
-    nick: 'Lizard',
     colors: [
       '#1d0e0b',
       '#393e54',

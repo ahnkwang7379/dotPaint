@@ -5,14 +5,16 @@ import {
   movePaletteToTrashCan,
   moveCellToTrashCan,
   reorderPaletteCell,
+  selectColorCell,
 } from '../../modules/palettes';
 import { useSelector, useDispatch } from 'react-redux';
 
 const PalettesConatiner = () => {
   const dispatch = useDispatch();
-  const { palettes, trashCan } = useSelector(({ palettes }) => ({
-    palettes: palettes.palettes,
-    trashCan: palettes.trashCan,
+  const { palettes, trashCan, selectColorId } = useSelector(({ dotArt }) => ({
+    palettes: dotArt.present.palettes.palettes,
+    trashCan: dotArt.present.palettes.trashCan,
+    selectColorId: dotArt.present.palettes.selectColorId,
   }));
 
   const handleReorderPalettes = useCallback(
@@ -32,16 +34,22 @@ const PalettesConatiner = () => {
   );
 
   const handleMovePaletteToTrashCan = useCallback(
-    (selectIdx) => {
-      dispatch(movePaletteToTrashCan({ selectIdx }));
+    (dragIdx) => {
+      dispatch(movePaletteToTrashCan({ dragIdx }));
     },
     [dispatch],
   );
 
   const handleMoveCellToTrashCan = useCallback(
-    (paletteId, selectIdx) => {
-      dispatch(moveCellToTrashCan({ paletteId, selectIdx }));
+    (paletteId, dragIdx) => {
+      dispatch(moveCellToTrashCan({ paletteId, dragIdx }));
     },
+    [dispatch],
+  );
+
+  const handleSelectColorCell = useCallback(
+    (paletteId, selectIdx) =>
+      dispatch(selectColorCell({ paletteId, selectIdx })),
     [dispatch],
   );
 
@@ -49,10 +57,12 @@ const PalettesConatiner = () => {
     <Palettes
       palettes={palettes}
       trashCan={trashCan}
+      selectColorId={selectColorId}
       handleReorderPalettes={handleReorderPalettes}
       handleReorderCell={handleReorderCell}
       handleMovePaletteToTrashCan={handleMovePaletteToTrashCan}
       handleMoveCellToTrashCan={handleMoveCellToTrashCan}
+      handleSelectColorCell={handleSelectColorCell}
     />
   );
 };

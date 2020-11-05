@@ -17,7 +17,6 @@ const Cell = styled.div`
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
   border-right: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
-  /* transition: all 0.5s linear; */
 
   :before,
   :after {
@@ -32,7 +31,6 @@ const Cell = styled.div`
     transform: scaleY(0.5774) rotate(-45deg);
     background-color: ${(props) => props.color || ''};
     left: 1.3934px;
-    /* transition: all 0.5s linear; */
   }
 
   :before {
@@ -56,7 +54,14 @@ const Cell = styled.div`
   }
 `;
 
-const PaletteCell = ({ color, paletteId, cellIdx, selected, clone }) => {
+const PaletteCell = ({
+  color,
+  paletteId,
+  cellIdx,
+  selected,
+  handleSelectColorCell,
+  clone,
+}) => {
   return clone ? (
     <Cell />
   ) : (
@@ -65,13 +70,14 @@ const PaletteCell = ({ color, paletteId, cellIdx, selected, clone }) => {
       draggableId={`cell-${paletteId}-${cellIdx}`}
       index={cellIdx}
     >
-      {(provided, snapshot) => (
+      {(provided) => (
         <Cell
           color={color}
           selected={selected}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          onClick={() => handleSelectColorCell(paletteId, cellIdx)}
         />
       )}
     </Draggable>

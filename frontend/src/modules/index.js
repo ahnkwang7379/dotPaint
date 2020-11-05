@@ -29,6 +29,7 @@ export const dotActions = createAction(
 const combineDotArt = combineReducers({
   dot: dot,
   palette: palette,
+  palettes: palettes,
 });
 
 const combineReducer = combineReducers({
@@ -40,7 +41,6 @@ const combineReducer = combineReducers({
   paintTool: paintTool,
   auth: auth,
   dialog: dialog,
-  palettes: palettes,
   user,
   loading,
 });

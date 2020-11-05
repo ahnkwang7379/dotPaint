@@ -2,13 +2,12 @@ import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import PaletteCell from './PaletteCell';
 import styled from 'styled-components';
+import { GrDrag } from 'react-icons/gr';
 
 const PaletteBlock = styled.div`
   display: flex;
   margin-top: 8px;
   &:nth-child(odd) {
-    /* transform 잘 못 건들면 하위 Draggable이 망가져버림... */
-    /* transform: translate(16px, 0px); */
     margin-left: 16px;
   }
 `;
@@ -16,14 +15,14 @@ const PaletteBlock = styled.div`
 const PaletteDragHandle = styled.div`
   width: 16px;
   height: 16px;
-  background: black;
 `;
 
 const DraggBlock = styled.div`
   display: flex;
+  width: 300px;
 `;
 
-function customStyle(style, snapshot, odd, smallThenSelectIdx) {
+function customStyle(style, snapshot, odd, smallThenDragIdx) {
   if (snapshot.isDragging) {
     return style;
   }
@@ -33,17 +32,26 @@ function customStyle(style, snapshot, odd, smallThenSelectIdx) {
     return { ...style };
   }
 
-  // 너무 엉망이긴 하지만...
   return {
     ...style,
     marginLeft: `0px`,
     transform: `${style.transform.slice(0, 9)}(${
-      smallThenSelectIdx ? (odd ? 16 : 0) : odd ? 0 : 16
+      smallThenDragIdx ? (odd ? 16 : 0) : odd ? 0 : 16
     }${style.transform.slice(11)}`,
   };
 }
 
-const Palette = ({ palette, idx, selectIdx }) => {
+const blockCustomStyle = (isDraggingOver) => ({
+  background: isDraggingOver ? `black` : `green`,
+});
+
+const Palette = ({
+  palette,
+  idx,
+  dragIdx,
+  selectColorId,
+  handleSelectColorCell,
+}) => {
   return (
     <Draggable key={palette.id} draggableId={`pale-${palette.id}`} index={idx}>
       {(provided, snapshot) => (
@@ -54,24 +62,35 @@ const Palette = ({ palette, idx, selectIdx }) => {
             provided.draggableProps.style,
             snapshot,
             idx % 2 !== 0,
-            selectIdx > idx,
+            dragIdx > idx,
           )}
         >
-          <PaletteDragHandle {...provided.dragHandleProps} />
+          <PaletteDragHandle {...provided.dragHandleProps}>
+            <GrDrag />
+          </PaletteDragHandle>
           <Droppable
             droppableId={`${palette.id}`}
             type="cell"
             direction="horizontal"
+            isDropDisabled={!(palette.colors.length < 10)}
           >
             {(provided, snapshot) => (
-              <DraggBlock ref={provided.innerRef} {...provided.droppableProps}>
+              <DraggBlock
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={blockCustomStyle(snapshot.isDraggingOver)}
+              >
                 {palette.colors.map((color, cellIdx) => (
                   <PaletteCell
                     color={color}
-                    // paletteIdx={idx}
                     paletteId={palette.id}
                     cellIdx={cellIdx}
                     key={`${palette.id}${cellIdx}`}
+                    selected={
+                      selectColorId.paletteId === palette.id &&
+                      selectColorId.colorId === cellIdx
+                    }
+                    handleSelectColorCell={handleSelectColorCell}
                   />
                 ))}
                 {provided.placeholder}
