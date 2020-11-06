@@ -2,9 +2,10 @@ import React, { useCallback } from 'react';
 import Palettes from '../../components/dotArtTools/Palettes';
 import {
   reorderPalettes,
+  reorderPaletteCell,
   movePaletteToTrashCan,
   moveCellToTrashCan,
-  reorderPaletteCell,
+  moveCellFromTrashCan,
   selectColorCell,
 } from '../../modules/palettes';
 import { useSelector, useDispatch } from 'react-redux';
@@ -47,6 +48,13 @@ const PalettesConatiner = () => {
     [dispatch],
   );
 
+  const handleMoveCellFromTrashCan = useCallback(
+    (endPaletteId, startIdx, endIdx) => {
+      dispatch(moveCellFromTrashCan({ endPaletteId, startIdx, endIdx }));
+    },
+    [dispatch],
+  );
+
   const handleSelectColorCell = useCallback(
     (paletteId, selectIdx) =>
       dispatch(selectColorCell({ paletteId, selectIdx })),
@@ -62,6 +70,7 @@ const PalettesConatiner = () => {
       handleReorderCell={handleReorderCell}
       handleMovePaletteToTrashCan={handleMovePaletteToTrashCan}
       handleMoveCellToTrashCan={handleMoveCellToTrashCan}
+      handleMoveCellFromTrashCan={handleMoveCellFromTrashCan}
       handleSelectColorCell={handleSelectColorCell}
     />
   );

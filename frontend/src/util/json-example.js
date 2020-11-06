@@ -48,7 +48,15 @@ export const examplePalette = [
   },
   {
     id: shortid.generate(),
-    colors: ['#4b73a4', '#667883', '#937e6a', '#b89d80', '#dadbd6', '#faf9fb'],
+    colors: [
+      '#4b73a4',
+      '#667883',
+      '#937e6a',
+      '#b89d80',
+      '#dadbd6',
+      '#faf9fb',
+      '#303f46',
+    ],
   },
   {
     id: shortid.generate(),

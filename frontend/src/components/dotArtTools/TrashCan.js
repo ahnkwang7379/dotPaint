@@ -36,6 +36,11 @@ const TrashCan = ({ dragType }) => {
           )}
         </Droppable>
       </TrashCanWrapper>
+      <TrashCanWrapper displayBool={dragType === 'temp'}>
+        <TrashCanBlock>
+          <DeleteIcon fontSize="large" />
+        </TrashCanBlock>
+      </TrashCanWrapper>
     </React.Fragment>
   );
 };

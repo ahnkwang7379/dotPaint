@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import Palette from './Palette';
 import TrashCan from './TrashCan';
-import PaletteCell from './PaletteCell';
 import TempBlock from './TempBlock';
 import styled from 'styled-components';
+import ColorCell from '../common/ColorCell';
 
 const DraggablePaletteBlock = styled.div`
   padding: 8px;
@@ -33,6 +33,7 @@ const Palettes = ({
   handleReorderCell,
   handleMovePaletteToTrashCan,
   handleMoveCellToTrashCan,
+  handleMoveCellFromTrashCan,
   handleSelectColorCell,
 }) => {
   const [dragIdx, setDragIdx] = useState(0);
@@ -54,6 +55,12 @@ const Palettes = ({
         handleMoveCellToTrashCan(
           result.source.droppableId,
           result.source.index,
+        );
+      } else if (result.source.droppableId === 'temp') {
+        handleMoveCellFromTrashCan(
+          result.destination.droppableId,
+          result.source.index,
+          result.destination.index,
         );
       } else {
         handleReorderCell(
@@ -95,17 +102,8 @@ const Palettes = ({
             {...provided.dragHandleProps}
             ref={provided.innerRef}
           >
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
-            <PaletteCell clone={true} />
+            <ColorCell />
+            <ColorCell />
           </CloneBlock>
         )}
       >

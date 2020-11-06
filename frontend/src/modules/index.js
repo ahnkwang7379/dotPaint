@@ -129,13 +129,13 @@ const dotActionsHandler = (state, paintTool, paintToolState, dotIdx) => {
   switch (paintTool) {
     case DOT:
       if (paintToolState === 'DRAGGING') {
-        const palette = state.dotArt.present.palette;
-        const { paletteId, colorId } = palette.selectColorId;
+        const palettes = state.dotArt.present.palettes;
+        const { paletteId, colorId } = palettes.selectColorId;
 
         // 선택된 색상 추출
-        const color = palette.paletteSet.reduce(
+        const color = palettes.palettes.reduce(
           (acc, palette) =>
-            palette['id'] === paletteId ? palette['colors'][colorId] : acc,
+            palette.id === paletteId ? palette.colors[colorId] : acc,
           [],
         );
 
@@ -146,12 +146,12 @@ const dotActionsHandler = (state, paintTool, paintToolState, dotIdx) => {
       } else return { ...state };
     case BUCKET:
       if (paintToolState === 'DRAGGING') {
-        const palette = state.dotArt.present.palette;
+        const palettes = state.dotArt.present.palettes;
 
-        const { paletteId, colorId } = palette.selectColorId;
-        const paletteColor = palette.paletteSet.reduce(
+        const { paletteId, colorId } = palettes.selectColorId;
+        const paletteColor = palettes.palettes.reduce(
           (acc, palette) =>
-            palette['id'] === paletteId ? palette['colors'][colorId] : acc,
+            palette.id === paletteId ? palette.colors[colorId] : acc,
           [],
         );
 
@@ -181,20 +181,37 @@ const dotActionsHandler = (state, paintTool, paintToolState, dotIdx) => {
         const dot = state.dotArt.present.dot;
         const activeIdx = dot.activeIdx;
         const dotColor = dot.dotList[activeIdx].dot[dotIdx];
+
         // 색이 없는 셀을 클릭했다면
         if (!dotColor) return { ...state };
-        else {
-          const palette = state.dotArt.present.palette;
-          const { paletteId, colorId } = palette.selectColorId;
+
+        // 해당 색상이 이미 palette안에 있는지 순회
+        const palettes = state.dotArt.present.palettes.palettes;
+        let existedColor = '';
+        palettes.map((palette) =>
+          palette.colors.map((color, colorIdx) =>
+            color === dotColor
+              ? (existedColor = { paletteId: palette.id, colorId: colorIdx })
+              : '',
+          ),
+        );
+        if (existedColor) {
+          console.log(existedColor);
           return produce(state, (draft) => {
-            draft.dotArt.present.palette.paletteSet.reduce(
-              (acc, cur) =>
-                cur['id'] === paletteId
-                  ? acc.concat((cur['colors'][colorId] = dotColor))
-                  : acc.concat(cur),
-              [],
-            );
+            draft.dotArt.present.palettes.selectColorId = existedColor;
           });
+        } else {
+          if (
+            state.dotArt.present.palettes.trashCan.filter(
+              (color) => color === dotColor,
+            ).length > 0
+          ) {
+            return { ...state };
+          } else {
+            return produce(state, (draft) => {
+              draft.dotArt.present.palettes.trashCan.unshift(dotColor);
+            });
+          }
         }
       } else {
         return { ...state };
