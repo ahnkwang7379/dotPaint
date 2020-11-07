@@ -22,6 +22,16 @@ const SaveLoadContainer = () => {
     rowCount: dot.rowCount,
     animationDuration: dot.animationDuration,
   }));
+  const { palettes, selectColorId } = useSelector(
+    ({
+      dotArt: {
+        present: { palettes },
+      },
+    }) => ({
+      palettes: palettes.palettes,
+      selectColorId: palettes.selectColorId,
+    }),
+  );
 
   const loadHandler = useCallback(
     (type) => {
@@ -32,13 +42,16 @@ const SaveLoadContainer = () => {
 
   const saveHandler = () => {
     const saveDotArtData = {
-      id: shortid.generate(),
-      dotList: dotList,
-      border: border,
-      dotSize: dotSize,
-      columnCount: columnCount,
-      rowCount: rowCount,
-      animationDuration: animationDuration,
+      dot: {
+        id: shortid.generate(),
+        dotList: dotList,
+        border: border,
+        dotSize: dotSize,
+        columnCount: columnCount,
+        rowCount: rowCount,
+        animationDuration: animationDuration,
+      },
+      palettes: { palettes: palettes, selectColorId: selectColorId },
     };
 
     return saveDotArtToStorage(localStorage, saveDotArtData);

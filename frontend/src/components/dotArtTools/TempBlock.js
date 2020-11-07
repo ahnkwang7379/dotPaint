@@ -4,7 +4,31 @@ import { Droppable } from 'react-beautiful-dnd';
 import TempBlockCell from './TempBlockCell';
 
 const TempBlockDiv = styled.div`
+  background: rgba(0, 0, 0, 0.3);
+  height: 40px;
+  width: calc(100% - 40px);
+  margin: 0px 8px;
   display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  & > * {
+    min-width: 30px;
+    margin-top: 8px;
+  }
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 const TempBlock = ({ trashCan }) => {
   return (

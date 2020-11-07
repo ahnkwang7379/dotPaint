@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import { examplePalette } from '../util/json-example';
 
+const LOAD_PALETTES = 'palettes/LOAD_PALETTES';
 const REORDER_PALETTES = 'palettes/REDORDER_PALETTES';
 const REORDER_PALETTE_CELL = 'palettes/REORDER_PALETTE_CELL';
 const MOVE_PALETTE_TO_TRASH_CAN = 'palettes/MOVE_PALETTE_TO_TRASH_CAN';
@@ -10,6 +11,10 @@ const MOVE_CELL_FROM_TRASH_CAN = 'palettes/MOVE_CELL_FROM_TRASH_CAN';
 const SELECT_COLOR_CELL = 'palettes/SELECT_COLOR_CELL';
 const INSERT_NEW_PALETTE = 'palettes/INSERT_NEW_PALETTE';
 
+export const loadPalettes = createAction(
+  LOAD_PALETTES,
+  (loadedData) => loadedData,
+);
 export const reorderPalettes = createAction(
   REORDER_PALETTES,
   ({ startIdx, endIdx }) => ({
@@ -53,8 +58,20 @@ const initialState = {
   trashCan: [],
 };
 
+const checkTrashCanIsFull = (trashCan) => {
+  if (trashCan.length < 30) {
+    return trashCan;
+  } else {
+    return trashCan.splice(0, 30);
+  }
+};
+
 const palettes = handleActions(
   {
+    [LOAD_PALETTES]: (state, { payload: loadedData }) => ({
+      ...state,
+      ...loadedData,
+    }),
     [REORDER_PALETTES]: (state, { payload: { startIdx, endIdx } }) =>
       produce(state, (draft) => {
         const [removed] = draft.palettes.splice(startIdx, 1);
@@ -100,6 +117,7 @@ const palettes = handleActions(
       produce(state, (draft) => {
         const removed = draft.palettes.splice(dragIdx, 1);
         removed[0].colors.map((color) => draft.trashCan.unshift(color));
+        draft.trashCan = checkTrashCanIsFull(draft.trashCan);
 
         // selectColorId 재설정
         if (removed[0].id === draft.selectColorId.paletteId) {
@@ -121,6 +139,8 @@ const palettes = handleActions(
         );
         const color = selectPalette[0].colors.splice(dragIdx, 1);
         draft.trashCan.unshift(color[0]);
+        draft.trashCan = checkTrashCanIsFull(draft.trashCan);
+
         //  삭제한 셀의 palette에 선택한 셀이 있는지
         if (draft.selectColorId.paletteId === paletteId) {
           if (draft.selectColorId.colorId > dragIdx) {

@@ -8,6 +8,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { loadDotArt } from '../../modules/dot';
+import { loadPalettes } from '../../modules/palettes';
 import { closeDialog } from '../../modules/dialog';
 
 const LoadDialogContainer = () => {
@@ -22,7 +23,8 @@ const LoadDialogContainer = () => {
   };
   const loadDotArtHandle = useCallback(
     (loadedData) => {
-      dispatch(loadDotArt(loadedData));
+      dispatch(loadDotArt(loadedData.dot));
+      dispatch(loadPalettes(loadedData.palettes));
       dispatch(closeDialog());
       enqueueSnackbar('Load DotArt From LocalStorage', { variant: 'success' });
     },

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import DotList from './DotList';
+import DotList from '../../components/dotArtTools/DotList';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   changeActiveIdx,
@@ -7,6 +7,7 @@ import {
   copyActiveDotArt,
   addNewDotArt,
   changeAnimationInterval,
+  reorderDotList,
 } from '../../modules/dot';
 
 const DotListContainer = () => {
@@ -46,6 +47,12 @@ const DotListContainer = () => {
     },
     [dispatch],
   );
+  const handleReorderDotList = useCallback(
+    (startIdx, endIdx) => {
+      dispatch(reorderDotList({ startIdx, endIdx }));
+    },
+    [dispatch],
+  );
 
   return (
     <DotList
@@ -58,6 +65,7 @@ const DotListContainer = () => {
       handleCopyDotArt={handleCopyDotArt}
       handleAddDotArt={handleAddDotArt}
       handleChangeInterval={handleChangeInterval}
+      handleReorderDotList={handleReorderDotList}
     />
   );
 };

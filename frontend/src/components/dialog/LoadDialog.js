@@ -80,19 +80,22 @@ const LoadDialog = ({
         {loadedData && loadedData.dotArt.length !== 0 ? (
           loadedData.dotArt.map((dotArt, dotArtIdx) => {
             return (
-              <CardDiv key={dotArt.id} onClick={() => loadDotArtHandle(dotArt)}>
+              <CardDiv
+                key={dotArt.dot.id}
+                onClick={() => loadDotArtHandle(dotArt)}
+              >
                 <PreviewBlock
                   size="4"
-                  columnCount={dotArt.columnCount}
-                  rowCount={dotArt.rowCount}
-                  key={dotArt.id}
+                  columnCount={dotArt.dot.columnCount}
+                  rowCount={dotArt.dot.rowCount}
+                  key={dotArt.dot.id}
                 >
                   <Preview
-                    dotList={dotArt.dotList}
-                    column={dotArt.columnCount}
+                    dotList={dotArt.dot.dotList}
+                    column={dotArt.dot.columnCount}
                     size="4"
-                    duration={dotArt.animationDuration}
-                    key={dotArt.id}
+                    duration={dotArt.dot.animationDuration}
+                    key={dotArt.dot.id}
                     animation={true}
                   />
                 </PreviewBlock>

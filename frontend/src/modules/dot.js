@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import { exampleCat } from '../util/json-example';
 import produce from 'immer';
 import shortid from 'shortid';
 
@@ -14,6 +15,7 @@ const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
 const ADD_NEW_DOT_ART = 'dot/ADD_NEW_DOT_ART';
 const CHANGE_ANIMATION_INTERVAL = 'dot/CHANGE_ANIMATION_INTERVAL';
 const CHANGE_ANIMATION_DURATION = 'dot/CHANGE_ANIMATION_DURATION';
+const REORDER_DOT_LIST = 'dot/REORDER_DOT_LIST';
 
 // initialState
 export const INITIAL_ROW = 16;
@@ -58,40 +60,18 @@ export const changeAnimationDuration = createAction(
   CHANGE_ANIMATION_DURATION,
   (duration) => duration,
 );
+export const reorderDotList = createAction(
+  REORDER_DOT_LIST,
+  ({ startIdx, endIdx }) => ({ startIdx, endIdx }),
+);
 
 const defaultDotMaker = (row, column) => {
   return new Array(row * column).fill('');
 };
 
 const initialState = {
-  dotList: [
-    {
-      id: shortid.generate(),
-      dot: ["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"], // prettier-ignore
-      interval: 25,
-    },
-    {
-      id: shortid.generate(),
-      dot: ["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"], // prettier-ignore
-      interval: 50,
-    },
-    {
-      id: shortid.generate(),
-      dot: ["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"], // prettier-ignore
-      interval: 75,
-    },
-    {
-      id: shortid.generate(),
-      dot: ["#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#ffffff", "#ffcdd2", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffcdd2", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffcdd2", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#000000", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#ffffff", "#ffffff", "#303f46", "#303f46", "#303f46", "#303f46", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#303f46", "#303f46", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#ffffff", "#ffffff", "#607d8b", "#607d8b", "#607d8b", "#607d8b"], // prettier-ignore
-      interval: 100,
-    },
-  ],
+  ...exampleCat,
   activeIdx: 0,
-  border: INITIAL_DOT_BORDER,
-  dotSize: INITIAL_DOT_DOTSIZE,
-  rowCount: INITIAL_ROW,
-  columnCount: INITIAL_COLUMN,
-  animationDuration: 2,
 };
 
 const intervalSetter = (dotList) => {
@@ -119,6 +99,7 @@ const dot = handleActions(
       }),
     [LOAD_DOT_ART]: (state, { payload: loadedData }) => ({
       ...state,
+      activeIdx: 0,
       ...loadedData,
     }),
     [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) =>
@@ -254,6 +235,35 @@ const dot = handleActions(
       ...state,
       animationDuration: duration,
     }),
+    [REORDER_DOT_LIST]: (state, { payload: { startIdx, endIdx } }) =>
+      produce(state, (draft) => {
+        const intervals = draft.dotList.reduce(
+          (acc, cur) => (acc = acc.concat(cur.interval)),
+          [],
+        );
+
+        const [removed] = draft.dotList.splice(startIdx, 1);
+        draft.dotList.splice(endIdx, 0, removed);
+
+        // interval 다시 세팅
+        intervals.map(
+          (interval, idx) => (draft.dotList[idx].interval = interval),
+        );
+
+        const activeIdx = draft.activeIdx;
+        // activeIdx 다시 잡아주기
+        if (activeIdx === startIdx) {
+          draft.activeIdx = endIdx;
+        } else if (activeIdx > startIdx) {
+          if (activeIdx <= endIdx) {
+            draft.activeIdx -= 1;
+          }
+        } else {
+          if (activeIdx >= endIdx) {
+            draft.activeIdx += 1;
+          }
+        }
+      }),
   },
   initialState,
 );

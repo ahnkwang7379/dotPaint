@@ -14,16 +14,9 @@ import undoable from 'redux-undo';
 
 export const DOT_ACTIONS = 'index/DOT_ACTIONS';
 
-export const dotActions = createAction(
-  DOT_ACTIONS,
-  // ({ rowIdx, columnIdx }) => ({
-  //   rowIdx,
-  //   columnIdx,
-  // }),
-  ({ dotIdx }) => ({
-    dotIdx,
-  }),
-);
+export const dotActions = createAction(DOT_ACTIONS, ({ dotIdx }) => ({
+  dotIdx,
+}));
 
 // undo redo 기능을 활용할 부분만 따로 combine
 const combineDotArt = combineReducers({
@@ -44,17 +37,6 @@ const combineReducer = combineReducers({
   user,
   loading,
 });
-
-// const combineReducer = (state, action) => ({
-//   dotArt: undoable(pipeReducers([dot, palette])(state, action), {
-//     debug: true,
-//     ignoreInitialState: true,
-//   }),
-//   paintTool: paintTool,
-//   auth: auth,
-//   user,
-//   loading,
-// });
 
 const floodFill = (dotArt, dotId, color, rowCount, columnCount) => {
   const cellCollection = [];

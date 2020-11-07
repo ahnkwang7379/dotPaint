@@ -3,6 +3,7 @@ import Preview from '../../components/common/Preview';
 import styled, { css } from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
+import { Draggable } from 'react-beautiful-dnd';
 
 const CustomDiv = styled.div`
   position: relative;
@@ -107,38 +108,57 @@ const DotListBlock = ({
   );
 
   return active === true ? (
-    <CardDiv active={true}>
-      <Preview dotSet={dot} column={columnCount} size={2} />
-      <CustomDiv>
-        <StyleButton onClick={() => handleRemoveDotArt(idx)}>
-          <DeleteIcon fontSize="inherit" />
-        </StyleButton>
-        <StyleButton onClick={() => handleCopyDotArt(idx)}>
-          <FileCopyRoundedIcon fontSize="inherit" />
-        </StyleButton>
-      </CustomDiv>
-      <IntervalInput
-        value={aniInterval}
-        type="number"
-        onChange={onChangeInput}
-        onBlur={(e) => onBlurHandle(e)}
-        disabled={lastIndex} // 애니메이션의 마지막은 100%로 고정
-        step="0.1"
-      />
-    </CardDiv>
+    <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
+      {(provided) => (
+        <CardDiv
+          active={true}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <Preview dotSet={dot} column={columnCount} size={2} />
+          <CustomDiv>
+            <StyleButton onClick={() => handleRemoveDotArt(idx)}>
+              <DeleteIcon fontSize="inherit" />
+            </StyleButton>
+            <StyleButton onClick={() => handleCopyDotArt(idx)}>
+              <FileCopyRoundedIcon fontSize="inherit" />
+            </StyleButton>
+          </CustomDiv>
+          <IntervalInput
+            value={aniInterval}
+            type="number"
+            onChange={onChangeInput}
+            onBlur={(e) => onBlurHandle(e)}
+            disabled={lastIndex} // 애니메이션의 마지막은 100%로 고정
+            step="0.1"
+          />
+        </CardDiv>
+      )}
+    </Draggable>
   ) : (
-    <CardDiv active={false} onClick={() => handleChangeIdx(idx)}>
-      <Preview dotSet={dot} column={columnCount} size={2} />
-      <CustomDiv>
-        <StyleButton disabled={true}>
-          <DeleteIcon fontSize="inherit" />
-        </StyleButton>
-        <StyleButton disabled={true}>
-          <FileCopyRoundedIcon fontSize="inherit" />
-        </StyleButton>
-      </CustomDiv>
-      <IntervalInput value={interval} disabled />
-    </CardDiv>
+    <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
+      {(provided) => (
+        <CardDiv
+          active={false}
+          onClick={() => handleChangeIdx(idx)}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <Preview dotSet={dot} column={columnCount} size={2} />
+          <CustomDiv>
+            <StyleButton disabled={true}>
+              <DeleteIcon fontSize="inherit" />
+            </StyleButton>
+            <StyleButton disabled={true}>
+              <FileCopyRoundedIcon fontSize="inherit" />
+            </StyleButton>
+          </CustomDiv>
+          <IntervalInput value={interval} disabled />
+        </CardDiv>
+      )}
+    </Draggable>
   );
 };
 

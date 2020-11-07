@@ -15,8 +15,10 @@ export function initialStorage(storage) {
   storage.setItem(
     STORAGE_KEY,
     JSON.stringify({
-      dotArt: [exampleCat],
-      paletteSet: [examplePalette],
+      dotArt: {
+        dot: [exampleCat],
+        palettes: [examplePalette],
+      },
       current: 0,
     }),
   );
@@ -70,28 +72,3 @@ export function removeDotArtFromStorage(storage, dotArtIdx) {
   }
   return false;
 }
-
-export function savePaletteSetToStorage(storage, paletteSetData) {
-  try {
-    let storageData = getDataFromStorage(storage);
-    if (storageData && storageData.paletteSet) {
-      storageData.paletteSet.push(paletteSetData);
-    } else {
-      storageData = {
-        ...storageData,
-        paletteSet: [paletteSetData],
-      };
-    }
-    storage.setItem(STORAGE_KEY, JSON.stringify(storageData));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-// export function removePaletteSetFromStorage(storage, paletteIdx) {
-//   const storageData = getDataFromStorage(stroage);
-//   if (storageData) {
-
-//   }
-// }
