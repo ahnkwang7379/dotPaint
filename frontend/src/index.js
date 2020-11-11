@@ -15,21 +15,10 @@ import { check, tempSetUser } from './modules/user';
 const sagaMiddleware = createSagaMiddleware();
 const logger = createLogger();
 
-// const createIncludedActions = () => includeAction([DOT_ACTIONS]);
-
-// const store = createStore(
-//   undoable(rootReducer, {
-//     filter: createIncludedActions(),
-//     debug: true,
-//     ignoreInitialState: true,
-//   }),
-//   composeWithDevTools(applyMiddleware(sagaMiddleware)),
-// );
-
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware)),
-  // applyMiddleware(sagaMiddleware),
+  // composeWithDevTools(applyMiddleware(sagaMiddleware)),
+  applyMiddleware(sagaMiddleware),
 );
 
 function loadUser() {

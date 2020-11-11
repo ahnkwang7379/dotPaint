@@ -16,7 +16,7 @@ export function generateAnimationCSSData(frames, columns, cellSize) {
 }
 
 export var getImageData = function getImageData(grid, opt) {
-  // grid = grid.flat();
+  grid = grid.flat();
   var xCoord = function xCoord(i) {
     return (i % opt.c) * opt.pSize + opt.pSize;
   };

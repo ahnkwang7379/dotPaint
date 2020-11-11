@@ -5,7 +5,7 @@ import TempBlockCell from './TempBlockCell';
 
 const TempBlockDiv = styled.div`
   background: rgba(0, 0, 0, 0.3);
-  height: 40px;
+  /* height: 40px; */
   width: calc(100% - 40px);
   margin: 0px 8px;
   display: flex;
@@ -17,8 +17,8 @@ const TempBlockDiv = styled.div`
     margin-top: 8px;
   }
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 2px;
+    height: 2px;
   }
   &::-webkit-scrollbar-track {
     background: #f1f1f1;

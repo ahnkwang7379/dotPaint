@@ -39,7 +39,6 @@ const Palettes = ({
   const [dragIdx, setDragIdx] = useState(0);
   const [dragType, setDragType] = useState('pale');
   const onDragEnd = (result) => {
-    console.log(result);
     if (!result.destination) {
       return;
     }
@@ -102,6 +101,13 @@ const Palettes = ({
             {...provided.dragHandleProps}
             ref={provided.innerRef}
           >
+            <ColorCell />
+            <ColorCell />
+            <ColorCell />
+            <ColorCell />
+            <ColorCell />
+            <ColorCell />
+            <ColorCell />
             <ColorCell />
             <ColorCell />
           </CloneBlock>

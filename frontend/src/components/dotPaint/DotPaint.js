@@ -4,12 +4,16 @@ import DotPaintLine from './DotPaintLine';
 
 const DotPaintWrapper = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
+  /* max-width: calc(100% - 40px);
+  max-height: calc(100% - 40px); */
   box-sizing: border-box;
   padding: 30px;
   touch-action: none;
+  overflow: auto;
 `;
+
 const DotPaintBlock = styled.div`
   display: inline-flex;
   justify-content: flex-start;
@@ -20,7 +24,9 @@ const DotPaintBlock = styled.div`
   padding: 0;
   border: 1px solid black;
   box-sizing: border-box;
-  overflow: hidden;
+  & > * {
+    display: flex;
+  }
 `;
 
 const DotPaint = ({
@@ -32,10 +38,10 @@ const DotPaint = ({
   onDotActionHandle,
 }) => {
   const onMouseDownHandler = useCallback(
-    (e, dotIdx) => {
+    (e, rowIdx, columnIdx) => {
       e.preventDefault();
       onChangePaintState('DRAGGING');
-      onDotActionHandle(dotIdx);
+      onDotActionHandle(rowIdx, columnIdx);
     },
     [onChangePaintState, onDotActionHandle],
   );
@@ -47,9 +53,9 @@ const DotPaint = ({
     [onChangePaintState],
   );
   const onMouseOverHandler = useCallback(
-    (e, dotIdx) => {
+    (e, rowIdx, columnIdx) => {
       e.preventDefault();
-      onDotActionHandle(dotIdx);
+      onDotActionHandle(rowIdx, columnIdx);
     },
     [onDotActionHandle],
   );
@@ -75,7 +81,7 @@ const DotPaint = ({
       // onTouchMove={(e) => onTouchMoveHandler(e)}
       onTouchEnd={(e) => onMouseUpHandler(e)}
     >
-      <DotPaintBlock>
+      <DotPaintBlock dotSize={dotSize} columnCount={columnCount}>
         {dotSet &&
           dotSet.map((dotLine, idx) => {
             return (

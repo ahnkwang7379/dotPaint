@@ -15,10 +15,12 @@ export function initialStorage(storage) {
   storage.setItem(
     STORAGE_KEY,
     JSON.stringify({
-      dotArt: {
-        dot: [exampleCat],
-        palettes: [examplePalette],
-      },
+      dotArt: [
+        {
+          dot: exampleCat,
+          palettes: examplePalette,
+        },
+      ],
       current: 0,
     }),
   );

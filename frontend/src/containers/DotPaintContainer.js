@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import DotPaint from '../components/dotPaint/DotPaint';
 import { useSelector, useDispatch } from 'react-redux';
 import { changePaintState } from '../modules/paintTool';
 import { dotActions } from '../modules/index';
 
 const DotpaintContainer = () => {
-  const [dotSet, setDotSet] = useState('');
   const dispatch = useDispatch();
   const { dot, border, dotSize, columnCount } = useSelector(({ dotArt: { present: { dot }}}) => 
     ({
@@ -17,42 +16,32 @@ const DotpaintContainer = () => {
     }),
   ); // prettier-ignore
 
-  useEffect(() => {
-    let returnDotArt = [];
-    let idx = 0;
-    for (let i = 0; i < dot.length / columnCount; i++) {
-      let row = [];
-      for (let j = 0; j < columnCount; j++) {
-        row.push(dot[idx]);
-        idx++;
-      }
-      returnDotArt.push(row);
-      row = [];
-    }
-    setDotSet(returnDotArt);
-  }, [dot, columnCount]);
-
   const onChangePaintState = useCallback(
     (paintState) => dispatch(changePaintState(paintState)),
     [dispatch],
   );
 
   const onDotActionHandle = useCallback(
-    (dotIdx) => dispatch(dotActions({ dotIdx: dotIdx })),
+    (rowIdx, columnIdx) =>
+      dispatch(
+        dotActions({
+          rowIdx: rowIdx,
+          columnIdx: columnIdx,
+        }),
+      ),
     [dispatch],
   );
+
   return (
-    dotSet && (
-      <div>
-        <DotPaint
-          dotSet={dotSet}
-          border={border}
-          dotSize={dotSize}
-          columnCount={columnCount}
-          onChangePaintState={onChangePaintState}
-          onDotActionHandle={onDotActionHandle}
-        />
-      </div>
+    dot && (
+      <DotPaint
+        dotSet={dot}
+        border={border}
+        dotSize={dotSize}
+        columnCount={columnCount}
+        onChangePaintState={onChangePaintState}
+        onDotActionHandle={onDotActionHandle}
+      />
     )
   );
 };

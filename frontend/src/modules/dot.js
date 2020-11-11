@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { exampleCat } from '../util/json-example';
+// import { exampleCat } from '../util/json-example';
 import produce from 'immer';
 import shortid from 'shortid';
 
@@ -18,8 +18,8 @@ const CHANGE_ANIMATION_DURATION = 'dot/CHANGE_ANIMATION_DURATION';
 const REORDER_DOT_LIST = 'dot/REORDER_DOT_LIST';
 
 // initialState
-export const INITIAL_ROW = 16;
-export const INITIAL_COLUMN = 16;
+export const INITIAL_ROW = 8;
+export const INITIAL_COLUMN = 8;
 export const INITIAL_DOT_DOTSIZE = 1;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
@@ -65,12 +65,28 @@ export const reorderDotList = createAction(
   ({ startIdx, endIdx }) => ({ startIdx, endIdx }),
 );
 
+// const defaultDotMaker = (row, column) => {
+//   return new Array(row * column).fill('');
+// };
+
 const defaultDotMaker = (row, column) => {
-  return new Array(row * column).fill('');
+  return new Array(column).fill().map(() => new Array(row).fill('#ffffff'));
 };
 
 const initialState = {
-  ...exampleCat,
+  // ...exampleCat,
+  dotList: [
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
+      interval: 100,
+    },
+  ],
+  border: INITIAL_DOT_BORDER,
+  dotSize: INITIAL_DOT_DOTSIZE,
+  columnCount: INITIAL_COLUMN,
+  rowCount: INITIAL_ROW,
+  animationDuration: 2,
   activeIdx: 0,
 };
 
@@ -114,50 +130,83 @@ const dot = handleActions(
       ...state,
       dotSize: dotSize,
     }),
+    // [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
+    //   produce(state, (draft) => {
+    //     let originRow = draft.rowCount;
+    //     let originColumn = draft.columnCount;
+
+    //     draft.dotList.map((dotSet) => {
+    //       if (newColumn > originColumn) {
+    //         let newDotSet = [];
+    //         for (let i = 0; i < originRow; i++) {
+    //           newDotSet = newDotSet
+    //             .concat(
+    //               dotSet.dot.slice(i * originColumn, (i + 1) * originColumn),
+    //             )
+    //             .concat(new Array(newColumn - originColumn).fill(''));
+    //         }
+    //         dotSet.dot = newDotSet;
+    //       }
+
+    //       if (newColumn < originColumn) {
+    //         let newDotSet = [];
+    //         for (let i = 0; i < originRow; i++) {
+    //           newDotSet = newDotSet.concat(
+    //             dotSet.dot.slice(
+    //               i * originColumn,
+    //               (i + 1) * originColumn - (originColumn - newColumn),
+    //             ),
+    //           );
+    //         }
+    //         dotSet.dot = newDotSet;
+    //       }
+
+    //       if (newRow > originRow) {
+    //         for (let i = originRow; i < newRow; i++) {
+    //           dotSet.dot = dotSet.dot.concat(new Array(newColumn).fill(''));
+    //         }
+    //       }
+
+    //       if (newRow < originRow) {
+    //         for (let i = newRow; i < originRow; i++) {
+    //           dotSet.dot = dotSet.dot.slice(0, newRow * newColumn);
+    //         }
+    //       }
+    //     });
+
+    //     draft.rowCount = newRow;
+    //     draft.columnCount = newColumn;
+    //   }),
     [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
       produce(state, (draft) => {
-        let originRow = draft.rowCount;
-        let originColumn = draft.columnCount;
+        const originRow = draft.rowCount;
+        const originColumn = draft.columnCount;
 
         draft.dotList.map((dotSet) => {
           if (newColumn > originColumn) {
-            let newDotSet = [];
-            for (let i = 0; i < originRow; i++) {
-              newDotSet = newDotSet
-                .concat(
-                  dotSet.dot.slice(i * originColumn, (i + 1) * originColumn),
-                )
-                .concat(new Array(newColumn - originColumn).fill(''));
+            for (let i = originColumn; i < newColumn; i++) {
+              dotSet.dot.map((column) => column.push(''));
             }
-            dotSet.dot = newDotSet;
           }
 
           if (newColumn < originColumn) {
-            let newDotSet = [];
-            for (let i = 0; i < originRow; i++) {
-              newDotSet = newDotSet.concat(
-                dotSet.dot.slice(
-                  i * originColumn,
-                  (i + 1) * originColumn - (originColumn - newColumn),
-                ),
-              );
+            for (let i = newColumn; i < originColumn; i++) {
+              dotSet.dot.map((column) => column.pop());
             }
-            dotSet.dot = newDotSet;
           }
 
           if (newRow > originRow) {
             for (let i = originRow; i < newRow; i++) {
-              dotSet.dot = dotSet.dot.concat(new Array(newColumn).fill(''));
+              dotSet.dot.push(new Array(newColumn).fill(''));
             }
           }
 
           if (newRow < originRow) {
             for (let i = newRow; i < originRow; i++) {
-              dotSet.dot = dotSet.dot.slice(0, newRow * newColumn);
+              dotSet.dot.pop();
             }
           }
         });
-
         draft.rowCount = newRow;
         draft.columnCount = newColumn;
       }),

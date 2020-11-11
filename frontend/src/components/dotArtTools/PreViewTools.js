@@ -22,16 +22,13 @@ const ButtonBox = styled.div`
   height: 30px;
 `;
 
-const PreviewBlock = styled.div.attrs(({ zoomIn, columnCount, rowCount }) => ({
-  style: {
-    width: zoomIn ? `${columnCount * 8}px` : `${columnCount * 4}px`,
-    height: zoomIn ? `${rowCount * 8}px` : `${rowCount * 4}px`,
-  },
-}))`
+const PreviewBlock = styled.div`
   margin-top: 5px;
+  width: ${(props) =>
+    props.zoomIn ? `${props.columnCount * 8}px` : `${props.columnCount * 4}px`};
+  height: ${(props) =>
+    props.zoomIn ? `${props.rowCount * 8}px` : `${props.rowCount * 4}px`};
 `;
-
-const PreviewControlBlock = styled.div``;
 
 const InputStyle = styled.input`
   width: 72px;
@@ -118,13 +115,13 @@ const PreViewTools = ({
           />
         </PreviewBlock>
       </Box>
-      <PreviewControlBlock>
+      <div>
         <InputStyle
           value={animationDuration}
           type="number"
           onChange={(e) => onChangeAnimationDuration(e)}
         />
-      </PreviewControlBlock>
+      </div>
     </PreviewWrapper>
   );
 };

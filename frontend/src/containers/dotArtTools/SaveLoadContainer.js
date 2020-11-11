@@ -1,8 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import SaveLoad from '../../components/dotArtTools/SaveLoad';
 import { saveDotArtToStorage } from '../../util/localStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
+import { getDataFromStorage, initialStorage } from '../../util/localStorage';
+import { loadDotArt } from '../../modules/dot';
+import { loadPalettes } from '../../modules/palettes';
 import shortid from 'shortid';
 
 const SaveLoadContainer = () => {
@@ -32,6 +35,19 @@ const SaveLoadContainer = () => {
       selectColorId: palettes.selectColorId,
     }),
   );
+
+  useEffect(() => {
+    let loadedData = getDataFromStorage(localStorage);
+    if (loadedData) {
+      dispatch(loadDotArt(loadedData.dotArt[loadedData.current].dot));
+      dispatch(loadPalettes(loadedData.dotArt[loadedData.current].palettes));
+    } else {
+      initialStorage(localStorage);
+      loadedData = getDataFromStorage(localStorage);
+      dispatch(loadDotArt(loadedData.dotArt[loadedData.current].dot));
+      dispatch(loadPalettes(loadedData.dotArt[loadedData.current].palettes));
+    }
+  }, []);
 
   const loadHandler = useCallback(
     (type) => {
