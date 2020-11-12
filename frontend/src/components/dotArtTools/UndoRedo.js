@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 const RedoUndoBlock = styled.div`
   display: flex;
-  width: 240px;
   height: 40px;
 `;
 

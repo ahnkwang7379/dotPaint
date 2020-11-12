@@ -34,29 +34,11 @@ export const exampleCat = {
 export const examplePalette = [
   {
     id: shortid.generate(),
-    colors: [
-      '#393b2d',
-      '#75651a',
-      '#775b1c',
-      '#788260',
-      '#bab887',
-      '#dfd6c5',
-      '#e6e6e6',
-      '#eee6d1',
-      '#f8eacf',
-    ],
+    colors: ['#393b2d', '#75651a', '#775b1c', '#788260', '#bab887', '#dfd6c5'],
   },
   {
     id: shortid.generate(),
-    colors: [
-      '#4b73a4',
-      '#667883',
-      '#937e6a',
-      '#b89d80',
-      '#dadbd6',
-      '#faf9fb',
-      '#303f46',
-    ],
+    colors: ['#4b73a4', '#667883', '#937e6a', '#b89d80', '#dadbd6', '#faf9fb'],
   },
   {
     id: shortid.generate(),
@@ -64,27 +46,10 @@ export const examplePalette = [
   },
   {
     id: shortid.generate(),
-    colors: [
-      '#171516',
-      '#303030',
-      '#553634',
-      '#92898c',
-      '#a70d01',
-      '#c4c2c3',
-      '#d12a21',
-    ],
+    colors: ['#171516', '#303030', '#553634', '#92898c', '#a70d01', '#c4c2c3'],
   },
   {
     id: shortid.generate(),
-    colors: [
-      '#1d0e0b',
-      '#393e54',
-      '#5e260d',
-      '#605d66',
-      '#98894e',
-      '#9f7441',
-      '#dde2ff',
-      '#eaac73',
-    ],
+    colors: ['#1d0e0b', '#393e54', '#5e260d'],
   },
 ];

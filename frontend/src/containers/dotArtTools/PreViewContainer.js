@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
-import { changeAnimationDuration } from '../../modules/dot';
+import { changeAnimationDuration, changePixelSize } from '../../modules/dot';
 import PreViewTools from '../../components/dotArtTools/PreViewTools';
 
 const PreViewContainer = () => {
@@ -12,12 +12,14 @@ const PreViewContainer = () => {
     rowCount,
     columnCount,
     animationDuration,
+    pixelSize,
   } = useSelector(({ dotArt }) => ({
     dotSet: dotArt.present.dot.dotList[dotArt.present.dot.activeIdx].dot,
     dotList: dotArt.present.dot.dotList,
     rowCount: dotArt.present.dot.rowCount,
     columnCount: dotArt.present.dot.columnCount,
     animationDuration: dotArt.present.dot.animationDuration,
+    pixelSize: dotArt.present.dot.pixelSize,
   }));
 
   const handleOpenDialog = useCallback(
@@ -34,6 +36,13 @@ const PreViewContainer = () => {
     [dispatch],
   );
 
+  const handelChangePixelSize = useCallback(
+    (pixelSize) => {
+      dispatch(changePixelSize(pixelSize));
+    },
+    [dispatch],
+  );
+
   return (
     <PreViewTools
       dotSet={dotSet}
@@ -41,8 +50,10 @@ const PreViewContainer = () => {
       rowCount={rowCount}
       columnCount={columnCount}
       animationDuration={animationDuration}
+      pixelSize={pixelSize}
       handleOpenDialog={handleOpenDialog}
       handleChangeAnimationDuration={handleChangeAnimationDuration}
+      handelChangePixelSize={handelChangePixelSize}
     />
   );
 };

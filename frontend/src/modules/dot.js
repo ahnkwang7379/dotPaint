@@ -1,9 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
-// import { exampleCat } from '../util/json-example';
 import produce from 'immer';
 import shortid from 'shortid';
 
 const CLEAR_DOT = 'dot/CLEAR_DOT';
+const NEW_DOT_ART_PROJECT = 'dot/NEW_DOT_ART_PROJECT';
 const LOAD_DOT_ART = 'dot/LOAD_DOT_ART';
 const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
 const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
@@ -15,6 +15,7 @@ const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
 const ADD_NEW_DOT_ART = 'dot/ADD_NEW_DOT_ART';
 const CHANGE_ANIMATION_INTERVAL = 'dot/CHANGE_ANIMATION_INTERVAL';
 const CHANGE_ANIMATION_DURATION = 'dot/CHANGE_ANIMATION_DURATION';
+const CHANGE_PIXEL_SIZE = 'dot/CHANGE_PIXEL_SIZE';
 const REORDER_DOT_LIST = 'dot/REORDER_DOT_LIST';
 
 // initialState
@@ -25,6 +26,7 @@ export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
 
 export const clearDot = createAction(CLEAR_DOT);
+export const newDotArtProject = createAction(NEW_DOT_ART_PROJECT);
 export const loadDotArt = createAction(
   LOAD_DOT_ART,
   (loadedData) => loadedData,
@@ -60,6 +62,10 @@ export const changeAnimationDuration = createAction(
   CHANGE_ANIMATION_DURATION,
   (duration) => duration,
 );
+export const changePixelSize = createAction(
+  CHANGE_PIXEL_SIZE,
+  (pixelSize) => pixelSize,
+);
 export const reorderDotList = createAction(
   REORDER_DOT_LIST,
   ({ startIdx, endIdx }) => ({ startIdx, endIdx }),
@@ -88,6 +94,7 @@ const initialState = {
   rowCount: INITIAL_ROW,
   animationDuration: 2,
   activeIdx: 0,
+  pixelSize: 10,
 };
 
 const intervalSetter = (dotList) => {
@@ -113,6 +120,9 @@ const dot = handleActions(
           draft.columnCount,
         );
       }),
+    [NEW_DOT_ART_PROJECT]: () => ({
+      ...initialState,
+    }),
     [LOAD_DOT_ART]: (state, { payload: loadedData }) => ({
       ...state,
       activeIdx: 0,
@@ -130,53 +140,6 @@ const dot = handleActions(
       ...state,
       dotSize: dotSize,
     }),
-    // [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
-    //   produce(state, (draft) => {
-    //     let originRow = draft.rowCount;
-    //     let originColumn = draft.columnCount;
-
-    //     draft.dotList.map((dotSet) => {
-    //       if (newColumn > originColumn) {
-    //         let newDotSet = [];
-    //         for (let i = 0; i < originRow; i++) {
-    //           newDotSet = newDotSet
-    //             .concat(
-    //               dotSet.dot.slice(i * originColumn, (i + 1) * originColumn),
-    //             )
-    //             .concat(new Array(newColumn - originColumn).fill(''));
-    //         }
-    //         dotSet.dot = newDotSet;
-    //       }
-
-    //       if (newColumn < originColumn) {
-    //         let newDotSet = [];
-    //         for (let i = 0; i < originRow; i++) {
-    //           newDotSet = newDotSet.concat(
-    //             dotSet.dot.slice(
-    //               i * originColumn,
-    //               (i + 1) * originColumn - (originColumn - newColumn),
-    //             ),
-    //           );
-    //         }
-    //         dotSet.dot = newDotSet;
-    //       }
-
-    //       if (newRow > originRow) {
-    //         for (let i = originRow; i < newRow; i++) {
-    //           dotSet.dot = dotSet.dot.concat(new Array(newColumn).fill(''));
-    //         }
-    //       }
-
-    //       if (newRow < originRow) {
-    //         for (let i = newRow; i < originRow; i++) {
-    //           dotSet.dot = dotSet.dot.slice(0, newRow * newColumn);
-    //         }
-    //       }
-    //     });
-
-    //     draft.rowCount = newRow;
-    //     draft.columnCount = newColumn;
-    //   }),
     [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
       produce(state, (draft) => {
         const originRow = draft.rowCount;
@@ -283,6 +246,10 @@ const dot = handleActions(
     [CHANGE_ANIMATION_DURATION]: (state, { payload: duration }) => ({
       ...state,
       animationDuration: duration,
+    }),
+    [CHANGE_PIXEL_SIZE]: (state, { payload: pixelSize }) => ({
+      ...state,
+      pixelSize: pixelSize,
     }),
     [REORDER_DOT_LIST]: (state, { payload: { startIdx, endIdx } }) =>
       produce(state, (draft) => {

@@ -40,22 +40,24 @@ const PreviewBlock = styled.div.attrs(
   margin-top: 8px;
 `;
 
-const PreviewDialog = ({
-  dotList,
-  activeIdx,
-  rowCount,
-  columnCount,
-  animationDuration,
-  handleChangeAnimationDuration,
-}) => {
+const PreviewDialog = ({ dot }) => {
+  const {
+    dotList,
+    activeIdx,
+    rowCount,
+    columnCount,
+    animationDuration,
+    pixelSize,
+    handleChangeAnimationDuration,
+    handleChangePixelSize,
+  } = dot;
   const [animation, setAnimation] = useState(false);
-  const [pixelSize, setpixelSize] = useState(10);
   const toggleAnimation = () => {
     setAnimation(!animation);
   };
 
   const onChangePixelSize = (e) => {
-    setpixelSize(e.target.value);
+    handleChangePixelSize(e.target.value);
   };
 
   const onChangeAnimationDuration = (e) => {

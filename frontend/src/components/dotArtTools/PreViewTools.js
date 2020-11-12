@@ -55,8 +55,10 @@ const PreViewTools = ({
   rowCount,
   columnCount,
   animationDuration,
+  pixelSize,
   handleOpenDialog,
   handleChangeAnimationDuration,
+  handelChangePixelSize,
 }) => {
   const [play, setPlay] = useState(false);
   const [zoomIn, setZoomIn] = useState(false);
@@ -76,6 +78,10 @@ const PreViewTools = ({
     } else {
       handleChangeAnimationDuration(e.target.value);
     }
+  };
+
+  const onChangePixelSize = (e) => {
+    handelChangePixelSize(e.target.value);
   };
 
   return (
@@ -120,6 +126,11 @@ const PreViewTools = ({
           value={animationDuration}
           type="number"
           onChange={(e) => onChangeAnimationDuration(e)}
+        />
+        <InputStyle
+          value={pixelSize}
+          type="number"
+          onChange={(e) => onChangePixelSize(e)}
         />
       </div>
     </PreviewWrapper>

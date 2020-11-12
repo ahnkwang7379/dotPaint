@@ -17,7 +17,7 @@ const CustomButtonStyled = styled.button`
   border-radius: 0.5rem;
   text-align: center;
   box-shadow: 0 0.3rem #999;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.05s ease-in-out;
   &:hover {
     color: #fff;
     background: ${(props) => (props.color ? `${props.color}` : `skyblue`)};

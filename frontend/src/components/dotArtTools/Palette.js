@@ -19,7 +19,7 @@ const PaletteDragHandle = styled.div`
 
 const DraggBlock = styled.div`
   display: flex;
-  width: 300px;
+  /* width: 300px; */
 `;
 
 function customStyle(style, snapshot, odd, smallThenDragIdx) {
@@ -42,7 +42,7 @@ function customStyle(style, snapshot, odd, smallThenDragIdx) {
 }
 
 const blockCustomStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? `black` : `green`,
+  background: isDraggingOver ? `gray` : ``,
 });
 
 const Palette = ({
@@ -72,7 +72,7 @@ const Palette = ({
             droppableId={`${palette.id}`}
             type="cell"
             direction="horizontal"
-            isDropDisabled={!(palette.colors.length < 10)}
+            isDropDisabled={!(palette.colors.length < 7)}
           >
             {(provided, snapshot) => (
               <DraggBlock

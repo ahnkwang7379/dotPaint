@@ -7,8 +7,7 @@ import styled from 'styled-components';
 import ColorCell from '../common/ColorCell';
 
 const DraggablePaletteBlock = styled.div`
-  padding: 8px;
-  margin: 8px;
+  padding: 8px 0px;
   background: gray;
 `;
 
@@ -101,10 +100,6 @@ const Palettes = ({
             {...provided.dragHandleProps}
             ref={provided.innerRef}
           >
-            <ColorCell />
-            <ColorCell />
-            <ColorCell />
-            <ColorCell />
             <ColorCell />
             <ColorCell />
             <ColorCell />

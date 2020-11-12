@@ -8,9 +8,7 @@ import { FaEraser } from 'react-icons/fa';
 
 const PaintToolBlock = styled.div`
   display: flex;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  width: 240px;
+  /* width: 240px; */
   height: 40px;
 `;
 const PaintTool = ({ onChangePaintTool, selectedPaintTool }) => {

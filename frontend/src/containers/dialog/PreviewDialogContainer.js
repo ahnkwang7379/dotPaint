@@ -1,15 +1,9 @@
 import React, { useCallback } from 'react';
 import PreviewDialog from '../../components/dialog/PreviewDialog';
-import { changeAnimationDuration } from '../../modules/dot';
+import { changeAnimationDuration, changePixelSize } from '../../modules/dot';
 import { useDispatch } from 'react-redux';
 
-const PreviewDialogContainer = ({
-  dotList,
-  activeIdx,
-  rowCount,
-  columnCount,
-  animationDuration,
-}) => {
+const PreviewDialogContainer = ({ dot }) => {
   const dispatch = useDispatch();
   const handleChangeAnimationDuration = useCallback(
     (duration) => {
@@ -17,14 +11,18 @@ const PreviewDialogContainer = ({
     },
     [dispatch],
   );
+  const handleChangePixelSize = useCallback(
+    (pixelSize) => {
+      dispatch(changePixelSize(pixelSize));
+    },
+    [dispatch],
+  );
+
   return (
     <PreviewDialog
-      dotList={dotList}
-      activeIdx={activeIdx}
-      rowCount={rowCount}
-      columnCount={columnCount}
-      animationDuration={animationDuration}
+      dot={dot}
       handleChangeAnimationDuration={handleChangeAnimationDuration}
+      handleChangePixelSize={handleChangePixelSize}
     />
   );
 };

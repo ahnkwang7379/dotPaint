@@ -10,8 +10,22 @@ import SaveLoadContainer from '../containers/dotArtTools/SaveLoadContainer';
 import PalettesContainer from '../containers/dotArtTools/PalettesContainer';
 import styled from 'styled-components';
 
-const ToolBox = styled.div`
+const MainWrapper = styled.div`
   display: flex;
+`;
+
+const LeftToolBox = styled.div`
+  & > * {
+    margin: 8px 0px;
+    max-width: 240px;
+  }
+`;
+
+const RightToolBox = styled.div`
+  & > * {
+    margin: 8px 0px;
+    max-width: 240px;
+  }
 `;
 
 const DotArtPage = () => {
@@ -19,17 +33,20 @@ const DotArtPage = () => {
     <React.Fragment>
       <DialogContainer />
       <DotListContainer />
-      <ToolBox>
-        <div>
+      <MainWrapper>
+        <LeftToolBox>
           <SaveLoadContainer />
           <PaintToolContainer />
           <UndoRedoContainer />
-        </div>
-        <PreViewContainer />
-      </ToolBox>
+          <PalettesContainer />
+        </LeftToolBox>
+        <RightToolBox>
+          <PreViewContainer />
+        </RightToolBox>
+      </MainWrapper>
       <DotPaintContainer />
-      <PalettesContainer />
-      <BottomToolsContainer />
+
+      {/* <BottomToolsContainer /> */}
     </React.Fragment>
   );
 };

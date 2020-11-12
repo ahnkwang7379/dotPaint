@@ -5,16 +5,16 @@ import TempBlockCell from './TempBlockCell';
 
 const TempBlockDiv = styled.div`
   background: rgba(0, 0, 0, 0.3);
-  /* height: 40px; */
-  width: calc(100% - 40px);
-  margin: 0px 8px;
+  /* width: calc(100% - 40px); */
+  width: 100%;
+  padding: 8px;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
   & > * {
     min-width: 30px;
-    margin-top: 8px;
+    /* margin-top: 8px; */
   }
   &::-webkit-scrollbar {
     width: 2px;

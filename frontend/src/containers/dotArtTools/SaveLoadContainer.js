@@ -4,7 +4,7 @@ import { saveDotArtToStorage } from '../../util/localStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
 import { getDataFromStorage, initialStorage } from '../../util/localStorage';
-import { loadDotArt } from '../../modules/dot';
+import { newDotArtProject, loadDotArt } from '../../modules/dot';
 import { loadPalettes } from '../../modules/palettes';
 import shortid from 'shortid';
 
@@ -49,7 +49,18 @@ const SaveLoadContainer = () => {
     }
   }, []);
 
+  const newProjectHandler = useCallback(() => {
+    dispatch(newDotArtProject());
+  }, [dispatch]);
+
   const loadHandler = useCallback(
+    (type) => {
+      dispatch(changeTypeAndOpen(type));
+    },
+    [dispatch],
+  );
+
+  const downLoadHandler = useCallback(
     (type) => {
       dispatch(changeTypeAndOpen(type));
     },
@@ -73,7 +84,14 @@ const SaveLoadContainer = () => {
     return saveDotArtToStorage(localStorage, saveDotArtData);
   };
 
-  return <SaveLoad saveHandler={saveHandler} loadHandler={loadHandler} />;
+  return (
+    <SaveLoad
+      newProjectHandler={newProjectHandler}
+      saveHandler={saveHandler}
+      loadHandler={loadHandler}
+      downLoadHandler={downLoadHandler}
+    />
+  );
 };
 
 export default React.memo(SaveLoadContainer);

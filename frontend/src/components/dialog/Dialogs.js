@@ -6,6 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import PreviewDialogContainer from '../../containers/dialog/PreviewDialogContainer';
 import LoadDialogContainer from '../../containers/dialog/LoadDialogContainer';
+import DownLoadDialogContainer from '../../containers/dialog/DownLoadDialogContainer';
 import { useSelector } from 'react-redux';
 import MuiDialog from '@material-ui/core/Dialog';
 
@@ -31,19 +32,7 @@ const DialogContent = withStyles((theme) => ({
 
 const Dialogs = ({ dialogType, open, handleCloseDialog }) => {
   const classes = useStyles();
-  const {
-    dotList,
-    activeIdx,
-    rowCount,
-    columnCount,
-    animationDuration,
-  } = useSelector(({ dotArt }) => ({
-    dotList: dotArt.present.dot.dotList,
-    activeIdx: dotArt.present.dot.activeIdx,
-    rowCount: dotArt.present.dot.rowCount,
-    columnCount: dotArt.present.dot.columnCount,
-    animationDuration: dotArt.present.dot.animationDuration,
-  }));
+  const { dot } = useSelector(({ dotArt }) => ({ dot: dotArt.present.dot }));
 
   const handleClose = () => {
     handleCloseDialog();
@@ -68,17 +57,11 @@ const Dialogs = ({ dialogType, open, handleCloseDialog }) => {
             (() => {
               switch (dialogType) {
                 case 'Preview':
-                  return (
-                    <PreviewDialogContainer
-                      dotList={dotList}
-                      activeIdx={activeIdx}
-                      rowCount={rowCount}
-                      columnCount={columnCount}
-                      animationDuration={animationDuration}
-                    />
-                  );
+                  return <PreviewDialogContainer dot={dot} />;
                 case 'Css':
                   return <div />;
+                case 'DownLoad':
+                  return <DownLoadDialogContainer dot={dot} />;
                 case 'Load':
                   return <LoadDialogContainer />;
                 case 'Test':

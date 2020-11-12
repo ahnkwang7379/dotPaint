@@ -6,10 +6,12 @@ const DotPaintWrapper = styled.div`
   display: flex;
   width: auto;
   height: auto;
+  /* min-width: 250px;
+  min-height: 200px; */
   /* max-width: calc(100% - 40px);
   max-height: calc(100% - 40px); */
   box-sizing: border-box;
-  padding: 30px;
+  /* padding: 30px; */
   touch-action: none;
   overflow: auto;
 `;
