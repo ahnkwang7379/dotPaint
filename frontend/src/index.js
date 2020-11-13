@@ -17,8 +17,8 @@ const logger = createLogger();
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware)),
-  // applyMiddleware(sagaMiddleware),
+  // composeWithDevTools(applyMiddleware(sagaMiddleware)),
+  applyMiddleware(sagaMiddleware),
 );
 
 function loadUser() {

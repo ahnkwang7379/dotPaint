@@ -14,8 +14,6 @@ const PreviewWrapper = styled.div`
   display: flex;
 `;
 
-const Box = styled.div``;
-
 const ButtonBox = styled.div`
   display: flex;
   width: 100px;
@@ -25,9 +23,12 @@ const ButtonBox = styled.div`
 const PreviewBlock = styled.div`
   margin-top: 5px;
   width: ${(props) =>
-    props.zoomIn ? `${props.columnCount * 8}px` : `${props.columnCount * 4}px`};
+    props.zoomIn ? `${props.columnCount * 6}px` : `${props.columnCount * 3}px`};
   height: ${(props) =>
-    props.zoomIn ? `${props.rowCount * 8}px` : `${props.rowCount * 4}px`};
+    props.zoomIn ? `${props.rowCount * 6}px` : `${props.rowCount * 3}px`};
+  /* overflow: auto; */
+  max-width: 300px;
+  max-height: 300px;
 `;
 
 const InputStyle = styled.input`
@@ -86,7 +87,7 @@ const PreViewTools = ({
 
   return (
     <PreviewWrapper>
-      <Box>
+      <div>
         <ButtonBox>
           <CustomButton
             onClick={togglePlay}
@@ -115,12 +116,12 @@ const PreViewTools = ({
             dotSet={dotSet}
             dotList={dotList}
             column={columnCount}
-            size={zoomIn ? 8 : 4}
+            size={zoomIn ? 6 : 3}
             animation={play}
             duration={animationDuration}
           />
         </PreviewBlock>
-      </Box>
+      </div>
       <div>
         <InputStyle
           value={animationDuration}

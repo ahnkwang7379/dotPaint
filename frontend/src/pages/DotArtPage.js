@@ -8,6 +8,7 @@ import BottomToolsContainer from '../containers/dotArtTools/BottomToolsContainer
 import UndoRedoContainer from '../containers/dotArtTools/UndoRedoContainer';
 import SaveLoadContainer from '../containers/dotArtTools/SaveLoadContainer';
 import PalettesContainer from '../containers/dotArtTools/PalettesContainer';
+import KeyBingingsContainer from '../containers/dotArtTools/KeyBindingsContainer';
 import styled from 'styled-components';
 
 const MainWrapper = styled.div`
@@ -45,8 +46,8 @@ const DotArtPage = () => {
         </RightToolBox>
       </MainWrapper>
       <DotPaintContainer />
-
-      {/* <BottomToolsContainer /> */}
+      <KeyBingingsContainer />
+      <BottomToolsContainer />
     </React.Fragment>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
 
 const DotPaintWrapper = styled.div`
@@ -28,6 +28,15 @@ const DotPaintBlock = styled.div`
   box-sizing: border-box;
   & > * {
     display: flex;
+  }
+  & > * > * {
+    ${(props) =>
+      props.border &&
+      css`
+        border: ${props.border.size}px solid ${props.border.color};
+        width: ${props.dotSize}rem;
+        height: ${props.dotSize}rem;
+      `}
   }
 `;
 
@@ -83,7 +92,11 @@ const DotPaint = ({
       // onTouchMove={(e) => onTouchMoveHandler(e)}
       onTouchEnd={(e) => onMouseUpHandler(e)}
     >
-      <DotPaintBlock dotSize={dotSize} columnCount={columnCount}>
+      <DotPaintBlock
+        dotSize={dotSize}
+        columnCount={columnCount}
+        border={border}
+      >
         {dotSet &&
           dotSet.map((dotLine, idx) => {
             return (
@@ -92,8 +105,8 @@ const DotPaint = ({
                 key={idx}
                 dotLineIdx={idx}
                 columnCount={columnCount}
-                dotSize={dotSize}
-                border={border}
+                // dotSize={dotSize}
+                // border={border}
                 onMouseDownHandler={onMouseDownHandler}
                 onMouseUpHandler={onMouseUpHandler}
                 onMouseOverHandler={onMouseOverHandler}

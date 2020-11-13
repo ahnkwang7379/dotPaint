@@ -40,7 +40,11 @@ const PreviewBlock = styled.div.attrs(
   margin-top: 8px;
 `;
 
-const PreviewDialog = ({ dot }) => {
+const PreviewDialog = ({
+  dot,
+  handleChangeAnimationDuration,
+  handleChangePixelSize,
+}) => {
   const {
     dotList,
     activeIdx,
@@ -48,8 +52,6 @@ const PreviewDialog = ({ dot }) => {
     columnCount,
     animationDuration,
     pixelSize,
-    handleChangeAnimationDuration,
-    handleChangePixelSize,
   } = dot;
   const [animation, setAnimation] = useState(false);
   const toggleAnimation = () => {

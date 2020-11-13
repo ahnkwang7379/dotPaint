@@ -4,8 +4,6 @@ import DivBlock from '../common/DivBlock';
 const DotPaintLine = ({
   dotLine,
   dotLineIdx,
-  border,
-  dotSize,
   onMouseDownHandler,
   onMouseUpHandler,
   onMouseOverHandler,
@@ -20,8 +18,6 @@ const DotPaintLine = ({
             rowIdx={dotLineIdx}
             columnIdx={columnIdx}
             dotColor={color}
-            dotSize={dotSize}
-            border={border}
             onMouseDownHandler={onMouseDownHandler}
             onMouseUpHandler={onMouseUpHandler}
             onMouseOverHandler={onMouseOverHandler}
