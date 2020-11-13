@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a834b74de4fa1fb8c531e74614034f8a",
+    "revision": "9f6d99434ab361cfb8d403b27aa0ddd1",
     "url": "/dotPaint/index.html"
   },
   {
-    "revision": "878eb27357d0ce0fd715",
+    "revision": "12af0aea9a52d9c2ce3f",
     "url": "/dotPaint/static/css/main.69eda509.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/dotPaint/static/js/2.fa013393.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "878eb27357d0ce0fd715",
-    "url": "/dotPaint/static/js/main.796f0365.chunk.js"
+    "revision": "12af0aea9a52d9c2ce3f",
+    "url": "/dotPaint/static/js/main.713ddbac.chunk.js"
   },
   {
     "revision": "360ed041653fa9d42eba",
