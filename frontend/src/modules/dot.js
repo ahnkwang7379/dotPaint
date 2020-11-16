@@ -142,6 +142,9 @@ const dot = handleActions(
     }),
     [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
       produce(state, (draft) => {
+        if (newRow < 1 || newColumn < 1) {
+          return;
+        }
         const originRow = draft.rowCount;
         const originColumn = draft.columnCount;
 

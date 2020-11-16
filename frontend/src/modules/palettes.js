@@ -10,6 +10,10 @@ const MOVE_CELL_TO_TRASH_CAN = 'palettes/MOVE_CELL_TO_TRASH_CAN';
 const MOVE_CELL_FROM_TRASH_CAN = 'palettes/MOVE_CELL_FROM_TRASH_CAN';
 const SELECT_COLOR_CELL = 'palettes/SELECT_COLOR_CELL';
 const INSERT_NEW_PALETTE = 'palettes/INSERT_NEW_PALETTE';
+const MOVE_UP_PALETTE_CELL = 'palettes/MOVE_UP_PALETTE_CELL';
+const MOVE_DOWN_PALETTE_CELL = 'palettes/MOVE_DOWN_PALETTE_CELL';
+const MOVE_LEFT_PALETTE_CELL = 'palettes/MOVE_LEFT_PALETTE_CELL';
+const MOVE_RIGHT_PALETTE_CELL = 'palettes/MOVE_RIGHT_PALETTE_CELL';
 
 export const loadPalettes = createAction(
   LOAD_PALETTES,
@@ -48,6 +52,10 @@ export const selectColorCell = createAction(
   ({ paletteId, selectIdx }) => ({ paletteId, selectIdx }),
 );
 export const insertNewPalette = createAction(INSERT_NEW_PALETTE);
+export const moveUpPaletteCell = createAction(MOVE_UP_PALETTE_CELL);
+export const moveDownPaletteCell = createAction(MOVE_DOWN_PALETTE_CELL);
+export const moveLeftPaletteCell = createAction(MOVE_LEFT_PALETTE_CELL);
+export const moveRightPaletteCell = createAction(MOVE_RIGHT_PALETTE_CELL);
 
 const initialState = {
   palettes: examplePalette,
@@ -70,7 +78,11 @@ const palettes = handleActions(
   {
     [LOAD_PALETTES]: (state, { payload: loadedData }) => ({
       ...state,
-      ...loadedData,
+      palettes: [...loadedData],
+      selectColorId: {
+        paletteId: loadedData[0]['id'],
+        colorId: 0,
+      },
     }),
     [REORDER_PALETTES]: (state, { payload: { startIdx, endIdx } }) =>
       produce(state, (draft) => {
@@ -184,6 +196,82 @@ const palettes = handleActions(
       ...state,
       selectColorId: { paletteId: paletteId, colorId: selectIdx },
     }),
+    [MOVE_UP_PALETTE_CELL]: (state) =>
+      produce(state, (draft) => {
+        const paletteId = draft.selectColorId.paletteId;
+        const paletteIdx = draft.palettes.findIndex(
+          (palette) => palette.id === paletteId,
+        );
+
+        // paletteId가 0보다 크고, 위에 있는 palette의 colors가 최소 1개는 있어야 위로 이동 가능
+        if (
+          paletteIdx > 0 &&
+          draft.palettes[paletteIdx - 1].colors.length > 0
+        ) {
+          // 위 쪽 palette의 colors수가 colorId보다 낮으면 마지막 조절해준다
+          if (
+            draft.palettes[paletteIdx - 1].colors.length - 1 >=
+            draft.selectColorId.colorId
+          ) {
+            draft.selectColorId = {
+              paletteId: draft.palettes[paletteIdx - 1].id,
+              colorId: draft.selectColorId.colorId,
+            };
+          } else {
+            draft.selectColorId = {
+              paletteId: draft.palettes[paletteIdx - 1].id,
+              colorId: draft.palettes[paletteIdx - 1].colors.length - 1,
+            };
+          }
+        }
+      }),
+    [MOVE_DOWN_PALETTE_CELL]: (state) =>
+      produce(state, (draft) => {
+        const paletteId = draft.selectColorId.paletteId;
+        const paletteIdx = draft.palettes.findIndex(
+          (palette) => palette.id === paletteId,
+        );
+
+        if (
+          paletteIdx < draft.palettes.length - 1 &&
+          draft.palettes[paletteIdx + 1].colors.length > 0
+        ) {
+          if (
+            draft.palettes[paletteIdx + 1].colors.length - 1 >=
+            draft.selectColorId.colorId
+          ) {
+            draft.selectColorId = {
+              paletteId: draft.palettes[paletteIdx + 1].id,
+              colorId: draft.selectColorId.colorId,
+            };
+          } else {
+            draft.selectColorId = {
+              paletteId: draft.palettes[paletteIdx + 1].id,
+              colorId: draft.palettes[paletteIdx + 1].colors.length - 1,
+            };
+          }
+        }
+      }),
+    [MOVE_LEFT_PALETTE_CELL]: (state) => ({
+      ...state,
+      selectColorId: {
+        paletteId: state.selectColorId.paletteId,
+        colorId:
+          state.selectColorId.colorId <= 0
+            ? state.selectColorId.colorId
+            : state.selectColorId.colorId - 1,
+      },
+    }),
+    [MOVE_RIGHT_PALETTE_CELL]: (state) =>
+      produce(state, (draft) => {
+        const paletteId = draft.selectColorId.paletteId;
+        const selectPalette = draft.palettes.filter(
+          (palette) => palette.id === paletteId,
+        )[0];
+        if (selectPalette.colors.length - 1 > draft.selectColorId.colorId) {
+          draft.selectColorId.colorId++;
+        }
+      }),
   },
   initialState,
 );

@@ -28,7 +28,7 @@ const LoadDialogContainer = () => {
       dispatch(closeDialog());
       enqueueSnackbar('Load DotArt From LocalStorage', { variant: 'success' });
     },
-    [dispatch],
+    [dispatch, enqueueSnackbar],
   );
   const clearStorageHandler = () => {
     clearSavedDotArtFromStorage(localStorage);

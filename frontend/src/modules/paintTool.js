@@ -28,8 +28,9 @@ const paintTool = handleActions(
     [CHANGE_PAINT_TOOL]: (state, { payload: paintTool }) => ({
       ...state,
       // 같은걸 누르면 기본인 DOT로 바뀌게
-      selectedPaintTool:
-        state.selectedPaintTool === paintTool ? DOT : paintTool,
+      // selectedPaintTool:
+      //   state.selectedPaintTool === paintTool ? DOT : paintTool,
+      selectedPaintTool: paintTool,
     }),
     [CHANGE_PAINT_STATE]: (state, { payload: paintState }) => ({
       ...state,

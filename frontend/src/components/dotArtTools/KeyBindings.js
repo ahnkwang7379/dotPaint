@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   changePaintTool,
   DOT,
@@ -8,10 +8,29 @@ import {
   ERASER,
 } from '../../modules/paintTool';
 import { ActionCreators } from 'redux-undo';
+import { changeDotArea } from '../../modules/dot';
+import {
+  moveUpPaletteCell,
+  moveDownPaletteCell,
+  moveLeftPaletteCell,
+  moveRightPaletteCell,
+} from '../../modules/palettes';
 import tinykeys from 'tinykeys';
 
 const KeyBindings = () => {
   const dispatch = useDispatch();
+  const { columnCount, rowCount } = useSelector(({ dotArt }) => ({
+    columnCount: dotArt.present.dot.columnCount,
+    rowCount: dotArt.present.dot.rowCount,
+  }));
+  const onChangeArea = useCallback(
+    (row, column) => {
+      dispatch(
+        changeDotArea({ newRow: parseInt(row), newColumn: parseInt(column) }),
+      );
+    },
+    [dispatch],
+  );
   useEffect(() => {
     const keyCombinations = {
       '$mod+KeyZ': (event) => {
@@ -22,42 +41,54 @@ const KeyBindings = () => {
         event.preventDefault();
         dispatch(ActionCreators.redo());
       },
-      // prettier-ignore
-      'KeyQ': event => {
+      KeyW: (event) => {
+        event.preventDefault();
+        dispatch(moveUpPaletteCell());
+      },
+      KeyS: (event) => {
+        event.preventDefault();
+        dispatch(moveDownPaletteCell());
+      },
+      KeyA: (event) => {
+        event.preventDefault();
+        dispatch(moveLeftPaletteCell());
+      },
+      KeyD: (event) => {
+        event.preventDefault();
+        dispatch(moveRightPaletteCell());
+      },
+      KeyQ: (event) => {
         event.preventDefault();
         dispatch(changePaintTool(DOT));
       },
-      // prettier-ignore
-      'KeyW': event => {
-          event.preventDefault();
-          dispatch(changePaintTool(BUCKET));
-        },
-      // prettier-ignore
-      'KeyE': event => {
-          event.preventDefault();
-          dispatch(changePaintTool(PICKER));
-        },
-      // prettier-ignore
-      'KeyR': event => {
-          event.preventDefault();
-          dispatch(changePaintTool(ERASER));
-        },
-      //   '$mod+ArrowRight': (event) => {
-      //     event.preventDefault();
-      //     dispatch(changeDimensions('columns', 1));
-      //   },
-      //   '$mod+ArrowLeft': (event) => {
-      //     event.preventDefault();
-      //     dispatch(changeDimensions('columns', -1));
-      //   },
-      //   '$mod+ArrowDown': (event) => {
-      //     event.preventDefault();
-      //     dispatch(changeDimensions('rows', 1));
-      //   },
-      //   '$mod+ArrowUp': (event) => {
-      //     event.preventDefault();
-      //     dispatch(changeDimensions('rows', -1));
-      //   },
+      KeyB: (event) => {
+        event.preventDefault();
+        dispatch(changePaintTool(BUCKET));
+      },
+      KeyP: (event) => {
+        event.preventDefault();
+        dispatch(changePaintTool(PICKER));
+      },
+      KeyE: (event) => {
+        event.preventDefault();
+        dispatch(changePaintTool(ERASER));
+      },
+      '$mod+ArrowRight': (event) => {
+        event.preventDefault();
+        onChangeArea(rowCount, columnCount + 1);
+      },
+      '$mod+ArrowLeft': (event) => {
+        event.preventDefault();
+        onChangeArea(rowCount, columnCount - 1);
+      },
+      '$mod+ArrowDown': (event) => {
+        event.preventDefault();
+        onChangeArea(rowCount + 1, columnCount);
+      },
+      '$mod+ArrowUp': (event) => {
+        event.preventDefault();
+        onChangeArea(rowCount - 1, columnCount);
+      },
     };
     const unsubscribe = tinykeys(window, keyCombinations);
     return () => {
