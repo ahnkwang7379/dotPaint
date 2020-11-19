@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import PublishIcon from '@material-ui/icons/Publish';
@@ -20,9 +20,9 @@ const SaveLoad = ({
 }) => {
   const { enqueueSnackbar } = useSnackbar();
 
-  const onClickNewProject = () => {
+  const onClickNewProject = useCallback(() => {
     newProjectHandler();
-  };
+  }, [newProjectHandler]);
 
   const onClickSave = () => {
     if (saveHandler()) {

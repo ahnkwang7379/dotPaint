@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Preview from '../common/Preview';
+import PreviewBox from './PreviewBox';
 import CustomButton from '../../components/common/CustomButton';
 import {
   MdFullscreen,
@@ -18,17 +18,6 @@ const ButtonBox = styled.div`
   display: flex;
   width: 100px;
   height: 30px;
-`;
-
-const PreviewBlock = styled.div`
-  margin-top: 5px;
-  width: ${(props) =>
-    props.zoomIn ? `${props.columnCount * 6}px` : `${props.columnCount * 3}px`};
-  height: ${(props) =>
-    props.zoomIn ? `${props.rowCount * 6}px` : `${props.rowCount * 3}px`};
-  /* overflow: auto; */
-  max-width: 300px;
-  max-height: 300px;
 `;
 
 const InputStyle = styled.input`
@@ -51,10 +40,6 @@ const InputStyle = styled.input`
 `;
 
 const PreViewTools = ({
-  dotSet,
-  dotList,
-  rowCount,
-  columnCount,
   animationDuration,
   pixelSize,
   handleOpenDialog,
@@ -107,20 +92,11 @@ const PreViewTools = ({
             <MdContentCopy />
           </CustomButton>
         </ButtonBox>
-        <PreviewBlock
+        <PreviewBox
           zoomIn={zoomIn}
-          rowCount={rowCount}
-          columnCount={columnCount}
-        >
-          <Preview
-            dotSet={dotSet}
-            dotList={dotList}
-            column={columnCount}
-            size={zoomIn ? 6 : 3}
-            animation={play}
-            duration={animationDuration}
-          />
-        </PreviewBlock>
+          animation={play}
+          animationDuration={animationDuration}
+        />
       </div>
       <div>
         <InputStyle

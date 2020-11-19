@@ -28,16 +28,16 @@ const PreviewWrapper = styled.div`
   & > * {
     margin: 8px;
   }
+  overflow: auto;
 `;
 
-const PreviewBlock = styled.div.attrs(({ size, columnCount, rowCount }) => ({
-  style: {
-    width: `${columnCount * size}px`,
-    height: `${rowCount * size}px`,
-  },
-}))``;
+const PreviewBlock = styled.div`
+  width: ${(props) => props.columnCount * props.size}px;
+  height: ${(props) => props.rowCount * props.size}px;
+`;
 
 const CardDiv = styled.div`
+  height: fit-content;
   background: rgb(255, 255, 255);
   opacity: 1;
   border: solid 1px black;

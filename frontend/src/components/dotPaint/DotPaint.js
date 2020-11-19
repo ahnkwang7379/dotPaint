@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
+import DotPaintBackground from './DotPaintBackground';
 
 const DotPaintWrapper = styled.div`
   display: flex;
@@ -28,23 +29,23 @@ const DotPaintBlock = styled.div`
   box-sizing: border-box;
   & > * {
     display: flex;
-  }
-  & > * > * {
-    ${(props) =>
-      props.border &&
-      css`
-        border: ${props.border.size}px solid ${props.border.color};
-        width: ${props.dotSize}rem;
-        height: ${props.dotSize}rem;
-      `}
+    & > * {
+      z-index: 1;
+      ${(props) =>
+        props.border &&
+        css`
+          border: ${props.border.size}px solid ${props.border.color};
+          width: ${props.dotSize * 8}px;
+          height: ${props.dotSize * 8}px;
+        `};
+    }
   }
 `;
 
 const DotPaint = ({
-  dotSet,
   border,
   dotSize,
-  columnCount,
+  rowCount,
   onChangePaintState,
   onDotActionHandle,
 }) => {
@@ -84,6 +85,24 @@ const DotPaint = ({
     },
     [onDotActionHandle],
   );
+
+  const dotLineMaker = useCallback(() => {
+    let dotLineArr = [];
+    for (let i = 0; i < rowCount; i++) {
+      dotLineArr.push(
+        <DotPaintLine
+          key={i}
+          dotLineIdx={i}
+          onMouseDownHandler={onMouseDownHandler}
+          onMouseUpHandler={onMouseUpHandler}
+          onMouseOverHandler={onMouseOverHandler}
+          onTouchMoveHandler={onTouchMoveHandler}
+        />,
+      );
+    }
+    return dotLineArr;
+  }, [rowCount]);
+
   return (
     <DotPaintWrapper
       onMouseLeave={(e) => onMouseUpHandler(e)}
@@ -92,28 +111,9 @@ const DotPaint = ({
       // onTouchMove={(e) => onTouchMoveHandler(e)}
       onTouchEnd={(e) => onMouseUpHandler(e)}
     >
-      <DotPaintBlock
-        dotSize={dotSize}
-        columnCount={columnCount}
-        border={border}
-      >
-        {dotSet &&
-          dotSet.map((dotLine, idx) => {
-            return (
-              <DotPaintLine
-                dotLine={dotLine}
-                key={idx}
-                dotLineIdx={idx}
-                columnCount={columnCount}
-                // dotSize={dotSize}
-                // border={border}
-                onMouseDownHandler={onMouseDownHandler}
-                onMouseUpHandler={onMouseUpHandler}
-                onMouseOverHandler={onMouseOverHandler}
-                onTouchMoveHandler={onTouchMoveHandler}
-              />
-            );
-          })}
+      <DotPaintBlock dotSize={dotSize} border={border}>
+        <DotPaintBackground />
+        {dotLineMaker()}
       </DotPaintBlock>
     </DotPaintWrapper>
   );

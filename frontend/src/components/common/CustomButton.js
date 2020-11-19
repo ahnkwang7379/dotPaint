@@ -47,4 +47,4 @@ const CustomButton = ({ children, ...rest }) => {
   return <CustomButtonStyled {...rest}>{children}</CustomButtonStyled>;
 };
 
-export default CustomButton;
+export default React.memo(CustomButton);

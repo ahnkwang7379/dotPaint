@@ -47,7 +47,7 @@ const DotArtPage = () => {
       </MainWrapper>
       <DotPaintContainer />
       <KeyBingingsContainer />
-      <BottomToolsContainer />
+      {/* <BottomToolsContainer /> */} {/* 얘가 느린 범인임*/}
     </React.Fragment>
   );
 };

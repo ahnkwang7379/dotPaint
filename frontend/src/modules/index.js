@@ -206,7 +206,6 @@ const dotActionsHandler = (
           ),
         );
         if (existedColor) {
-          console.log(existedColor);
           return produce(state, (draft) => {
             draft.dotArt.present.palettes.selectColorId = existedColor;
           });

@@ -6,18 +6,7 @@ import PreViewTools from '../../components/dotArtTools/PreViewTools';
 
 const PreViewContainer = () => {
   const dispatch = useDispatch();
-  const {
-    dotSet,
-    dotList,
-    rowCount,
-    columnCount,
-    animationDuration,
-    pixelSize,
-  } = useSelector(({ dotArt }) => ({
-    dotSet: dotArt.present.dot.dotList[dotArt.present.dot.activeIdx].dot,
-    dotList: dotArt.present.dot.dotList,
-    rowCount: dotArt.present.dot.rowCount,
-    columnCount: dotArt.present.dot.columnCount,
+  const { animationDuration, pixelSize } = useSelector(({ dotArt }) => ({
     animationDuration: dotArt.present.dot.animationDuration,
     pixelSize: dotArt.present.dot.pixelSize,
   }));
@@ -45,10 +34,6 @@ const PreViewContainer = () => {
 
   return (
     <PreViewTools
-      dotSet={dotSet}
-      dotList={dotList}
-      rowCount={rowCount}
-      columnCount={columnCount}
       animationDuration={animationDuration}
       pixelSize={pixelSize}
       handleOpenDialog={handleOpenDialog}

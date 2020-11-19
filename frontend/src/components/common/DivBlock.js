@@ -1,6 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { INITIAL_DOT_COLOR } from '../../modules/dot';
+import styled from 'styled-components';
 
 const DotStyled = styled.div`
   border: none;
@@ -11,24 +10,17 @@ const DotStyled = styled.div`
   font-size: 1rem;
   box-sizing: border-box;
   /* transition: all 0.3s linear, width 0.1s linear, height 0.1s linear; */
-  ${(props) =>
-    css`
-      background: ${props.dotColor || INITIAL_DOT_COLOR};
-    `}
 `;
 
 const DivBlock = ({
   rowIdx,
   columnIdx,
-  dotColor,
   onMouseDownHandler,
   onMouseUpHandler,
   onMouseOverHandler,
-  // onTouchMoveHandler,
 }) => {
   return (
     <DotStyled
-      dotColor={dotColor}
       onContextMenu={(e) => e.preventDefault()}
       onMouseDown={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}
       onMouseOver={(e) => onMouseOverHandler(e, rowIdx, columnIdx)}
@@ -39,4 +31,4 @@ const DivBlock = ({
   );
 };
 
-export default React.memo(DivBlock);
+export default DivBlock;

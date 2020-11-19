@@ -6,13 +6,11 @@ import { dotActions } from '../modules/index';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();
-  const { dot, border, dotSize, columnCount } = useSelector(({ dotArt: { present: { dot }}}) => 
+  const { border, dotSize, rowCount } = useSelector(({ dotArt: { present: { dot }}}) => 
     ({
-      // dotSet: dot.dotSet,
-      dot: dot.dotList[dot.activeIdx].dot,
       border: dot.border,
       dotSize: dot.dotSize,
-      columnCount: dot.columnCount,
+      rowCount: dot.rowCount,
     }),
   ); // prettier-ignore
 
@@ -33,16 +31,13 @@ const DotpaintContainer = () => {
   );
 
   return (
-    dot && (
-      <DotPaint
-        dotSet={dot}
-        border={border}
-        dotSize={dotSize}
-        columnCount={columnCount}
-        onChangePaintState={onChangePaintState}
-        onDotActionHandle={onDotActionHandle}
-      />
-    )
+    <DotPaint
+      border={border}
+      dotSize={dotSize}
+      rowCount={rowCount}
+      onChangePaintState={onChangePaintState}
+      onDotActionHandle={onDotActionHandle}
+    />
   );
 };
 

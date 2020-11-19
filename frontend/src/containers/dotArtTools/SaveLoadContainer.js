@@ -78,7 +78,8 @@ const SaveLoadContainer = () => {
         rowCount: rowCount,
         animationDuration: animationDuration,
       },
-      palettes: { palettes: palettes, selectColorId: selectColorId },
+      // palettes: { palettes: palettes, selectColorId: selectColorId },
+      palettes: palettes,
     };
 
     return saveDotArtToStorage(localStorage, saveDotArtData);
