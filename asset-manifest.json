@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/dotPaint/static/css/main.69eda509.chunk.css",
-    "main.js": "/dotPaint/static/js/main.812f0a32.chunk.js",
-    "main.js.map": "/dotPaint/static/js/main.812f0a32.chunk.js.map",
+    "main.js": "/dotPaint/static/js/main.ea7f4589.chunk.js",
+    "main.js.map": "/dotPaint/static/js/main.ea7f4589.chunk.js.map",
     "runtime-main.js": "/dotPaint/static/js/runtime-main.a416796f.js",
     "runtime-main.js.map": "/dotPaint/static/js/runtime-main.a416796f.js.map",
     "static/js/2.4f55a299.chunk.js": "/dotPaint/static/js/2.4f55a299.chunk.js",
     "static/js/2.4f55a299.chunk.js.map": "/dotPaint/static/js/2.4f55a299.chunk.js.map",
     "index.html": "/dotPaint/index.html",
-    "precache-manifest.e3af85f0427fcf74f7bc741c93572cfb.js": "/dotPaint/precache-manifest.e3af85f0427fcf74f7bc741c93572cfb.js",
+    "precache-manifest.6812c488be141cbc96ae3324ef315199.js": "/dotPaint/precache-manifest.6812c488be141cbc96ae3324ef315199.js",
     "service-worker.js": "/dotPaint/service-worker.js",
     "static/css/main.69eda509.chunk.css.map": "/dotPaint/static/css/main.69eda509.chunk.css.map",
     "static/js/2.4f55a299.chunk.js.LICENSE.txt": "/dotPaint/static/js/2.4f55a299.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.a416796f.js",
     "static/js/2.4f55a299.chunk.js",
     "static/css/main.69eda509.chunk.css",
-    "static/js/main.812f0a32.chunk.js"
+    "static/js/main.ea7f4589.chunk.js"
   ]
 }
