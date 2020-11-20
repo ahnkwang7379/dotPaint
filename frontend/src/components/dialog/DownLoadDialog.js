@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Preview from '../common/Preview';
 import CustomButton from '../common/CustomButton';
 import styled from 'styled-components';
+import {
+  generateAnimationCSSData,
+  generatePixelDrawCss,
+} from '../../util/cssParser';
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,7 +44,8 @@ const PreviewBlock = styled.div.attrs(
   margin-bottom: 8px;
 `;
 
-const DownLoadDialog = ({ dot, saveFileHandler }) => {
+const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
+  const [dialog, setDialog] = useState('');
   const [type, setType] = useState('single');
   const {
     dotList,
@@ -50,6 +55,10 @@ const DownLoadDialog = ({ dot, saveFileHandler }) => {
     pixelSize,
     animationDuration,
   } = dot;
+  useEffect(() => {
+    setDialog(dialogType);
+    console.log(generateAnimationCSSData(dotList, columnCount, pixelSize));
+  }, [dialogType]);
   return (
     <Wrapper>
       <ButtonWrapper>
@@ -62,12 +71,14 @@ const DownLoadDialog = ({ dot, saveFileHandler }) => {
         <CustomButton selected={type === 'gif'} onClick={() => setType('gif')}>
           gif
         </CustomButton>
-        <CustomButton
-          selected={type === 'sprite'}
-          onClick={() => setType('sprite')}
-        >
-          sprite
-        </CustomButton>
+        {dialog === 'DownLoad' && (
+          <CustomButton
+            selected={type === 'sprite'}
+            onClick={() => setType('sprite')}
+          >
+            sprite
+          </CustomButton>
+        )}
       </ButtonWrapper>
 
       <PreviewScrollWrapper>
@@ -86,13 +97,32 @@ const DownLoadDialog = ({ dot, saveFileHandler }) => {
           />
         </PreviewBlock>
       </PreviewScrollWrapper>
-      <CustomButton
-        baseColor="#0f0f0f"
-        width="160"
-        onClick={() => saveFileHandler(type)}
-      >
-        download!
-      </CustomButton>
+      {dialog === 'DownLoad' && (
+        <CustomButton
+          baseColor="#0f0f0f"
+          width="160"
+          onClick={() => saveFileHandler(type)}
+        >
+          download!
+        </CustomButton>
+      )}
+      {dialog === 'Css' && (
+        <textarea
+          width="500px"
+          hieght="500px"
+          value={
+            type === 'single'
+              ? generatePixelDrawCss(
+                  dotList[activeIdx].dot,
+                  columnCount,
+                  pixelSize,
+                  'string',
+                )
+              : generateAnimationCSSData(dotList, columnCount, pixelSize)
+          }
+          readOnly
+        />
+      )}
     </Wrapper>
   );
 };

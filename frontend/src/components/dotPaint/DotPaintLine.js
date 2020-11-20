@@ -29,7 +29,13 @@ const DotPaintLine = ({
       );
     }
     return dotArr;
-  }, [columnCount]);
+  }, [
+    columnCount,
+    dotLineIdx,
+    onMouseDownHandler,
+    onMouseUpHandler,
+    onMouseOverHandler,
+  ]);
   return <div>{dotMaker()}</div>;
 };
 

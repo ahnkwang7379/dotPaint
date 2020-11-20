@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PreviewDialogContainer from '../../containers/dialog/PreviewDialogContainer';
 import LoadDialogContainer from '../../containers/dialog/LoadDialogContainer';
 import DownLoadDialogContainer from '../../containers/dialog/DownLoadDialogContainer';
+import CssDialogContainer from '../../containers/dialog/CssDialogContainer';
 import { useSelector } from 'react-redux';
 import MuiDialog from '@material-ui/core/Dialog';
 
@@ -58,24 +59,21 @@ const Dialogs = ({ dialogType, open, handleCloseDialog }) => {
               switch (dialogType) {
                 case 'Preview':
                   return <PreviewDialogContainer dot={dot} />;
-                case 'Css':
-                  return <div />;
                 case 'DownLoad':
-                  return <DownLoadDialogContainer dot={dot} />;
+                  return (
+                    <DownLoadDialogContainer
+                      dot={dot}
+                      dialogType={dialogType}
+                    />
+                  );
                 case 'Load':
                   return <LoadDialogContainer />;
-                case 'Test':
+                case 'Css':
                   return (
-                    <div>
-                      {[...new Array(50)]
-                        .map(
-                          () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
-                        )
-                        .join('\n')}
-                    </div>
+                    <DownLoadDialogContainer
+                      dot={dot}
+                      dialogType={dialogType}
+                    />
                   );
                 default:
                   return null;

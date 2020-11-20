@@ -25,16 +25,9 @@ const SaveLoadContainer = () => {
     rowCount: dot.rowCount,
     animationDuration: dot.animationDuration,
   }));
-  const { palettes, selectColorId } = useSelector(
-    ({
-      dotArt: {
-        present: { palettes },
-      },
-    }) => ({
-      palettes: palettes.palettes,
-      selectColorId: palettes.selectColorId,
-    }),
-  );
+  const { palettes } = useSelector(({ dotArt: { present: { palettes } } }) => ({
+    palettes: palettes.palettes,
+  }));
 
   useEffect(() => {
     let loadedData = getDataFromStorage(localStorage);
@@ -53,14 +46,7 @@ const SaveLoadContainer = () => {
     dispatch(newDotArtProject());
   }, [dispatch]);
 
-  const loadHandler = useCallback(
-    (type) => {
-      dispatch(changeTypeAndOpen(type));
-    },
-    [dispatch],
-  );
-
-  const downLoadHandler = useCallback(
+  const dialogOpenHandler = useCallback(
     (type) => {
       dispatch(changeTypeAndOpen(type));
     },
@@ -89,8 +75,7 @@ const SaveLoadContainer = () => {
     <SaveLoad
       newProjectHandler={newProjectHandler}
       saveHandler={saveHandler}
-      loadHandler={loadHandler}
-      downLoadHandler={downLoadHandler}
+      dialogOpenHandler={dialogOpenHandler}
     />
   );
 };

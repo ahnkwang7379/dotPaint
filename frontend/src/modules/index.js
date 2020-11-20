@@ -191,6 +191,10 @@ const dotActionsHandler = (
         const dot = state.dotArt.present.dot;
         const activeIdx = dot.activeIdx;
         const dotColor = dot.dotList[activeIdx].dot[rowIdx][columnIdx];
+        const selectPaletteId =
+          state.dotArt.present.palettes.selectColorId.paletteId;
+        const selectColorId =
+          state.dotArt.present.palettes.selectColorId.colorId;
 
         // 색이 없는 셀을 클릭했다면
         if (!dotColor) return { ...state };
@@ -218,7 +222,14 @@ const dotActionsHandler = (
             return { ...state };
           } else {
             return produce(state, (draft) => {
-              draft.dotArt.present.palettes.trashCan.unshift(dotColor);
+              draft.dotArt.present.palettes.palettes.map((palette) => {
+                if (palette.id === selectPaletteId) {
+                  draft.dotArt.present.palettes.trashCan.unshift(
+                    palette.colors[selectColorId],
+                  );
+                  palette.colors[selectColorId] = dotColor;
+                }
+              });
             });
           }
         }

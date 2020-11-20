@@ -28,6 +28,7 @@ const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
           boxShadow: cssString,
           MozBoxShadow: cssString,
           WebkitBoxShadow: cssString,
+          border: '0px',
         },
       };
       // return <PreViewWrapper cssString={cssString} cellSize={cellSize} />;

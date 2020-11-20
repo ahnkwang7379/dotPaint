@@ -5,7 +5,6 @@ import SketchPicker from '../../common/ColorPicker';
 const BorderBox = styled.div`
   display: flex;
 `;
-const BorderRangeBar = styled.input``;
 
 const BorderControl = ({
   borderSize,
@@ -16,7 +15,7 @@ const BorderControl = ({
   return (
     <BorderBox>
       <span>테두리 크기 : {borderSize}px</span>
-      <BorderRangeBar
+      <input
         type="range"
         min="0"
         max="50"

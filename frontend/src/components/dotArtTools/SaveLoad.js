@@ -12,12 +12,7 @@ const SaveLoadBlock = styled.div`
   height: 40px;
 `;
 
-const SaveLoad = ({
-  newProjectHandler,
-  saveHandler,
-  loadHandler,
-  downLoadHandler,
-}) => {
+const SaveLoad = ({ newProjectHandler, saveHandler, dialogOpenHandler }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const onClickNewProject = useCallback(() => {
@@ -40,12 +35,13 @@ const SaveLoad = ({
       <CustomButton onClick={onClickSave}>
         <PublishIcon />
       </CustomButton>
-      <CustomButton onClick={() => loadHandler('Load')}>
+      <CustomButton onClick={() => dialogOpenHandler('Load')}>
         <GetAppIcon />
       </CustomButton>
-      <CustomButton onClick={() => downLoadHandler('DownLoad')}>
+      <CustomButton onClick={() => dialogOpenHandler('DownLoad')}>
         Down
       </CustomButton>
+      <CustomButton onClick={() => dialogOpenHandler('Css')}>Test</CustomButton>
     </SaveLoadBlock>
   );
 };

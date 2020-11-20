@@ -71,20 +71,20 @@ const DotPaint = ({
     },
     [onDotActionHandle],
   );
-  const onTouchStartHandler = useCallback(
-    (e) => {
-      e.preventDefault();
-      onChangePaintState('DRAGGING');
-    },
-    [onChangePaintState],
-  );
-  const onTouchMoveHandler = useCallback(
-    (e, dotIdx) => {
-      e.preventDefault();
-      onDotActionHandle(dotIdx);
-    },
-    [onDotActionHandle],
-  );
+  // const onTouchStartHandler = useCallback(
+  //   (e) => {
+  //     e.preventDefault();
+  //     onChangePaintState('DRAGGING');
+  //   },
+  //   [onChangePaintState],
+  // );
+  // const onTouchMoveHandler = useCallback(
+  //   (e, dotIdx) => {
+  //     e.preventDefault();
+  //     onDotActionHandle(dotIdx);
+  //   },
+  //   [onDotActionHandle],
+  // );
 
   const dotLineMaker = useCallback(() => {
     let dotLineArr = [];
@@ -96,18 +96,17 @@ const DotPaint = ({
           onMouseDownHandler={onMouseDownHandler}
           onMouseUpHandler={onMouseUpHandler}
           onMouseOverHandler={onMouseOverHandler}
-          onTouchMoveHandler={onTouchMoveHandler}
         />,
       );
     }
     return dotLineArr;
-  }, [rowCount]);
+  }, [rowCount, onMouseDownHandler, onMouseUpHandler, onMouseOverHandler]);
 
   return (
     <DotPaintWrapper
       onMouseLeave={(e) => onMouseUpHandler(e)}
       onMouseUp={(e) => onMouseUpHandler(e)}
-      onTouchStart={(e) => onTouchStartHandler(e)}
+      // onTouchStart={(e) => onTouchStartHandler(e)}
       // onTouchMove={(e) => onTouchMoveHandler(e)}
       onTouchEnd={(e) => onMouseUpHandler(e)}
     >
