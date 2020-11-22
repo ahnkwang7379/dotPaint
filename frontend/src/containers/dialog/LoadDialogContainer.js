@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import LoadDialog from '../../components/dialog/LoadDialog';
 import {
-  getDataFromStorage,
+  getDotArtDataFromStorage,
   removeDotArtFromStorage,
   clearSavedDotArtFromStorage,
 } from '../../util/localStorage';
@@ -15,11 +15,11 @@ const LoadDialogContainer = () => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [loadedData, setLoadedData] = useState(
-    getDataFromStorage(localStorage),
+    getDotArtDataFromStorage(localStorage),
   );
   const removeDotArtHandle = (dotArtIdx) => {
     removeDotArtFromStorage(localStorage, dotArtIdx);
-    setLoadedData(getDataFromStorage(localStorage));
+    setLoadedData(getDotArtDataFromStorage(localStorage));
   };
   const loadDotArtHandle = useCallback(
     (loadedData) => {
@@ -32,7 +32,7 @@ const LoadDialogContainer = () => {
   );
   const clearStorageHandler = () => {
     clearSavedDotArtFromStorage(localStorage);
-    setLoadedData(getDataFromStorage(localStorage));
+    setLoadedData(getDotArtDataFromStorage(localStorage));
     enqueueSnackbar('Clear DotArt From LocalStorage', { variant: 'success' });
   };
   return (

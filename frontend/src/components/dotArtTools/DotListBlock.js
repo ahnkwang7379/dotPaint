@@ -5,16 +5,28 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
 import { Draggable } from 'react-beautiful-dnd';
 
-const CustomDiv = styled.div`
+const ButtonDiv = styled.div`
   position: relative;
   display: grid;
   width: 16px;
-  left: 48px;
+  left: 56px;
   margin: 0px;
   padding: 0px;
   & > * + * {
-    margin-top: 16px;
+    margin-top: 24px;
   }
+`;
+
+const IndexBox = styled.div`
+  background: orange;
+  color: black;
+  text-align: center;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  z-index: 2;
+  font-weight: 900;
+  font-size: 12px;
 `;
 
 const CardDiv = styled.div`
@@ -52,7 +64,7 @@ const StyleButton = styled.div`
 `;
 
 const IntervalInput = styled.input`
-  width: 72px;
+  width: 80px;
   height: 24px;
   font-size: 16px;
   font-weight: bold;
@@ -76,7 +88,6 @@ const DotListBlock = ({
   idx,
   dot,
   columnCount,
-  rowCount,
   interval,
   handleChangeIdx,
   handleCopyDotArt,
@@ -116,15 +127,16 @@ const DotListBlock = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Preview dotSet={dot} column={columnCount} size={2} />
-          <CustomDiv>
+          <IndexBox>{idx}</IndexBox>
+          <Preview dotSet={dot} column={columnCount} size={3} />
+          <ButtonDiv>
             <StyleButton onClick={() => handleRemoveDotArt(idx)}>
               <DeleteIcon fontSize="inherit" />
             </StyleButton>
             <StyleButton onClick={() => handleCopyDotArt(idx)}>
               <FileCopyRoundedIcon fontSize="inherit" />
             </StyleButton>
-          </CustomDiv>
+          </ButtonDiv>
           <IntervalInput
             value={aniInterval}
             type="number"
@@ -146,15 +158,16 @@ const DotListBlock = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Preview dotSet={dot} column={columnCount} size={2} />
-          <CustomDiv>
+          <IndexBox>{idx}</IndexBox>
+          <Preview dotSet={dot} column={columnCount} size={3} />
+          <ButtonDiv>
             <StyleButton disabled={true}>
               <DeleteIcon fontSize="inherit" />
             </StyleButton>
             <StyleButton disabled={true}>
               <FileCopyRoundedIcon fontSize="inherit" />
             </StyleButton>
-          </CustomDiv>
+          </ButtonDiv>
           <IntervalInput value={interval} disabled />
         </CardDiv>
       )}

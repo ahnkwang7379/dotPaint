@@ -3,7 +3,10 @@ import SaveLoad from '../../components/dotArtTools/SaveLoad';
 import { saveDotArtToStorage } from '../../util/localStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
-import { getDataFromStorage, initialStorage } from '../../util/localStorage';
+import {
+  getDotArtDataFromStorage,
+  initialStorage,
+} from '../../util/localStorage';
 import { newDotArtProject, loadDotArt } from '../../modules/dot';
 import { loadPalettes } from '../../modules/palettes';
 import shortid from 'shortid';
@@ -25,18 +28,18 @@ const SaveLoadContainer = () => {
     rowCount: dot.rowCount,
     animationDuration: dot.animationDuration,
   }));
-  const { palettes } = useSelector(({ dotArt: { present: { palettes } } }) => ({
+  const { palettes } = useSelector(({ palettes }) => ({
     palettes: palettes.palettes,
   }));
 
   useEffect(() => {
-    let loadedData = getDataFromStorage(localStorage);
+    let loadedData = getDotArtDataFromStorage(localStorage);
     if (loadedData) {
       dispatch(loadDotArt(loadedData.dotArt[loadedData.current].dot));
       dispatch(loadPalettes(loadedData.dotArt[loadedData.current].palettes));
     } else {
       initialStorage(localStorage);
-      loadedData = getDataFromStorage(localStorage);
+      loadedData = getDotArtDataFromStorage(localStorage);
       dispatch(loadDotArt(loadedData.dotArt[loadedData.current].dot));
       dispatch(loadPalettes(loadedData.dotArt[loadedData.current].palettes));
     }

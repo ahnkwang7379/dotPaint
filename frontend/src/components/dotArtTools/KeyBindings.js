@@ -91,6 +91,7 @@ const KeyBindings = () => {
       },
     };
     const unsubscribe = tinykeys(window, keyCombinations);
+
     return () => {
       unsubscribe();
     };

@@ -45,6 +45,7 @@ const PreViewTools = ({
   handleOpenDialog,
   handleChangeAnimationDuration,
   handelChangePixelSize,
+  handleChangeTyping,
 }) => {
   const [play, setPlay] = useState(false);
   const [zoomIn, setZoomIn] = useState(false);
@@ -103,11 +104,15 @@ const PreViewTools = ({
           value={animationDuration}
           type="number"
           onChange={(e) => onChangeAnimationDuration(e)}
+          onFocus={() => handleChangeTyping(true)}
+          onBlur={() => handleChangeTyping(false)}
         />
         <InputStyle
           value={pixelSize}
           type="number"
           onChange={(e) => onChangePixelSize(e)}
+          onFocus={() => handleChangeTyping(true)}
+          onBlur={() => handleChangeTyping(false)}
         />
       </div>
     </PreviewWrapper>

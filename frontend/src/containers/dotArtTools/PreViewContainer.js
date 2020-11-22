@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
 import { changeAnimationDuration, changePixelSize } from '../../modules/dot';
+import { changeTypingState } from '../../modules/typing';
 import PreViewTools from '../../components/dotArtTools/PreViewTools';
 
 const PreViewContainer = () => {
@@ -32,6 +33,13 @@ const PreViewContainer = () => {
     [dispatch],
   );
 
+  const handleChangeTyping = useCallback(
+    (typing) => {
+      dispatch(changeTypingState(typing));
+    },
+    [dispatch],
+  );
+
   return (
     <PreViewTools
       animationDuration={animationDuration}
@@ -39,6 +47,7 @@ const PreViewContainer = () => {
       handleOpenDialog={handleOpenDialog}
       handleChangeAnimationDuration={handleChangeAnimationDuration}
       handelChangePixelSize={handelChangePixelSize}
+      handleChangeTyping={handleChangeTyping}
     />
   );
 };

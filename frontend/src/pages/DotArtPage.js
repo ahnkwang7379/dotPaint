@@ -35,8 +35,8 @@ const DotArtPage = () => {
   return (
     <React.Fragment>
       <DialogContainer />
-      <DotListContainer />
       <MainWrapper>
+        <DotListContainer />
         <LeftToolBox>
           <SaveLoadContainer />
           <PaintToolContainer />

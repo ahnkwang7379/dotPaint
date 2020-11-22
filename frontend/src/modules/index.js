@@ -2,13 +2,13 @@ import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import { createAction, handleActions } from 'redux-actions';
 import dot from './dot';
-import palette from './palette';
 import paintTool, { DOT, BUCKET, PICKER, ERASER } from './paintTool';
 import loading from './loading';
 import auth, { authSaga } from './auth';
 import user, { userSaga } from './user';
 import palettes from './palettes';
 import dialog from './dialog';
+import typing from './typing';
 import { produce } from 'immer';
 import undoable from 'redux-undo';
 
@@ -25,8 +25,7 @@ export const dotActions = createAction(
 // undo redo 기능을 활용할 부분만 따로 combine
 const combineDotArt = combineReducers({
   dot: dot,
-  palette: palette,
-  palettes: palettes,
+  // palettes: palettes,
 });
 
 const combineReducer = combineReducers({
@@ -35,11 +34,13 @@ const combineReducer = combineReducers({
     // debug: true,
     ignoreInitialState: true,
   }),
-  paintTool: paintTool,
-  auth: auth,
-  dialog: dialog,
+  palettes,
+  paintTool,
+  auth,
+  dialog,
   user,
   loading,
+  typing,
 });
 
 const floodFill = (dotArt, dotId, color, rowCount, columnCount) => {
@@ -121,7 +122,7 @@ const dotActionsHandler = (
   switch (paintTool) {
     case DOT:
       if (paintToolState === 'DRAGGING') {
-        const palettes = state.dotArt.present.palettes;
+        const palettes = state.palettes;
         const { paletteId, colorId } = palettes.selectColorId;
 
         // 선택된 색상 추출
@@ -140,7 +141,7 @@ const dotActionsHandler = (
       } else return { ...state };
     case BUCKET:
       if (paintToolState === 'DRAGGING') {
-        const palettes = state.dotArt.present.palettes;
+        const palettes = state.palettes;
 
         const { paletteId, colorId } = palettes.selectColorId;
         const paletteColor = palettes.palettes.reduce(
@@ -191,16 +192,14 @@ const dotActionsHandler = (
         const dot = state.dotArt.present.dot;
         const activeIdx = dot.activeIdx;
         const dotColor = dot.dotList[activeIdx].dot[rowIdx][columnIdx];
-        const selectPaletteId =
-          state.dotArt.present.palettes.selectColorId.paletteId;
-        const selectColorId =
-          state.dotArt.present.palettes.selectColorId.colorId;
+        const selectPaletteId = state.palettes.selectColorId.paletteId;
+        const selectColorId = state.palettes.selectColorId.colorId;
 
         // 색이 없는 셀을 클릭했다면
         if (!dotColor) return { ...state };
 
         // 해당 색상이 이미 palette안에 있는지 순회
-        const palettes = state.dotArt.present.palettes.palettes;
+        const palettes = state.palettes.palettes;
         let existedColor = '';
         palettes.map((palette) =>
           palette.colors.map((color, colorIdx) =>
@@ -211,20 +210,19 @@ const dotActionsHandler = (
         );
         if (existedColor) {
           return produce(state, (draft) => {
-            draft.dotArt.present.palettes.selectColorId = existedColor;
+            draft.palettes.selectColorId = existedColor;
           });
         } else {
           if (
-            state.dotArt.present.palettes.trashCan.filter(
-              (color) => color === dotColor,
-            ).length > 0
+            state.palettes.trashCan.filter((color) => color === dotColor)
+              .length > 0
           ) {
             return { ...state };
           } else {
             return produce(state, (draft) => {
-              draft.dotArt.present.palettes.palettes.map((palette) => {
+              draft.palettes.palettes.map((palette) => {
                 if (palette.id === selectPaletteId) {
-                  draft.dotArt.present.palettes.trashCan.unshift(
+                  draft.palettes.trashCan.unshift(
                     palette.colors[selectColorId],
                   );
                   palette.colors[selectColorId] = dotColor;

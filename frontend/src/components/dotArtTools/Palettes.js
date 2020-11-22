@@ -34,6 +34,7 @@ const Palettes = ({
   handleMoveCellToTrashCan,
   handleMoveCellFromTrashCan,
   handleSelectColorCell,
+  handleSavePalettes,
 }) => {
   const [dragIdx, setDragIdx] = useState(0);
   const [dragType, setDragType] = useState('pale');
@@ -128,6 +129,7 @@ const Palettes = ({
           </DraggablePaletteBlock>
         )}
       </Droppable>
+      <button onClick={() => handleSavePalettes('test')}>save</button>
     </DragDropContext>
   );
 };

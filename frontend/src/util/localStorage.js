@@ -1,6 +1,7 @@
 import { exampleCat, examplePalette } from './json-example';
 
 const STORAGE_KEY = 'dotArt_storage';
+const STORAGE_PALETTES_KEY = 'dotArt_palettes_storage';
 
 function saveDataToStorage(storage, data) {
   try {
@@ -30,7 +31,7 @@ export function clearSavedDotArtFromStorage(storage) {
   storage.removeItem(STORAGE_KEY);
 }
 
-export function getDataFromStorage(storage) {
+export function getDotArtDataFromStorage(storage) {
   try {
     const data = storage.getItem(STORAGE_KEY);
     return data ? JSON.parse(data) : false;
@@ -39,9 +40,18 @@ export function getDataFromStorage(storage) {
   }
 }
 
+export function getPalettesDataFromStroage(storage) {
+  try {
+    const data = storage.getItem(STORAGE_PALETTES_KEY);
+    return data ? JSON.parse(data) : false;
+  } catch (e) {
+    return false;
+  }
+}
+
 export function saveDotArtToStorage(storage, dotArtData) {
   try {
-    let storageData = getDataFromStorage(storage);
+    let storageData = getDotArtDataFromStorage(storage);
     if (storageData && storageData.dotArt) {
       storageData.dotArt.push(dotArtData);
       storageData.current = storageData.dotArt.length - 1;
@@ -59,8 +69,23 @@ export function saveDotArtToStorage(storage, dotArtData) {
   }
 }
 
+export function savePalettesToStorage(storage, palettesData) {
+  try {
+    let storageData = getPalettesDataFromStroage(storage);
+    if (storageData) {
+      storageData.push(palettesData);
+    } else {
+      storageData = [palettesData];
+    }
+    storage.setItem(STORAGE_PALETTES_KEY, JSON.stringify(storageData));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 export function removeDotArtFromStorage(storage, dotArtIdx) {
-  const storageData = getDataFromStorage(storage);
+  const storageData = getDotArtDataFromStorage(storage);
   if (storageData) {
     let newCurrent = 0;
     storageData.dotArt.splice(dotArtIdx, 1);

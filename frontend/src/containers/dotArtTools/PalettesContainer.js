@@ -9,13 +9,14 @@ import {
   selectColorCell,
 } from '../../modules/palettes';
 import { useSelector, useDispatch } from 'react-redux';
+import { savePalettesToStorage } from '../../util/localStorage';
 
 const PalettesConatiner = () => {
   const dispatch = useDispatch();
-  const { palettes, trashCan, selectColorId } = useSelector(({ dotArt }) => ({
-    palettes: dotArt.present.palettes.palettes,
-    trashCan: dotArt.present.palettes.trashCan,
-    selectColorId: dotArt.present.palettes.selectColorId,
+  const { palettes, trashCan, selectColorId } = useSelector(({ palettes }) => ({
+    palettes: palettes.palettes,
+    trashCan: palettes.trashCan,
+    selectColorId: palettes.selectColorId,
   }));
 
   const handleReorderPalettes = useCallback(
@@ -61,6 +62,17 @@ const PalettesConatiner = () => {
     [dispatch],
   );
 
+  const handleSavePalettes = useCallback(
+    (palettesName) => {
+      const palettesData = {
+        palettesName: palettesName,
+        palettes: [...palettes],
+      };
+      savePalettesToStorage(localStorage, palettesData);
+    },
+    [palettes],
+  );
+
   return (
     <Palettes
       palettes={palettes}
@@ -72,6 +84,7 @@ const PalettesConatiner = () => {
       handleMoveCellToTrashCan={handleMoveCellToTrashCan}
       handleMoveCellFromTrashCan={handleMoveCellFromTrashCan}
       handleSelectColorCell={handleSelectColorCell}
+      handleSavePalettes={handleSavePalettes}
     />
   );
 };

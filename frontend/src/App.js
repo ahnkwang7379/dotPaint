@@ -4,7 +4,6 @@ import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import IndexPage from './pages/IndexPage';
-// import DotArtPage from './pages/DotArtPage';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { SnackbarProvider } from 'notistack';
@@ -32,7 +31,6 @@ const App = () => {
       >
         <BrowserRouter>
           <Switch>
-            {/* <Route component={DotArtPage} path="/" /> */}
             <Route path="/" component={IndexPage} exact />
             <Route component={LoginPage} path="/login" exact />
             <Route component={SignUpPage} path="/signup" exact />

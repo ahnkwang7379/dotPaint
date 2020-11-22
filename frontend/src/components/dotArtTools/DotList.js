@@ -2,32 +2,37 @@ import React from 'react';
 import styled from 'styled-components';
 import DotListBlock from './DotListBlock';
 import CustomButton from '../common/CustomButton';
-import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 
 const DotListDiv = styled.div`
+  min-height: 80vh;
+  max-height: 80vh;
+  width: fit-content;
   display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const ScrollCustom = styled.div`
   background: rgba(0, 0, 0, 0.3);
   border-radius: 0.5rem;
-  width: calc(100% - 40px);
+  width: auto;
+  height: 100%;
   margin: 0px 8px;
-  display: flex;
   flex-wrap: nowrap;
   overflow: auto;
-  & > * {
-    width: 72px;
-    min-width: 72px;
-    margin: 8px 0px 8px 8px;
-    height: 88px;
+  position: sticky;
+  & > *:not(:last-child) {
+    width: 80px;
+    min-width: 80px;
+    height: 96px;
   }
-  & > :last-child {
-    margin-right: 8px;
+  & > * {
+    margin: 8px;
   }
   &::-webkit-scrollbar {
-    width: 16px;
+    width: 8px;
   }
   &::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -44,7 +49,6 @@ const DotList = ({
   dotList,
   activeIdx,
   columnCount,
-  rowCount,
   handleChangeIdx,
   handleRemoveDotArt,
   handleCopyDotArt,
@@ -64,11 +68,8 @@ const DotList = ({
 
   return (
     <DotListDiv>
-      <CustomButton width="40" onClick={() => handleAddDotArt()}>
-        <AddToPhotosIcon />
-      </CustomButton>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="dotList" type="dotList" direction="horizontal">
+        <Droppable droppableId="dotList" type="dotList">
           {(provided) => (
             <ScrollCustom ref={provided.innerRef} {...provided.droppableProps}>
               {dotList &&
@@ -81,7 +82,6 @@ const DotList = ({
                       dot={dot.dot}
                       interval={dot.interval}
                       columnCount={columnCount}
-                      rowCount={rowCount}
                       handleCopyDotArt={handleCopyDotArt}
                       handleRemoveDotArt={handleRemoveDotArt}
                       handleChangeInterval={handleChangeInterval}
@@ -91,6 +91,9 @@ const DotList = ({
                   );
                 })}
               {provided.placeholder}
+              <CustomButton width="80" onClick={() => handleAddDotArt()}>
+                <AddBoxIcon />
+              </CustomButton>
             </ScrollCustom>
           )}
         </Droppable>
