@@ -6,9 +6,9 @@ const DotSizeChanger = ({ dotSize, onChange }) => {
       <span>도트 크기{dotSize}</span>
       <input
         type="range"
-        min="4"
-        max="20"
-        value={dotSize * 10}
+        min="2"
+        max="60"
+        value={dotSize}
         onChange={onChange}
         step="2"
       />

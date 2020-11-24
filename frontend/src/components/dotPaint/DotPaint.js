@@ -35,8 +35,8 @@ const DotPaintBlock = styled.div`
         props.border &&
         css`
           border: ${props.border.size}px solid ${props.border.color};
-          width: ${props.dotSize * 8}px;
-          height: ${props.dotSize * 8}px;
+          width: ${props.dotSize}px;
+          height: ${props.dotSize}px;
         `};
     }
   }

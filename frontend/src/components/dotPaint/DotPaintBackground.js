@@ -8,7 +8,7 @@ const DotPaintBackground = () => {
     columnCount: dotArt.present.dot.columnCount,
     dotSize: dotArt.present.dot.dotSize,
   }));
-  return <Preview dotSet={dot} column={columnCount} size={dotSize * 8} />;
+  return <Preview dotSet={dot} column={columnCount} size={dotSize} />;
 };
 
 export default React.memo(DotPaintBackground);

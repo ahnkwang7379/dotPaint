@@ -11,7 +11,7 @@ const DotSizeContainer = () => {
 
   const handleOnChange = useCallback(
     (e) => {
-      dispatch(changeDotSize(e.target.value / 10));
+      dispatch(changeDotSize(e.target.value));
     },
     [dispatch],
   );

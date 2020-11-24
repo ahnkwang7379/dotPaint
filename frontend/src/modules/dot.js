@@ -7,6 +7,8 @@ const NEW_DOT_ART_PROJECT = 'dot/NEW_DOT_ART_PROJECT';
 const LOAD_DOT_ART = 'dot/LOAD_DOT_ART';
 const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
 const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
+const INCREASE_DOT_SIZE = 'dot/INCREASE_DOT_SIZE';
+const DECREASE_DOT_SIZE = 'dotDECREASE_DOT_SIZE';
 const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
 const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
 const CHANGE_ACTIVE_IDX = 'dot/CHANGE_ACTIVE_IDX';
@@ -39,6 +41,8 @@ export const changeDotBorderColor = createAction(
   CHANGE_DOT_BORDER_COLOR,
   (color) => color,
 );
+export const increaseDotSize = createAction(INCREASE_DOT_SIZE);
+export const decreaseDotSize = createAction(DECREASE_DOT_SIZE);
 export const changeDotSize = createAction(
   CHANGE_DOT_SIZE,
   (dotSize) => dotSize,
@@ -71,16 +75,11 @@ export const reorderDotList = createAction(
   ({ startIdx, endIdx }) => ({ startIdx, endIdx }),
 );
 
-// const defaultDotMaker = (row, column) => {
-//   return new Array(row * column).fill('');
-// };
-
 const defaultDotMaker = (row, column) => {
   return new Array(column).fill().map(() => new Array(row).fill('#ffffff'));
 };
 
 const initialState = {
-  // ...exampleCat,
   dotList: [
     {
       id: shortid.generate(),
@@ -136,6 +135,14 @@ const dot = handleActions(
       produce(state, (draft) => {
         draft.border.color = color;
       }),
+    [INCREASE_DOT_SIZE]: (state) => ({
+      ...state,
+      dotSize: state.dotSize < 61 ? state.dotSize + 2 : state.dotSize,
+    }),
+    [DECREASE_DOT_SIZE]: (state) => ({
+      ...state,
+      dotSize: state.dotSize > 2 ? state.dotSize - 2 : state.dotSize,
+    }),
     [CHANGE_DOT_SIZE]: (state, { payload: dotSize }) => ({
       ...state,
       dotSize: dotSize,

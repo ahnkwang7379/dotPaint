@@ -8,7 +8,11 @@ import {
   ERASER,
 } from '../../modules/paintTool';
 import { ActionCreators } from 'redux-undo';
-import { changeDotArea } from '../../modules/dot';
+import {
+  changeDotArea,
+  increaseDotSize,
+  decreaseDotSize,
+} from '../../modules/dot';
 import {
   moveUpPaletteCell,
   moveDownPaletteCell,
@@ -88,6 +92,14 @@ const KeyBindings = () => {
       '$mod+ArrowUp': (event) => {
         event.preventDefault();
         onChangeArea(rowCount - 1, columnCount);
+      },
+      Minus: (event) => {
+        event.preventDefault();
+        dispatch(decreaseDotSize());
+      },
+      Equal: (event) => {
+        event.preventDefault();
+        dispatch(increaseDotSize());
       },
     };
     const unsubscribe = tinykeys(window, keyCombinations);
