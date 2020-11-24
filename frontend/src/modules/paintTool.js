@@ -8,6 +8,7 @@ export const ERASER = 'ERASER';
 
 const CHANGE_PAINT_TOOL = 'paintTool/CHANGE_PAINT_TOOL';
 const CHANGE_PAINT_STATE = 'paintTool/CHANGE_PAINT_STATE';
+const SET_DIRECTION = 'paintTool/SET_DIRECTION';
 
 export const changePaintTool = createAction(
   CHANGE_PAINT_TOOL,
@@ -17,24 +18,30 @@ export const changePaintState = createAction(
   CHANGE_PAINT_STATE,
   (paintState) => paintState,
 );
+export const setDirection = createAction(
+  SET_DIRECTION,
+  (direction) => direction,
+);
 
 const initialState = {
   selectedPaintTool: DOT,
   paintState: 'IDLE',
+  direction: 'LEFT',
 };
 
 const paintTool = handleActions(
   {
     [CHANGE_PAINT_TOOL]: (state, { payload: paintTool }) => ({
       ...state,
-      // 같은걸 누르면 기본인 DOT로 바뀌게
-      // selectedPaintTool:
-      //   state.selectedPaintTool === paintTool ? DOT : paintTool,
       selectedPaintTool: paintTool,
     }),
     [CHANGE_PAINT_STATE]: (state, { payload: paintState }) => ({
       ...state,
       paintState: paintState,
+    }),
+    [SET_DIRECTION]: (state, { payload: direction }) => ({
+      ...state,
+      direction: direction,
     }),
   },
   initialState,

@@ -8,6 +8,8 @@ const PaletteCell = ({
   cellIdx,
   selected,
   handleSelectColorCell,
+  handleSelectLeftColor,
+  handleSelectRightColor,
 }) => {
   return (
     <Draggable
@@ -19,11 +21,14 @@ const PaletteCell = ({
         <ColorCell
           color={color}
           selected={selected}
-          // ref={provided.innerRef}
           innerRef={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          onClick={() => handleSelectColorCell(paletteId, cellIdx)}
+          // onClick={() => handleSelectColorCell(paletteId, cellIdx)}
+          onClick={() => handleSelectLeftColor(paletteId, cellIdx, color)}
+          onContextMenu={(e) =>
+            handleSelectRightColor(e, paletteId, cellIdx, color)
+          }
         />
       )}
     </Draggable>

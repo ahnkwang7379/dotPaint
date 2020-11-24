@@ -24,7 +24,7 @@ const DivBlock = ({
       onMouseDown={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}
       onMouseOver={(e) => onMouseOverHandler(e, rowIdx, columnIdx)}
       onMouseUp={(e) => onMouseUpHandler(e)}
-      // onTouchStart={(e) => onMouseDownHandler(e, dotIdx)}
+      // onTouchStart={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}
       // onTouchMove={(e) => onTouchMoveHandler(e, dotIdx)}
     />
   );

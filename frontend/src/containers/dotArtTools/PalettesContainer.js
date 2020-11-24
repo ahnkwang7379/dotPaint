@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import Palettes from '../../components/dotArtTools/Palettes';
 import {
+  selectLeftColor,
+  selectRightColor,
   reorderPalettes,
   reorderPaletteCell,
   movePaletteToTrashCan,
@@ -62,6 +64,20 @@ const PalettesConatiner = () => {
     [dispatch],
   );
 
+  const handleSelectLeftColor = useCallback(
+    (paletteId, selectIdx, color) =>
+      dispatch(selectLeftColor({ paletteId, selectIdx, color })),
+    [dispatch],
+  );
+
+  const handleSelectRightColor = useCallback(
+    (event, paletteId, selectIdx, color) => {
+      event.preventDefault();
+      dispatch(selectRightColor({ paletteId, selectIdx, color }));
+    },
+    [dispatch],
+  );
+
   const handleSavePalettes = useCallback(
     (palettesName) => {
       const palettesData = {
@@ -78,6 +94,8 @@ const PalettesConatiner = () => {
       palettes={palettes}
       trashCan={trashCan}
       selectColorId={selectColorId}
+      handleSelectLeftColor={handleSelectLeftColor}
+      handleSelectRightColor={handleSelectRightColor}
       handleReorderPalettes={handleReorderPalettes}
       handleReorderCell={handleReorderCell}
       handleMovePaletteToTrashCan={handleMovePaletteToTrashCan}

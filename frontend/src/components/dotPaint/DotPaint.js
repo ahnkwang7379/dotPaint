@@ -47,11 +47,13 @@ const DotPaint = ({
   dotSize,
   rowCount,
   onChangePaintState,
+  onSetDirection,
   onDotActionHandle,
 }) => {
   const onMouseDownHandler = useCallback(
     (e, rowIdx, columnIdx) => {
       e.preventDefault();
+      onSetDirection(e.button === 0 ? 'LEFT' : 'RIGHT');
       onChangePaintState('DRAGGING');
       onDotActionHandle(rowIdx, columnIdx);
     },
@@ -108,7 +110,7 @@ const DotPaint = ({
       onMouseUp={(e) => onMouseUpHandler(e)}
       // onTouchStart={(e) => onTouchStartHandler(e)}
       // onTouchMove={(e) => onTouchMoveHandler(e)}
-      onTouchEnd={(e) => onMouseUpHandler(e)}
+      // onTouchEnd={(e) => onMouseUpHandler(e)}
     >
       <DotPaintBlock dotSize={dotSize} border={border}>
         <DotPaintBackground />

@@ -28,6 +28,8 @@ const Palettes = ({
   palettes,
   trashCan,
   selectColorId,
+  handleSelectLeftColor,
+  handleSelectRightColor,
   handleReorderPalettes,
   handleReorderCell,
   handleMovePaletteToTrashCan,
@@ -123,6 +125,8 @@ const Palettes = ({
                 dragIdx={dragIdx}
                 selectColorId={selectColorId}
                 handleSelectColorCell={handleSelectColorCell}
+                handleSelectLeftColor={handleSelectLeftColor}
+                handleSelectRightColor={handleSelectRightColor}
               />
             ))}
             {provided.placeholder}

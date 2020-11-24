@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import DotPaint from '../components/dotPaint/DotPaint';
 import { useSelector, useDispatch } from 'react-redux';
-import { changePaintState } from '../modules/paintTool';
+import { changePaintState, setDirection } from '../modules/paintTool';
 import { dotActions } from '../modules/index';
 
 const DotpaintContainer = () => {
@@ -15,7 +15,7 @@ const DotpaintContainer = () => {
   ); // prettier-ignore
 
   const onChangePaintState = useCallback(
-    (paintState) => dispatch(changePaintState(paintState)),
+    (paintState, direct) => dispatch(changePaintState(paintState, direct)),
     [dispatch],
   );
 
@@ -30,6 +30,11 @@ const DotpaintContainer = () => {
     [dispatch],
   );
 
+  const onSetDirection = useCallback(
+    (direction) => dispatch(setDirection(direction)),
+    [dispatch],
+  );
+
   return (
     <DotPaint
       border={border}
@@ -37,6 +42,7 @@ const DotpaintContainer = () => {
       rowCount={rowCount}
       onChangePaintState={onChangePaintState}
       onDotActionHandle={onDotActionHandle}
+      onSetDirection={onSetDirection}
     />
   );
 };

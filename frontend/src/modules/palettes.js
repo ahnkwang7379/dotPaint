@@ -3,6 +3,8 @@ import { produce } from 'immer';
 import { examplePalette } from '../util/json-example';
 
 const LOAD_PALETTES = 'palettes/LOAD_PALETTES';
+const SELECT_LEFT_COLOR = 'palettes/SELECT_LEFT_COLOR';
+const SELECT_RIGHT_COLOR = 'palettes/SELECT_RIGHT_COLOR';
 const REORDER_PALETTES = 'palettes/REDORDER_PALETTES';
 const REORDER_PALETTE_CELL = 'palettes/REORDER_PALETTE_CELL';
 const MOVE_PALETTE_TO_TRASH_CAN = 'palettes/MOVE_PALETTE_TO_TRASH_CAN';
@@ -18,6 +20,14 @@ const MOVE_RIGHT_PALETTE_CELL = 'palettes/MOVE_RIGHT_PALETTE_CELL';
 export const loadPalettes = createAction(
   LOAD_PALETTES,
   (loadedData) => loadedData,
+);
+export const selectLeftColor = createAction(
+  SELECT_LEFT_COLOR,
+  ({ paletteId, selectIdx, color }) => ({ paletteId, selectIdx, color }),
+);
+export const selectRightColor = createAction(
+  SELECT_RIGHT_COLOR,
+  ({ paletteId, selectIdx, color }) => ({ paletteId, selectIdx, color }),
 );
 export const reorderPalettes = createAction(
   REORDER_PALETTES,
@@ -63,6 +73,8 @@ const initialState = {
     paletteId: examplePalette[0]['id'],
     colorId: 0,
   },
+  leftColor: '',
+  rightColor: '',
   trashCan: [],
 };
 
@@ -83,6 +95,20 @@ const palettes = handleActions(
         paletteId: loadedData[0]['id'],
         colorId: 0,
       },
+    }),
+    [SELECT_LEFT_COLOR]: (
+      state,
+      { payload: { paletteId, selectIdx, color } },
+    ) => ({
+      ...state,
+      leftColor: color,
+    }),
+    [SELECT_RIGHT_COLOR]: (
+      state,
+      { payload: { paletteId, selectIdx, color } },
+    ) => ({
+      ...state,
+      rightColor: color,
     }),
     [REORDER_PALETTES]: (state, { payload: { startIdx, endIdx } }) =>
       produce(state, (draft) => {

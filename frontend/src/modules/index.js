@@ -114,6 +114,7 @@ const dotActionsHandler = (
   state,
   paintTool,
   paintToolState,
+  direction,
   rowIdx,
   columnIdx,
 ) => {
@@ -122,15 +123,10 @@ const dotActionsHandler = (
   switch (paintTool) {
     case DOT:
       if (paintToolState === 'DRAGGING') {
-        const palettes = state.palettes;
-        const { paletteId, colorId } = palettes.selectColorId;
-
-        // 선택된 색상 추출
-        const color = palettes.palettes.reduce(
-          (acc, palette) =>
-            palette.id === paletteId ? palette.colors[colorId] : acc,
-          [],
-        );
+        const color =
+          direction === 'LEFT'
+            ? state.palettes.leftColor
+            : state.palettes.rightColor;
 
         const activeIdx = state.dotArt.present.dot.activeIdx;
         return produce(state, (draft) => {
@@ -141,14 +137,10 @@ const dotActionsHandler = (
       } else return { ...state };
     case BUCKET:
       if (paintToolState === 'DRAGGING') {
-        const palettes = state.palettes;
-
-        const { paletteId, colorId } = palettes.selectColorId;
-        const paletteColor = palettes.palettes.reduce(
-          (acc, palette) =>
-            palette.id === paletteId ? palette.colors[colorId] : acc,
-          [],
-        );
+        const paletteColor =
+          direction === 'LEFT'
+            ? state.palettes.leftColor
+            : state.palettes.rightColor;
 
         const dot = state.dotArt.present.dot;
         const activeIdx = dot.activeIdx;
@@ -211,15 +203,26 @@ const dotActionsHandler = (
         if (existedColor) {
           return produce(state, (draft) => {
             draft.palettes.selectColorId = existedColor;
+            direction === 'LEFT'
+              ? (draft.palettes.leftColor = dotColor)
+              : (draft.palettes.rightColor = dotColor);
           });
         } else {
           if (
             state.palettes.trashCan.filter((color) => color === dotColor)
               .length > 0
           ) {
-            return { ...state };
+            return produce(state, (draft) => {
+              direction === 'LEFT'
+                ? (draft.palettes.leftColor = dotColor)
+                : (draft.palettes.rightColor = dotColor);
+            });
           } else {
             return produce(state, (draft) => {
+              direction === 'LEFT'
+                ? (draft.palettes.leftColor = dotColor)
+                : (draft.palettes.rightColor = dotColor);
+
               draft.palettes.palettes.map((palette) => {
                 if (palette.id === selectPaletteId) {
                   draft.palettes.trashCan.unshift(
@@ -255,6 +258,7 @@ const crossSilceReducer = handleActions(
         state,
         state.paintTool.selectedPaintTool,
         state.paintTool.paintState,
+        state.paintTool.direction,
         rowIdx,
         columnIdx,
       ),

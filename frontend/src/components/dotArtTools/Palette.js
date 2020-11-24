@@ -51,6 +51,8 @@ const Palette = ({
   dragIdx,
   selectColorId,
   handleSelectColorCell,
+  handleSelectLeftColor,
+  handleSelectRightColor,
 }) => {
   return (
     <Draggable key={palette.id} draggableId={`pale-${palette.id}`} index={idx}>
@@ -91,6 +93,8 @@ const Palette = ({
                       selectColorId.colorId === cellIdx
                     }
                     handleSelectColorCell={handleSelectColorCell}
+                    handleSelectLeftColor={handleSelectLeftColor}
+                    handleSelectRightColor={handleSelectRightColor}
                   />
                 ))}
                 {provided.placeholder}
