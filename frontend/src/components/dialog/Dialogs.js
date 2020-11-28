@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PreviewDialogContainer from '../../containers/dialog/PreviewDialogContainer';
 import LoadDialogContainer from '../../containers/dialog/LoadDialogContainer';
 import DownLoadDialogContainer from '../../containers/dialog/DownLoadDialogContainer';
+import KeyBindDialogConainter from '../../containers/dialog/KeyBindDialogContainer';
 import { useSelector } from 'react-redux';
 import MuiDialog from '@material-ui/core/Dialog';
 
@@ -74,6 +75,10 @@ const Dialogs = ({ dialogType, open, handleCloseDialog }) => {
                       dialogType={dialogType}
                     />
                   );
+                case 'Palettes':
+                  return <div>a</div>;
+                case 'KeyBind':
+                  return <KeyBindDialogConainter />;
                 default:
                   return null;
               }

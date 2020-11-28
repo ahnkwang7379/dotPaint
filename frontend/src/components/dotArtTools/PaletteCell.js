@@ -26,9 +26,7 @@ const PaletteCell = ({
           {...provided.dragHandleProps}
           // onClick={() => handleSelectColorCell(paletteId, cellIdx)}
           onClick={() => handleSelectLeftColor(paletteId, cellIdx, color)}
-          onContextMenu={(e) =>
-            handleSelectRightColor(e, paletteId, cellIdx, color)
-          }
+          onContextMenu={(e) => handleSelectRightColor(e, color)}
         />
       )}
     </Draggable>

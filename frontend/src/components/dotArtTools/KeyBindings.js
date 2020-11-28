@@ -9,106 +9,110 @@ import {
 } from '../../modules/paintTool';
 import { ActionCreators } from 'redux-undo';
 import {
-  changeDotArea,
+  increaseColumn,
+  decreaseColumn,
+  increaseRow,
+  decreaseRow,
   increaseDotSize,
   decreaseDotSize,
 } from '../../modules/dot';
 import {
+  swapLeftRightColor,
   moveUpPaletteCell,
   moveDownPaletteCell,
   moveLeftPaletteCell,
   moveRightPaletteCell,
 } from '../../modules/palettes';
+import { TiKeyboard } from 'react-icons/ti';
+import styled from 'styled-components';
 import tinykeys from 'tinykeys';
 
-const KeyBindings = () => {
+const Button = styled.div`
+  border: 3px solid #6e6e6e;
+  color: #6e6e6e;
+  border-radius: 5px;
+  width: 3rem;
+  height: 3rem;
+  text-align: center;
+
+  &:hover {
+    color: #87ceeb;
+    border: 3px solid #87ceeb;
+  }
+`;
+
+const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
   const dispatch = useDispatch();
-  const { columnCount, rowCount } = useSelector(({ dotArt }) => ({
-    columnCount: dotArt.present.dot.columnCount,
-    rowCount: dotArt.present.dot.rowCount,
-  }));
-  const onChangeArea = useCallback(
-    (row, column) => {
-      dispatch(
-        changeDotArea({ newRow: parseInt(row), newColumn: parseInt(column) }),
-      );
-    },
-    [dispatch],
-  );
+
   useEffect(() => {
-    const keyCombinations = {
-      '$mod+KeyZ': (event) => {
-        event.preventDefault();
-        dispatch(ActionCreators.undo());
-      },
-      '$mod+Shift+KeyZ': (event) => {
-        event.preventDefault();
-        dispatch(ActionCreators.redo());
-      },
-      KeyW: (event) => {
-        event.preventDefault();
-        dispatch(moveUpPaletteCell());
-      },
-      KeyS: (event) => {
-        event.preventDefault();
-        dispatch(moveDownPaletteCell());
-      },
-      KeyA: (event) => {
-        event.preventDefault();
-        dispatch(moveLeftPaletteCell());
-      },
-      KeyD: (event) => {
-        event.preventDefault();
-        dispatch(moveRightPaletteCell());
-      },
-      KeyQ: (event) => {
-        event.preventDefault();
-        dispatch(changePaintTool(DOT));
-      },
-      KeyB: (event) => {
-        event.preventDefault();
-        dispatch(changePaintTool(BUCKET));
-      },
-      KeyP: (event) => {
-        event.preventDefault();
-        dispatch(changePaintTool(PICKER));
-      },
-      KeyE: (event) => {
-        event.preventDefault();
-        dispatch(changePaintTool(ERASER));
-      },
-      '$mod+ArrowRight': (event) => {
-        event.preventDefault();
-        onChangeArea(rowCount, columnCount + 1);
-      },
-      '$mod+ArrowLeft': (event) => {
-        event.preventDefault();
-        onChangeArea(rowCount, columnCount - 1);
-      },
-      '$mod+ArrowDown': (event) => {
-        event.preventDefault();
-        onChangeArea(rowCount + 1, columnCount);
-      },
-      '$mod+ArrowUp': (event) => {
-        event.preventDefault();
-        onChangeArea(rowCount - 1, columnCount);
-      },
-      Minus: (event) => {
-        event.preventDefault();
-        dispatch(decreaseDotSize());
-      },
-      Equal: (event) => {
-        event.preventDefault();
-        dispatch(increaseDotSize());
-      },
+    let keyCombinations = {};
+
+    function keyCombinationMaker(keySet) {
+      keySet.map((keyData) => {
+        keyCombinations[keyData.code] = (event) => {
+          event.preventDefault();
+          keybindActionMaker(keyData.action);
+        };
+      });
+    }
+    keyCombinationMaker(keySet);
+
+    const keybindActionMaker = (action) => {
+      switch (action) {
+        case 'UNDO':
+          return dispatch(ActionCreators.undo());
+        case 'REDO':
+          return dispatch(ActionCreators.redo());
+        case 'SWAP':
+          return dispatch(swapLeftRightColor());
+        case 'PALETTE_UP':
+          return dispatch(moveUpPaletteCell());
+        case 'PALETTE_DOWN':
+          return dispatch(moveDownPaletteCell());
+        case 'PALETTE_LEFT':
+          return dispatch(moveLeftPaletteCell());
+        case 'PALETTE_RIGHT':
+          return dispatch(moveRightPaletteCell());
+        case 'DOT':
+          return dispatch(changePaintTool(DOT));
+        case 'BUCKET':
+          return dispatch(changePaintTool(BUCKET));
+        case 'PIKCER':
+          return dispatch(changePaintTool(PICKER));
+        case 'ERASER':
+          return dispatch(changePaintTool(ERASER));
+        case 'INCREASE_COLUMN':
+          return dispatch(increaseColumn());
+        case 'DECREASE_COLUMN':
+          return dispatch(decreaseColumn());
+        case 'INCREASE_ROW':
+          return dispatch(increaseRow());
+        case 'DECREASE_ROW':
+          return dispatch(decreaseRow());
+        case 'INCREASE_DOTSIZE':
+          return dispatch(increaseDotSize());
+        case 'DECREASE_DOTSIZE':
+          return dispatch(decreaseDotSize());
+        default:
+          return console.log('bind error');
+      }
     };
+
     const unsubscribe = tinykeys(window, keyCombinations);
+
+    if (isTyping) {
+      unsubscribe();
+    }
 
     return () => {
       unsubscribe();
     };
-  });
-  return <div />;
+  }, [isTyping, keySet]);
+  return (
+    <Button>
+      <TiKeyboard size="2.5rem" onClick={openKeyBindDialog} />
+    </Button>
+  );
 };
 
 export default KeyBindings;

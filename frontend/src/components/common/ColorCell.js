@@ -16,6 +16,7 @@ const Cell = styled.div`
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
   border-right: solid 3px
     ${(props) => (props.selected ? selectBorder : defaultBorder)};
+  outline: none;
 
   :before,
   :after {

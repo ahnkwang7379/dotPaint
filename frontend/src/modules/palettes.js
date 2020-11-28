@@ -5,6 +5,7 @@ import { examplePalette } from '../util/json-example';
 const LOAD_PALETTES = 'palettes/LOAD_PALETTES';
 const SELECT_LEFT_COLOR = 'palettes/SELECT_LEFT_COLOR';
 const SELECT_RIGHT_COLOR = 'palettes/SELECT_RIGHT_COLOR';
+const SWAP_LEFT_RIGHT_COLOR = 'palettes/SWAP_LEFT_RIGHT_COLOR';
 const REORDER_PALETTES = 'palettes/REDORDER_PALETTES';
 const REORDER_PALETTE_CELL = 'palettes/REORDER_PALETTE_CELL';
 const MOVE_PALETTE_TO_TRASH_CAN = 'palettes/MOVE_PALETTE_TO_TRASH_CAN';
@@ -23,12 +24,13 @@ export const loadPalettes = createAction(
 );
 export const selectLeftColor = createAction(
   SELECT_LEFT_COLOR,
-  ({ paletteId, selectIdx, color }) => ({ paletteId, selectIdx, color }),
+  ({ color, paletteId, selectIdx }) => ({ color, paletteId, selectIdx }),
 );
 export const selectRightColor = createAction(
   SELECT_RIGHT_COLOR,
-  ({ paletteId, selectIdx, color }) => ({ paletteId, selectIdx, color }),
+  ({ color }) => ({ color }),
 );
+export const swapLeftRightColor = createAction(SWAP_LEFT_RIGHT_COLOR);
 export const reorderPalettes = createAction(
   REORDER_PALETTES,
   ({ startIdx, endIdx }) => ({
@@ -73,8 +75,8 @@ const initialState = {
     paletteId: examplePalette[0]['id'],
     colorId: 0,
   },
-  leftColor: '',
-  rightColor: '',
+  leftColor: '#000000',
+  rightColor: '#ffffff',
   trashCan: [],
 };
 
@@ -98,17 +100,23 @@ const palettes = handleActions(
     }),
     [SELECT_LEFT_COLOR]: (
       state,
-      { payload: { paletteId, selectIdx, color } },
+      { payload: { color, paletteId, selectIdx } },
     ) => ({
       ...state,
       leftColor: color,
+      selectColorId: {
+        paletteId: paletteId,
+        colorId: selectIdx,
+      },
     }),
-    [SELECT_RIGHT_COLOR]: (
-      state,
-      { payload: { paletteId, selectIdx, color } },
-    ) => ({
+    [SELECT_RIGHT_COLOR]: (state, { payload: { color } }) => ({
       ...state,
       rightColor: color,
+    }),
+    [SWAP_LEFT_RIGHT_COLOR]: (state) => ({
+      ...state,
+      leftColor: state.rightColor,
+      rightColor: state.leftColor,
     }),
     [REORDER_PALETTES]: (state, { payload: { startIdx, endIdx } }) =>
       produce(state, (draft) => {
@@ -250,6 +258,10 @@ const palettes = handleActions(
             };
           }
         }
+        // Left Color setting
+        draft.leftColor = draft.palettes
+          .filter((palette) => palette.id === draft.selectColorId.paletteId)
+          .map((palette) => palette.colors[draft.selectColorId.colorId]);
       }),
     [MOVE_DOWN_PALETTE_CELL]: (state) =>
       produce(state, (draft) => {
@@ -277,17 +289,36 @@ const palettes = handleActions(
             };
           }
         }
+        // Left Color setting
+        draft.leftColor = draft.palettes
+          .filter((palette) => palette.id === draft.selectColorId.paletteId)
+          .map((palette) => palette.colors[draft.selectColorId.colorId]);
       }),
-    [MOVE_LEFT_PALETTE_CELL]: (state) => ({
-      ...state,
-      selectColorId: {
-        paletteId: state.selectColorId.paletteId,
-        colorId:
-          state.selectColorId.colorId <= 0
-            ? state.selectColorId.colorId
-            : state.selectColorId.colorId - 1,
-      },
-    }),
+    // [MOVE_LEFT_PALETTE_CELL]: (state) => ({
+    //   ...state,
+    //   selectColorId: {
+    //     paletteId: state.selectColorId.paletteId,
+    //     colorId:
+    //       state.selectColorId.colorId <= 0
+    //         ? state.selectColorId.colorId
+    //         : state.selectColorId.colorId - 1,
+    //   },
+    // }),
+    [MOVE_LEFT_PALETTE_CELL]: (state) =>
+      produce(state, (draft) => {
+        draft.selectColorId = {
+          paletteId: draft.selectColorId.paletteId,
+          colorId:
+            draft.selectColorId.colorId <= 0
+              ? draft.selectColorId.colorId
+              : draft.selectColorId.colorId - 1,
+        };
+
+        // Left Color setting
+        draft.leftColor = draft.palettes
+          .filter((palette) => palette.id === draft.selectColorId.paletteId)
+          .map((palette) => palette.colors[draft.selectColorId.colorId]);
+      }),
     [MOVE_RIGHT_PALETTE_CELL]: (state) =>
       produce(state, (draft) => {
         const paletteId = draft.selectColorId.paletteId;
@@ -297,6 +328,10 @@ const palettes = handleActions(
         if (selectPalette.colors.length - 1 > draft.selectColorId.colorId) {
           draft.selectColorId.colorId++;
         }
+        // Left Color setting
+        draft.leftColor = draft.palettes
+          .filter((palette) => palette.id === draft.selectColorId.paletteId)
+          .map((palette) => palette.colors[draft.selectColorId.colorId]);
       }),
   },
   initialState,

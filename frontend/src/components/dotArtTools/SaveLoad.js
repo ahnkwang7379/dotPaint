@@ -41,7 +41,7 @@ const SaveLoad = ({ newProjectHandler, saveHandler, dialogOpenHandler }) => {
       <CustomButton onClick={() => dialogOpenHandler('DownLoad')}>
         Down
       </CustomButton>
-      <CustomButton onClick={() => dialogOpenHandler('Css')}>Test</CustomButton>
+      <CustomButton onClick={() => dialogOpenHandler('Css')}>Css</CustomButton>
     </SaveLoadBlock>
   );
 };

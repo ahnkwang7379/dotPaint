@@ -8,8 +8,12 @@ const LOAD_DOT_ART = 'dot/LOAD_DOT_ART';
 const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
 const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
 const INCREASE_DOT_SIZE = 'dot/INCREASE_DOT_SIZE';
-const DECREASE_DOT_SIZE = 'dotDECREASE_DOT_SIZE';
+const DECREASE_DOT_SIZE = 'dot/DECREASE_DOT_SIZE';
 const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
+const INCREASE_COLUMN = 'dot/INCREASE_COLUMN';
+const DECREASE_COLUMN = 'dot/DECREASE_COLUMN';
+const INCREASE_ROW = 'dot/INCREASE_ROW';
+const DECREASE_ROW = 'dot/DECREASE_ROW';
 const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
 const CHANGE_ACTIVE_IDX = 'dot/CHANGE_ACTIVE_IDX';
 const REMOVE_ACTIVE_DOT_ART = 'dot/REMOVE_ACTIVE_DOT_ART';
@@ -23,7 +27,7 @@ const REORDER_DOT_LIST = 'dot/REORDER_DOT_LIST';
 // initialState
 export const INITIAL_ROW = 8;
 export const INITIAL_COLUMN = 8;
-export const INITIAL_DOT_DOTSIZE = 1;
+export const INITIAL_DOT_DOTSIZE = 16;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
 
@@ -47,6 +51,10 @@ export const changeDotSize = createAction(
   CHANGE_DOT_SIZE,
   (dotSize) => dotSize,
 );
+export const increaseColumn = createAction(INCREASE_COLUMN);
+export const decreaseColumn = createAction(DECREASE_COLUMN);
+export const increaseRow = createAction(INCREASE_ROW);
+export const decreaseRow = createAction(DECREASE_ROW);
 export const changeDotArea = createAction(
   CHANGE_DOT_AREA,
   ({ newRow, newColumn }) => ({ newRow, newColumn }),
@@ -76,7 +84,7 @@ export const reorderDotList = createAction(
 );
 
 const defaultDotMaker = (row, column) => {
-  return new Array(column).fill().map(() => new Array(row).fill('#ffffff'));
+  return new Array(column).fill().map(() => new Array(row).fill(''));
 };
 
 const initialState = {
@@ -146,6 +154,23 @@ const dot = handleActions(
     [CHANGE_DOT_SIZE]: (state, { payload: dotSize }) => ({
       ...state,
       dotSize: dotSize,
+    }),
+    [INCREASE_COLUMN]: (state) => ({
+      ...state,
+      columnCount: state.columnCount + 1,
+    }),
+    [DECREASE_COLUMN]: (state) => ({
+      ...state,
+      columnCount:
+        state.columnCount > 2 ? state.columnCount - 1 : state.columnCount,
+    }),
+    [INCREASE_ROW]: (state) => ({
+      ...state,
+      rowCount: state.rowCount + 1,
+    }),
+    [DECREASE_ROW]: (state) => ({
+      ...state,
+      rowCount: state.rowCount > 2 ? state.rowCount - 1 : state.rowCount,
     }),
     [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
       produce(state, (draft) => {

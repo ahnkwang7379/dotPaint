@@ -71,9 +71,9 @@ const PalettesConatiner = () => {
   );
 
   const handleSelectRightColor = useCallback(
-    (event, paletteId, selectIdx, color) => {
+    (event, color) => {
       event.preventDefault();
-      dispatch(selectRightColor({ paletteId, selectIdx, color }));
+      dispatch(selectRightColor({ color }));
     },
     [dispatch],
   );

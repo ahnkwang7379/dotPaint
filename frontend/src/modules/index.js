@@ -9,6 +9,7 @@ import user, { userSaga } from './user';
 import palettes from './palettes';
 import dialog from './dialog';
 import typing from './typing';
+import keybind from './keybind';
 import { produce } from 'immer';
 import undoable from 'redux-undo';
 
@@ -41,6 +42,7 @@ const combineReducer = combineReducers({
   user,
   loading,
   typing,
+  keybind,
 });
 
 const floodFill = (dotArt, dotId, color, rowCount, columnCount) => {

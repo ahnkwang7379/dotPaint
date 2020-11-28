@@ -57,7 +57,7 @@ const DotPaint = ({
       onChangePaintState('DRAGGING');
       onDotActionHandle(rowIdx, columnIdx);
     },
-    [onChangePaintState, onDotActionHandle],
+    [onChangePaintState, onDotActionHandle, onSetDirection],
   );
   const onMouseUpHandler = useCallback(
     (e) => {
@@ -120,4 +120,4 @@ const DotPaint = ({
   );
 };
 
-export default DotPaint;
+export default React.memo(DotPaint);

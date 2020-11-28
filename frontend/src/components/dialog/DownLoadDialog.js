@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Preview from '../common/Preview';
 import CustomButton from '../common/CustomButton';
 import styled from 'styled-components';
 import {
-  generateAnimationCSSData,
-  generatePixelDrawCss,
+  getCssImageClassOutput,
+  exportAnimationData,
 } from '../../util/cssParser';
+import { useSnackbar } from 'notistack';
 
 const Wrapper = styled.div`
   display: flex;
@@ -44,9 +45,35 @@ const PreviewBlock = styled.div.attrs(
   margin-bottom: 8px;
 `;
 
+const CssDiv = styled.div`
+  width: 100%;
+`;
+
+const CssTextArea = styled.textarea`
+  margin-top: 0.5em;
+  width: 100%;
+  padding: 1em 0.5em 0;
+  text-align: left;
+  display: block;
+  resize: none;
+  height: 20em;
+  background: #089cd9;
+  font-weight: bold;
+  font-size: 15px;
+  color: white;
+`;
+
 const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [dialog, setDialog] = useState('');
   const [type, setType] = useState('single');
+  const textAreaRef = useRef(null);
+  const copyToClipboard = (e) => {
+    textAreaRef.current.select();
+    document.execCommand('copy');
+    e.target.focus();
+    enqueueSnackbar('Copy Success!', { variant: 'success' });
+  };
   const {
     dotList,
     columnCount,
@@ -57,7 +84,6 @@ const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
   } = dot;
   useEffect(() => {
     setDialog(dialogType);
-    console.log(generateAnimationCSSData(dotList, columnCount, pixelSize));
   }, [dialogType]);
   return (
     <Wrapper>
@@ -107,21 +133,24 @@ const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
         </CustomButton>
       )}
       {dialog === 'Css' && (
-        <textarea
-          width="500px"
-          hieght="500px"
-          value={
-            type === 'single'
-              ? generatePixelDrawCss(
-                  dotList[activeIdx].dot,
-                  columnCount,
-                  pixelSize,
-                  'string',
-                )
-              : generateAnimationCSSData(dotList, columnCount, pixelSize)
-          }
-          readOnly
-        />
+        <CssDiv>
+          <CustomButton width="240" height="40" onClick={copyToClipboard}>
+            Copy To ClipBoard
+          </CustomButton>
+          <CssTextArea
+            ref={textAreaRef}
+            value={
+              type === 'single'
+                ? getCssImageClassOutput(
+                    dotList[activeIdx].dot,
+                    columnCount,
+                    pixelSize,
+                  )
+                : exportAnimationData(dotList, columnCount, pixelSize)
+            }
+            readOnly
+          />
+        </CssDiv>
       )}
     </Wrapper>
   );
