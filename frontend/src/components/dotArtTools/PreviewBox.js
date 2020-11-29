@@ -5,13 +5,15 @@ import styled from 'styled-components';
 
 const PreviewBlock = styled.div`
   margin-top: 5px;
-  width: ${(props) =>
+  /* width: ${(props) =>
     props.zoomIn ? `${props.columnCount * 6}px` : `${props.columnCount * 3}px`};
   height: ${(props) =>
-    props.zoomIn ? `${props.rowCount * 6}px` : `${props.rowCount * 3}px`};
-  /* overflow: auto; */
-  max-width: 300px;
-  max-height: 300px;
+    props.zoomIn ? `${props.rowCount * 6}px` : `${props.rowCount * 3}px`}; */
+  /* max-width: 300px;
+  max-height: 300px; */
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
 `;
 
 const PreviewBox = ({ zoomIn, animation, animationDuration }) => {

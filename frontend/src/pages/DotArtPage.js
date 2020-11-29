@@ -19,13 +19,30 @@ const MainWrapper = styled.div`
 `;
 
 const LeftToolBox = styled.div`
+  position: sticky;
+  left: 0px;
+  width: 150px;
   & > * {
     margin: 8px 0px;
     max-width: 240px;
   }
 `;
 
+const DotPaintBox = styled.div`
+  width: 100%;
+  max-width: 100%;
+  height: 90vh;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: scroll;
+  background: gray;
+  padding: 16px;
+`;
+
 const RightToolBox = styled.div`
+  position: sticky;
   & > * {
     margin: 8px 0px;
     max-width: 240px;
@@ -37,22 +54,24 @@ const DotArtPage = () => {
     <React.Fragment>
       <DialogContainer />
       <MainWrapper>
-        <DotListContainer />
         <LeftToolBox>
           <SaveLoadContainer />
           <PaintToolContainer />
           <UndoRedoContainer />
-          <PalettesContainer />
-        </LeftToolBox>
-        <RightToolBox>
           <DotBorderContainer />
           <DotSizeContainer />
           <DotAreaContainer />
-          <PreViewContainer />
           <PaintColorContainer />
+        </LeftToolBox>
+        <DotListContainer />
+        <DotPaintBox>
+          <DotPaintContainer />
+        </DotPaintBox>
+        <RightToolBox>
+          <PreViewContainer />
+          <PalettesContainer />
         </RightToolBox>
       </MainWrapper>
-      <DotPaintContainer />
       <KeyBingingsContainer />
     </React.Fragment>
   );

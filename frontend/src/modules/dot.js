@@ -155,23 +155,38 @@ const dot = handleActions(
       ...state,
       dotSize: dotSize,
     }),
-    [INCREASE_COLUMN]: (state) => ({
-      ...state,
-      columnCount: state.columnCount + 1,
-    }),
-    [DECREASE_COLUMN]: (state) => ({
-      ...state,
-      columnCount:
-        state.columnCount > 2 ? state.columnCount - 1 : state.columnCount,
-    }),
-    [INCREASE_ROW]: (state) => ({
-      ...state,
-      rowCount: state.rowCount + 1,
-    }),
-    [DECREASE_ROW]: (state) => ({
-      ...state,
-      rowCount: state.rowCount > 2 ? state.rowCount - 1 : state.rowCount,
-    }),
+    [INCREASE_COLUMN]: (state) =>
+      produce(state, (draft) => {
+        draft.columnCount++;
+        for (let i = 0; i < draft.dotList.length; i++) {
+          draft.dotList[i].dot.map((column) => column.push(''));
+        }
+      }),
+    [DECREASE_COLUMN]: (state) =>
+      produce(state, (draft) => {
+        if (draft.columnCount > 2) {
+          draft.columnCount--;
+          for (let i = 0; i < draft.dotList.length; i++) {
+            draft.dotList[i].dot.map((column) => column.pop());
+          }
+        }
+      }),
+    [INCREASE_ROW]: (state) =>
+      produce(state, (draft) => {
+        draft.rowCount++;
+        for (let i = 0; i < draft.dotList.length; i++) {
+          draft.dotList[i].dot.push(new Array(draft.rowCount).fill(''));
+        }
+      }),
+    [DECREASE_ROW]: (state) =>
+      produce(state, (draft) => {
+        if (draft.rowCount > 2) {
+          draft.rowCount--;
+          for (let i = 0; i < draft.dotList.length; i++) {
+            draft.dotList[i].dot.pop();
+          }
+        }
+      }),
     [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
       produce(state, (draft) => {
         if (newRow < 1 || newColumn < 1) {
@@ -180,31 +195,32 @@ const dot = handleActions(
         const originRow = draft.rowCount;
         const originColumn = draft.columnCount;
 
-        draft.dotList.map((dotSet) => {
+        for (let listIdx = 0; listIdx < draft.dotList.length; listIdx++) {
           if (newColumn > originColumn) {
             for (let i = originColumn; i < newColumn; i++) {
-              dotSet.dot.map((column) => column.push(''));
+              draft.dotList[listIdx].dot.map((column) => column.push(''));
             }
           }
 
           if (newColumn < originColumn) {
             for (let i = newColumn; i < originColumn; i++) {
-              dotSet.dot.map((column) => column.pop());
+              draft.dotList[listIdx].dot.map((column) => column.pop());
             }
           }
 
           if (newRow > originRow) {
             for (let i = originRow; i < newRow; i++) {
-              dotSet.dot.push(new Array(newColumn).fill(''));
+              draft.dotList[listIdx].dot.push(new Array(newColumn).fill(''));
             }
           }
 
           if (newRow < originRow) {
             for (let i = newRow; i < originRow; i++) {
-              dotSet.dot.pop();
+              draft.dotList[listIdx].dot.pop();
             }
           }
-        });
+        }
+
         draft.rowCount = newRow;
         draft.columnCount = newColumn;
       }),

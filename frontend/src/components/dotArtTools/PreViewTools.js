@@ -10,9 +10,7 @@ import {
   MdContentCopy,
 } from 'react-icons/md';
 
-const PreviewWrapper = styled.div`
-  display: flex;
-`;
+const PreviewWrapper = styled.div``;
 
 const ButtonBox = styled.div`
   display: flex;
@@ -73,48 +71,44 @@ const PreViewTools = ({
 
   return (
     <PreviewWrapper>
-      <div>
-        <ButtonBox>
-          <CustomButton
-            onClick={togglePlay}
-            selected={play}
-            selectColor="#f05556"
-            color={play ? '#b71b2d' : '#008000'}
-            baseColor="#3db12a"
-          >
-            {play ? <MdPause /> : <MdPlayArrow />}
-          </CustomButton>
+      <PreviewBox
+        zoomIn={zoomIn}
+        animation={play}
+        animationDuration={animationDuration}
+      />
+      <ButtonBox>
+        <CustomButton
+          onClick={togglePlay}
+          selected={play}
+          selectColor="#f05556"
+          color={play ? '#b71b2d' : '#008000'}
+          baseColor="#3db12a"
+        >
+          {play ? <MdPause /> : <MdPlayArrow />}
+        </CustomButton>
 
-          <CustomButton onClick={toggleZoom}>
-            {zoomIn ? <MdFullscreenExit /> : <MdFullscreen />}
-          </CustomButton>
+        <CustomButton onClick={toggleZoom}>
+          {zoomIn ? <MdFullscreenExit /> : <MdFullscreen />}
+        </CustomButton>
 
-          <CustomButton onClick={() => handleOpenDialog('Preview')}>
-            <MdContentCopy />
-          </CustomButton>
-        </ButtonBox>
-        <PreviewBox
-          zoomIn={zoomIn}
-          animation={play}
-          animationDuration={animationDuration}
-        />
-      </div>
-      <div>
-        <InputStyle
-          value={animationDuration}
-          type="number"
-          onChange={(e) => onChangeAnimationDuration(e)}
-          onFocus={() => handleChangeTyping(true)}
-          onBlur={() => handleChangeTyping(false)}
-        />
-        <InputStyle
-          value={pixelSize}
-          type="number"
-          onChange={(e) => onChangePixelSize(e)}
-          onFocus={() => handleChangeTyping(true)}
-          onBlur={() => handleChangeTyping(false)}
-        />
-      </div>
+        <CustomButton onClick={() => handleOpenDialog('Preview')}>
+          <MdContentCopy />
+        </CustomButton>
+      </ButtonBox>
+      <InputStyle
+        value={animationDuration}
+        type="number"
+        onChange={(e) => onChangeAnimationDuration(e)}
+        onFocus={() => handleChangeTyping(true)}
+        onBlur={() => handleChangeTyping(false)}
+      />
+      <InputStyle
+        value={pixelSize}
+        type="number"
+        onChange={(e) => onChangePixelSize(e)}
+        onFocus={() => handleChangeTyping(true)}
+        onBlur={() => handleChangeTyping(false)}
+      />
     </PreviewWrapper>
   );
 };

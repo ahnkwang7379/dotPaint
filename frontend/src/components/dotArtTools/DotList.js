@@ -6,8 +6,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 
 const DotListDiv = styled.div`
-  min-height: 80vh;
-  max-height: 80vh;
+  max-height: 90vh;
   width: fit-content;
   display: flex;
   flex-direction: column;

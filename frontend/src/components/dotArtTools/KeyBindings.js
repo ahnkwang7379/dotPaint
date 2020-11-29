@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   changePaintTool,
   DOT,
@@ -34,6 +34,9 @@ const Button = styled.div`
   width: 3rem;
   height: 3rem;
   text-align: center;
+  position: sticky;
+  left: 64px;
+  bottom: 16px;
 
   &:hover {
     color: #87ceeb;
@@ -48,12 +51,12 @@ const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
     let keyCombinations = {};
 
     function keyCombinationMaker(keySet) {
-      keySet.map((keyData) => {
+      for (let keyData of keySet) {
         keyCombinations[keyData.code] = (event) => {
           event.preventDefault();
           keybindActionMaker(keyData.action);
         };
-      });
+      }
     }
     keyCombinationMaker(keySet);
 
@@ -107,7 +110,7 @@ const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
     return () => {
       unsubscribe();
     };
-  }, [isTyping, keySet]);
+  }, [isTyping, keySet, dispatch]);
   return (
     <Button>
       <TiKeyboard size="2.5rem" onClick={openKeyBindDialog} />
