@@ -70,7 +70,7 @@ const PreViewTools = ({
   };
 
   return (
-    <PreviewWrapper>
+    <React.Fragment>
       <PreviewBox
         zoomIn={zoomIn}
         animation={play}
@@ -109,7 +109,7 @@ const PreViewTools = ({
         onFocus={() => handleChangeTyping(true)}
         onBlur={() => handleChangeTyping(false)}
       />
-    </PreviewWrapper>
+    </React.Fragment>
   );
 };
 

@@ -1,20 +1,40 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
 import DotPaintBackground from './DotPaintBackground';
 
+const DotPaintBox = styled.div`
+  width: 100%;
+  max-width: 100%;
+  height: 90vh;
+  max-height: 90vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+  background: #afafaf;
+  padding: 16px;
+  margin-right: 8px;
+`;
+
 const DotPaintWrapper = styled.div`
   display: flex;
-  width: auto;
-  height: auto;
-  /* min-width: 250px;
-  min-height: 200px; */
-  /* max-width: calc(100% - 40px);
-  max-height: calc(100% - 40px); */
   box-sizing: border-box;
-  /* padding: 30px; */
   touch-action: none;
   overflow: auto;
+  &::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 const DotPaintBlock = styled.div`
@@ -22,15 +42,16 @@ const DotPaintBlock = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   width: auto;
-  height: auto;
+  height: fit-content;
+  background: ${(props) =>
+    props.backgroundColor ? props.backgroundColor : '#000000'};
   margin: 0 auto;
   padding: 0;
-  border: 1px solid black;
   box-sizing: border-box;
   & > * {
     display: flex;
     & > * {
-      z-index: 1;
+      z-index: 99;
       ${(props) =>
         props.border &&
         css`
@@ -45,11 +66,41 @@ const DotPaintBlock = styled.div`
 const DotPaint = ({
   border,
   dotSize,
+  backgroundColor,
   rowCount,
+  onWheelHandler,
   onChangePaintState,
   onSetDirection,
   onDotActionHandle,
 }) => {
+  const [lock, setLock] = useState(false);
+  const lockHandle = () => {
+    setLock(!lock);
+    console.log(!lock);
+  };
+
+  useEffect(() => {
+    let paintBox = document.getElementById('paintBox');
+    let lockedX = paintBox.scrollTop;
+    let lockedY = paintBox.scrollLeft;
+
+    const lockTest = (e) => {
+      let paintBox = document.getElementById('paintBox');
+      if (lock) {
+        paintBox.scrollTo(lockedX, lockedY);
+        e.preventDefault();
+      }
+    };
+
+    if (lock) {
+      paintBox.addEventListener('scroll', lockTest, false);
+    }
+
+    return () => {
+      paintBox.removeEventListener('scroll', lockTest, false);
+    };
+  }, [lock]);
+
   const onMouseDownHandler = useCallback(
     (e, rowIdx, columnIdx) => {
       e.preventDefault();
@@ -105,18 +156,28 @@ const DotPaint = ({
   }, [rowCount, onMouseDownHandler, onMouseUpHandler, onMouseOverHandler]);
 
   return (
-    <DotPaintWrapper
-      onMouseLeave={(e) => onMouseUpHandler(e)}
-      onMouseUp={(e) => onMouseUpHandler(e)}
-      // onTouchStart={(e) => onTouchStartHandler(e)}
-      // onTouchMove={(e) => onTouchMoveHandler(e)}
-      // onTouchEnd={(e) => onMouseUpHandler(e)}
+    <DotPaintBox
+      onWheel={(e) => (lock ? onWheelHandler(e) : console.log('is lock'))}
     >
-      <DotPaintBlock dotSize={dotSize} border={border}>
-        <DotPaintBackground />
-        {dotLineMaker()}
-      </DotPaintBlock>
-    </DotPaintWrapper>
+      <button onClick={lockHandle}>asdf?</button>
+      <DotPaintWrapper
+        id="paintBox"
+        onMouseLeave={(e) => onMouseUpHandler(e)}
+        onMouseUp={(e) => onMouseUpHandler(e)}
+        // onTouchStart={(e) => onTouchStartHandler(e)}
+        // onTouchMove={(e) => onTouchMoveHandler(e)}
+        // onTouchEnd={(e) => onMouseUpHandler(e)}
+      >
+        <DotPaintBlock
+          dotSize={dotSize}
+          border={border}
+          backgroundColor={backgroundColor}
+        >
+          <DotPaintBackground />
+          {dotLineMaker()}
+        </DotPaintBlock>
+      </DotPaintWrapper>
+    </DotPaintBox>
   );
 };
 

@@ -8,6 +8,7 @@ const DotPaintBackground = () => {
     columnCount: dotArt.present.dot.columnCount,
     dotSize: dotArt.present.dot.dotSize,
   }));
+  // console.log(dot);
   return <Preview dotSet={dot} column={columnCount} size={dotSize} />;
 };
 

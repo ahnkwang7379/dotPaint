@@ -3,17 +3,24 @@ import { useSelector } from 'react-redux';
 import Preview from '../common/Preview';
 import styled from 'styled-components';
 
-const PreviewBlock = styled.div`
-  margin-top: 5px;
-  /* width: ${(props) =>
-    props.zoomIn ? `${props.columnCount * 6}px` : `${props.columnCount * 3}px`};
-  height: ${(props) =>
-    props.zoomIn ? `${props.rowCount * 6}px` : `${props.rowCount * 3}px`}; */
-  /* max-width: 300px;
-  max-height: 300px; */
+const PreviewWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 200px;
   height: 200px;
+  border: 2px solid #9e9e9e;
+`;
+
+const PreviewBlock = styled.div`
+  width: ${(props) =>
+    props.zoomIn ? `${props.columnCount * 6}px` : `${props.columnCount * 3}px`};
+  height: ${(props) =>
+    props.zoomIn ? `${props.rowCount * 6}px` : `${props.rowCount * 3}px`};
+  max-width: 200px;
+  max-height: 200px;
   overflow: hidden;
+  border: 1px solid #e6e6e6;
 `;
 
 const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
@@ -26,15 +33,21 @@ const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
     }),
   );
   return (
-    <PreviewBlock zoomIn={zoomIn} columnCount={columnCount} rowCount={rowCount}>
-      <Preview
-        dotSet={dotSet}
-        dotList={dotList}
-        animation={animation}
-        size={zoomIn ? 6 : 3}
-        duration={animationDuration}
-      />
-    </PreviewBlock>
+    <PreviewWrapper>
+      <PreviewBlock
+        zoomIn={zoomIn}
+        columnCount={columnCount}
+        rowCount={rowCount}
+      >
+        <Preview
+          dotSet={dotSet}
+          dotList={dotList}
+          animation={animation}
+          size={zoomIn ? 6 : 3}
+          duration={animationDuration}
+        />
+      </PreviewBlock>
+    </PreviewWrapper>
   );
 };
 

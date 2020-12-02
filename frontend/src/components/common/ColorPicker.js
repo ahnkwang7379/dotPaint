@@ -10,13 +10,17 @@ const ColorBlock = styled.div`
   display: inline-block;
 `;
 
-const Color = styled.div`
+const Color = styled.div.attrs((props) => ({
+  style: {
+    background: props.backgroundColor,
+  },
+}))`
   border-radius: 2px;
-  width: 36px;
-  height: 14px;
-  background: ${(props) => props.backgroundColor || 'white'};
+  width: 48px;
+  height: 16px;
   color: white;
   font-size: 0.5rem;
+  text-align: center;
 `;
 
 const ColorPickerBlock = styled.div`

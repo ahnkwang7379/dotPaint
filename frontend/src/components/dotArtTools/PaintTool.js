@@ -1,15 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DOT, BUCKET, PICKER, ERASER } from '../../../modules/paintTool';
-import CustomButton from '../../common/CustomButton';
+import { DOT, BUCKET, PICKER, ERASER } from '../../modules/paintTool';
+import CustomButton from '../common/CustomButton';
 import { TiPencil, TiPipette } from 'react-icons/ti';
 import { BsFillBucketFill } from 'react-icons/bs';
 import { FaEraser } from 'react-icons/fa';
 
 const PaintToolBlock = styled.div`
   display: flex;
-  /* width: 240px; */
-  height: 40px;
+  height: 32px;
 `;
 const PaintTool = ({ onChangePaintTool, selectedPaintTool }) => {
   return (

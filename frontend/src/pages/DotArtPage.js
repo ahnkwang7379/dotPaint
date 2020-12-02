@@ -3,13 +3,13 @@ import DialogContainer from '../containers/dialog/DialogContainer';
 import DotListContainer from '../containers/dotArtTools/DotListContainer';
 import PreViewContainer from '../containers/dotArtTools/PreViewContainer';
 import DotPaintContainer from '../containers/DotPaintContainer';
-import PaintToolContainer from '../containers/DotHeader/PaintToolContainer';
+import PaintToolContainer from '../containers/dotArtTools/PaintToolContainer';
 import UndoRedoContainer from '../containers/dotArtTools/UndoRedoContainer';
 import SaveLoadContainer from '../containers/dotArtTools/SaveLoadContainer';
 import PalettesContainer from '../containers/dotArtTools/PalettesContainer';
-import DotBorderContainer from '../containers/DotHeader/DotBorderContainer';
-import DotSizeContainer from '../containers/DotHeader/DotSizeContainer';
-import DotAreaContainer from '../containers/DotHeader/DotAreaContainer';
+import DotBorderContainer from '../containers/dotArtTools/DotBorderContainer';
+import DotSizeContainer from '../containers/dotArtTools/DotSizeContainer';
+import DotAreaContainer from '../containers/dotArtTools/DotAreaContainer';
 import PaintColorContainer from '../containers/dotArtTools/PaintColorContainer';
 import KeyBingingsContainer from '../containers/dotArtTools/KeyBindingsContainer';
 import styled from 'styled-components';
@@ -19,7 +19,9 @@ const MainWrapper = styled.div`
 `;
 
 const LeftToolBox = styled.div`
-  position: sticky;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   left: 0px;
   width: 150px;
   & > * {
@@ -28,25 +30,12 @@ const LeftToolBox = styled.div`
   }
 `;
 
-const DotPaintBox = styled.div`
-  width: 100%;
-  max-width: 100%;
-  height: 90vh;
-  max-height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: scroll;
-  background: gray;
-  padding: 16px;
-`;
-
 const RightToolBox = styled.div`
   position: sticky;
-  & > * {
-    margin: 8px 0px;
-    max-width: 240px;
-  }
+  // & > * {
+  //   margin: 8px 0px;
+  //   max-width: 240px;
+  // }
 `;
 
 const DotArtPage = () => {
@@ -64,9 +53,7 @@ const DotArtPage = () => {
           <PaintColorContainer />
         </LeftToolBox>
         <DotListContainer />
-        <DotPaintBox>
-          <DotPaintContainer />
-        </DotPaintBox>
+        <DotPaintContainer />
         <RightToolBox>
           <PreViewContainer />
           <PalettesContainer />

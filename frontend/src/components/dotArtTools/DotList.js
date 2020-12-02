@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import DotListBlock from './DotListBlock';
 import CustomButton from '../common/CustomButton';
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import AddIcon from '@material-ui/icons/Add';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 
 const DotListDiv = styled.div`
@@ -42,6 +42,10 @@ const ScrollCustom = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+`;
+
+const Span = styled.span`
+  font-size: 16px;
 `;
 
 const DotList = ({
@@ -90,8 +94,13 @@ const DotList = ({
                   );
                 })}
               {provided.placeholder}
-              <CustomButton width="80" onClick={() => handleAddDotArt()}>
-                <AddBoxIcon />
+              <CustomButton
+                width="80"
+                height="50"
+                onClick={() => handleAddDotArt()}
+              >
+                <AddIcon />
+                <Span>Add new</Span>
               </CustomButton>
             </ScrollCustom>
           )}

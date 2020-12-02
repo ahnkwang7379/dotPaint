@@ -30,6 +30,7 @@ export const exampleCat = {
   ],
   border: { size: 0.5, color: '#d0d0fc' },
   dotSize: 16,
+  backgroundColor: '#777777',
   columnCount: 16,
   rowCount: 16,
   animationDuration: 2,

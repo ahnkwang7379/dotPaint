@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeDotArea, clearDot } from '../../modules/dot';
-import DotAreaControl from '../../components/dotPaint/dotHeader/DotAreaControl';
+import DotAreaControl from '../../components/dotArtTools/DotAreaControl';
 
 const DotAreaContainer = () => {
   const dispatch = useDispatch();

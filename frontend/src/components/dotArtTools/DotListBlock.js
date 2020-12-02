@@ -40,7 +40,7 @@ const CardDiv = styled.div`
     props.active &&
     css`
       opacity: 1;
-      border: solid 1.5px #b22222;
+      border: solid 1px #b22222;
     `}
 `;
 
@@ -64,11 +64,13 @@ const StyleButton = styled.div`
 `;
 
 const IntervalInput = styled.input`
-  width: 80px;
-  height: 24px;
+  position: absolute;
+  width: 78px;
+  height: 22px;
+  border: none;
   font-size: 16px;
   font-weight: bold;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 1);
   text-align: center;
   color: white;
   &:focus {
@@ -127,7 +129,7 @@ const DotListBlock = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <IndexBox>{idx}</IndexBox>
+          <IndexBox>{idx + 1}</IndexBox>
           <Preview dotSet={dot} column={columnCount} size={3} />
           <ButtonDiv>
             <StyleButton onClick={() => handleRemoveDotArt(idx)}>
@@ -158,7 +160,7 @@ const DotListBlock = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <IndexBox>{idx}</IndexBox>
+          <IndexBox>{idx + 1}</IndexBox>
           <Preview dotSet={dot} column={columnCount} size={3} />
           <ButtonDiv>
             <StyleButton disabled={true}>

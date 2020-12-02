@@ -74,7 +74,9 @@ const LoadDialog = ({
   return (
     <Wrapper>
       <ButtonWrapper>
-        <CustomButton onClick={clearStorageHandler}>Clear!</CustomButton>
+        <CustomButton width="100" height="50" onClick={clearStorageHandler}>
+          Clear storage!
+        </CustomButton>
       </ButtonWrapper>
       <PreviewWrapper>
         {loadedData && loadedData.dotArt.length !== 0 ? (

@@ -31,6 +31,8 @@ const PreviewScrollWrapper = styled.div`
   overflow: auto;
   max-width: 100%;
   max-height: 100%;
+  border: 1px solid #9e9e9e;
+  margin-bottom: 16px;
 `;
 
 const PreviewBlock = styled.div.attrs(
@@ -40,10 +42,7 @@ const PreviewBlock = styled.div.attrs(
       height: `${rowCount * pixelSize}px`,
     },
   }),
-)`
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;
+)``;
 
 const CssDiv = styled.div`
   width: 100%;

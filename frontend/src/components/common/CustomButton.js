@@ -3,6 +3,9 @@ import styled, { css } from 'styled-components';
 
 const CustomButtonStyled = styled.button`
   font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #6e6e6e;
   ${(props) =>
     props.baseColor &&

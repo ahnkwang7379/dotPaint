@@ -5,7 +5,15 @@ import {
 } from '../../util/cssParser';
 import Animation from './Animation';
 
-const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
+const Preview = ({
+  dotSet,
+  dotList,
+  column,
+  size,
+  animation,
+  duration,
+  // opacity,
+}) => {
   const cellSize = typeof size === 'string' ? parseFloat(size) : size;
 
   const generatePreview = () => {
@@ -13,6 +21,7 @@ const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
     // const cellSize = typeof size === 'string' ? parseFloat(size) : size;
     let cssString;
     let animationData;
+    // let cssOpacity = opacity ? opacity : 1;
 
     if (animation) {
       animationData = generateAnimationCSSData(dotList, columns, cellSize);
@@ -29,6 +38,7 @@ const Preview = ({ dotSet, dotList, column, size, animation, duration }) => {
           MozBoxShadow: cssString,
           WebkitBoxShadow: cssString,
           border: '0px',
+          // opacity: cssOpacity,
         },
       };
       // return <PreViewWrapper cssString={cssString} cellSize={cellSize} />;

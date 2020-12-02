@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import CustomButton from '../../common/CustomButton';
+import CustomButton from '../common/CustomButton';
 import { TiPlusOutline, TiMinusOutline } from 'react-icons/ti';
 
 const DotAreaBlock = styled.div`

@@ -18,10 +18,15 @@ const DivBlock = ({
   onMouseUpHandler,
   onMouseOverHandler,
 }) => {
+  const onMouseDown = (e) => {
+    if (e.button === 1) return;
+    onMouseDownHandler(e, rowIdx, columnIdx);
+  };
   return (
     <DotStyled
       onContextMenu={(e) => e.preventDefault()}
-      onMouseDown={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}
+      // onMouseDown={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}
+      onMouseDown={onMouseDown}
       onMouseOver={(e) => onMouseOverHandler(e, rowIdx, columnIdx)}
       onMouseUp={(e) => onMouseUpHandler(e)}
       // onTouchStart={(e) => onMouseDownHandler(e, rowIdx, columnIdx)}

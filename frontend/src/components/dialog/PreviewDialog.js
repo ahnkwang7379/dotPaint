@@ -27,6 +27,7 @@ const PreviewScrollWrapper = styled.div`
   overflow: auto;
   max-width: 100%;
   max-height: 100%;
+  border: 1px solid #9e9e9e;
 `;
 
 const PreviewBlock = styled.div.attrs(
@@ -36,9 +37,7 @@ const PreviewBlock = styled.div.attrs(
       height: `${rowCount * pixelSize}px`,
     },
   }),
-)`
-  margin-top: 8px;
-`;
+)``;
 
 const PreviewDialog = ({
   dot,
@@ -78,7 +77,7 @@ const PreviewDialog = ({
           size="small"
           variant="outlined"
           type="number"
-          label="Duration"
+          label="Animation Duration"
           value={animationDuration}
           onChange={(e) => onChangeAnimationDuration(e)}
         />

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeDotBorderSize, changeDotBorderColor } from '../../modules/dot';
-import BorderControl from '../../components/dotPaint/dotHeader/BorderControl';
+import BorderControl from '../../components/dotArtTools/BorderControl';
 
 const DotBorderContainer = () => {
   const dispatch = useDispatch();
@@ -10,14 +10,14 @@ const DotBorderContainer = () => {
     borderColor: dotArt.present.dot.border.color,
   }));
 
-  const onSizeChange = useCallback(
-    (e) => {
-      dispatch(changeDotBorderSize(e.target.value / 10));
+  const onChangeDotBorderSize = useCallback(
+    (e, newValue) => {
+      dispatch(changeDotBorderSize(newValue));
     },
     [dispatch],
   );
 
-  const onChangeColor = useCallback(
+  const onChangeBorderColor = useCallback(
     (pick) => {
       dispatch(changeDotBorderColor(pick));
     },
@@ -25,14 +25,14 @@ const DotBorderContainer = () => {
   );
 
   return (
-    <>
+    <React.Fragment>
       <BorderControl
         borderSize={borderSize}
-        onSizeChange={onSizeChange}
         backgroundColor={borderColor}
-        onChangeColor={onChangeColor}
+        onChangeDotBorderSize={onChangeDotBorderSize}
+        onChangeBorderColor={onChangeBorderColor}
       />
-    </>
+    </React.Fragment>
   );
 };
 

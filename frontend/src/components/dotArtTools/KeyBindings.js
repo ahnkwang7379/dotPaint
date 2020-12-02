@@ -34,7 +34,7 @@ const Button = styled.div`
   width: 3rem;
   height: 3rem;
   text-align: center;
-  position: sticky;
+  position: fixed;
   left: 64px;
   bottom: 16px;
 

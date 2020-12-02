@@ -4,11 +4,11 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import PublishIcon from '@material-ui/icons/Publish';
 import CustomButton from '../common/CustomButton';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
+import SaveIcon from '@material-ui/icons/Save';
 import { useSnackbar } from 'notistack';
 
-const SaveLoadBlock = styled.div`
+const ButtonBlock = styled.div`
   display: flex;
-  /* width: 240px; */
   height: 40px;
 `;
 
@@ -28,21 +28,27 @@ const SaveLoad = ({ newProjectHandler, saveHandler, dialogOpenHandler }) => {
   };
 
   return (
-    <SaveLoadBlock>
-      <CustomButton onClick={onClickNewProject}>
-        <FiberNewIcon fontSize="large" />
-      </CustomButton>
-      <CustomButton onClick={onClickSave}>
-        <PublishIcon />
-      </CustomButton>
-      <CustomButton onClick={() => dialogOpenHandler('Load')}>
-        <GetAppIcon />
-      </CustomButton>
-      <CustomButton onClick={() => dialogOpenHandler('DownLoad')}>
-        Down
-      </CustomButton>
-      <CustomButton onClick={() => dialogOpenHandler('Css')}>Css</CustomButton>
-    </SaveLoadBlock>
+    <React.Fragment>
+      <ButtonBlock>
+        <CustomButton onClick={onClickNewProject}>
+          <FiberNewIcon fontSize="large" />
+        </CustomButton>
+        <CustomButton onClick={onClickSave}>
+          <PublishIcon />
+        </CustomButton>
+        <CustomButton onClick={() => dialogOpenHandler('Load')}>
+          <GetAppIcon />
+        </CustomButton>
+      </ButtonBlock>
+      <ButtonBlock>
+        <CustomButton onClick={() => dialogOpenHandler('DownLoad')}>
+          <SaveIcon />
+        </CustomButton>
+        <CustomButton onClick={() => dialogOpenHandler('Css')}>
+          css
+        </CustomButton>
+      </ButtonBlock>
+    </React.Fragment>
   );
 };
 

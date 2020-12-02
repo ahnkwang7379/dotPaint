@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SketchPicker } from 'react-color';
 
@@ -44,13 +44,20 @@ const PaintColor = ({
 }) => {
   const [displayLeftColorPicker, setDisplayLeftColorPicker] = useState(false);
   const [displayRightColorPicker, setDisplayRightColorPicker] = useState(false);
+  const [leftSelectColor, setLeftSelectColor] = useState('');
+  const [rightSelectColor, setRightSelectColor] = useState('');
+
+  useEffect(() => {
+    setLeftSelectColor(leftColor);
+    setRightSelectColor(rightColor);
+  }, [leftColor, rightColor]);
 
   const handleLeftColorChange = (pick) => {
-    changeLeftColor(pick.hex);
+    setLeftSelectColor(pick.hex);
   };
 
   const handleRightColorChange = (pick) => {
-    changeRightColor(pick.hex);
+    setRightSelectColor(pick.hex);
   };
 
   const handleOpenColorPicker = (type) => {
@@ -64,8 +71,10 @@ const PaintColor = ({
   const handleClose = (type) => {
     if (type === 'LEFT') {
       setDisplayLeftColorPicker(false);
+      changeLeftColor(leftSelectColor);
     } else {
       setDisplayRightColorPicker(false);
+      changeRightColor(rightSelectColor);
     }
   };
 
@@ -74,14 +83,14 @@ const PaintColor = ({
       <LeftClickBox>
         <ColorBox
           onClick={() => handleOpenColorPicker('LEFT')}
-          color={leftColor}
+          color={leftSelectColor}
         />
         {displayLeftColorPicker ? (
           <ColorPickerBlock>
             <Cover onClick={() => handleClose('LEFT')} />
             <SketchPicker
               disableAlpha
-              color={leftColor}
+              color={leftSelectColor}
               onChange={handleLeftColorChange}
             />
           </ColorPickerBlock>
@@ -90,14 +99,14 @@ const PaintColor = ({
       <RightClickBox>
         <ColorBox
           onClick={() => handleOpenColorPicker('RIGHT')}
-          color={rightColor}
+          color={rightSelectColor}
         />
         {displayRightColorPicker ? (
           <ColorPickerBlock>
             <Cover onClick={() => handleClose('RIGHT')} />
             <SketchPicker
               disableAlpha
-              color={rightColor}
+              color={rightSelectColor}
               onChange={handleRightColorChange}
             />
           </ColorPickerBlock>

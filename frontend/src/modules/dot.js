@@ -10,6 +10,7 @@ const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
 const INCREASE_DOT_SIZE = 'dot/INCREASE_DOT_SIZE';
 const DECREASE_DOT_SIZE = 'dot/DECREASE_DOT_SIZE';
 const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
+const CHANGE_BACKGROUND_COLOR = 'dot/CHANGE_BACKGROUND_COLOR';
 const INCREASE_COLUMN = 'dot/INCREASE_COLUMN';
 const DECREASE_COLUMN = 'dot/DECREASE_COLUMN';
 const INCREASE_ROW = 'dot/INCREASE_ROW';
@@ -30,6 +31,7 @@ export const INITIAL_COLUMN = 8;
 export const INITIAL_DOT_DOTSIZE = 16;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
 export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
+export const INITIAL_BACKGROUND_COLOR = '#777777';
 
 export const clearDot = createAction(CLEAR_DOT);
 export const newDotArtProject = createAction(NEW_DOT_ART_PROJECT);
@@ -50,6 +52,10 @@ export const decreaseDotSize = createAction(DECREASE_DOT_SIZE);
 export const changeDotSize = createAction(
   CHANGE_DOT_SIZE,
   (dotSize) => dotSize,
+);
+export const changeBackgroundColor = createAction(
+  CHANGE_BACKGROUND_COLOR,
+  (color) => color,
 );
 export const increaseColumn = createAction(INCREASE_COLUMN);
 export const decreaseColumn = createAction(DECREASE_COLUMN);
@@ -97,6 +103,7 @@ const initialState = {
   ],
   border: INITIAL_DOT_BORDER,
   dotSize: INITIAL_DOT_DOTSIZE,
+  backgroundColor: INITIAL_BACKGROUND_COLOR,
   columnCount: INITIAL_COLUMN,
   rowCount: INITIAL_ROW,
   animationDuration: 2,
@@ -155,6 +162,10 @@ const dot = handleActions(
       ...state,
       dotSize: dotSize,
     }),
+    [CHANGE_BACKGROUND_COLOR]: (state, { payload: color }) => ({
+      ...state,
+      backgroundColor: color,
+    }),
     [INCREASE_COLUMN]: (state) =>
       produce(state, (draft) => {
         draft.columnCount++;
@@ -175,7 +186,7 @@ const dot = handleActions(
       produce(state, (draft) => {
         draft.rowCount++;
         for (let i = 0; i < draft.dotList.length; i++) {
-          draft.dotList[i].dot.push(new Array(draft.rowCount).fill(''));
+          draft.dotList[i].dot.push(new Array(draft.columnCount).fill(''));
         }
       }),
     [DECREASE_ROW]: (state) =>
