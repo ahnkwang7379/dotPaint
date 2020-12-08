@@ -1,61 +1,36 @@
 import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 import shortid from 'shortid';
+import { DOT, ERASER, BUCKET, PICKER, MOVE } from './paintTool';
 
-const CLEAR_DOT = 'dot/CLEAR_DOT';
-const NEW_DOT_ART_PROJECT = 'dot/NEW_DOT_ART_PROJECT';
-const LOAD_DOT_ART = 'dot/LOAD_DOT_ART';
-const CHANGE_DOT_BORDER_SIZE = 'dot/CHANGE_DOT_BORDER_SIZE';
-const CHANGE_DOT_BORDER_COLOR = 'dot/CHANGE_DOT_BORDER_COLOR';
-const INCREASE_DOT_SIZE = 'dot/INCREASE_DOT_SIZE';
-const DECREASE_DOT_SIZE = 'dot/DECREASE_DOT_SIZE';
-const CHANGE_DOT_SIZE = 'dot/CHANGE_DOT_SIZE';
-const CHANGE_BACKGROUND_COLOR = 'dot/CHANGE_BACKGROUND_COLOR';
-const INCREASE_COLUMN = 'dot/INCREASE_COLUMN';
-const DECREASE_COLUMN = 'dot/DECREASE_COLUMN';
-const INCREASE_ROW = 'dot/INCREASE_ROW';
-const DECREASE_ROW = 'dot/DECREASE_ROW';
-const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
-const CHANGE_ACTIVE_IDX = 'dot/CHANGE_ACTIVE_IDX';
-const REMOVE_ACTIVE_DOT_ART = 'dot/REMOVE_ACTIVE_DOT_ART';
-const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
-const ADD_NEW_DOT_ART = 'dot/ADD_NEW_DOT_ART';
-const CHANGE_ANIMATION_INTERVAL = 'dot/CHANGE_ANIMATION_INTERVAL';
+export const CLEAR_DOT = 'dot/CLEAR_DOT';
+export const NEW_DOT_ART_PROJECT = 'dot/NEW_DOT_ART_PROJECT';
+export const LOAD_DOT_ART = 'dot/LOAD_DOT_ART';
+export const INCREASE_COLUMN = 'dot/INCREASE_COLUMN';
+export const DECREASE_COLUMN = 'dot/DECREASE_COLUMN';
+export const INCREASE_ROW = 'dot/INCREASE_ROW';
+export const DECREASE_ROW = 'dot/DECREASE_ROW';
+export const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
+export const CHANGE_ACTIVE_IDX = 'dot/CHANGE_ACTIVE_IDX';
+export const REMOVE_ACTIVE_DOT_ART = 'dot/REMOVE_ACTIVE_DOT_ART';
+export const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
+export const ADD_NEW_DOT_ART = 'dot/ADD_NEW_DOT_ART';
+export const CHANGE_ANIMATION_INTERVAL = 'dot/CHANGE_ANIMATION_INTERVAL';
 const CHANGE_ANIMATION_DURATION = 'dot/CHANGE_ANIMATION_DURATION';
 const CHANGE_PIXEL_SIZE = 'dot/CHANGE_PIXEL_SIZE';
-const REORDER_DOT_LIST = 'dot/REORDER_DOT_LIST';
+export const REORDER_DOT_LIST = 'dot/REORDER_DOT_LIST';
+export const UPDATE_DOT_ART = 'dot/UPDATE_DOT_ART';
 
 // initialState
 export const INITIAL_ROW = 8;
 export const INITIAL_COLUMN = 8;
-export const INITIAL_DOT_DOTSIZE = 16;
 export const INITIAL_DOT_COLOR = '#f0f0f0';
-export const INITIAL_DOT_BORDER = { size: 0.5, color: '#d0d0fc' };
-export const INITIAL_BACKGROUND_COLOR = '#777777';
 
 export const clearDot = createAction(CLEAR_DOT);
 export const newDotArtProject = createAction(NEW_DOT_ART_PROJECT);
 export const loadDotArt = createAction(
   LOAD_DOT_ART,
   (loadedData) => loadedData,
-);
-export const changeDotBorderSize = createAction(
-  CHANGE_DOT_BORDER_SIZE,
-  (size) => size,
-);
-export const changeDotBorderColor = createAction(
-  CHANGE_DOT_BORDER_COLOR,
-  (color) => color,
-);
-export const increaseDotSize = createAction(INCREASE_DOT_SIZE);
-export const decreaseDotSize = createAction(DECREASE_DOT_SIZE);
-export const changeDotSize = createAction(
-  CHANGE_DOT_SIZE,
-  (dotSize) => dotSize,
-);
-export const changeBackgroundColor = createAction(
-  CHANGE_BACKGROUND_COLOR,
-  (color) => color,
 );
 export const increaseColumn = createAction(INCREASE_COLUMN);
 export const decreaseColumn = createAction(DECREASE_COLUMN);
@@ -88,12 +63,17 @@ export const reorderDotList = createAction(
   REORDER_DOT_LIST,
   ({ startIdx, endIdx }) => ({ startIdx, endIdx }),
 );
+export const updateDotArt = createAction(
+  UPDATE_DOT_ART,
+  (selectedPaintTool) => selectedPaintTool,
+);
 
 const defaultDotMaker = (row, column) => {
-  return new Array(column).fill().map(() => new Array(row).fill(''));
+  return new Array(row).fill().map(() => new Array(column).fill(''));
 };
 
 const initialState = {
+  fakeDotArt: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
   dotList: [
     {
       id: shortid.generate(),
@@ -101,9 +81,6 @@ const initialState = {
       interval: 100,
     },
   ],
-  border: INITIAL_DOT_BORDER,
-  dotSize: INITIAL_DOT_DOTSIZE,
-  backgroundColor: INITIAL_BACKGROUND_COLOR,
   columnCount: INITIAL_COLUMN,
   rowCount: INITIAL_ROW,
   animationDuration: 2,
@@ -139,63 +116,44 @@ const dot = handleActions(
     }),
     [LOAD_DOT_ART]: (state, { payload: loadedData }) => ({
       ...state,
+      fakeDotArt: defaultDotMaker(loadedData.rowCount, loadedData.columnCount),
       activeIdx: 0,
       ...loadedData,
     }),
-    [CHANGE_DOT_BORDER_SIZE]: (state, { payload: size }) =>
-      produce(state, (draft) => {
-        draft.border.size = size;
-      }),
-    [CHANGE_DOT_BORDER_COLOR]: (state, { payload: color }) =>
-      produce(state, (draft) => {
-        draft.border.color = color;
-      }),
-    [INCREASE_DOT_SIZE]: (state) => ({
-      ...state,
-      dotSize: state.dotSize < 61 ? state.dotSize + 2 : state.dotSize,
-    }),
-    [DECREASE_DOT_SIZE]: (state) => ({
-      ...state,
-      dotSize: state.dotSize > 2 ? state.dotSize - 2 : state.dotSize,
-    }),
-    [CHANGE_DOT_SIZE]: (state, { payload: dotSize }) => ({
-      ...state,
-      dotSize: dotSize,
-    }),
-    [CHANGE_BACKGROUND_COLOR]: (state, { payload: color }) => ({
-      ...state,
-      backgroundColor: color,
-    }),
     [INCREASE_COLUMN]: (state) =>
       produce(state, (draft) => {
-        draft.columnCount++;
+        draft.columnCount = draft.columnCount + 1;
         for (let i = 0; i < draft.dotList.length; i++) {
           draft.dotList[i].dot.map((column) => column.push(''));
         }
+        draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
       }),
     [DECREASE_COLUMN]: (state) =>
       produce(state, (draft) => {
         if (draft.columnCount > 2) {
-          draft.columnCount--;
+          draft.columnCount = draft.columnCount - 1;
           for (let i = 0; i < draft.dotList.length; i++) {
             draft.dotList[i].dot.map((column) => column.pop());
           }
+          draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
         }
       }),
     [INCREASE_ROW]: (state) =>
       produce(state, (draft) => {
-        draft.rowCount++;
+        draft.rowCount = draft.rowCount + 1;
         for (let i = 0; i < draft.dotList.length; i++) {
           draft.dotList[i].dot.push(new Array(draft.columnCount).fill(''));
         }
+        draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
       }),
     [DECREASE_ROW]: (state) =>
       produce(state, (draft) => {
         if (draft.rowCount > 2) {
-          draft.rowCount--;
+          draft.rowCount = draft.rowCount - 1;
           for (let i = 0; i < draft.dotList.length; i++) {
             draft.dotList[i].dot.pop();
           }
+          draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
         }
       }),
     [CHANGE_DOT_AREA]: (state, { payload: { newRow, newColumn } }) =>
@@ -234,6 +192,7 @@ const dot = handleActions(
 
         draft.rowCount = newRow;
         draft.columnCount = newColumn;
+        draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
       }),
     [CHANGE_ACTIVE_IDX]: (state, { payload: idx }) => ({
       ...state,
@@ -342,8 +301,45 @@ const dot = handleActions(
           }
         }
       }),
+    [UPDATE_DOT_ART]: (state, { payload: selectedPaintTool }) => {
+      if (selectedPaintTool === PICKER) return { ...state };
+
+      let newDotArt;
+      if (selectedPaintTool === DOT) {
+        newDotArt = dotArtMerge(
+          state.fakeDotArt,
+          state.dotList[state.activeIdx].dot,
+          state.rowCount,
+          state.columnCount,
+        );
+      }
+      if (selectedPaintTool === ERASER) {
+        newDotArt = state.fakeDotArt;
+      }
+      if (selectedPaintTool === BUCKET) {
+        newDotArt = state.fakeDotArt;
+      }
+      if (selectedPaintTool === MOVE) {
+        newDotArt = state.fakeDotArt;
+      }
+      return produce(state, (draft) => {
+        draft.dotList[draft.activeIdx].dot = newDotArt;
+      });
+    },
   },
   initialState,
 );
+
+function dotArtMerge(firstDotArt, secondDotArt, rowCount, columnCount) {
+  let mergedDotArt = defaultDotMaker(rowCount, columnCount);
+  for (let i = 0; i < rowCount; i++) {
+    for (let j = 0; j < columnCount; j++) {
+      firstDotArt[i][j] !== ''
+        ? (mergedDotArt[i][j] = firstDotArt[i][j])
+        : (mergedDotArt[i][j] = secondDotArt[i][j]);
+    }
+  }
+  return mergedDotArt;
+}
 
 export default dot;

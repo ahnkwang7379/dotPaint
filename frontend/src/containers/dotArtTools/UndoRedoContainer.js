@@ -7,10 +7,12 @@ const UndoRedoContainer = () => {
   const dispatch = useDispatch();
 
   const undoHandle = useCallback(() => {
-    dispatch(ActionCreators.undo());
+    // dispatch(ActionCreators.undo());
+    dispatch(ActionCreators.jump(-2));
   }, [dispatch]);
   const redoHandle = useCallback(() => {
-    dispatch(ActionCreators.redo());
+    // dispatch(ActionCreators.redo());
+    dispatch(ActionCreators.jump(2));
   }, [dispatch]);
 
   return <UndoRedo undoHandle={undoHandle} redoHandle={redoHandle} />;

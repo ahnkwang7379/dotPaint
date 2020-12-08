@@ -2,7 +2,7 @@ import React from 'react';
 import DialogContainer from '../containers/dialog/DialogContainer';
 import DotListContainer from '../containers/dotArtTools/DotListContainer';
 import PreViewContainer from '../containers/dotArtTools/PreViewContainer';
-import DotPaintContainer from '../containers/DotPaintContainer';
+import DotPaintContainer from '../containers/dotPaint/DotPaintContainer';
 import PaintToolContainer from '../containers/dotArtTools/PaintToolContainer';
 import UndoRedoContainer from '../containers/dotArtTools/UndoRedoContainer';
 import SaveLoadContainer from '../containers/dotArtTools/SaveLoadContainer';
@@ -12,6 +12,7 @@ import DotSizeContainer from '../containers/dotArtTools/DotSizeContainer';
 import DotAreaContainer from '../containers/dotArtTools/DotAreaContainer';
 import PaintColorContainer from '../containers/dotArtTools/PaintColorContainer';
 import KeyBingingsContainer from '../containers/dotArtTools/KeyBindingsContainer';
+import ObserberContainer from '../containers/dotArtTools/ObserverContainer';
 import styled from 'styled-components';
 
 const MainWrapper = styled.div`
@@ -57,6 +58,7 @@ const DotArtPage = () => {
         <RightToolBox>
           <PreViewContainer />
           <PalettesContainer />
+          <ObserberContainer />
         </RightToolBox>
       </MainWrapper>
       <KeyBingingsContainer />

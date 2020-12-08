@@ -22,11 +22,11 @@ const DotSizeChanger = ({
         aria-labelledby="vertical-slider"
         valueLabelDisplay="auto"
         value={dotSize}
-        step={2}
+        step={4}
         color="secondary"
         marks
-        min={2}
-        max={60}
+        min={4}
+        max={100}
         onChange={onChangeDotSize}
       />
     </React.Fragment>

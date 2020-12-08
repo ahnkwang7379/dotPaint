@@ -31,7 +31,8 @@ const App = () => {
       >
         <BrowserRouter>
           <Switch>
-            <Route path="/" component={IndexPage} exact />
+            <Route component={MainPage} />
+            {/* <Route path="/" component={IndexPage} exact />
             <Route component={LoginPage} path="/login" exact />
             <Route component={SignUpPage} path="/signup" exact />
             <Route component={MainPage} path="/main" />
@@ -42,7 +43,7 @@ const App = () => {
                   <p>{location.pathname}는 없는 주소입니다</p>
                 </div>
               )}
-            />
+            /> */}
           </Switch>
         </BrowserRouter>
       </SnackbarProvider>

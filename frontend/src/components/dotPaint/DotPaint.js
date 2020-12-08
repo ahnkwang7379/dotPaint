@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
-import DotPaintBackground from './DotPaintBackground';
+import DotLayoutContainer from '../../containers/dotPaint/DotLayoutContainer';
 
 const DotPaintBox = styled.div`
   width: 100%;
@@ -25,6 +25,8 @@ const DotPaintWrapper = styled.div`
   &::-webkit-scrollbar {
     width: 16px;
     height: 16px;
+    // width: 0px;
+    // height: 0px;
   }
   &::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -48,10 +50,20 @@ const DotPaintBlock = styled.div`
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
+  ${(props) =>
+    props.border &&
+    css`
+      border: ${props.border.size}px solid ${props.border.color};
+    `};
   & > * {
     display: flex;
     & > * {
       z-index: 99;
+      cursor: cell;
+      box-sizing: border-box;
+      :hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
       ${(props) =>
         props.border &&
         css`
@@ -63,60 +75,70 @@ const DotPaintBlock = styled.div`
   }
 `;
 
+const ScrollLockButton = styled.button`
+  width: 240px;
+  height: 40px;
+`;
+
 const DotPaint = ({
   border,
   dotSize,
   backgroundColor,
   rowCount,
-  onWheelHandler,
-  onChangePaintState,
-  onSetDirection,
+  onWheelHandle,
+  onChangePaintStateHandle,
   onDotActionHandle,
+  onSetDirectionHandle,
+  onLeavesPaintAreaHandle,
 }) => {
-  const [lock, setLock] = useState(false);
-  const lockHandle = () => {
-    setLock(!lock);
-    console.log(!lock);
-  };
+  // const [lock, setLock] = useState(false);
+  // const lockHandle = () => {
+  //   setLock(!lock);
+  //   console.log(!lock);
+  // };
 
-  useEffect(() => {
-    let paintBox = document.getElementById('paintBox');
-    let lockedX = paintBox.scrollTop;
-    let lockedY = paintBox.scrollLeft;
+  // useEffect(() => {
+  //   const paintBox = document.getElementById('paintBox');
+  //   const lockedX = paintBox.scrollTop;
+  //   const lockedY = paintBox.scrollLeft;
 
-    const lockTest = (e) => {
-      let paintBox = document.getElementById('paintBox');
-      if (lock) {
-        paintBox.scrollTo(lockedX, lockedY);
-        e.preventDefault();
-      }
-    };
+  //   console.log(paintBox.scrollHeight);
+  //   console.log(paintBox.scrollWidth);
 
-    if (lock) {
-      paintBox.addEventListener('scroll', lockTest, false);
-    }
+  //   const lockTest = (e) => {
+  //     let paintBox = document.getElementById('paintBox');
+  //     if (lock) {
+  //       paintBox.scrollTo(lockedX, lockedY);
+  //       e.preventDefault();
+  //     }
+  //   };
 
-    return () => {
-      paintBox.removeEventListener('scroll', lockTest, false);
-    };
-  }, [lock]);
+  //   if (lock) {
+  //     paintBox.addEventListener('scroll', lockTest, false);
+  //   }
+
+  //   return () => {
+  //     paintBox.removeEventListener('scroll', lockTest, false);
+  //   };
+  // }, [lock]);
 
   const onMouseDownHandler = useCallback(
-    (e, rowIdx, columnIdx) => {
-      e.preventDefault();
-      onSetDirection(e.button === 0 ? 'LEFT' : 'RIGHT');
-      onChangePaintState('DRAGGING');
-      onDotActionHandle(rowIdx, columnIdx);
-    },
-    [onChangePaintState, onDotActionHandle, onSetDirection],
-  );
-  const onMouseUpHandler = useCallback(
     (e) => {
       e.preventDefault();
-      onChangePaintState('IDLE');
+      if (e.button === 1) return;
+
+      onSetDirectionHandle(e.button === 0 ? 'LEFT' : 'RIGHT');
+      onChangePaintStateHandle('DRAGGING');
     },
-    [onChangePaintState],
+    [onChangePaintStateHandle, onSetDirectionHandle],
   );
+  // const onMouseUpHandler = useCallback(
+  //   (e) => {
+  //     e.preventDefault();
+  //     onChangePaintStateHandle('IDLE');
+  //   },
+  //   [onChangePaintStateHandle],
+  // );
   const onMouseOverHandler = useCallback(
     (e, rowIdx, columnIdx) => {
       e.preventDefault();
@@ -124,20 +146,6 @@ const DotPaint = ({
     },
     [onDotActionHandle],
   );
-  // const onTouchStartHandler = useCallback(
-  //   (e) => {
-  //     e.preventDefault();
-  //     onChangePaintState('DRAGGING');
-  //   },
-  //   [onChangePaintState],
-  // );
-  // const onTouchMoveHandler = useCallback(
-  //   (e, dotIdx) => {
-  //     e.preventDefault();
-  //     onDotActionHandle(dotIdx);
-  //   },
-  //   [onDotActionHandle],
-  // );
 
   const dotLineMaker = useCallback(() => {
     let dotLineArr = [];
@@ -147,33 +155,35 @@ const DotPaint = ({
           key={i}
           dotLineIdx={i}
           onMouseDownHandler={onMouseDownHandler}
-          onMouseUpHandler={onMouseUpHandler}
           onMouseOverHandler={onMouseOverHandler}
         />,
       );
     }
     return dotLineArr;
-  }, [rowCount, onMouseDownHandler, onMouseUpHandler, onMouseOverHandler]);
+    // }, [rowCount, onMouseDownHandler, onMouseUpHandler, onMouseOverHandler]);
+  }, [rowCount, onMouseDownHandler, onMouseOverHandler]);
 
   return (
     <DotPaintBox
-      onWheel={(e) => (lock ? onWheelHandler(e) : console.log('is lock'))}
+      // onWheel={(e) => (lock ? onWheelHandle(e) : console.log('not lock'))}
+      onWheel={(e) => onWheelHandle(e)}
+      onContextMenu={(e) => e.preventDefault()}
     >
-      <button onClick={lockHandle}>asdf?</button>
+      {/* <ScrollLockButton onClick={lockHandle}>Scroll Lock?</ScrollLockButton> */}
       <DotPaintWrapper
         id="paintBox"
-        onMouseLeave={(e) => onMouseUpHandler(e)}
-        onMouseUp={(e) => onMouseUpHandler(e)}
-        // onTouchStart={(e) => onTouchStartHandler(e)}
-        // onTouchMove={(e) => onTouchMoveHandler(e)}
-        // onTouchEnd={(e) => onMouseUpHandler(e)}
+        // onMouseLeave={(e) => onMouseUpHandler(e)}
+        // onMouseUp={(e) => onMouseUpHandler(e)}
       >
         <DotPaintBlock
           dotSize={dotSize}
           border={border}
           backgroundColor={backgroundColor}
+          onMouseLeave={onLeavesPaintAreaHandle}
+          onMouseDownCapture={onMouseDownHandler} // 캡쳐링으로 state를 먼저 바꿔줘야함
+          onContextMenu={(e) => e.preventDefault()}
         >
-          <DotPaintBackground />
+          <DotLayoutContainer />
           {dotLineMaker()}
         </DotPaintBlock>
       </DotPaintWrapper>

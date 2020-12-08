@@ -2,12 +2,7 @@ import React, { useCallback } from 'react';
 import DivBlock from '../common/DivBlock';
 import { shallowEqual, useSelector } from 'react-redux';
 
-const DotPaintLine = ({
-  dotLineIdx,
-  onMouseDownHandler,
-  onMouseUpHandler,
-  onMouseOverHandler,
-}) => {
+const DotPaintLine = ({ dotLineIdx, onMouseOverHandler }) => {
   const { columnCount } = useSelector(
     ({ dotArt }) => ({
       columnCount: dotArt.present.dot.columnCount,
@@ -22,20 +17,12 @@ const DotPaintLine = ({
           key={i}
           rowIdx={dotLineIdx}
           columnIdx={i}
-          onMouseDownHandler={onMouseDownHandler}
-          onMouseUpHandler={onMouseUpHandler}
           onMouseOverHandler={onMouseOverHandler}
         />,
       );
     }
     return dotArr;
-  }, [
-    columnCount,
-    dotLineIdx,
-    onMouseDownHandler,
-    onMouseUpHandler,
-    onMouseOverHandler,
-  ]);
+  }, [columnCount, dotLineIdx, onMouseOverHandler]);
   return <div>{dotMaker()}</div>;
 };
 

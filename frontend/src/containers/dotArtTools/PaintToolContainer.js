@@ -13,12 +13,10 @@ const PaintToolContainer = () => {
     [dispatch],
   );
   return (
-    <>
-      <PaintTool
-        onChangePaintTool={onChangePaintTool}
-        selectedPaintTool={selectedPaintTool}
-      />
-    </>
+    <PaintTool
+      onChangePaintTool={onChangePaintTool}
+      selectedPaintTool={selectedPaintTool}
+    />
   );
 };
 

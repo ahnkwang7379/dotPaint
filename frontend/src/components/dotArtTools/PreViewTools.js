@@ -10,8 +10,6 @@ import {
   MdContentCopy,
 } from 'react-icons/md';
 
-const PreviewWrapper = styled.div``;
-
 const ButtonBox = styled.div`
   display: flex;
   width: 100px;

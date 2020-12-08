@@ -11,7 +11,7 @@ const BorderControl = ({
   borderSize,
   backgroundColor,
   onChangeDotBorderSize,
-  onChangeBorderColor,
+  onChangeDotBorderColor,
 }) => {
   // Slider default value / set은 쓰지 말 것
   const [defaultValue, setDefaultValue] = useState(borderSize);
@@ -22,7 +22,7 @@ const BorderControl = ({
         <label>색상</label>
         <SketchPicker
           backgroundColor={backgroundColor}
-          onChangeColor={onChangeBorderColor}
+          onChangeColor={onChangeDotBorderColor}
         />
       </ColorBox>
       <Slider

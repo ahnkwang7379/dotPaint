@@ -12,6 +12,7 @@ const Preview = ({
   size,
   animation,
   duration,
+  zIndex,
   // opacity,
 }) => {
   const cellSize = typeof size === 'string' ? parseFloat(size) : size;
@@ -38,6 +39,7 @@ const Preview = ({
           MozBoxShadow: cssString,
           WebkitBoxShadow: cssString,
           border: '0px',
+          zIndex: zIndex ? zIndex : '',
           // opacity: cssOpacity,
         },
       };

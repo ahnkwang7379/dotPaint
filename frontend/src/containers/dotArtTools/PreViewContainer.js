@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
 import { changeAnimationDuration, changePixelSize } from '../../modules/dot';
-import { changeTypingState } from '../../modules/typing';
+import { changeTypingState } from '../../modules/observer';
 import PreViewTools from '../../components/dotArtTools/PreViewTools';
 
 const PreViewContainer = () => {

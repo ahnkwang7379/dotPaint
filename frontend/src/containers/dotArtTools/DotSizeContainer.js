@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import DotSizeChanger from '../../components/dotArtTools/DotSizeChanger';
-import { changeDotSize, changeBackgroundColor } from '../../modules/dot';
+import { changeDotSize, changeBackgroundColor } from '../../modules/observer';
 import { useDispatch, useSelector } from 'react-redux';
 
 const DotSizeContainer = () => {
   const dispatch = useDispatch();
-  const { dotSize, backgroundColor } = useSelector(({ dotArt }) => ({
-    dotSize: dotArt.present.dot.dotSize,
-    backgroundColor: dotArt.present.dot.backgroundColor,
+  const { dotSize, backgroundColor } = useSelector(({ observer }) => ({
+    dotSize: observer.dotSize,
+    backgroundColor: observer.backgroundColor,
   }));
 
   const onChangeDotSize = useCallback(

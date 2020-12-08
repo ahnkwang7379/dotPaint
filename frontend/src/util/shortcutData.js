@@ -4,6 +4,7 @@ export const initShortcut = {
     { action: 'BUCKET', key: 'b', code: 'KeyB', helpText: 'Bucket tool' },
     { action: 'PIKCER', key: 'p', code: 'KeyP', helpText: 'Color picker tool' },
     { action: 'ERASER', key: 'e', code: 'KeyE', helpText: 'Eraser tool' },
+    { action: 'MOVE', key: 'm', code: 'KeyM', helpText: 'Move tool' },
     {
       action: 'SWAP',
       key: 'x',
@@ -76,6 +77,30 @@ export const initShortcut = {
       key: '+',
       code: 'Minus',
       helpText: 'Decrease dot size',
+    },
+    {
+      action: 'MOVE_VIEWPORT_UP',
+      key: 'shift + arrowUp',
+      code: 'Shift+ArrowUp',
+      helpText: 'Move viewport up',
+    },
+    {
+      action: 'MOVE_VIEWPORT_RIGHT',
+      key: 'shift + arrowRight',
+      code: 'Shift+ArrowRight',
+      helpText: 'Move viewport right',
+    },
+    {
+      action: 'MOVE_VIEWPORT_DOWN',
+      key: 'shift + arrowDown',
+      code: 'Shift+ArrowDown',
+      helpText: 'Move viewport down',
+    },
+    {
+      action: 'MOVE_VIEWPORT_LEFT',
+      key: 'shift + arrowLeft',
+      code: 'Shift+ArrowLeft',
+      helpText: 'Move viewport left',
     },
   ],
 };

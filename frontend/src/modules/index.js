@@ -1,19 +1,43 @@
 import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import { createAction, handleActions } from 'redux-actions';
-import dot from './dot';
-import paintTool, { DOT, BUCKET, PICKER, ERASER } from './paintTool';
+import dot, {
+  CLEAR_DOT,
+  NEW_DOT_ART_PROJECT,
+  LOAD_DOT_ART,
+  INCREASE_COLUMN,
+  DECREASE_COLUMN,
+  INCREASE_ROW,
+  DECREASE_ROW,
+  CHANGE_DOT_AREA,
+  CHANGE_ACTIVE_IDX,
+  REMOVE_ACTIVE_DOT_ART,
+  COPY_ACTIVE_DOT_ART,
+  ADD_NEW_DOT_ART,
+  CHANGE_ANIMATION_INTERVAL,
+  REORDER_DOT_LIST,
+  UPDATE_DOT_ART,
+} from './dot';
+import paintTool, {
+  DOT,
+  BUCKET,
+  PICKER,
+  ERASER,
+  CHANGE_PAINT_TOOL,
+  MOVE,
+} from './paintTool';
 import loading from './loading';
 import auth, { authSaga } from './auth';
 import user, { userSaga } from './user';
 import palettes from './palettes';
 import dialog from './dialog';
-import typing from './typing';
+import observer from './observer';
 import keybind from './keybind';
 import { produce } from 'immer';
-import undoable from 'redux-undo';
+import undoable, { includeAction, excludeAction } from 'redux-undo';
 
-export const DOT_ACTIONS = 'index/DOT_ACTIONS';
+const DOT_ACTIONS = 'index/DOT_ACTIONS';
+const CLEAR_FAKE_DOT_ART = 'index/CLEAR_FAKE_DOT_ART';
 
 export const dotActions = createAction(
   DOT_ACTIONS,
@@ -22,11 +46,11 @@ export const dotActions = createAction(
     columnIdx,
   }),
 );
+export const clearFakeDotArt = createAction(CLEAR_FAKE_DOT_ART);
 
 // undo redo 기능을 활용할 부분만 따로 combine
 const combineDotArt = combineReducers({
-  dot: dot,
-  // palettes: palettes,
+  dot,
 });
 
 const combineReducer = combineReducers({
@@ -34,6 +58,24 @@ const combineReducer = combineReducers({
     limit: 100,
     // debug: true,
     ignoreInitialState: true,
+    filter: includeAction([
+      CLEAR_DOT,
+      NEW_DOT_ART_PROJECT,
+      LOAD_DOT_ART,
+      INCREASE_COLUMN,
+      DECREASE_COLUMN,
+      INCREASE_ROW,
+      DECREASE_ROW,
+      CHANGE_DOT_AREA,
+      CHANGE_ACTIVE_IDX,
+      REMOVE_ACTIVE_DOT_ART,
+      COPY_ACTIVE_DOT_ART,
+      ADD_NEW_DOT_ART,
+      CHANGE_ANIMATION_INTERVAL,
+      REORDER_DOT_LIST,
+      UPDATE_DOT_ART,
+    ]),
+    // filter: excludeAction(DOT_ACTIONS),
   }),
   palettes,
   paintTool,
@@ -41,7 +83,7 @@ const combineReducer = combineReducers({
   dialog,
   user,
   loading,
-  typing,
+  observer,
   keybind,
 });
 
@@ -112,6 +154,10 @@ const bucketDotArt = (
   return newDotArt;
 };
 
+const defaultDotMaker = (row, column) => {
+  return new Array(row).fill().map(() => new Array(column).fill(''));
+};
+
 const dotActionsHandler = (
   state,
   paintTool,
@@ -121,7 +167,8 @@ const dotActionsHandler = (
   columnIdx,
 ) => {
   // selectedPaintTool -> PaintToolState -> rowIdx, columnIdx 체크 순
-  if (paintToolState === 'IDLE') return { ...state };
+  if (paintToolState === 'IDLE' || paintToolState !== 'DRAGGING')
+    return { ...state };
   switch (paintTool) {
     case DOT:
       if (paintToolState === 'DRAGGING') {
@@ -130,11 +177,8 @@ const dotActionsHandler = (
             ? state.palettes.leftColor
             : state.palettes.rightColor;
 
-        const activeIdx = state.dotArt.present.dot.activeIdx;
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotList[activeIdx].dot[rowIdx][
-            columnIdx
-          ] = color;
+          draft.dotArt.present.dot.fakeDotArt[rowIdx][columnIdx] = color;
         });
       } else return { ...state };
     case BUCKET:
@@ -145,11 +189,14 @@ const dotActionsHandler = (
             : state.palettes.rightColor;
 
         const dot = state.dotArt.present.dot;
-        const activeIdx = dot.activeIdx;
+        // const activeIdx = dot.activeIdx;
 
         const { rowCount, columnCount } = dot;
         // 2차배열 1차배열로 풀어서 넣어줌
-        const dotArt = dot.dotList[activeIdx].dot.reduce((acc, cur) =>
+        // const dotArt = dot.dotList[activeIdx].dot.reduce((acc, cur) =>
+        //   acc.concat(cur),
+        // );
+        const dotArt = state.dotArt.present.dot.fakeDotArt.reduce((acc, cur) =>
           acc.concat(cur),
         );
         const selectedDotId = rowIdx * columnCount + columnIdx;
@@ -175,8 +222,11 @@ const dotActionsHandler = (
           returnDotArt.push(row);
           row = [];
         }
+        // return produce(state, (draft) => {
+        //   draft.dotArt.present.dot.dotList[activeIdx].dot = returnDotArt;
+        // });
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotList[activeIdx].dot = returnDotArt;
+          draft.dotArt.present.dot.fakeDotArt = returnDotArt;
         });
       } else {
         return { ...state };
@@ -241,11 +291,14 @@ const dotActionsHandler = (
       }
     case ERASER:
       if (paintToolState === 'DRAGGING') {
-        const activeIdx = state.dotArt.present.dot.activeIdx;
         return produce(state, (draft) => {
-          draft.dotArt.present.dot.dotList[activeIdx].dot[rowIdx][columnIdx] =
-            '';
+          draft.dotArt.present.dot.fakeDotArt[rowIdx][columnIdx] = '';
         });
+      }
+      return { ...state };
+    case MOVE:
+      if (paintToolState === 'DRAGGING') {
+        console.log('!');
       }
       return { ...state };
     default:
@@ -253,17 +306,90 @@ const dotActionsHandler = (
   }
 };
 
+const fakeDotArtSetHandle = (state) => {
+  switch (state.paintTool.selectedPaintTool) {
+    case DOT:
+      return produce(state, (draft) => {
+        draft.dotArt.present.dot.fakeDotArt = defaultDotMaker(
+          draft.dotArt.present.dot.rowCount,
+          draft.dotArt.present.dot.columnCount,
+        );
+      });
+    case BUCKET:
+    case ERASER:
+    case MOVE:
+      return produce(state, (draft) => {
+        draft.dotArt.present.dot.fakeDotArt =
+          draft.dotArt.present.dot.dotList[
+            draft.dotArt.present.dot.activeIdx
+          ].dot;
+      });
+    case PICKER:
+      return produce(state, (draft) => {});
+    default:
+      return { ...state };
+  }
+};
+
 const crossSilceReducer = handleActions(
   {
-    [DOT_ACTIONS]: (state, { payload: { rowIdx, columnIdx } }) =>
-      dotActionsHandler(
-        state,
+    // mousePosition 잡아주기
+    [DOT_ACTIONS]: (state, { payload: { rowIdx, columnIdx } }) => {
+      let newState = {
+        ...state,
+        observer: {
+          ...state.observer,
+          mousePosition: { x: rowIdx, y: columnIdx },
+        },
+      };
+      return dotActionsHandler(
+        newState,
         state.paintTool.selectedPaintTool,
         state.paintTool.paintState,
         state.paintTool.direction,
         rowIdx,
         columnIdx,
-      ),
+      );
+    },
+    // paintTool 변경시 fakeDotArt 초기화 후 새로 세팅
+    [CHANGE_PAINT_TOOL]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [CLEAR_FAKE_DOT_ART]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    // dot modules에서 업데이트 후 뒷처리
+    [UPDATE_DOT_ART]: (state, { payload: selectedPaintTool }) => {
+      switch (selectedPaintTool) {
+        case DOT:
+          return produce(state, (draft) => {
+            draft.dotArt.present.dot.fakeDotArt = defaultDotMaker(
+              draft.dotArt.present.dot.rowCount,
+              draft.dotArt.present.dot.columnCount,
+            );
+          });
+        case ERASER:
+        // return produce(state, (draft) => {
+        //   draft.dotArt.present.dot.fakeDotArt =
+        //     draft.dotArt.present.dot.dotList[
+        //       draft.dotArt.present.dot.activeIdx
+        //     ].dot;
+        // });
+        case BUCKET:
+          return produce(state, (draft) => {
+            draft.dotArt.present.dot.fakeDotArt =
+              draft.dotArt.present.dot.dotList[
+                draft.dotArt.present.dot.activeIdx
+              ].dot;
+          });
+        case MOVE:
+          return { ...state };
+        case PICKER:
+          return { ...state };
+        default:
+          return { ...state };
+      }
+    },
   },
   {},
 );

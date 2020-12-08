@@ -26,10 +26,10 @@ const PreviewBlock = styled.div`
 const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
   const { dotSet, dotList, rowCount, columnCount } = useSelector(
     ({ dotArt }) => ({
-      rowCount: dotArt.present.dot.rowCount,
-      columnCount: dotArt.present.dot.columnCount,
       dotSet: dotArt.present.dot.dotList[dotArt.present.dot.activeIdx].dot,
       dotList: dotArt.present.dot.dotList,
+      rowCount: dotArt.present.dot.rowCount,
+      columnCount: dotArt.present.dot.columnCount,
     }),
   );
   return (
@@ -42,8 +42,9 @@ const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
         <Preview
           dotSet={dotSet}
           dotList={dotList}
-          animation={animation}
+          column={columnCount}
           size={zoomIn ? 6 : 3}
+          animation={animation}
           duration={animationDuration}
         />
       </PreviewBlock>

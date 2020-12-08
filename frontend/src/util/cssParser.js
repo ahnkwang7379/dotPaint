@@ -36,7 +36,7 @@ export function exportAnimationData(frames, columns, cellSize, duration) {
 }
 
 const getImageData = function getImageData(grid, opt) {
-  // grid = grid.flat();
+  grid = grid.flat();
   var xCoord = function xCoord(i) {
     return (i % opt.c) * opt.pSize + opt.pSize;
   };
@@ -57,37 +57,37 @@ const getImageData = function getImageData(grid, opt) {
       }, []);
     }
     default: {
-      return grid
-        .reduce(
-          (acc, cur, rowIdx) =>
-            acc.concat(
-              cur.reduce(
-                (bsString, color, columnIdx) =>
-                  color !== ''
-                    ? ''
-                        .concat(bsString, ' ')
-                        .concat(opt.pSize * columnIdx + opt.pSize, 'px ')
-                        .concat(opt.pSize * rowIdx + opt.pSize, 'px ')
-                        .concat(color, ',')
-                    : bsString,
-                '',
-              ),
-            ),
-          '',
-        )
-        .slice(1, -1);
       // return grid
-      //   .reduce(function (bsString, color, i) {
-      //     if (color !== '') {
-      //       return ''
-      //         .concat(bsString, ' ')
-      //         .concat(xCoord(i), 'px ')
-      //         .concat(yCoord(i), 'px ')
-      //         .concat(color, ',');
-      //     }
-      //     return bsString;
-      //   }, '')
+      //   .reduce(
+      //     (acc, cur, rowIdx) =>
+      //       acc.concat(
+      //         cur.reduce(
+      //           (bsString, color, columnIdx) =>
+      //             color !== ''
+      //               ? ''
+      //                   .concat(bsString, ' ')
+      //                   .concat(opt.pSize * columnIdx + opt.pSize, 'px ')
+      //                   .concat(opt.pSize * rowIdx + opt.pSize, 'px ')
+      //                   .concat(color, ',')
+      //               : bsString,
+      //           '',
+      //         ),
+      //       ),
+      //     '',
+      //   )
       //   .slice(1, -1);
+      return grid
+        .reduce(function (bsString, color, i) {
+          if (color !== '') {
+            return ''
+              .concat(bsString, ' ')
+              .concat(xCoord(i), 'px ')
+              .concat(yCoord(i), 'px ')
+              .concat(color, ',');
+          }
+          return bsString;
+        }, '')
+        .slice(1, -1);
     }
   }
 };

@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { clearFakeDotArt } from '../../modules/index';
 import {
   changePaintTool,
   DOT,
   BUCKET,
   PICKER,
   ERASER,
+  MOVE,
 } from '../../modules/paintTool';
 import { ActionCreators } from 'redux-undo';
 import {
@@ -13,9 +15,8 @@ import {
   decreaseColumn,
   increaseRow,
   decreaseRow,
-  increaseDotSize,
-  decreaseDotSize,
 } from '../../modules/dot';
+import { increaseDotSize, decreaseDotSize } from '../../modules/observer';
 import {
   swapLeftRightColor,
   moveUpPaletteCell,
@@ -63,39 +64,69 @@ const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
     const keybindActionMaker = (action) => {
       switch (action) {
         case 'UNDO':
-          return dispatch(ActionCreators.undo());
+          dispatch(ActionCreators.undo());
+          dispatch(clearFakeDotArt());
+          return;
         case 'REDO':
-          return dispatch(ActionCreators.redo());
+          dispatch(ActionCreators.redo());
+          dispatch(clearFakeDotArt());
+          return;
         case 'SWAP':
-          return dispatch(swapLeftRightColor());
+          dispatch(swapLeftRightColor());
+          return;
         case 'PALETTE_UP':
-          return dispatch(moveUpPaletteCell());
+          dispatch(moveUpPaletteCell());
+          return;
         case 'PALETTE_DOWN':
-          return dispatch(moveDownPaletteCell());
+          dispatch(moveDownPaletteCell());
+          return;
         case 'PALETTE_LEFT':
-          return dispatch(moveLeftPaletteCell());
+          dispatch(moveLeftPaletteCell());
+          return;
         case 'PALETTE_RIGHT':
-          return dispatch(moveRightPaletteCell());
+          dispatch(moveRightPaletteCell());
+          return;
         case 'DOT':
-          return dispatch(changePaintTool(DOT));
+          dispatch(changePaintTool(DOT));
+          return;
         case 'BUCKET':
-          return dispatch(changePaintTool(BUCKET));
+          dispatch(changePaintTool(BUCKET));
+          return;
         case 'PIKCER':
-          return dispatch(changePaintTool(PICKER));
+          dispatch(changePaintTool(PICKER));
+          return;
         case 'ERASER':
-          return dispatch(changePaintTool(ERASER));
+          dispatch(changePaintTool(ERASER));
+          return;
+        case 'MOVE':
+          dispatch(changePaintTool(MOVE));
+          return;
         case 'INCREASE_COLUMN':
-          return dispatch(increaseColumn());
+          dispatch(increaseColumn());
+          return;
         case 'DECREASE_COLUMN':
-          return dispatch(decreaseColumn());
+          dispatch(decreaseColumn());
+          return;
         case 'INCREASE_ROW':
-          return dispatch(increaseRow());
+          dispatch(increaseRow());
+          return;
         case 'DECREASE_ROW':
-          return dispatch(decreaseRow());
+          dispatch(decreaseRow());
+          return;
         case 'INCREASE_DOTSIZE':
-          return dispatch(increaseDotSize());
+          dispatch(increaseDotSize());
+          return;
         case 'DECREASE_DOTSIZE':
-          return dispatch(decreaseDotSize());
+          dispatch(decreaseDotSize());
+          return;
+        // case 'MOVE_VIEWPORT_UP':
+        //   return;
+        // case 'MOVE_VIEWPORT_RIGHT':
+        //   return;
+        // case 'MOVE_VIEWPORT_DOWN':
+        //   return;
+        // case 'MOVE_VIEWPORT_LEFT':
+        //   return;
         default:
           return console.log('bind error');
       }
