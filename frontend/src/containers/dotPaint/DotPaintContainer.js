@@ -8,8 +8,9 @@ import { dotActions } from '../../modules/index';
 
 const DotpaintContainer = () => {
   const dispatch = useDispatch();
-  const { rowCount } = useSelector(({ dotArt }) => ({
+  const { rowCount, columnCount } = useSelector(({ dotArt }) => ({
     rowCount: dotArt.present.dot.rowCount,
+    columnCount: dotArt.present.dot.columnCount,
   }));
   const { border, dotSize, backgroundColor } = useSelector(({ observer }) => ({
     border: observer.dotBorder,
@@ -54,6 +55,7 @@ const DotpaintContainer = () => {
       dotSize={dotSize}
       backgroundColor={backgroundColor}
       rowCount={rowCount}
+      columnCount={columnCount}
       onWheelHandle={onWheelHandle}
       onChangePaintStateHandle={onChangePaintStateHandle}
       onDotActionHandle={onDotActionHandle}

@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
-import DotLayoutContainer from '../../containers/dotPaint/DotLayoutContainer';
+import DotLayerContainer from '../../containers/dotPaint/DotLayerContainer';
 
-const DotPaintBox = styled.div`
+const DotPaintWrapper = styled.div`
   width: 100%;
-  max-width: 100%;
   height: 90vh;
   max-height: 90vh;
   display: flex;
@@ -15,16 +14,19 @@ const DotPaintBox = styled.div`
   background: #afafaf;
   padding: 16px;
   margin-right: 8px;
+  // align-items: center;
 `;
 
-const DotPaintWrapper = styled.div`
+const DotPaintBox = styled.div`
+  // width: fit-content;
+  // height: fit-content;
   display: flex;
   box-sizing: border-box;
   touch-action: none;
-  overflow: auto;
+  overflow: overlay;
   &::-webkit-scrollbar {
-    width: 16px;
-    height: 16px;
+    width: 8px;
+    height: 8px;
     // width: 0px;
     // height: 0px;
   }
@@ -55,7 +57,7 @@ const DotPaintBlock = styled.div`
     css`
       border: ${props.border.size}px solid ${props.border.color};
     `};
-  & > * {
+  & > :nth-child(n + 2) {
     display: flex;
     & > * {
       z-index: 99;
@@ -70,6 +72,8 @@ const DotPaintBlock = styled.div`
           border: ${props.border.size}px solid ${props.border.color};
           width: ${props.dotSize}px;
           height: ${props.dotSize}px;
+          min-width: ${props.dotSize}px;
+          min-height: ${props.dotSize}px;
         `};
     }
   }
@@ -164,13 +168,13 @@ const DotPaint = ({
   }, [rowCount, onMouseDownHandler, onMouseOverHandler]);
 
   return (
-    <DotPaintBox
+    <DotPaintWrapper
       // onWheel={(e) => (lock ? onWheelHandle(e) : console.log('not lock'))}
       onWheel={(e) => onWheelHandle(e)}
       onContextMenu={(e) => e.preventDefault()}
     >
       {/* <ScrollLockButton onClick={lockHandle}>Scroll Lock?</ScrollLockButton> */}
-      <DotPaintWrapper
+      <DotPaintBox
         id="paintBox"
         // onMouseLeave={(e) => onMouseUpHandler(e)}
         // onMouseUp={(e) => onMouseUpHandler(e)}
@@ -183,11 +187,11 @@ const DotPaint = ({
           onMouseDownCapture={onMouseDownHandler} // 캡쳐링으로 state를 먼저 바꿔줘야함
           onContextMenu={(e) => e.preventDefault()}
         >
-          <DotLayoutContainer />
+          <DotLayerContainer />
           {dotLineMaker()}
         </DotPaintBlock>
-      </DotPaintWrapper>
-    </DotPaintBox>
+      </DotPaintBox>
+    </DotPaintWrapper>
   );
 };
 

@@ -34,7 +34,7 @@ import dialog from './dialog';
 import observer from './observer';
 import keybind from './keybind';
 import { produce } from 'immer';
-import undoable, { includeAction, excludeAction } from 'redux-undo';
+import undoable, { includeAction } from 'redux-undo';
 
 const DOT_ACTIONS = 'index/DOT_ACTIONS';
 const CLEAR_FAKE_DOT_ART = 'index/CLEAR_FAKE_DOT_ART';
@@ -295,12 +295,88 @@ const dotActionsHandler = (
           draft.dotArt.present.dot.fakeDotArt[rowIdx][columnIdx] = '';
         });
       }
-      return { ...state };
     case MOVE:
       if (paintToolState === 'DRAGGING') {
-        console.log('!');
+        const startX = state.observer.startPosition.x;
+        const startY = state.observer.startPosition.y;
+
+        const mouseX = state.observer.mousePosition.x;
+        const mouseY = state.observer.mousePosition.y;
+
+        const diffX = mouseX - startX;
+        const diffY = mouseY - startY;
+
+        const dot = state.dotArt.present.dot;
+        const { columnCount } = dot;
+
+        let returnDotArt = dot.dotList[dot.activeIdx].dot.slice();
+        let removedDiffY;
+
+        if (state.observer.altDown) {
+          if (diffY > 0) {
+            removedDiffY = returnDotArt.slice(returnDotArt.length - diffY);
+            returnDotArt = removedDiffY.concat(
+              returnDotArt.slice(0, returnDotArt.length - diffY),
+            );
+          } else if (diffY < 0) {
+            removedDiffY = returnDotArt.slice(0, -diffY);
+            returnDotArt = returnDotArt.slice(-diffY).concat(removedDiffY);
+          }
+
+          if (diffX > 0) {
+            returnDotArt = returnDotArt.map((row) =>
+              row.slice(-diffX).concat(row.slice(0, row.length - diffX)),
+            );
+          } else if (diffX < 0) {
+            returnDotArt = returnDotArt.map((row) =>
+              row.slice(-diffX).concat(row.slice(0, -diffX)),
+            );
+          }
+        } else {
+          // y축 범위를 먼저 좁혀주고 X축 계산 후 y축에 빈 배열을 추가해주는 방식
+          if (diffY > 0) {
+            returnDotArt = returnDotArt.slice(0, returnDotArt.length - diffY);
+          } else if (diffY < 0) {
+            returnDotArt = returnDotArt.slice(-diffY);
+          }
+
+          if (diffX > 0) {
+            returnDotArt = returnDotArt.map((row) =>
+              new Array(diffX)
+                .fill('')
+                .concat(row.slice(0, row.length - diffX)),
+            );
+          } else if (diffX < 0) {
+            returnDotArt = returnDotArt.map((row) =>
+              row.slice(-diffX).concat(new Array(-diffX).fill('')),
+            );
+          }
+
+          if (diffY > 0) {
+            returnDotArt = defaultDotMaker(diffY, columnCount).concat(
+              returnDotArt,
+            );
+          } else if (diffY < 0) {
+            returnDotArt = returnDotArt.concat(
+              defaultDotMaker(-diffY, columnCount),
+            );
+          }
+        }
+
+        return {
+          ...state,
+          dotArt: {
+            ...state.dotArt,
+            present: {
+              ...state.dotArt.present,
+              dot: {
+                ...state.dotArt.present.dot,
+                fakeDotArt: returnDotArt,
+              },
+            },
+          },
+        };
       }
-      return { ...state };
     default:
       return { ...state };
   }
@@ -314,6 +390,7 @@ const fakeDotArtSetHandle = (state) => {
           draft.dotArt.present.dot.rowCount,
           draft.dotArt.present.dot.columnCount,
         );
+        draft.observer.startPosition = { x: '', y: '' };
       });
     case BUCKET:
     case ERASER:
@@ -323,6 +400,7 @@ const fakeDotArtSetHandle = (state) => {
           draft.dotArt.present.dot.dotList[
             draft.dotArt.present.dot.activeIdx
           ].dot;
+        draft.observer.startPosition = { x: '', y: '' };
       });
     case PICKER:
       return produce(state, (draft) => {});
@@ -333,13 +411,19 @@ const fakeDotArtSetHandle = (state) => {
 
 const crossSilceReducer = handleActions(
   {
-    // mousePosition 잡아주기
+    // mousePosition startPosition 잡아주기
     [DOT_ACTIONS]: (state, { payload: { rowIdx, columnIdx } }) => {
       let newState = {
         ...state,
         observer: {
           ...state.observer,
-          mousePosition: { x: rowIdx, y: columnIdx },
+          mousePosition: { x: columnIdx, y: rowIdx },
+          startPosition:
+            state.paintTool.paintState === 'DRAGGING' &&
+            state.observer.startPosition.x === '' &&
+            state.observer.startPosition.y === ''
+              ? { x: columnIdx, y: rowIdx }
+              : state.observer.startPosition,
         },
       };
       return dotActionsHandler(
@@ -351,44 +435,36 @@ const crossSilceReducer = handleActions(
         columnIdx,
       );
     },
-    // paintTool 변경시 fakeDotArt 초기화 후 새로 세팅
+    // dot의 특정 액션들 후에 fakeDotArt 재설정을 위해 필요함
     [CHANGE_PAINT_TOOL]: (state) => {
       return fakeDotArtSetHandle(state);
     },
     [CLEAR_FAKE_DOT_ART]: (state) => {
       return fakeDotArtSetHandle(state);
     },
-    // dot modules에서 업데이트 후 뒷처리
-    [UPDATE_DOT_ART]: (state, { payload: selectedPaintTool }) => {
-      switch (selectedPaintTool) {
-        case DOT:
-          return produce(state, (draft) => {
-            draft.dotArt.present.dot.fakeDotArt = defaultDotMaker(
-              draft.dotArt.present.dot.rowCount,
-              draft.dotArt.present.dot.columnCount,
-            );
-          });
-        case ERASER:
-        // return produce(state, (draft) => {
-        //   draft.dotArt.present.dot.fakeDotArt =
-        //     draft.dotArt.present.dot.dotList[
-        //       draft.dotArt.present.dot.activeIdx
-        //     ].dot;
-        // });
-        case BUCKET:
-          return produce(state, (draft) => {
-            draft.dotArt.present.dot.fakeDotArt =
-              draft.dotArt.present.dot.dotList[
-                draft.dotArt.present.dot.activeIdx
-              ].dot;
-          });
-        case MOVE:
-          return { ...state };
-        case PICKER:
-          return { ...state };
-        default:
-          return { ...state };
-      }
+    [UPDATE_DOT_ART]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [INCREASE_COLUMN]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [DECREASE_COLUMN]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [INCREASE_ROW]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [DECREASE_ROW]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [CHANGE_DOT_AREA]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [CHANGE_ACTIVE_IDX]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [ADD_NEW_DOT_ART]: (state) => {
+      return fakeDotArtSetHandle(state);
     },
   },
   {},

@@ -6,20 +6,20 @@ const Observer = ({
   selectedPaintTool,
   onChangePaintStateHandle,
   onUpdateDotArtHandle,
+  onAltDownHandle,
 }) => {
   useEffect(() => {
-    const mouseUpHandler = (e) => {
+    const mouseUpHandle = (e) => {
       console.log('mouse up!');
       onUpdateDotArtHandle(selectedPaintTool);
       onChangePaintStateHandle('IDLE');
     };
 
     if (paintState === 'DRAGGING')
-      window.addEventListener('mouseup', mouseUpHandler, false);
+      window.addEventListener('mouseup', mouseUpHandle, false);
 
     return () => {
-      window.removeEventListener('mouseup', mouseUpHandler, false);
-      // onUpdateDotArtHandle(); // selectedPaintTool이 바뀌면 강제업뎃시키기
+      window.removeEventListener('mouseup', mouseUpHandle, false);
       console.log('remove event');
     };
   }, [
@@ -28,6 +28,27 @@ const Observer = ({
     onChangePaintStateHandle,
     onUpdateDotArtHandle,
   ]);
+
+  useEffect(() => {
+    const keyUpHandle = (e) => {
+      if (e.code === 'AltLeft') {
+        onAltDownHandle(false);
+      }
+    };
+    const keyDownHandle = (e) => {
+      if (e.code === 'AltLeft') {
+        onAltDownHandle(true);
+      }
+    };
+
+    window.addEventListener('keyup', keyUpHandle, false);
+    window.addEventListener('keydown', keyDownHandle, false);
+
+    return () => {
+      window.removeEventListener('keyup', keyUpHandle, false);
+      window.removeEventListener('keydown', keyDownHandle, false);
+    };
+  }, [onAltDownHandle]);
 
   return (
     <div>{mousePosition && `[${mousePosition.x}, ${mousePosition.y}]`}</div>

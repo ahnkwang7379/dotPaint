@@ -8,6 +8,7 @@ const INCREASE_DOT_SIZE = 'observer/INCREASE_DOT_SIZE';
 const DECREASE_DOT_SIZE = 'observer/DECREASE_DOT_SIZE';
 const CHANGE_DOT_SIZE = 'observer/CHANGE_DOT_SIZE';
 const CHANGE_BACKGROUND_COLOR = 'observer/CHANGE_BACKGROUND_COLOR';
+const ALT_DOWN = 'observer/ALT_DOWN';
 
 export const changeTypingState = createAction(
   CHANGE_TYPING_STATE,
@@ -33,13 +34,16 @@ export const changeBackgroundColor = createAction(
   CHANGE_BACKGROUND_COLOR,
   (color) => color,
 );
+export const altDown = createAction(ALT_DOWN, (bool) => bool);
 
 const initialState = {
   isTyping: false,
   mousePosition: { x: '', y: '' },
+  startPosition: { x: '', y: '' },
   dotSize: 32,
   dotBorder: { size: 0.5, color: '#d0d0fc' },
   backgroundColor: '#777777',
+  altDown: false,
 };
 
 const observer = handleActions(
@@ -81,6 +85,10 @@ const observer = handleActions(
     [CHANGE_BACKGROUND_COLOR]: (state, { payload: color }) => ({
       ...state,
       backgroundColor: color,
+    }),
+    [ALT_DOWN]: (state, { payload: bool }) => ({
+      ...state,
+      altDown: bool,
     }),
   },
   initialState,

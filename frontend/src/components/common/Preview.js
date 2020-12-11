@@ -13,6 +13,8 @@ const Preview = ({
   animation,
   duration,
   zIndex,
+  top,
+  left,
   // opacity,
 }) => {
   const cellSize = typeof size === 'string' ? parseFloat(size) : size;
@@ -50,8 +52,10 @@ const Preview = ({
 
   const style = {
     position: 'relative',
-    top: `-${cellSize}px`,
-    left: `-${cellSize}px`,
+    // top: `-${cellSize}px`,
+    // left: `-${cellSize}px`,
+    top: `${top && top !== 0 ? top - cellSize : -cellSize}px`,
+    left: `${left && left !== 0 ? left - cellSize : -cellSize}px`,
   };
 
   return (
