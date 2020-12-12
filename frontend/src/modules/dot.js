@@ -2,15 +2,18 @@ import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 import shortid from 'shortid';
 import { DOT, ERASER, BUCKET, PICKER, MOVE } from './paintTool';
+import { exampleCat, exampleCatTwo } from '../util/json-example';
 
 export const CLEAR_DOT = 'dot/CLEAR_DOT';
 export const NEW_DOT_ART_PROJECT = 'dot/NEW_DOT_ART_PROJECT';
 export const LOAD_DOT_ART = 'dot/LOAD_DOT_ART';
+
 export const INCREASE_COLUMN = 'dot/INCREASE_COLUMN';
 export const DECREASE_COLUMN = 'dot/DECREASE_COLUMN';
 export const INCREASE_ROW = 'dot/INCREASE_ROW';
 export const DECREASE_ROW = 'dot/DECREASE_ROW';
 export const CHANGE_DOT_AREA = 'dot/CHANGE_DOT_AREA';
+
 export const CHANGE_ACTIVE_IDX = 'dot/CHANGE_ACTIVE_IDX';
 export const REMOVE_ACTIVE_DOT_ART = 'dot/REMOVE_ACTIVE_DOT_ART';
 export const COPY_ACTIVE_DOT_ART = 'dot/COPY_ACTIVE_DOT_ART';
@@ -21,11 +24,16 @@ const CHANGE_PIXEL_SIZE = 'dot/CHANGE_PIXEL_SIZE';
 export const REORDER_DOT_LIST = 'dot/REORDER_DOT_LIST';
 export const UPDATE_DOT_ART = 'dot/UPDATE_DOT_ART';
 
-// initialState
-export const INITIAL_ROW = 8;
-export const INITIAL_COLUMN = 8;
-export const INITIAL_DOT_COLOR = '#f0f0f0';
+// Layer
+export const ADD_NEW_LAYER = 'dot/ADD_NEW_LAYER';
+export const REMOVE_LAYER = 'dot/REMOVE_LAYER';
+export const MERGE_LAYER = 'dot/MERGE_LAYER';
+export const MOVE_UP_LAYER = 'dot/MOVE_UP_LAYER';
+export const MOVE_DOWN_LAYER = 'dot/MOVE_DOWN_LAYER';
+export const SELECT_LAYER_IDX = 'dot/SELECT_LAYER_IDX';
+export const RENAME_LAYER = 'dot/RENAME_LAYER';
 
+// redux actions
 export const clearDot = createAction(CLEAR_DOT);
 export const newDotArtProject = createAction(NEW_DOT_ART_PROJECT);
 export const loadDotArt = createAction(
@@ -67,25 +75,22 @@ export const updateDotArt = createAction(
   UPDATE_DOT_ART,
   (selectedPaintTool) => selectedPaintTool,
 );
+export const addNewLayer = createAction(ADD_NEW_LAYER);
+export const removeLayer = createAction(REMOVE_LAYER);
+export const margeLayer = createAction(MERGE_LAYER);
+export const moveUpLayer = createAction(
+  MOVE_UP_LAYER,
+  (shiftDown) => shiftDown,
+);
+export const moveDownLayer = createAction(
+  MOVE_DOWN_LAYER,
+  (shiftDown) => shiftDown,
+);
+export const selectLayerIdx = createAction(SELECT_LAYER_IDX, (idx) => idx);
+export const renameLayer = createAction(RENAME_LAYER, (name) => name);
 
 const defaultDotMaker = (row, column) => {
   return new Array(row).fill().map(() => new Array(column).fill(''));
-};
-
-const initialState = {
-  fakeDotArt: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
-  dotList: [
-    {
-      id: shortid.generate(),
-      dot: defaultDotMaker(INITIAL_ROW, INITIAL_COLUMN),
-      interval: 100,
-    },
-  ],
-  columnCount: INITIAL_COLUMN,
-  rowCount: INITIAL_ROW,
-  animationDuration: 2,
-  activeIdx: 0,
-  pixelSize: 10,
 };
 
 const intervalSetter = (dotList) => {
@@ -100,6 +105,31 @@ const intervalSetter = (dotList) => {
     };
   });
   return returnDotList;
+};
+
+const initialState = {
+  fakeDotArt: defaultDotMaker(16, 16),
+  dotList: [
+    {
+      id: shortid.generate(),
+      dot: defaultDotMaker(16, 16),
+      interval: 100,
+    },
+  ],
+  dotFrameList: [
+    {
+      id: shortid.generate(),
+      layerList: exampleCatTwo.dotList,
+      interval: 100,
+    },
+  ],
+  columnCount: 16,
+  rowCount: 16,
+  animationDuration: 2,
+  activeIdx: 0,
+  layerSelectIdx: 1,
+  layerNameSet: [...exampleCatTwo.layerNameSet],
+  pixelSize: 10,
 };
 
 const dot = handleActions(
@@ -305,6 +335,7 @@ const dot = handleActions(
       if (selectedPaintTool === PICKER) return { ...state };
 
       let newDotArt;
+
       if (selectedPaintTool === DOT) {
         newDotArt = dotArtMerge(
           state.fakeDotArt,
@@ -322,10 +353,211 @@ const dot = handleActions(
       if (selectedPaintTool === MOVE) {
         newDotArt = state.fakeDotArt;
       }
+
       return produce(state, (draft) => {
         draft.dotList[draft.activeIdx].dot = newDotArt;
       });
     },
+    [ADD_NEW_LAYER]: (state) => {
+      const layerLength = state.dotFrameList[0].layerList.length;
+      const addLayer = {
+        id: shortid.generate(),
+        name: `Layer ${layerLength + 1}`,
+        dot: defaultDotMaker(state.rowCount, state.columnCount),
+      };
+
+      const returnDotFrame = state.dotFrameList.map((dotFrame) => {
+        return {
+          ...dotFrame,
+          layerList: []
+            .concat(dotFrame.layerList.slice(0, state.layerSelectIdx + 1))
+            .concat(addLayer)
+            .concat(
+              dotFrame.layerList.slice(state.layerSelectIdx + 1, layerLength),
+            ),
+        };
+      });
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrame,
+        layerSelectIdx: state.layerSelectIdx + 1,
+      };
+    },
+    [REMOVE_LAYER]: (state) => {
+      const layerLength = state.dotFrameList[0].layerList.length;
+
+      if (layerLength === 1) return { ...state }; // 최소 하나의 layer는 있어야 함
+
+      const returnDotFrame = state.dotFrameList.map((dotFrame) => {
+        return {
+          ...dotFrame,
+          layerList: dotFrame.layerList.filter(
+            (layer, idx) => idx !== state.layerSelectIdx,
+          ),
+        };
+      });
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrame,
+        layerSelectIdx:
+          state.layerSelectIdx === layerLength - 1
+            ? state.layerSelectIdx - 1
+            : state.layerSelectIdx,
+      };
+    },
+    [MERGE_LAYER]: (state) => {
+      const layerLength = state.dotFrameList[0].layerList.length;
+
+      if (layerLength === 1) return { ...state }; // 하나의 layer만 있으면 실행 불가
+      if (state.layerSelectIdx === 0) return { ...state }; // 맨 아래 layer는 merge가 불가능
+
+      const returnDotFrame = state.dotFrameList.map((dotFrame) => {
+        return {
+          ...dotFrame,
+          layerList: []
+            .concat(dotFrame.layerList.slice(0, state.layerSelectIdx - 1))
+            .concat({
+              id: shortid.generate(),
+              name: dotFrame.layerList[state.layerSelectIdx].name,
+              dot: dotArtMerge(
+                dotFrame.layerList[state.layerSelectIdx].dot,
+                dotFrame.layerList[state.layerSelectIdx - 1].dot,
+                state.rowCount,
+                state.columnCount,
+              ),
+            })
+            .concat(
+              dotFrame.layerList.slice(state.layerSelectIdx + 1, layerLength),
+            ),
+        };
+      });
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrame,
+        layerSelectIdx: state.layerSelectIdx - 1,
+      };
+    },
+    [MOVE_UP_LAYER]: (state, { payload: shiftDown }) => {
+      const layerLength = state.dotFrameList[0].layerList.length;
+      const layerSelectIdx = state.layerSelectIdx;
+
+      if (state.layerSelectIdx === layerLength - 1) return { ...state }; // 맨 위는 더 이동 불가
+
+      let returnDotFrame;
+      let returnSelectIdx;
+      if (!shiftDown) {
+        // 한 칸 위로 이동
+        returnDotFrame = state.dotFrameList.map((dotFrame) => {
+          return {
+            ...dotFrame,
+            layerList: []
+              .concat(
+                dotFrame.layerList.slice(
+                  0,
+                  layerSelectIdx === 0 ? 0 : layerSelectIdx,
+                ),
+              )
+              .concat(
+                dotFrame.layerList.slice(
+                  layerSelectIdx + 1,
+                  layerSelectIdx + 2,
+                ),
+              )
+              .concat(
+                dotFrame.layerList.slice(layerSelectIdx, layerSelectIdx + 1),
+              )
+              .concat(dotFrame.layerList.slice(layerSelectIdx + 2)),
+          };
+        });
+        returnSelectIdx = state.layerSelectIdx + 1;
+      } else {
+        // 맨 위로 이동
+        returnDotFrame = state.dotFrameList.map((dotFrame) => {
+          return {
+            ...dotFrame,
+            layerList: []
+              .concat(
+                dotFrame.layerList.slice(
+                  0,
+                  layerSelectIdx === 0 ? 0 : layerSelectIdx,
+                ),
+              )
+              .concat(dotFrame.layerList.slice(layerSelectIdx + 1))
+              .concat(
+                dotFrame.layerList.slice(layerSelectIdx, layerSelectIdx + 1),
+              ),
+          };
+        });
+        returnSelectIdx = layerLength - 1;
+      }
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrame,
+        layerSelectIdx: returnSelectIdx,
+      };
+    },
+    [MOVE_DOWN_LAYER]: (state, { payload: shiftDown }) => {
+      if (state.layerSelectIdx === 0) return { ...state }; // 맨 아래는 더 이동 불가
+
+      const layerSelectIdx = state.layerSelectIdx;
+
+      let returnDotFrame;
+      let returnSelectIdx;
+      if (!shiftDown) {
+        // 한 칸 아래로 이동
+        returnDotFrame = state.dotFrameList.map((dotFrame) => {
+          return {
+            ...dotFrame,
+            layerList: []
+              .concat(
+                dotFrame.layerList.slice(
+                  0,
+                  layerSelectIdx - 1, // idx가 0인 것은 맨 처음 걸러냈음
+                ),
+              )
+              .concat(
+                dotFrame.layerList.slice(layerSelectIdx, layerSelectIdx + 1),
+              )
+              .concat(
+                dotFrame.layerList.slice(layerSelectIdx - 1, layerSelectIdx),
+              )
+              .concat(dotFrame.layerList.slice(layerSelectIdx + 1)),
+          };
+        });
+        returnSelectIdx = layerSelectIdx - 1;
+      } else {
+        // 맨 아래로 이동
+        returnDotFrame = state.dotFrameList.map((dotFrame) => {
+          return {
+            ...dotFrame,
+            layerList: []
+              .concat(
+                dotFrame.layerList.slice(layerSelectIdx, layerSelectIdx + 1),
+              )
+              .concat(dotFrame.layerList.slice(0, layerSelectIdx))
+              .concat(dotFrame.layerList.slice(layerSelectIdx + 1)),
+          };
+        });
+        returnSelectIdx = 0;
+      }
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrame,
+        layerSelectIdx: returnSelectIdx,
+      };
+    },
+    [SELECT_LAYER_IDX]: (state, { payload: idx }) => ({
+      ...state,
+      layerSelectIdx: idx,
+    }),
+    [RENAME_LAYER]: (state, { payload: name }) => ({
+      ...state,
+    }),
   },
   initialState,
 );

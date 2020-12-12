@@ -10,6 +10,7 @@ import PalettesContainer from '../containers/dotArtTools/PalettesContainer';
 import DotBorderContainer from '../containers/dotArtTools/DotBorderContainer';
 import DotSizeContainer from '../containers/dotArtTools/DotSizeContainer';
 import DotAreaContainer from '../containers/dotArtTools/DotAreaContainer';
+import LayerControlContainer from '../containers/dotArtTools/LayerControlContainer';
 import PaintColorContainer from '../containers/dotArtTools/PaintColorContainer';
 import KeyBingingsContainer from '../containers/dotArtTools/KeyBindingsContainer';
 import ObserberContainer from '../containers/dotArtTools/ObserverContainer';
@@ -57,6 +58,7 @@ const DotArtPage = () => {
         <DotPaintContainer />
         <RightToolBox>
           <PreViewContainer />
+          <LayerControlContainer />
           <PalettesContainer />
           <ObserberContainer />
         </RightToolBox>

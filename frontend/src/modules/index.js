@@ -17,6 +17,13 @@ import dot, {
   CHANGE_ANIMATION_INTERVAL,
   REORDER_DOT_LIST,
   UPDATE_DOT_ART,
+  ADD_NEW_LAYER,
+  REMOVE_LAYER,
+  MERGE_LAYER,
+  MOVE_UP_LAYER,
+  MOVE_DOWN_LAYER,
+  SELECT_LAYER_IDX,
+  RENAME_LAYER,
 } from './dot';
 import paintTool, {
   DOT,
@@ -74,6 +81,13 @@ const combineReducer = combineReducers({
       CHANGE_ANIMATION_INTERVAL,
       REORDER_DOT_LIST,
       UPDATE_DOT_ART,
+      ADD_NEW_LAYER,
+      REMOVE_LAYER,
+      MERGE_LAYER,
+      MOVE_UP_LAYER,
+      MOVE_DOWN_LAYER,
+      SELECT_LAYER_IDX,
+      RENAME_LAYER,
     ]),
     // filter: excludeAction(DOT_ACTIONS),
   }),
@@ -436,6 +450,9 @@ const crossSilceReducer = handleActions(
       );
     },
     // dot의 특정 액션들 후에 fakeDotArt 재설정을 위해 필요함
+    [CLEAR_DOT]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
     [CHANGE_PAINT_TOOL]: (state) => {
       return fakeDotArtSetHandle(state);
     },

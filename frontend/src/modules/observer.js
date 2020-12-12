@@ -9,6 +9,7 @@ const DECREASE_DOT_SIZE = 'observer/DECREASE_DOT_SIZE';
 const CHANGE_DOT_SIZE = 'observer/CHANGE_DOT_SIZE';
 const CHANGE_BACKGROUND_COLOR = 'observer/CHANGE_BACKGROUND_COLOR';
 const ALT_DOWN = 'observer/ALT_DOWN';
+const SHIFT_DOWN = 'observer/SHIFT_DOWN';
 
 export const changeTypingState = createAction(
   CHANGE_TYPING_STATE,
@@ -35,6 +36,7 @@ export const changeBackgroundColor = createAction(
   (color) => color,
 );
 export const altDown = createAction(ALT_DOWN, (bool) => bool);
+export const shiftDown = createAction(SHIFT_DOWN, (bool) => bool);
 
 const initialState = {
   isTyping: false,
@@ -44,6 +46,7 @@ const initialState = {
   dotBorder: { size: 0.5, color: '#d0d0fc' },
   backgroundColor: '#777777',
   altDown: false,
+  shiftDown: false,
 };
 
 const observer = handleActions(
@@ -89,6 +92,10 @@ const observer = handleActions(
     [ALT_DOWN]: (state, { payload: bool }) => ({
       ...state,
       altDown: bool,
+    }),
+    [SHIFT_DOWN]: (state, { payload: bool }) => ({
+      ...state,
+      shiftDown: bool,
     }),
   },
   initialState,

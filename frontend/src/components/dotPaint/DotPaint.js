@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
 import DotLayerContainer from '../../containers/dotPaint/DotLayerContainer';
+import TestLayerContainer from '../../containers/dotPaint/TestLayerContainer';
 
 const DotPaintWrapper = styled.div`
   width: 100%;
@@ -23,7 +24,8 @@ const DotPaintBox = styled.div`
   display: flex;
   box-sizing: border-box;
   touch-action: none;
-  overflow: overlay;
+  // overflow: overlay;
+  overflow: auto;
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -187,7 +189,8 @@ const DotPaint = ({
           onMouseDownCapture={onMouseDownHandler} // 캡쳐링으로 state를 먼저 바꿔줘야함
           onContextMenu={(e) => e.preventDefault()}
         >
-          <DotLayerContainer />
+          {/* <DotLayerContainer /> */}
+          <TestLayerContainer />
           {dotLineMaker()}
         </DotPaintBlock>
       </DotPaintBox>

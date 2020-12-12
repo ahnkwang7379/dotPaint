@@ -7,6 +7,7 @@ const Observer = ({
   onChangePaintStateHandle,
   onUpdateDotArtHandle,
   onAltDownHandle,
+  onShiftDownHandle,
 }) => {
   useEffect(() => {
     const mouseUpHandle = (e) => {
@@ -34,10 +35,16 @@ const Observer = ({
       if (e.code === 'AltLeft') {
         onAltDownHandle(false);
       }
+      if (e.code === 'ShiftLeft') {
+        onShiftDownHandle(false);
+      }
     };
     const keyDownHandle = (e) => {
       if (e.code === 'AltLeft') {
         onAltDownHandle(true);
+      }
+      if (e.code === 'ShiftLeft') {
+        onShiftDownHandle(true);
       }
     };
 
@@ -48,7 +55,7 @@ const Observer = ({
       window.removeEventListener('keyup', keyUpHandle, false);
       window.removeEventListener('keydown', keyDownHandle, false);
     };
-  }, [onAltDownHandle]);
+  }, [onAltDownHandle, onShiftDownHandle]);
 
   return (
     <div>{mousePosition && `[${mousePosition.x}, ${mousePosition.y}]`}</div>

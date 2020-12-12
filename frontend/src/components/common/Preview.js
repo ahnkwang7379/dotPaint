@@ -15,7 +15,7 @@ const Preview = ({
   zIndex,
   top,
   left,
-  // opacity,
+  opacity,
 }) => {
   const cellSize = typeof size === 'string' ? parseFloat(size) : size;
 
@@ -24,7 +24,7 @@ const Preview = ({
     // const cellSize = typeof size === 'string' ? parseFloat(size) : size;
     let cssString;
     let animationData;
-    // let cssOpacity = opacity ? opacity : 1;
+    let cssOpacity = opacity ? opacity : 1;
 
     if (animation) {
       animationData = generateAnimationCSSData(dotList, columns, cellSize);
@@ -42,7 +42,7 @@ const Preview = ({
           WebkitBoxShadow: cssString,
           border: '0px',
           zIndex: zIndex ? zIndex : '',
-          // opacity: cssOpacity,
+          opacity: cssOpacity,
         },
       };
       // return <PreViewWrapper cssString={cssString} cellSize={cellSize} />;

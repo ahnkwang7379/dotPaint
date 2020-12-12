@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Observer from '../../components/dotArtTools/Observer';
 import { updateDotArt } from '../../modules/dot';
 import { changePaintState } from '../../modules/paintTool';
-import { altDown } from '../../modules/observer';
+import { altDown, shiftDown } from '../../modules/observer';
 
 const ObserverContainer = () => {
   const dispatch = useDispatch();
@@ -36,6 +36,13 @@ const ObserverContainer = () => {
     [dispatch],
   );
 
+  const onShiftDownHandle = useCallback(
+    (bool) => {
+      dispatch(shiftDown(bool));
+    },
+    [dispatch],
+  );
+
   return (
     <Observer
       mousePosition={mousePosition}
@@ -44,6 +51,7 @@ const ObserverContainer = () => {
       onChangePaintStateHandle={onChangePaintStateHandle}
       onUpdateDotArtHandle={onUpdateDotArtHandle}
       onAltDownHandle={onAltDownHandle}
+      onShiftDownHandle={onShiftDownHandle}
     />
   );
 };
