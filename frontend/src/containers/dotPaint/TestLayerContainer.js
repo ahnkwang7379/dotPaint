@@ -3,11 +3,13 @@ import TestLayer from '../../components/dotPaint/TestLayer';
 import { useSelector } from 'react-redux';
 
 const TestLayerContainer = () => {
-  const { dotFrameList, columnCount, layerSelectIdx } = useSelector(
+  const { layerList, columnCount, layerSelectIdx, layerData } = useSelector(
     ({ dotArt }) => ({
-      dotFrameList: dotArt.present.dot.dotFrameList,
+      layerList:
+        dotArt.present.dot.dotFrameList[dotArt.present.dot.activeIdx].layerList,
       columnCount: dotArt.present.dot.columnCount,
       layerSelectIdx: dotArt.present.dot.layerSelectIdx,
+      layerData: dotArt.present.dot.layerData,
     }),
   );
 
@@ -17,10 +19,10 @@ const TestLayerContainer = () => {
 
   return (
     <TestLayer
-      dotFrameList={dotFrameList}
+      layerList={layerList}
       columnCount={columnCount}
       dotSize={dotSize}
-      layerSelectIdx={layerSelectIdx}
+      layerIdx={layerData[layerSelectIdx].dotFrameIdx}
     />
   );
 };

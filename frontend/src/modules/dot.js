@@ -2,7 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 import shortid from 'shortid';
 import { DOT, ERASER, BUCKET, PICKER, MOVE } from './paintTool';
-import { exampleCat, exampleCatTwo } from '../util/json-example';
+import { exampleCat, exampleCatTwo, example } from '../util/json-example';
 
 export const CLEAR_DOT = 'dot/CLEAR_DOT';
 export const NEW_DOT_ART_PROJECT = 'dot/NEW_DOT_ART_PROJECT';
@@ -75,7 +75,10 @@ export const updateDotArt = createAction(
   UPDATE_DOT_ART,
   (selectedPaintTool) => selectedPaintTool,
 );
-export const addNewLayer = createAction(ADD_NEW_LAYER);
+export const addNewLayer = createAction(
+  ADD_NEW_LAYER,
+  (shiftDown) => shiftDown,
+);
 export const removeLayer = createAction(REMOVE_LAYER);
 export const margeLayer = createAction(MERGE_LAYER);
 export const moveUpLayer = createAction(
@@ -116,19 +119,13 @@ const initialState = {
       interval: 100,
     },
   ],
-  dotFrameList: [
-    {
-      id: shortid.generate(),
-      layerList: exampleCatTwo.dotList,
-      interval: 100,
-    },
-  ],
+  dotFrameList: [...example.dotFrameList],
   columnCount: 16,
   rowCount: 16,
   animationDuration: 2,
   activeIdx: 0,
-  layerSelectIdx: 1,
-  layerNameSet: [...exampleCatTwo.layerNameSet],
+  layerSelectIdx: 0,
+  layerData: [...example.layerData],
   pixelSize: 10,
 };
 
@@ -358,49 +355,99 @@ const dot = handleActions(
         draft.dotList[draft.activeIdx].dot = newDotArt;
       });
     },
-    [ADD_NEW_LAYER]: (state) => {
-      const layerLength = state.dotFrameList[0].layerList.length;
-      const addLayer = {
-        id: shortid.generate(),
-        name: `Layer ${layerLength + 1}`,
-        dot: defaultDotMaker(state.rowCount, state.columnCount),
+    [ADD_NEW_LAYER]: (state, { payload: shiftDown }) => {
+      const { layerSelectIdx, layerData } = state;
+      const layerLength = layerData.length;
+      const dotFrameIdx = layerData[layerSelectIdx].dotFrameIdx;
+
+      let addLayer = [];
+      let addLayerData;
+      let returnDotFrame;
+      if (shiftDown) {
+        // 레이어 복사
+        for (let i = 0; i < state.dotFrameList.length; i++) {
+          addLayer = addLayer.concat([
+            state.dotFrameList[i].layerList[dotFrameIdx].slice(),
+          ]);
+        }
+
+        addLayerData = {
+          layerName: `${layerData[layerSelectIdx].layerName} (copy)`,
+          dotFrameIdx: layerLength,
+        };
+
+        returnDotFrame = state.dotFrameList.map((dotFrame, idx) => {
+          return {
+            ...dotFrame,
+            layerList: []
+              .concat(dotFrame.layerList.slice())
+              .concat([addLayer[idx]]),
+          };
+        });
+      } else {
+        // 신규 레이어
+        addLayer = [defaultDotMaker(state.rowCount, state.columnCount)];
+        console.log(addLayer);
+
+        addLayerData = {
+          layerName: `Layer ${layerLength + 1}`,
+          dotFrameIdx: layerLength,
+        };
+
+        returnDotFrame = state.dotFrameList.map((dotFrame) => {
+          return {
+            ...dotFrame,
+            layerList: [].concat(dotFrame.layerList.slice()).concat(addLayer),
+          };
+        });
+      }
+
+      const returnLayerData = []
+        .concat(layerData.slice(0, layerSelectIdx + 1))
+        .concat(addLayerData)
+        .concat(layerData.slice(layerSelectIdx + 1));
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrame,
+        layerSelectIdx: layerSelectIdx + 1,
+        layerData: returnLayerData,
       };
+    },
+    [REMOVE_LAYER]: (state) => {
+      if (state.layerData.length === 1) return { ...state }; // 최소 하나의 layer는 보장해야 함
+      const { layerSelectIdx, layerData } = state;
+      const layerLength = layerData.length;
+      const dotFrameIdx = layerData[layerSelectIdx].dotFrameIdx;
 
       const returnDotFrame = state.dotFrameList.map((dotFrame) => {
         return {
           ...dotFrame,
           layerList: []
-            .concat(dotFrame.layerList.slice(0, state.layerSelectIdx + 1))
-            .concat(addLayer)
-            .concat(
-              dotFrame.layerList.slice(state.layerSelectIdx + 1, layerLength),
-            ),
+            .concat(dotFrame.layerList.slice(0, dotFrameIdx))
+            .concat(dotFrame.layerList.slice(dotFrameIdx + 1)),
         };
+      });
+      let returnLayerData = []
+        .concat(layerData.slice(0, layerSelectIdx))
+        .concat(layerData.slice(layerSelectIdx + 1));
+
+      // dotFrameIdx 다시 잡아주기. layerSelectIdx보다 높거나 같은 친구들을 하나씩 낮춰주자
+      returnLayerData = returnLayerData.map((data) => {
+        if (data.dotFrameIdx >= layerSelectIdx) {
+          return {
+            ...data,
+            dotFrameIdx: data.dotFrameIdx - 1,
+          };
+        } else {
+          return { ...data };
+        }
       });
 
       return {
         ...state,
         dotFrameList: returnDotFrame,
-        layerSelectIdx: state.layerSelectIdx + 1,
-      };
-    },
-    [REMOVE_LAYER]: (state) => {
-      const layerLength = state.dotFrameList[0].layerList.length;
-
-      if (layerLength === 1) return { ...state }; // 최소 하나의 layer는 있어야 함
-
-      const returnDotFrame = state.dotFrameList.map((dotFrame) => {
-        return {
-          ...dotFrame,
-          layerList: dotFrame.layerList.filter(
-            (layer, idx) => idx !== state.layerSelectIdx,
-          ),
-        };
-      });
-
-      return {
-        ...state,
-        dotFrameList: returnDotFrame,
+        layerData: returnLayerData,
         layerSelectIdx:
           state.layerSelectIdx === layerLength - 1
             ? state.layerSelectIdx - 1
@@ -408,147 +455,130 @@ const dot = handleActions(
       };
     },
     [MERGE_LAYER]: (state) => {
-      const layerLength = state.dotFrameList[0].layerList.length;
+      const { layerSelectIdx, layerData, dotFrameList } = state;
+      const layerLength = layerData.length;
 
       if (layerLength === 1) return { ...state }; // 하나의 layer만 있으면 실행 불가
-      if (state.layerSelectIdx === 0) return { ...state }; // 맨 아래 layer는 merge가 불가능
+      if (layerSelectIdx === 0) return { ...state }; // 맨 아래 layer는 merge가 불가능
 
-      const returnDotFrame = state.dotFrameList.map((dotFrame) => {
-        return {
-          ...dotFrame,
-          layerList: []
-            .concat(dotFrame.layerList.slice(0, state.layerSelectIdx - 1))
-            .concat({
-              id: shortid.generate(),
-              name: dotFrame.layerList[state.layerSelectIdx].name,
-              dot: dotArtMerge(
-                dotFrame.layerList[state.layerSelectIdx].dot,
-                dotFrame.layerList[state.layerSelectIdx - 1].dot,
+      const firstLayerIdx = layerData[layerSelectIdx].dotFrameIdx;
+      const secondLayerIdx = layerData[layerSelectIdx - 1].dotFrameIdx;
+
+      let returnDotFrameList = [];
+      for (let i = 0; i < dotFrameList.length; i++) {
+        let firstLayer = dotFrameList[i].layerList[firstLayerIdx].slice();
+        let secondtLayer = dotFrameList[i].layerList[secondLayerIdx].slice();
+
+        let returnLayer = dotFrameList[i].layerList.reduce((acc, cur, idx) => {
+          if (idx === firstLayerIdx) {
+            return acc.concat([
+              dotArtMerge(
+                firstLayer,
+                secondtLayer,
                 state.rowCount,
                 state.columnCount,
               ),
-            })
-            .concat(
-              dotFrame.layerList.slice(state.layerSelectIdx + 1, layerLength),
-            ),
+            ]);
+          } else if (idx === secondLayerIdx) {
+            return acc;
+          } else {
+            return acc.concat([cur]);
+          }
+        }, []);
+
+        let result = {
+          id: dotFrameList[i].id,
+          layerList: returnLayer,
+          interval: dotFrameList[i].interval,
         };
+
+        returnDotFrameList.push(result);
+      }
+
+      let returnLayerData = []
+        .concat(layerData.slice(0, layerSelectIdx - 1))
+        .concat(layerData.slice(layerSelectIdx));
+
+      // dotFrameIdx 다시 잡아주기. layerSelectIdx보다 높거나 같은 친구들을 하나씩 낮춰주자
+      returnLayerData = returnLayerData.map((data) => {
+        if (data.dotFrameIdx >= layerSelectIdx) {
+          return {
+            ...data,
+            dotFrameIdx: data.dotFrameIdx - 1,
+          };
+        } else {
+          return { ...data };
+        }
       });
 
       return {
         ...state,
-        dotFrameList: returnDotFrame,
+        dotFrameList: returnDotFrameList,
         layerSelectIdx: state.layerSelectIdx - 1,
+        layerData: returnLayerData,
       };
     },
     [MOVE_UP_LAYER]: (state, { payload: shiftDown }) => {
-      const layerLength = state.dotFrameList[0].layerList.length;
-      const layerSelectIdx = state.layerSelectIdx;
+      const layerLength = state.layerData.length;
+      const { layerSelectIdx, layerData } = state;
 
-      if (state.layerSelectIdx === layerLength - 1) return { ...state }; // 맨 위는 더 이동 불가
+      if (layerSelectIdx === layerLength - 1) return { ...state }; // 맨 위는 이동 불가
 
-      let returnDotFrame;
+      let returnLayerData;
       let returnSelectIdx;
+
       if (!shiftDown) {
         // 한 칸 위로 이동
-        returnDotFrame = state.dotFrameList.map((dotFrame) => {
-          return {
-            ...dotFrame,
-            layerList: []
-              .concat(
-                dotFrame.layerList.slice(
-                  0,
-                  layerSelectIdx === 0 ? 0 : layerSelectIdx,
-                ),
-              )
-              .concat(
-                dotFrame.layerList.slice(
-                  layerSelectIdx + 1,
-                  layerSelectIdx + 2,
-                ),
-              )
-              .concat(
-                dotFrame.layerList.slice(layerSelectIdx, layerSelectIdx + 1),
-              )
-              .concat(dotFrame.layerList.slice(layerSelectIdx + 2)),
-          };
-        });
-        returnSelectIdx = state.layerSelectIdx + 1;
+        returnLayerData = []
+          .concat(layerData.slice(0, layerSelectIdx === 0 ? 0 : layerSelectIdx))
+          .concat(layerData.slice(layerSelectIdx + 1, layerSelectIdx + 2))
+          .concat(layerData.slice(layerSelectIdx, layerSelectIdx + 1))
+          .concat(layerData.slice(layerSelectIdx + 2));
+        returnSelectIdx = layerSelectIdx + 1;
       } else {
         // 맨 위로 이동
-        returnDotFrame = state.dotFrameList.map((dotFrame) => {
-          return {
-            ...dotFrame,
-            layerList: []
-              .concat(
-                dotFrame.layerList.slice(
-                  0,
-                  layerSelectIdx === 0 ? 0 : layerSelectIdx,
-                ),
-              )
-              .concat(dotFrame.layerList.slice(layerSelectIdx + 1))
-              .concat(
-                dotFrame.layerList.slice(layerSelectIdx, layerSelectIdx + 1),
-              ),
-          };
-        });
+        returnLayerData = []
+          .concat(layerData.slice(0, layerSelectIdx === 0 ? 0 : layerSelectIdx))
+          .concat(layerData.slice(layerSelectIdx + 1))
+          .concat(layerData.slice(layerSelectIdx, layerSelectIdx + 1));
         returnSelectIdx = layerLength - 1;
       }
 
       return {
         ...state,
-        dotFrameList: returnDotFrame,
         layerSelectIdx: returnSelectIdx,
+        layerData: returnLayerData,
       };
     },
     [MOVE_DOWN_LAYER]: (state, { payload: shiftDown }) => {
-      if (state.layerSelectIdx === 0) return { ...state }; // 맨 아래는 더 이동 불가
+      const { layerSelectIdx, layerData } = state;
 
-      const layerSelectIdx = state.layerSelectIdx;
+      if (layerSelectIdx === 0) return { ...state }; // 맨 아래는 더 이동 불가
 
-      let returnDotFrame;
+      let returnLayerData;
       let returnSelectIdx;
+
       if (!shiftDown) {
         // 한 칸 아래로 이동
-        returnDotFrame = state.dotFrameList.map((dotFrame) => {
-          return {
-            ...dotFrame,
-            layerList: []
-              .concat(
-                dotFrame.layerList.slice(
-                  0,
-                  layerSelectIdx - 1, // idx가 0인 것은 맨 처음 걸러냈음
-                ),
-              )
-              .concat(
-                dotFrame.layerList.slice(layerSelectIdx, layerSelectIdx + 1),
-              )
-              .concat(
-                dotFrame.layerList.slice(layerSelectIdx - 1, layerSelectIdx),
-              )
-              .concat(dotFrame.layerList.slice(layerSelectIdx + 1)),
-          };
-        });
+        returnLayerData = []
+          .concat(layerData.slice(0, layerSelectIdx - 1)) // idx가 0인 경우는 위에서 걸러놨음
+          .concat(layerData.slice(layerSelectIdx, layerSelectIdx + 1))
+          .concat(layerData.slice(layerSelectIdx - 1, layerSelectIdx))
+          .concat(layerData.slice(layerSelectIdx + 1));
         returnSelectIdx = layerSelectIdx - 1;
       } else {
         // 맨 아래로 이동
-        returnDotFrame = state.dotFrameList.map((dotFrame) => {
-          return {
-            ...dotFrame,
-            layerList: []
-              .concat(
-                dotFrame.layerList.slice(layerSelectIdx, layerSelectIdx + 1),
-              )
-              .concat(dotFrame.layerList.slice(0, layerSelectIdx))
-              .concat(dotFrame.layerList.slice(layerSelectIdx + 1)),
-          };
-        });
+        returnLayerData = []
+          .concat(layerData.slice(layerSelectIdx, layerSelectIdx + 1))
+          .concat(layerData.slice(0, layerSelectIdx))
+          .concat(layerData.slice(layerSelectIdx + 1));
         returnSelectIdx = 0;
       }
 
       return {
         ...state,
-        dotFrameList: returnDotFrame,
         layerSelectIdx: returnSelectIdx,
+        layerData: returnLayerData,
       };
     },
     [SELECT_LAYER_IDX]: (state, { payload: idx }) => ({
@@ -557,6 +587,11 @@ const dot = handleActions(
     }),
     [RENAME_LAYER]: (state, { payload: name }) => ({
       ...state,
+      layerData: state.layerData.map((data, idx) =>
+        idx === state.layerSelectIdx
+          ? { ...data, layerName: name }
+          : { ...data },
+      ),
     }),
   },
   initialState,

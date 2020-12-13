@@ -8,20 +8,29 @@ import {
   moveUpLayer,
   moveDownLayer,
   selectLayerIdx,
+  renameLayer,
 } from '../../modules/dot';
 
 const LayerControlContainer = () => {
   const dispatch = useDispatch();
-  const { dotFrameList } = useSelector(({ dotArt }) => ({
-    dotFrameList: dotArt.present.dot.dotFrameList,
-  }));
+  const { layerList, layerSelectIdx, layerData } = useSelector(
+    ({ dotArt }) => ({
+      layerList:
+        dotArt.present.dot.dotFrameList[dotArt.present.dot.activeIdx].layerList,
+      layerSelectIdx: dotArt.present.dot.layerSelectIdx,
+      layerData: dotArt.present.dot.layerData,
+    }),
+  );
   const { shiftDown } = useSelector(({ observer }) => ({
     shiftDown: observer.shiftDown,
   }));
 
-  const addNewLayerHandle = useCallback(() => {
-    dispatch(addNewLayer());
-  }, [dispatch]);
+  const addNewLayerHandle = useCallback(
+    (shiftDown) => {
+      dispatch(addNewLayer(shiftDown));
+    },
+    [dispatch],
+  );
 
   const removeLayerHandle = useCallback(() => {
     dispatch(removeLayer());
@@ -52,9 +61,25 @@ const LayerControlContainer = () => {
     [dispatch],
   );
 
+  // const renameLayerHandle = useCallback(
+  //   (name) => {
+  //     dispatch(renameLayer(name));
+  //   },
+  //   [dispatch],
+  // );
+
+  const renameLayerHandle = useCallback(
+    (e) => {
+      dispatch(renameLayer(e.target.value));
+    },
+    [dispatch],
+  );
+
   return (
     <LayerControl
-      dotFrameList={dotFrameList}
+      layerList={layerList}
+      layerSelectIdx={layerSelectIdx}
+      layerData={layerData}
       shiftDown={shiftDown}
       addNewLayerHandle={addNewLayerHandle}
       removeLayerHandle={removeLayerHandle}
@@ -62,6 +87,7 @@ const LayerControlContainer = () => {
       moveUpHandle={moveUpHandle}
       moveDownHandle={moveDownHandle}
       selectLayerIdxHandle={selectLayerIdxHandle}
+      renameLayerHandle={renameLayerHandle}
     />
   );
 };

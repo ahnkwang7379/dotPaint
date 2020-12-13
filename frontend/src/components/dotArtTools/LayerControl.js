@@ -14,13 +14,24 @@ const LayerControlButton = styled.button`
   width: 40px;
   height: 40px;
   font-size: 24px;
+  cursor: pointer;
 `;
 
-const LayerBox = styled.div``;
-const Layer = styled.div``;
+const LayerBox = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+`;
+const Layer = styled.div`
+  width: 100%;
+  height: 24px;
+  cursor: pointer;
+  background: ${(props) => (props.selected ? 'skyblue' : 'white')};
+  border: 1px solid ${(props) => (props.selected ? 'red' : 'black')};
+`;
 
 const LayerControl = ({
-  dotFrameList,
+  layerSelectIdx,
+  layerData,
   shiftDown,
   addNewLayerHandle,
   removeLayerHandle,
@@ -28,7 +39,11 @@ const LayerControl = ({
   moveUpHandle,
   moveDownHandle,
   selectLayerIdxHandle,
+  renameLayerHandle,
 }) => {
+  const onClickAddNewLayer = () => {
+    addNewLayerHandle(shiftDown);
+  };
   const onClickMoveUp = () => {
     moveUpHandle(shiftDown);
   };
@@ -37,22 +52,47 @@ const LayerControl = ({
   };
   return (
     <LayerWrapper>
-      <LayerControlButton onClick={addNewLayerHandle}>
+      <LayerControlButton onClick={onClickAddNewLayer}>
         <TiPlus />
       </LayerControlButton>
-      <LayerControlButton onClick={removeLayerHandle}>
+      <LayerControlButton
+        onClick={removeLayerHandle}
+        disabled={layerData.length === 1}
+      >
         <TiDelete />
       </LayerControlButton>
-      <LayerControlButton onClick={mergeLayerHandle}>
+      <LayerControlButton
+        onClick={mergeLayerHandle}
+        disabled={layerSelectIdx === 0}
+      >
         <TiFlowMerge />
       </LayerControlButton>
-      <LayerControlButton onClick={onClickMoveUp}>
+      <LayerControlButton
+        onClick={onClickMoveUp}
+        disabled={layerSelectIdx === layerData.length - 1}
+      >
         <TiArrowUpThick />
       </LayerControlButton>
-      <LayerControlButton onClick={onClickMoveDown}>
+      <LayerControlButton
+        onClick={onClickMoveDown}
+        disabled={layerSelectIdx === 0}
+      >
         <TiArrowDownThick />
       </LayerControlButton>
-      <LayerBox></LayerBox>
+      <LayerBox>
+        {layerData.map((layer, idx) => {
+          return (
+            <Layer
+              onClick={() => selectLayerIdxHandle(idx)}
+              key={layer.dotFrameIdx}
+              selected={idx === layerSelectIdx}
+            >
+              <input value={layer.layerName} onChange={renameLayerHandle} />
+              {layer.dotFrameIdx}
+            </Layer>
+          );
+        })}
+      </LayerBox>
     </LayerWrapper>
   );
 };
