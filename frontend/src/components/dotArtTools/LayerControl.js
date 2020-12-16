@@ -84,7 +84,8 @@ const LayerControl = ({
           return (
             <Layer
               onClick={() => selectLayerIdxHandle(idx)}
-              key={layer.dotFrameIdx}
+              // key={layer.dotFrameIdx}
+              key={idx}
               selected={idx === layerSelectIdx}
             >
               <input value={layer.layerName} onChange={renameLayerHandle} />

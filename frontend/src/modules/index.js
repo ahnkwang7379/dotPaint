@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
+import { defaultDotMaker } from '../util/dotArrayUtil';
 import { createAction, handleActions } from 'redux-actions';
 import dot, {
   CLEAR_DOT,
@@ -168,10 +169,6 @@ const bucketDotArt = (
   return newDotArt;
 };
 
-const defaultDotMaker = (row, column) => {
-  return new Array(row).fill().map(() => new Array(column).fill(''));
-};
-
 const dotActionsHandler = (
   state,
   paintTool,
@@ -321,9 +318,12 @@ const dotActionsHandler = (
         const diffY = mouseY - startY;
 
         const dot = state.dotArt.present.dot;
-        const { columnCount } = dot;
+        const { columnCount, layerSelectIdx } = dot;
+        const dotFrameIdx = dot.layerData[layerSelectIdx].dotFrameIdx;
 
-        let returnDotArt = dot.dotList[dot.activeIdx].dot.slice();
+        let returnDotArt = dot.dotFrameList[dot.activeIdx].layerList[
+          dotFrameIdx
+        ].slice();
         let removedDiffY;
 
         // 그냥 이동
@@ -411,11 +411,12 @@ const fakeDotArtSetHandle = (state) => {
     case BUCKET:
     case ERASER:
     case MOVE:
+      const { activeIdx, layerSelectIdx, layerData } = state.dotArt.present.dot;
+      const layerIdx = layerData[layerSelectIdx].dotFrameIdx;
+
       return produce(state, (draft) => {
         draft.dotArt.present.dot.fakeDotArt =
-          draft.dotArt.present.dot.dotList[
-            draft.dotArt.present.dot.activeIdx
-          ].dot;
+          draft.dotArt.present.dot.dotFrameList[activeIdx].layerList[layerIdx];
         draft.observer.startPosition = { x: '', y: '' };
       });
     case PICKER:
@@ -455,6 +456,12 @@ const crossSilceReducer = handleActions(
     [CLEAR_DOT]: (state) => {
       return fakeDotArtSetHandle(state);
     },
+    [LOAD_DOT_ART]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [NEW_DOT_ART_PROJECT]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
     [CHANGE_PAINT_TOOL]: (state) => {
       return fakeDotArtSetHandle(state);
     },
@@ -483,6 +490,24 @@ const crossSilceReducer = handleActions(
       return fakeDotArtSetHandle(state);
     },
     [ADD_NEW_DOT_ART]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [REMOVE_LAYER]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [MERGE_LAYER]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [MOVE_UP_LAYER]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [MOVE_DOWN_LAYER]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [SELECT_LAYER_IDX]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
+    [RENAME_LAYER]: (state) => {
       return fakeDotArtSetHandle(state);
     },
   },

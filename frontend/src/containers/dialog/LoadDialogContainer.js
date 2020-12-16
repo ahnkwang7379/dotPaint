@@ -10,6 +10,7 @@ import { useSnackbar } from 'notistack';
 import { loadDotArt } from '../../modules/dot';
 import { loadPalettes } from '../../modules/palettes';
 import { closeDialog } from '../../modules/dialog';
+import { loadData } from '../../modules/observer';
 
 const LoadDialogContainer = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const LoadDialogContainer = () => {
     (loadedData) => {
       dispatch(loadDotArt(loadedData.dot));
       dispatch(loadPalettes(loadedData.palettes));
+      dispatch(loadData(loadedData.observer));
       dispatch(closeDialog());
       enqueueSnackbar('Load DotArt From LocalStorage', { variant: 'success' });
     },

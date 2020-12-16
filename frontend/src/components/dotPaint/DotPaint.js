@@ -189,8 +189,8 @@ const DotPaint = ({
           onMouseDownCapture={onMouseDownHandler} // 캡쳐링으로 state를 먼저 바꿔줘야함
           onContextMenu={(e) => e.preventDefault()}
         >
-          {/* <DotLayerContainer /> */}
-          <TestLayerContainer />
+          <DotLayerContainer />
+          {/* <TestLayerContainer /> */}
           {dotLineMaker()}
         </DotPaintBlock>
       </DotPaintBox>

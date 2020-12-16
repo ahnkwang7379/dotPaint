@@ -12,29 +12,31 @@ import {
 
 const DotListContainer = () => {
   const dispatch = useDispatch();
-  const { dotList, activeIdx, columnCount } = useSelector(({ dotArt }) => ({
-    dotList: dotArt.present.dot.dotList,
-    activeIdx: dotArt.present.dot.activeIdx,
-    columnCount: dotArt.present.dot.columnCount,
-  }));
+  const { dotFrameList, activeIdx, layerIdx, columnCount } = useSelector(
+    ({
+      dotArt: {
+        present: { dot },
+      },
+    }) => ({
+      dotList: dot.dotList,
+      dotFrameList: dot.dotFrameList,
+      activeIdx: dot.activeIdx,
+      layerIdx: dot.layerData[dot.layerSelectIdx].dotFrameIdx,
+      columnCount: dot.columnCount,
+    }),
+  );
   const handleChangeIdx = useCallback(
     (idx) => {
       dispatch(changeActiveIdx(idx));
     },
     [dispatch],
   );
-  const handleRemoveDotArt = useCallback(
-    (idx) => {
-      dispatch(removeActiveDotArt(idx));
-    },
-    [dispatch],
-  );
-  const handleCopyDotArt = useCallback(
-    (idx) => {
-      dispatch(copyActiveDotArt(idx));
-    },
-    [dispatch],
-  );
+  const handleRemoveDotArt = useCallback(() => {
+    dispatch(removeActiveDotArt());
+  }, [dispatch]);
+  const handleCopyDotArt = useCallback(() => {
+    dispatch(copyActiveDotArt());
+  }, [dispatch]);
   const handleAddDotArt = useCallback(() => {
     dispatch(addNewDotArt());
   }, [dispatch]);
@@ -53,8 +55,9 @@ const DotListContainer = () => {
 
   return (
     <DotList
-      dotList={dotList}
+      dotFrameList={dotFrameList}
       activeIdx={activeIdx}
+      layerIdx={layerIdx}
       columnCount={columnCount}
       handleChangeIdx={handleChangeIdx}
       handleRemoveDotArt={handleRemoveDotArt}

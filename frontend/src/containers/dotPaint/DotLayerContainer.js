@@ -3,10 +3,18 @@ import DotLayer from '../../components/dotPaint/DotLayer';
 import { useSelector } from 'react-redux';
 
 const DotLayerContainer = () => {
-  const { dot, fakeDotArt, columnCount } = useSelector(({ dotArt }) => ({
-    dot: dotArt.present.dot.dotList[dotArt.present.dot.activeIdx].dot,
-    fakeDotArt: dotArt.present.dot.fakeDotArt,
-    columnCount: dotArt.present.dot.columnCount,
+  const {
+    layerList,
+    dotFrame,
+    layerIdx,
+    fakeDotArt,
+    columnCount,
+  } = useSelector(({ dotArt: { present: { dot } } }) => ({
+    layerList: dot.dotFrameList[dot.activeIdx].layerList,
+    dotFrame: dot.dotFrameList[dot.activeIdx],
+    layerIdx: dot.layerData[dot.layerSelectIdx].dotFrameIdx,
+    fakeDotArt: dot.fakeDotArt,
+    columnCount: dot.columnCount,
   }));
   const { dotSize } = useSelector(({ observer }) => ({
     dotSize: observer.dotSize,
@@ -17,10 +25,12 @@ const DotLayerContainer = () => {
 
   return (
     <DotLayer
-      dot={dot}
+      layerList={layerList}
+      dot={dotFrame.layerList[layerIdx]}
       fakeDotArt={fakeDotArt}
       columnCount={columnCount}
       dotSize={dotSize}
+      layerIdx={layerIdx}
       selectedPaintTool={selectedPaintTool}
     />
   );

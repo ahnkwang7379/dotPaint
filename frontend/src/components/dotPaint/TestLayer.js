@@ -2,7 +2,6 @@ import React from 'react';
 import Preview from '../common/Preview';
 
 const TestLayer = ({ layerList, columnCount, dotSize, layerIdx }) => {
-  console.log(layerIdx);
   return (
     <div>
       {layerList.map((layer, idx) => {

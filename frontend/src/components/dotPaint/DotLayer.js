@@ -1,60 +1,71 @@
 import React from 'react';
+import styled from 'styled-components';
 import Preview from '../common/Preview';
 import { BUCKET, DOT, ERASER, MOVE, PICKER } from '../../modules/paintTool';
 
+const LayerWrapper = styled.div``;
+const Layer = styled.div``;
+
 const DotLayer = ({
-  dot,
+  layerList,
   fakeDotArt,
   columnCount,
   dotSize,
+  layerIdx,
   selectedPaintTool,
 }) => {
   return (
-    <>
-      {selectedPaintTool === DOT && (
-        <>
-          <Preview dotSet={dot} column={columnCount} size={dotSize} />
-          <Preview
-            dotSet={fakeDotArt}
-            column={columnCount}
-            size={dotSize}
-            zIndex={100}
-          />
-        </>
-      )}
-      {selectedPaintTool === ERASER && (
-        <Preview
-          dotSet={fakeDotArt}
-          column={columnCount}
-          size={dotSize}
-          zIndex={1}
-        />
-      )}
-      {selectedPaintTool === BUCKET && (
-        <Preview
-          dotSet={fakeDotArt}
-          column={columnCount}
-          size={dotSize}
-          zIndex={1}
-        />
-      )}
-      {selectedPaintTool === PICKER && (
-        <Preview
-          dotSet={fakeDotArt}
-          column={columnCount}
-          size={dotSize}
-          zIndex={100}
-        />
-      )}
-      {selectedPaintTool === MOVE && (
-        <Preview
-          dotSet={fakeDotArt}
-          column={columnCount}
-          size={dotSize}
-          zIndex={1}
-        />
-      )}
-    </>
+    <LayerWrapper>
+      {layerList.map((layer, idx) => {
+        if (idx !== layerIdx) {
+          // 선택된 레이어가 아니면
+          return (
+            <Preview
+              key={idx}
+              dotSet={layer}
+              column={columnCount}
+              size={dotSize}
+              zIndex={1}
+              opacity={0.5}
+            />
+          );
+        } else {
+          // 선택된 레이어면
+          return (
+            <Layer key="selectLayer" id="selectLayer">
+              {selectedPaintTool === DOT && (
+                <>
+                  <Preview
+                    key={idx}
+                    dotSet={layer}
+                    column={columnCount}
+                    size={dotSize}
+                    zIndex={2}
+                    opacity={1}
+                  />
+                  <Preview
+                    dotSet={fakeDotArt}
+                    column={columnCount}
+                    size={dotSize}
+                    zIndex={100}
+                  />
+                </>
+              )}
+              {selectedPaintTool !== DOT && (
+                <>
+                  <Preview
+                    dotSet={fakeDotArt}
+                    column={columnCount}
+                    size={dotSize}
+                    zIndex={2}
+                  />
+                </>
+              )}
+            </Layer>
+          );
+        }
+      })}
+    </LayerWrapper>
   );
 };
 

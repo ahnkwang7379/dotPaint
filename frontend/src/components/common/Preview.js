@@ -13,15 +13,12 @@ const Preview = ({
   animation,
   duration,
   zIndex,
-  top,
-  left,
   opacity,
 }) => {
   const cellSize = typeof size === 'string' ? parseFloat(size) : size;
 
   const generatePreview = () => {
     const columns = column;
-    // const cellSize = typeof size === 'string' ? parseFloat(size) : size;
     let cssString;
     let animationData;
     let cssOpacity = opacity ? opacity : 1;
@@ -45,17 +42,14 @@ const Preview = ({
           opacity: cssOpacity,
         },
       };
-      // return <PreViewWrapper cssString={cssString} cellSize={cellSize} />;
       return <div style={styles.previewWrapper} />;
     }
   };
 
   const style = {
     position: 'relative',
-    // top: `-${cellSize}px`,
-    // left: `-${cellSize}px`,
-    top: `${top && top !== 0 ? top - cellSize : -cellSize}px`,
-    left: `${left && left !== 0 ? left - cellSize : -cellSize}px`,
+    top: `-${cellSize}px`,
+    left: `-${cellSize}px`,
   };
 
   return (

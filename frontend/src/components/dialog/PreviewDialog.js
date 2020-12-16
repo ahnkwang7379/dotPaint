@@ -4,6 +4,10 @@ import CustomButton from '../common/CustomButton';
 import styled from 'styled-components';
 import { MdPlayArrow, MdPause } from 'react-icons/md';
 import TextField from '@material-ui/core/TextField';
+import {
+  layerListMerge,
+  mergeLayersByDotFrameList,
+} from '../../util/dotArrayUtil';
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,18 +44,16 @@ const PreviewBlock = styled.div.attrs(
 )``;
 
 const PreviewDialog = ({
-  dot,
+  dotFrameList,
+  activeIdx,
+  rowCount,
+  columnCount,
+  animationDuration,
+  pixelSize,
+  layerData,
   handleChangeAnimationDuration,
   handleChangePixelSize,
 }) => {
-  const {
-    dotList,
-    activeIdx,
-    rowCount,
-    columnCount,
-    animationDuration,
-    pixelSize,
-  } = dot;
   const [animation, setAnimation] = useState(false);
   const toggleAnimation = () => {
     setAnimation(!animation);
@@ -107,14 +109,25 @@ const PreviewDialog = ({
           columnCount={columnCount}
           rowCount={rowCount}
         >
-          <Preview
-            dotSet={dotList[activeIdx].dot}
-            dotList={dotList}
-            column={columnCount}
-            size={pixelSize}
-            animation={animation}
-            duration={animationDuration}
-          />
+          {!animation && (
+            <Preview
+              dotSet={layerListMerge(
+                dotFrameList[activeIdx].layerList,
+                layerData,
+              )}
+              column={columnCount}
+              size={pixelSize}
+            />
+          )}
+          {animation && (
+            <Preview
+              dotList={mergeLayersByDotFrameList(dotFrameList, layerData)}
+              column={columnCount}
+              size={pixelSize}
+              animation={animation}
+              duration={animationDuration}
+            />
+          )}
         </PreviewBlock>
       </PreviewScrollWrapper>
     </Wrapper>

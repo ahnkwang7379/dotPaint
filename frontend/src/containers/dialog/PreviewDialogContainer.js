@@ -20,7 +20,13 @@ const PreviewDialogContainer = ({ dot }) => {
 
   return (
     <PreviewDialog
-      dot={dot}
+      dotFrameList={dot.dotFrameList}
+      activeIdx={dot.activeIdx}
+      rowCount={dot.rowCount}
+      columnCount={dot.columnCount}
+      animationDuration={dot.animationDuration}
+      pixelSize={dot.pixelSize}
+      layerData={dot.layerData}
       handleChangeAnimationDuration={handleChangeAnimationDuration}
       handleChangePixelSize={handleChangePixelSize}
     />

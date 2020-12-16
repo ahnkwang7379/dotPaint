@@ -132,10 +132,10 @@ const DotListBlock = ({
           <IndexBox>{idx + 1}</IndexBox>
           <Preview dotSet={dot} column={columnCount} size={3} />
           <ButtonDiv>
-            <StyleButton onClick={() => handleRemoveDotArt(idx)}>
+            <StyleButton onClick={handleRemoveDotArt}>
               <DeleteIcon fontSize="inherit" />
             </StyleButton>
-            <StyleButton onClick={() => handleCopyDotArt(idx)}>
+            <StyleButton onClick={handleCopyDotArt}>
               <FileCopyRoundedIcon fontSize="inherit" />
             </StyleButton>
           </ButtonDiv>

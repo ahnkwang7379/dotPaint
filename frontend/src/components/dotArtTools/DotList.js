@@ -49,8 +49,9 @@ const Span = styled.span`
 `;
 
 const DotList = ({
-  dotList,
+  dotFrameList,
   activeIdx,
+  layerIdx,
   columnCount,
   handleChangeIdx,
   handleRemoveDotArt,
@@ -75,21 +76,21 @@ const DotList = ({
         <Droppable droppableId="dotList" type="dotList">
           {(provided) => (
             <ScrollCustom ref={provided.innerRef} {...provided.droppableProps}>
-              {dotList &&
-                dotList.map((dot, idx) => {
+              {dotFrameList &&
+                dotFrameList.map((dotFrame, idx) => {
                   return (
                     <DotListBlock
                       active={activeIdx === idx}
                       idx={idx}
-                      key={dot.id}
-                      dot={dot.dot}
-                      interval={dot.interval}
+                      key={dotFrame.id}
+                      dot={dotFrame.layerList[layerIdx]}
+                      interval={dotFrame.interval}
                       columnCount={columnCount}
                       handleCopyDotArt={handleCopyDotArt}
                       handleRemoveDotArt={handleRemoveDotArt}
                       handleChangeInterval={handleChangeInterval}
                       handleChangeIdx={handleChangeIdx}
-                      lastIndex={dotList.length - 1 === idx}
+                      lastIndex={dotFrameList.length - 1 === idx}
                     />
                   );
                 })}

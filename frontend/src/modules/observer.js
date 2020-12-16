@@ -10,6 +10,7 @@ const CHANGE_DOT_SIZE = 'observer/CHANGE_DOT_SIZE';
 const CHANGE_BACKGROUND_COLOR = 'observer/CHANGE_BACKGROUND_COLOR';
 const ALT_DOWN = 'observer/ALT_DOWN';
 const SHIFT_DOWN = 'observer/SHIFT_DOWN';
+const LOAD_DATA = 'observer/LOAD_DATA';
 
 export const changeTypingState = createAction(
   CHANGE_TYPING_STATE,
@@ -37,6 +38,7 @@ export const changeBackgroundColor = createAction(
 );
 export const altDown = createAction(ALT_DOWN, (bool) => bool);
 export const shiftDown = createAction(SHIFT_DOWN, (bool) => bool);
+export const loadData = createAction(LOAD_DATA, (observerData) => observerData);
 
 const initialState = {
   isTyping: false,
@@ -96,6 +98,10 @@ const observer = handleActions(
     [SHIFT_DOWN]: (state, { payload: bool }) => ({
       ...state,
       shiftDown: bool,
+    }),
+    [LOAD_DATA]: (state, { payload: observerData }) => ({
+      ...state,
+      ...observerData,
     }),
   },
   initialState,

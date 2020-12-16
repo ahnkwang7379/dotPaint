@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Preview from '../common/Preview';
 import styled from 'styled-components';
+import {
+  layerListMerge,
+  mergeLayersByDotFrameList,
+} from '../../util/dotArrayUtil';
 
 const PreviewWrapper = styled.div`
   display: flex;
@@ -24,14 +28,24 @@ const PreviewBlock = styled.div`
 `;
 
 const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
-  const { dotSet, dotList, rowCount, columnCount } = useSelector(
-    ({ dotArt }) => ({
-      dotSet: dotArt.present.dot.dotList[dotArt.present.dot.activeIdx].dot,
-      dotList: dotArt.present.dot.dotList,
-      rowCount: dotArt.present.dot.rowCount,
-      columnCount: dotArt.present.dot.columnCount,
-    }),
-  );
+  const {
+    dotFrameList,
+    layerList,
+    rowCount,
+    columnCount,
+    layerData,
+  } = useSelector(({ dotArt: { present: { dot } } }) => ({
+    dotFrameList: dot.dotFrameList,
+    layerList: dot.dotFrameList[dot.activeIdx].layerList,
+    rowCount: dot.rowCount,
+    columnCount: dot.columnCount,
+    layerData: dot.layerData,
+  }));
+  // dotList는 애니메이션때문에 넣어둠
+  const [dotList, setDotList] = useState();
+  useEffect(() => {
+    setDotList(mergeLayersByDotFrameList(dotFrameList, layerData));
+  }, [animation, dotFrameList]);
   return (
     <PreviewWrapper>
       <PreviewBlock
@@ -39,17 +53,25 @@ const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
         columnCount={columnCount}
         rowCount={rowCount}
       >
-        <Preview
-          dotSet={dotSet}
-          dotList={dotList}
-          column={columnCount}
-          size={zoomIn ? 6 : 3}
-          animation={animation}
-          duration={animationDuration}
-        />
+        {!animation && (
+          <Preview
+            dotSet={layerListMerge(layerList, layerData)}
+            column={columnCount}
+            size={zoomIn ? 6 : 3}
+          />
+        )}
+        {animation && (
+          <Preview
+            dotList={dotList}
+            column={columnCount}
+            size={zoomIn ? 6 : 3}
+            animation={animation}
+            duration={animationDuration}
+          />
+        )}
       </PreviewBlock>
     </PreviewWrapper>
   );
 };
 
-export default PreviewBox;
+export default React.memo(PreviewBox);

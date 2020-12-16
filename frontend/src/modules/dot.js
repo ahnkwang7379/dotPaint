@@ -2,7 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 import shortid from 'shortid';
 import { DOT, ERASER, BUCKET, PICKER, MOVE } from './paintTool';
-import { exampleCat, exampleCatTwo, example } from '../util/json-example';
+import { defaultDotMaker, dotArrayMerge } from '../util/dotArrayUtil';
 
 export const CLEAR_DOT = 'dot/CLEAR_DOT';
 export const NEW_DOT_ART_PROJECT = 'dot/NEW_DOT_ART_PROJECT';
@@ -49,11 +49,8 @@ export const changeDotArea = createAction(
   ({ newRow, newColumn }) => ({ newRow, newColumn }),
 );
 export const changeActiveIdx = createAction(CHANGE_ACTIVE_IDX, (idx) => idx);
-export const removeActiveDotArt = createAction(
-  REMOVE_ACTIVE_DOT_ART,
-  (idx) => idx,
-);
-export const copyActiveDotArt = createAction(COPY_ACTIVE_DOT_ART, (idx) => idx);
+export const removeActiveDotArt = createAction(REMOVE_ACTIVE_DOT_ART);
+export const copyActiveDotArt = createAction(COPY_ACTIVE_DOT_ART);
 export const addNewDotArt = createAction(ADD_NEW_DOT_ART);
 export const changeAnimationInterval = createAction(
   CHANGE_ANIMATION_INTERVAL,
@@ -92,11 +89,7 @@ export const moveDownLayer = createAction(
 export const selectLayerIdx = createAction(SELECT_LAYER_IDX, (idx) => idx);
 export const renameLayer = createAction(RENAME_LAYER, (name) => name);
 
-const defaultDotMaker = (row, column) => {
-  return new Array(row).fill().map(() => new Array(column).fill(''));
-};
-
-const intervalSetter = (dotList) => {
+function intervalSetter(dotList) {
   const quotient = 100 / dotList.length;
   const returnDotList = dotList.map((dotSet, idx) => {
     return {
@@ -108,7 +101,7 @@ const intervalSetter = (dotList) => {
     };
   });
   return returnDotList;
-};
+}
 
 const initialState = {
   fakeDotArt: defaultDotMaker(16, 16),
@@ -119,13 +112,15 @@ const initialState = {
       interval: 100,
     },
   ],
-  dotFrameList: [...example.dotFrameList],
+  dotFrameList: [
+    { id: shortid.generate(), layerList: [defaultDotMaker(16, 16)] },
+  ],
   columnCount: 16,
   rowCount: 16,
   animationDuration: 2,
   activeIdx: 0,
   layerSelectIdx: 0,
-  layerData: [...example.layerData],
+  layerData: [{ layerName: 'Layer 1', dotFrameIdx: 0 }],
   pixelSize: 10,
 };
 
@@ -133,43 +128,48 @@ const dot = handleActions(
   {
     [CLEAR_DOT]: (state) =>
       produce(state, (draft) => {
-        draft.dotList[draft.activeIdx].dot = defaultDotMaker(
-          draft.rowCount,
-          draft.columnCount,
-        );
+        const layerIdx = draft.layerData[draft.layerSelectIdx].dotFrameIdx;
+        draft.dotFrameList[state.activeIdx].layerList[
+          layerIdx
+        ] = defaultDotMaker(draft.rowCount, draft.columnCount);
       }),
     [NEW_DOT_ART_PROJECT]: () => ({
       ...initialState,
     }),
     [LOAD_DOT_ART]: (state, { payload: loadedData }) => ({
       ...state,
-      fakeDotArt: defaultDotMaker(loadedData.rowCount, loadedData.columnCount),
       activeIdx: 0,
+      fakeDotArt: defaultDotMaker(loadedData.rowCount, loadedData.columnCount),
+      layerSelectIdx: 0,
       ...loadedData,
     }),
     [INCREASE_COLUMN]: (state) =>
       produce(state, (draft) => {
         draft.columnCount = draft.columnCount + 1;
-        for (let i = 0; i < draft.dotList.length; i++) {
-          draft.dotList[i].dot.map((column) => column.push(''));
+        for (let i = 0; i < draft.dotFrameList.length; i++) {
+          draft.dotFrameList[i].layerList.map((layer) =>
+            layer.map((column) => column.push('')),
+          );
         }
-        draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
       }),
     [DECREASE_COLUMN]: (state) =>
       produce(state, (draft) => {
-        if (draft.columnCount > 2) {
+        if (draft.columnCount > 1) {
           draft.columnCount = draft.columnCount - 1;
-          for (let i = 0; i < draft.dotList.length; i++) {
-            draft.dotList[i].dot.map((column) => column.pop());
+          for (let i = 0; i < draft.dotFrameList.length; i++) {
+            draft.dotFrameList[i].layerList.map((layer) =>
+              layer.map((column) => column.pop()),
+            );
           }
-          draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
         }
       }),
     [INCREASE_ROW]: (state) =>
       produce(state, (draft) => {
         draft.rowCount = draft.rowCount + 1;
-        for (let i = 0; i < draft.dotList.length; i++) {
-          draft.dotList[i].dot.push(new Array(draft.columnCount).fill(''));
+        for (let i = 0; i < draft.dotFrameList.length; i++) {
+          draft.dotFrameList[i].layerList.map((layer) =>
+            layer.push(new Array(draft.columnCount).fill('')),
+          );
         }
         draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
       }),
@@ -177,8 +177,8 @@ const dot = handleActions(
       produce(state, (draft) => {
         if (draft.rowCount > 2) {
           draft.rowCount = draft.rowCount - 1;
-          for (let i = 0; i < draft.dotList.length; i++) {
-            draft.dotList[i].dot.pop();
+          for (let i = 0; i < draft.dotFrameList.length; i++) {
+            draft.dotFrameList[i].layerList.map((layer) => layer.pop());
           }
           draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
         }
@@ -191,28 +191,34 @@ const dot = handleActions(
         const originRow = draft.rowCount;
         const originColumn = draft.columnCount;
 
-        for (let listIdx = 0; listIdx < draft.dotList.length; listIdx++) {
+        for (let listIdx = 0; listIdx < draft.dotFrameList.length; listIdx++) {
           if (newColumn > originColumn) {
             for (let i = originColumn; i < newColumn; i++) {
-              draft.dotList[listIdx].dot.map((column) => column.push(''));
+              draft.dotFrameList[listIdx].layerList.map((layer) =>
+                layer.map((column) => column.push('')),
+              );
             }
           }
 
           if (newColumn < originColumn) {
             for (let i = newColumn; i < originColumn; i++) {
-              draft.dotList[listIdx].dot.map((column) => column.pop());
+              draft.dotFrameList[listIdx].layerList.map((layer) =>
+                layer.map((column) => column.pop()),
+              );
             }
           }
 
           if (newRow > originRow) {
             for (let i = originRow; i < newRow; i++) {
-              draft.dotList[listIdx].dot.push(new Array(newColumn).fill(''));
+              draft.dotFrameList[listIdx].layerList.map((layer) =>
+                layer.push(new Array(newColumn).fill('')),
+              );
             }
           }
 
           if (newRow < originRow) {
             for (let i = newRow; i < originRow; i++) {
-              draft.dotList[listIdx].dot.pop();
+              draft.dotFrameList[listIdx].layerList.map((layer) => layer.pop());
             }
           }
         }
@@ -225,57 +231,64 @@ const dot = handleActions(
       ...state,
       activeIdx: idx,
     }),
-    [REMOVE_ACTIVE_DOT_ART]: (state, { payload: idx }) =>
-      produce(state, (draft) => {
-        if (draft.dotList.length === 1) {
-          draft.dotList = [
-            {
-              id: shortid.generate(),
-              dot: defaultDotMaker(draft.rowCount, draft.columnCount),
-              interval: 100,
-            },
-          ];
-        } else {
-          let dotList = draft.dotList;
-          let tempDotList = dotList.slice(idx + 1, dotList.length);
+    [REMOVE_ACTIVE_DOT_ART]: (state) => {
+      if (state.dotFrameList.length === 1) return { ...state }; // 단일 dotFrame은 삭제 불가
 
-          dotList = dotList.slice(0, idx);
-          dotList = dotList.concat(tempDotList);
-          draft.dotList = intervalSetter(dotList);
-          draft.activeIdx = idx > dotList.length - 1 ? idx - 1 : idx;
-        }
-      }),
-    [COPY_ACTIVE_DOT_ART]: (state, { payload: idx }) =>
-      produce(state, (draft) => {
-        let dotList = draft.dotList;
-        let copyDotArt = {
-          ...dotList[idx],
-          id: shortid.generate(),
-        };
+      const { dotFrameList, activeIdx } = state;
 
-        let tempDotList = dotList.slice(idx + 1, dotList.length);
-        dotList = dotList.slice(0, idx + 1);
-        dotList = dotList.concat(copyDotArt);
-        dotList = dotList.concat(tempDotList);
-        draft.dotList = intervalSetter(dotList);
-        draft.activeIdx = idx + 1;
-      }),
-    [ADD_NEW_DOT_ART]: (state) =>
-      produce(state, (draft) => {
-        draft.dotList.push({
-          id: shortid.generate(),
-          dot: defaultDotMaker(draft.rowCount, draft.columnCount),
-          interval: 25,
-        });
-        draft.dotList = intervalSetter(draft.dotList);
-        draft.activeIdx = draft.dotList.length - 1;
-      }),
+      const returnDotFrameList = intervalSetter(
+        []
+          .concat(dotFrameList.slice(0, activeIdx))
+          .concat(dotFrameList.slice(activeIdx + 1)),
+      );
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrameList,
+        activeIdx:
+          activeIdx > returnDotFrameList.length - 1 ? activeIdx - 1 : activeIdx,
+      };
+    },
+    [COPY_ACTIVE_DOT_ART]: (state) => {
+      const { dotFrameList, activeIdx } = state;
+
+      const returnDotFrameList = intervalSetter(
+        []
+          .concat(dotFrameList.slice(0, activeIdx + 2))
+          .concat({ ...dotFrameList[activeIdx], id: shortid.generate() })
+          .concat(dotFrameList.slice(activeIdx + 2)),
+      );
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrameList,
+        activeIdx: activeIdx + 1,
+      };
+    },
+    [ADD_NEW_DOT_ART]: (state) => {
+      const defaultDot = defaultDotMaker(state.rowCount, state.columnCount);
+      const newDotFrame = {
+        id: shortid.generate(),
+        layerList: new Array(state.layerData.length).fill(defaultDot),
+        interval: 0,
+      };
+
+      const returnDotFrameList = intervalSetter(
+        [].concat(state.dotFrameList.slice()).concat(newDotFrame),
+      );
+
+      return {
+        ...state,
+        dotFrameList: returnDotFrameList,
+        activeIdx: returnDotFrameList.length - 1,
+      };
+    },
     [CHANGE_ANIMATION_INTERVAL]: (
       state,
       { payload: { interval, activeIdx } },
     ) =>
       produce(state, (draft) => {
-        const dotList = draft.dotList;
+        const dotList = draft.dotFrameList;
         if (dotList[activeIdx + 1].interval < interval) {
           // 현재 interval이 다음 animation보다 늦어선 안되므로 최대치로 조정해준다
           dotList[activeIdx].interval = dotList[activeIdx + 1].interval;
@@ -301,17 +314,17 @@ const dot = handleActions(
     }),
     [REORDER_DOT_LIST]: (state, { payload: { startIdx, endIdx } }) =>
       produce(state, (draft) => {
-        const intervals = draft.dotList.reduce(
+        const intervals = draft.dotFrameList.reduce(
           (acc, cur) => (acc = acc.concat(cur.interval)),
           [],
         );
 
-        const [removed] = draft.dotList.splice(startIdx, 1);
-        draft.dotList.splice(endIdx, 0, removed);
+        const [removed] = draft.dotFrameList.splice(startIdx, 1);
+        draft.dotFrameList.splice(endIdx, 0, removed);
 
         // interval 다시 세팅
         intervals.map(
-          (interval, idx) => (draft.dotList[idx].interval = interval),
+          (interval, idx) => (draft.dotFrameList[idx].interval = interval),
         );
 
         const activeIdx = draft.activeIdx;
@@ -334,9 +347,10 @@ const dot = handleActions(
       let newDotArt;
 
       if (selectedPaintTool === DOT) {
-        newDotArt = dotArtMerge(
+        const layerIdx = state.layerData[state.layerSelectIdx].dotFrameIdx;
+        newDotArt = dotArrayMerge(
           state.fakeDotArt,
-          state.dotList[state.activeIdx].dot,
+          state.dotFrameList[state.activeIdx].layerList[layerIdx],
           state.rowCount,
           state.columnCount,
         );
@@ -352,7 +366,9 @@ const dot = handleActions(
       }
 
       return produce(state, (draft) => {
-        draft.dotList[draft.activeIdx].dot = newDotArt;
+        draft.dotFrameList[draft.activeIdx].layerList[
+          draft.layerData[draft.layerSelectIdx].dotFrameIdx
+        ] = newDotArt;
       });
     },
     [ADD_NEW_LAYER]: (state, { payload: shiftDown }) => {
@@ -387,7 +403,6 @@ const dot = handleActions(
       } else {
         // 신규 레이어
         addLayer = [defaultDotMaker(state.rowCount, state.columnCount)];
-        console.log(addLayer);
 
         addLayerData = {
           layerName: `Layer ${layerLength + 1}`,
@@ -432,9 +447,9 @@ const dot = handleActions(
         .concat(layerData.slice(0, layerSelectIdx))
         .concat(layerData.slice(layerSelectIdx + 1));
 
-      // dotFrameIdx 다시 잡아주기. layerSelectIdx보다 높거나 같은 친구들을 하나씩 낮춰주자
+      // dotFrameIdx 다시 잡아주기. select된 layer의 dotFrameIdx보다 높거나 같은 친구들을 하나씩 낮춰주자
       returnLayerData = returnLayerData.map((data) => {
-        if (data.dotFrameIdx >= layerSelectIdx) {
+        if (data.dotFrameIdx > dotFrameIdx) {
           return {
             ...data,
             dotFrameIdx: data.dotFrameIdx - 1,
@@ -461,25 +476,25 @@ const dot = handleActions(
       if (layerLength === 1) return { ...state }; // 하나의 layer만 있으면 실행 불가
       if (layerSelectIdx === 0) return { ...state }; // 맨 아래 layer는 merge가 불가능
 
-      const firstLayerIdx = layerData[layerSelectIdx].dotFrameIdx;
-      const secondLayerIdx = layerData[layerSelectIdx - 1].dotFrameIdx;
+      const topLayerIdx = layerData[layerSelectIdx].dotFrameIdx;
+      const bottomLayerIdx = layerData[layerSelectIdx - 1].dotFrameIdx;
 
       let returnDotFrameList = [];
       for (let i = 0; i < dotFrameList.length; i++) {
-        let firstLayer = dotFrameList[i].layerList[firstLayerIdx].slice();
-        let secondtLayer = dotFrameList[i].layerList[secondLayerIdx].slice();
+        let topLayer = dotFrameList[i].layerList[topLayerIdx].slice();
+        let bottomLayer = dotFrameList[i].layerList[bottomLayerIdx].slice();
 
         let returnLayer = dotFrameList[i].layerList.reduce((acc, cur, idx) => {
-          if (idx === firstLayerIdx) {
+          if (idx === topLayerIdx) {
             return acc.concat([
-              dotArtMerge(
-                firstLayer,
-                secondtLayer,
+              dotArrayMerge(
+                topLayer,
+                bottomLayer,
                 state.rowCount,
                 state.columnCount,
               ),
             ]);
-          } else if (idx === secondLayerIdx) {
+          } else if (idx === bottomLayerIdx) {
             return acc;
           } else {
             return acc.concat([cur]);
@@ -499,9 +514,11 @@ const dot = handleActions(
         .concat(layerData.slice(0, layerSelectIdx - 1))
         .concat(layerData.slice(layerSelectIdx));
 
-      // dotFrameIdx 다시 잡아주기. layerSelectIdx보다 높거나 같은 친구들을 하나씩 낮춰주자
+      const dotFrameIdx = layerData[layerSelectIdx - 1].dotFrameIdx; // remove와는 다르다 주의할 것
+
+      // dotFrameIdx 다시 잡아주기. 선택된 layer의 dotFrameIdx보다 높은 친구들을 하나씩 낮춰주자
       returnLayerData = returnLayerData.map((data) => {
-        if (data.dotFrameIdx >= layerSelectIdx) {
+        if (data.dotFrameIdx > dotFrameIdx) {
           return {
             ...data,
             dotFrameIdx: data.dotFrameIdx - 1,
@@ -596,17 +613,5 @@ const dot = handleActions(
   },
   initialState,
 );
-
-function dotArtMerge(firstDotArt, secondDotArt, rowCount, columnCount) {
-  let mergedDotArt = defaultDotMaker(rowCount, columnCount);
-  for (let i = 0; i < rowCount; i++) {
-    for (let j = 0; j < columnCount; j++) {
-      firstDotArt[i][j] !== ''
-        ? (mergedDotArt[i][j] = firstDotArt[i][j])
-        : (mergedDotArt[i][j] = secondDotArt[i][j]);
-    }
-  }
-  return mergedDotArt;
-}
 
 export default dot;

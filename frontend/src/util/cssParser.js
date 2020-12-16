@@ -96,7 +96,7 @@ const getAnimationKeyframes = function getAnimationKeyframes(frames, opt) {
   var result = frames.reduce(function (acc, frame, index) {
     var intervalAcc = acc;
     try {
-      var grid = frame.dot || frame.get('dot') || 0;
+      var grid = frame.layer || frame.get('layer') || 0;
       if (grid) {
         var currentBoxShadow = getImageData(grid, {
           pSize: opt.pSize,
