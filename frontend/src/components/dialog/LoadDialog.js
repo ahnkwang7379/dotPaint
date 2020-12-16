@@ -3,6 +3,7 @@ import CustomButton from '../common/CustomButton';
 import Preview from '../common/Preview';
 import styled from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { mergeLayersByDotFrameList } from '../../util/dotArrayUtil';
 
 const Wrapper = styled.div`
   display: flex;
@@ -81,6 +82,8 @@ const LoadDialog = ({
       <PreviewWrapper>
         {loadedData && loadedData.dotArt.length !== 0 ? (
           loadedData.dotArt.map((dotArt, dotArtIdx) => {
+            console.log(dotArt);
+            console.log(dotArt.dot);
             return (
               <CardDiv
                 key={dotArt.dot.id}
@@ -93,7 +96,10 @@ const LoadDialog = ({
                   key={dotArt.dot.id}
                 >
                   <Preview
-                    dotList={dotArt.dot.dotList}
+                    dotList={mergeLayersByDotFrameList(
+                      dotArt.dot.dotFrameList,
+                      dotArt.dot.layerData,
+                    )}
                     column={dotArt.dot.columnCount}
                     size="4"
                     duration={dotArt.dot.animationDuration}

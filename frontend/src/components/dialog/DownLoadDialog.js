@@ -6,6 +6,10 @@ import {
   getCssImageClassOutput,
   exportAnimationData,
 } from '../../util/cssParser';
+import {
+  layerListMerge,
+  mergeLayersByDotFrameList,
+} from '../../util/dotArrayUtil';
 import { useSnackbar } from 'notistack';
 
 const Wrapper = styled.div`
@@ -74,7 +78,8 @@ const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
     enqueueSnackbar('Copy Success!', { variant: 'success' });
   };
   const {
-    dotList,
+    dotFrameList,
+    layerData,
     columnCount,
     rowCount,
     activeIdx,
@@ -98,8 +103,8 @@ const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
         </CustomButton>
         {dialog === 'DownLoad' && (
           <CustomButton
-            selected={type === 'sprite'}
-            onClick={() => setType('sprite')}
+            selected={type === 'spritesheet'}
+            onClick={() => setType('spritesheet')}
           >
             sprite
           </CustomButton>
@@ -113,8 +118,11 @@ const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
           rowCount={rowCount}
         >
           <Preview
-            dotSet={dotList[activeIdx].dot}
-            dotList={dotList}
+            dotSet={layerListMerge(
+              dotFrameList[activeIdx].layerList,
+              layerData,
+            )}
+            dotList={mergeLayersByDotFrameList(dotFrameList, layerData)}
             column={columnCount}
             size={pixelSize}
             animation={type === 'gif' ? true : false}
@@ -141,11 +149,19 @@ const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
             value={
               type === 'single'
                 ? getCssImageClassOutput(
-                    dotList[activeIdx].dot,
+                    layerListMerge(
+                      dotFrameList[activeIdx].layerList,
+                      layerData,
+                    ),
                     columnCount,
                     pixelSize,
                   )
-                : exportAnimationData(dotList, columnCount, pixelSize)
+                : exportAnimationData(
+                    mergeLayersByDotFrameList(dotFrameList, layerData),
+                    columnCount,
+                    pixelSize,
+                    animationDuration,
+                  )
             }
             readOnly
           />

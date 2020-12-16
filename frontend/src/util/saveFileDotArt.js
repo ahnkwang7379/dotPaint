@@ -1,6 +1,7 @@
 import GIFEncoder from 'gif-encoder';
 import blobStream from 'blob-stream';
 import { saveAs } from 'file-saver';
+import { mergeLayersByDotFrameList } from './dotArrayUtil';
 
 function randomName() {
   return Math.random()
@@ -12,7 +13,7 @@ function randomName() {
 function fillCanvasWithDotArt(canvas, dotArtInfo) {
   const { dotArt, cols, pixelSize, dotArtHeight, dotArtIdx } = dotArtInfo;
   const ctx = canvas;
-  dotArt['dot'].flat().forEach((fillStyle, pixelIdx) => {
+  dotArt.layer.flat().forEach((fillStyle, pixelIdx) => {
     if (!fillStyle) {
       return;
     }
@@ -68,13 +69,15 @@ const saveCanvasToDisk = (blob, fileExtension) => {
 
 const saveFileDotArt = (type, dotArtData) => {
   const {
-    dotList,
+    dotFrameList,
+    layerData,
     columnCount,
     rowCount,
     animationDuration,
     activeIdx,
     pixelSize,
   } = dotArtData;
+  const dotList = mergeLayersByDotFrameList(dotFrameList, layerData);
 
   const durationInMillisecond = animationDuration * 1000;
   const dotArtWidth = columnCount * pixelSize;

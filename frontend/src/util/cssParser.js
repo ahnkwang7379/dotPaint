@@ -134,6 +134,8 @@ const getAnimationCssClassOutput = function getAnimationCssClassOutput(
   frames,
   opt,
 ) {
+  console.log(frames);
+  console.log(opt);
   var keyframes = getAnimationKeyframes(frames, opt);
   var result = '';
   result += '.'.concat(opt.cssClassName, ' {\n  position: absolute;\n  ');

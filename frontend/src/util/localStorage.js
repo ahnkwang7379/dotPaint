@@ -1,4 +1,4 @@
-import { example, exampleCat, examplePalette } from './json-example';
+import { exampleCat, examplePalette } from './json-example';
 
 const STORAGE_KEY = 'dotArt_storage';
 const STORAGE_PALETTES_KEY = 'dotArt_palettes_storage';
@@ -18,7 +18,7 @@ export function initialStorage(storage) {
     JSON.stringify({
       dotArt: [
         {
-          dot: { ...example },
+          dot: { ...exampleCat },
           palettes: examplePalette,
         },
       ],
