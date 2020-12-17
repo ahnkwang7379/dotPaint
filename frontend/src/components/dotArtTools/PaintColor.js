@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { SketchPicker } from 'react-color';
+import { SketchPicker, ChromePicker } from 'react-color';
 
 const Wrapper = styled.div`
   display: flex;
@@ -46,6 +46,7 @@ const PaintColor = ({
   const [displayRightColorPicker, setDisplayRightColorPicker] = useState(false);
   const [leftSelectColor, setLeftSelectColor] = useState('');
   const [rightSelectColor, setRightSelectColor] = useState('');
+  console.log(rightSelectColor);
 
   useEffect(() => {
     setLeftSelectColor(leftColor);
@@ -57,7 +58,8 @@ const PaintColor = ({
   };
 
   const handleRightColorChange = (pick) => {
-    setRightSelectColor(pick.hex);
+    console.log(pick);
+    setRightSelectColor(pick.rgb);
   };
 
   const handleOpenColorPicker = (type) => {
@@ -74,9 +76,14 @@ const PaintColor = ({
       changeLeftColor(leftSelectColor);
     } else {
       setDisplayRightColorPicker(false);
+      console.log(rightSelectColor);
       changeRightColor(rightSelectColor);
     }
   };
+
+  // console.log(`rightColor : ${rightColor}`);
+  // console.log(`rightSelectColor : ${rightSelectColor}`);
+  // console.log(`displayRightColorPicker : ${displayRightColorPicker}`);
 
   return (
     <Wrapper>
@@ -88,8 +95,8 @@ const PaintColor = ({
         {displayLeftColorPicker ? (
           <ColorPickerBlock>
             <Cover onClick={() => handleClose('LEFT')} />
-            <SketchPicker
-              disableAlpha
+            <ChromePicker
+              // disableAlpha
               color={leftSelectColor}
               onChange={handleLeftColorChange}
             />
@@ -104,8 +111,8 @@ const PaintColor = ({
         {displayRightColorPicker ? (
           <ColorPickerBlock>
             <Cover onClick={() => handleClose('RIGHT')} />
-            <SketchPicker
-              disableAlpha
+            <ChromePicker
+              // disableAlpha
               color={rightSelectColor}
               onChange={handleRightColorChange}
             />

@@ -145,10 +145,9 @@ const bucketDotArt = (
   let adjacentColor;
 
   while (queue.length > 0) {
-    currentId = queue.shift();
-    newDotArt = produce(newDotArt, (draft) => {
-      draft[currentId] = paletteColor;
-    });
+    currentId = queue.pop();
+    newDotArt[currentId] = paletteColor;
+
     adjacents = floodFill(
       newDotArt,
       currentId,
@@ -188,9 +187,22 @@ const dotActionsHandler = (
             ? state.palettes.leftColor
             : state.palettes.rightColor;
 
-        return produce(state, (draft) => {
-          draft.dotArt.present.dot.fakeDotArt[rowIdx][columnIdx] = color;
-        });
+        let fakeDotSet = state.dotArt.present.dot.fakeDotArt.slice();
+        fakeDotSet[rowIdx][columnIdx] = color;
+
+        return {
+          ...state,
+          dotArt: {
+            ...state.dotArt,
+            present: {
+              ...state.dotArt.present,
+              dot: {
+                ...state.dotArt.present.dot,
+                fakeDotArt: fakeDotSet,
+              },
+            },
+          },
+        };
       } else return { ...state };
     case BUCKET:
       if (paintToolState === 'DRAGGING') {
@@ -200,13 +212,9 @@ const dotActionsHandler = (
             : state.palettes.rightColor;
 
         const dot = state.dotArt.present.dot;
-        // const activeIdx = dot.activeIdx;
 
         const { rowCount, columnCount } = dot;
         // 2차배열 1차배열로 풀어서 넣어줌
-        // const dotArt = dot.dotList[activeIdx].dot.reduce((acc, cur) =>
-        //   acc.concat(cur),
-        // );
         const dotArt = state.dotArt.present.dot.fakeDotArt.reduce((acc, cur) =>
           acc.concat(cur),
         );
@@ -233,12 +241,20 @@ const dotActionsHandler = (
           returnDotArt.push(row);
           row = [];
         }
-        // return produce(state, (draft) => {
-        //   draft.dotArt.present.dot.dotList[activeIdx].dot = returnDotArt;
-        // });
-        return produce(state, (draft) => {
-          draft.dotArt.present.dot.fakeDotArt = returnDotArt;
-        });
+
+        return {
+          ...state,
+          dotArt: {
+            ...state.dotArt,
+            present: {
+              ...state.dotArt.present,
+              dot: {
+                ...state.dotArt.present.dot,
+                fakeDotArt: returnDotArt,
+              },
+            },
+          },
+        };
       } else {
         return { ...state };
       }
@@ -302,10 +318,25 @@ const dotActionsHandler = (
       }
     case ERASER:
       if (paintToolState === 'DRAGGING') {
-        return produce(state, (draft) => {
-          draft.dotArt.present.dot.fakeDotArt[rowIdx][columnIdx] = '';
-        });
-      }
+        let fakeDotSet = state.dotArt.present.dot.fakeDotArt.map((arr) =>
+          arr.slice(),
+        );
+        fakeDotSet[rowIdx][columnIdx] = '';
+
+        return {
+          ...state,
+          dotArt: {
+            ...state.dotArt,
+            present: {
+              ...state.dotArt.present,
+              dot: {
+                ...state.dotArt.present.dot,
+                fakeDotArt: fakeDotSet,
+              },
+            },
+          },
+        };
+      } else return { ...state };
     case MOVE:
       if (paintToolState === 'DRAGGING') {
         const startX = state.observer.startPosition.x;
@@ -401,24 +432,53 @@ const dotActionsHandler = (
 const fakeDotArtSetHandle = (state) => {
   switch (state.paintTool.selectedPaintTool) {
     case DOT:
-      return produce(state, (draft) => {
-        draft.dotArt.present.dot.fakeDotArt = defaultDotMaker(
-          draft.dotArt.present.dot.rowCount,
-          draft.dotArt.present.dot.columnCount,
-        );
-        draft.observer.startPosition = { x: '', y: '' };
-      });
+      const defaultDot = defaultDotMaker(
+        state.dotArt.present.dot.rowCount,
+        state.dotArt.present.dot.columnCount,
+      );
+      return {
+        ...state,
+        dotArt: {
+          ...state.dotArt,
+          present: {
+            ...state.dotArt.present,
+            dot: {
+              ...state.dotArt.present.dot,
+              fakeDotArt: defaultDot,
+            },
+          },
+        },
+        observer: {
+          ...state.observer,
+          startPosition: { x: '', y: '' },
+        },
+      };
     case BUCKET:
     case ERASER:
     case MOVE:
       const { activeIdx, layerSelectIdx, layerData } = state.dotArt.present.dot;
       const layerIdx = layerData[layerSelectIdx].dotFrameIdx;
 
-      return produce(state, (draft) => {
-        draft.dotArt.present.dot.fakeDotArt =
-          draft.dotArt.present.dot.dotFrameList[activeIdx].layerList[layerIdx];
-        draft.observer.startPosition = { x: '', y: '' };
-      });
+      return {
+        ...state,
+        dotArt: {
+          ...state.dotArt,
+          present: {
+            ...state.dotArt.present,
+            dot: {
+              ...state.dotArt.present.dot,
+              fakeDotArt:
+                state.dotArt.present.dot.dotFrameList[activeIdx].layerList[
+                  layerIdx
+                ],
+            },
+          },
+        },
+        observer: {
+          ...state.observer,
+          startPosition: { x: '', y: '' },
+        },
+      };
     case PICKER:
       return produce(state, (draft) => {});
     default:
@@ -436,6 +496,7 @@ const crossSilceReducer = handleActions(
           ...state.observer,
           mousePosition: { x: columnIdx, y: rowIdx },
           startPosition:
+            state.paintTool.paintTool === 'MOVE' &&
             state.paintTool.paintState === 'DRAGGING' &&
             state.observer.startPosition.x === '' &&
             state.observer.startPosition.y === ''

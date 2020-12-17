@@ -23,9 +23,10 @@ const ScrollCustom = styled.div`
   overflow: auto;
   position: sticky;
   & > *:not(:last-child) {
-    width: 80px;
-    min-width: 80px;
-    height: 96px;
+    width: 96px;
+    min-width: 96px;
+    height: 118px;
+    /* height: 96px; */
   }
   & > * {
     margin: 8px;
@@ -53,6 +54,7 @@ const DotList = ({
   activeIdx,
   layerIdx,
   columnCount,
+  rowCount,
   handleChangeIdx,
   handleRemoveDotArt,
   handleCopyDotArt,
@@ -86,6 +88,7 @@ const DotList = ({
                       dot={dotFrame.layerList[layerIdx]}
                       interval={dotFrame.interval}
                       columnCount={columnCount}
+                      rowCount={rowCount}
                       handleCopyDotArt={handleCopyDotArt}
                       handleRemoveDotArt={handleRemoveDotArt}
                       handleChangeInterval={handleChangeInterval}
@@ -96,7 +99,7 @@ const DotList = ({
                 })}
               {provided.placeholder}
               <CustomButton
-                width="80"
+                width="96"
                 height="50"
                 onClick={() => handleAddDotArt()}
               >

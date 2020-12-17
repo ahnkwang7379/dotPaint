@@ -76,7 +76,7 @@ const initialState = {
     colorId: 0,
   },
   leftColor: '#000000',
-  rightColor: '#ffffff',
+  rightColor: '#ffffff00',
   trashCan: [],
 };
 

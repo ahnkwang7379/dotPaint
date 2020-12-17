@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
 import DotLayerContainer from '../../containers/dotPaint/DotLayerContainer';
-import TestLayerContainer from '../../containers/dotPaint/TestLayerContainer';
+import White from '../../img/white.png';
 
 const DotPaintWrapper = styled.div`
   width: 100%;
@@ -44,13 +44,12 @@ const DotPaintBox = styled.div`
 `;
 
 const DotPaintBlock = styled.div`
+  background-image: url(${White});
   display: inline-flex;
   justify-content: flex-start;
   flex-direction: column;
   width: auto;
   height: fit-content;
-  background: ${(props) =>
-    props.backgroundColor ? props.backgroundColor : '#000000'};
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;

@@ -17,7 +17,7 @@ const CustomButtonStyled = styled.button`
   height: ${(props) => (props.height ? `${props.height}px` : `auto`)};
   border: 1px solid #225ea7;
   outline: none;
-  border-radius: 0.5rem;
+  // border-radius: 0.5rem;
   text-align: center;
   box-shadow: 0 0.3rem #999;
   transition: all 0.05s ease-in-out;
@@ -41,9 +41,6 @@ const CustomButtonStyled = styled.button`
       box-shadow: 0 0.1rem #666;
       transform: translateY(4px);
     `}
-  & + & {
-    margin-left: 5px;
-  }
 `;
 
 const CustomButton = ({ children, ...rest }) => {

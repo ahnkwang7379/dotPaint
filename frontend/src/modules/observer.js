@@ -45,7 +45,7 @@ const initialState = {
   mousePosition: { x: '', y: '' },
   startPosition: { x: '', y: '' },
   dotSize: 32,
-  dotBorder: { size: 0.5, color: '#d0d0fc' },
+  dotBorder: { size: 0.5, color: '#000000' },
   backgroundColor: '#777777',
   altDown: false,
   shiftDown: false,

@@ -105,15 +105,12 @@ function intervalSetter(dotList) {
 
 const initialState = {
   fakeDotArt: defaultDotMaker(16, 16),
-  dotList: [
+  dotFrameList: [
     {
       id: shortid.generate(),
-      dot: defaultDotMaker(16, 16),
+      layerList: [defaultDotMaker(16, 16)],
       interval: 100,
     },
-  ],
-  dotFrameList: [
-    { id: shortid.generate(), layerList: [defaultDotMaker(16, 16)] },
   ],
   columnCount: 16,
   rowCount: 16,
@@ -175,7 +172,7 @@ const dot = handleActions(
       }),
     [DECREASE_ROW]: (state) =>
       produce(state, (draft) => {
-        if (draft.rowCount > 2) {
+        if (draft.rowCount > 1) {
           draft.rowCount = draft.rowCount - 1;
           for (let i = 0; i < draft.dotFrameList.length; i++) {
             draft.dotFrameList[i].layerList.map((layer) => layer.pop());

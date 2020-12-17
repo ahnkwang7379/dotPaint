@@ -6,8 +6,10 @@ import {
   layerListMerge,
   mergeLayersByDotFrameList,
 } from '../../util/dotArrayUtil';
+import White from '../../img/white.png';
 
 const PreviewWrapper = styled.div`
+  background-image: url(${White});
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +26,7 @@ const PreviewBlock = styled.div`
   max-width: 200px;
   max-height: 200px;
   overflow: hidden;
-  border: 1px solid #e6e6e6;
+  border: 3px solid yellow;
 `;
 
 const PreviewBox = ({ zoomIn, animation, animationDuration }) => {

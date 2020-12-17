@@ -51,7 +51,7 @@ const DotArtPage = () => {
           <UndoRedoContainer />
           <DotBorderContainer />
           <DotSizeContainer />
-          {/* <DotAreaContainer /> */}
+          <DotAreaContainer />
           <PaintColorContainer />
         </LeftToolBox>
         <DotListContainer />

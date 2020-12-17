@@ -6,14 +6,30 @@ import {
   TiArrowDownThick,
   TiDelete,
   TiFlowMerge,
+  TiPen,
 } from 'react-icons/ti';
+import CustomButton from '../common/CustomButton';
 
-const LayerWrapper = styled.div``;
+const LayerWrapper = styled.div`
+  border: 2px solid #888;
+`;
 
-const LayerControlButton = styled.button`
-  width: 40px;
-  height: 40px;
+const LayerHead = styled.div`
   font-size: 24px;
+  padding-left: 16px;
+  font-weight: bold;
+  color: white;
+  background: #222222;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+`;
+
+const LayerButton = styled.button`
+  width: 100%;
+  height: 32px;
+  font-size: 16px;
   cursor: pointer;
 `;
 
@@ -21,6 +37,7 @@ const LayerBox = styled.div`
   display: flex;
   flex-direction: column-reverse;
 `;
+
 const Layer = styled.div`
   width: 100%;
   height: 24px;
@@ -52,44 +69,45 @@ const LayerControl = ({
   };
   return (
     <LayerWrapper>
-      <LayerControlButton onClick={onClickAddNewLayer}>
-        <TiPlus />
-      </LayerControlButton>
-      <LayerControlButton
-        onClick={removeLayerHandle}
-        disabled={layerData.length === 1}
-      >
-        <TiDelete />
-      </LayerControlButton>
-      <LayerControlButton
-        onClick={mergeLayerHandle}
-        disabled={layerSelectIdx === 0}
-      >
-        <TiFlowMerge />
-      </LayerControlButton>
-      <LayerControlButton
-        onClick={onClickMoveUp}
-        disabled={layerSelectIdx === layerData.length - 1}
-      >
-        <TiArrowUpThick />
-      </LayerControlButton>
-      <LayerControlButton
-        onClick={onClickMoveDown}
-        disabled={layerSelectIdx === 0}
-      >
-        <TiArrowDownThick />
-      </LayerControlButton>
+      <LayerHead>Layers</LayerHead>
+      <ButtonBox>
+        <CustomButton onClick={onClickAddNewLayer}>
+          <TiPlus />
+        </CustomButton>
+        <CustomButton
+          onClick={onClickMoveUp}
+          disabled={layerSelectIdx === layerData.length - 1}
+        >
+          <TiArrowUpThick />
+        </CustomButton>
+        <CustomButton onClick={onClickMoveDown} disabled={layerSelectIdx === 0}>
+          <TiArrowDownThick />
+        </CustomButton>
+        <CustomButton>
+          <TiPen />
+        </CustomButton>
+        <CustomButton
+          onClick={mergeLayerHandle}
+          disabled={layerSelectIdx === 0}
+        >
+          <TiFlowMerge />
+        </CustomButton>
+        <CustomButton
+          onClick={removeLayerHandle}
+          disabled={layerData.length === 1}
+        >
+          <TiDelete />
+        </CustomButton>
+      </ButtonBox>
       <LayerBox>
         {layerData.map((layer, idx) => {
           return (
             <Layer
               onClick={() => selectLayerIdxHandle(idx)}
-              // key={layer.dotFrameIdx}
               key={idx}
               selected={idx === layerSelectIdx}
             >
               <input value={layer.layerName} onChange={renameLayerHandle} />
-              {layer.dotFrameIdx}
             </Layer>
           );
         })}

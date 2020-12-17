@@ -4,17 +4,18 @@ import styled, { css } from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
 import { Draggable } from 'react-beautiful-dnd';
+import White from '../../img/white.png';
 
 const ButtonDiv = styled.div`
-  position: relative;
-  display: grid;
+  left: 83px;
+  position: absolute;
   width: 16px;
-  left: 56px;
   margin: 0px;
   padding: 0px;
   & > * + * {
-    margin-top: 24px;
+    margin-top: 48px;
   }
+  z-index: 2;
 `;
 
 const IndexBox = styled.div`
@@ -30,18 +31,40 @@ const IndexBox = styled.div`
 `;
 
 const CardDiv = styled.div`
-  overflow: hidden;
-  background: rgb(255, 255, 255);
+  outline: none;
   opacity: 0.6;
-  border: solid 1px black;
-  box-sizing: border-box;
+  border-radius: 0.3rem;
+  border: solid 3px black;
+  box-sizing: content-box;
   cursor: pointer;
   ${(props) =>
     props.active &&
     css`
       opacity: 1;
-      border: solid 1px #b22222;
+      border: solid 3px #b22222;
     `}
+`;
+
+const PreviewBox = styled.div`
+  width: 96px;
+  height: 96px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PreviewBlock = styled.div`
+  background-image: url(${White});
+  width: ${(props) => `${props.columnCount * props.pixelSize}px`};
+  height: ${(props) => `${props.rowCount * props.pixelSize}px`};
+  ${(props) =>
+    props.columnCount > props.rowCount
+      ? css`
+          width: 96px;
+        `
+      : css`
+          height: 96px;
+        `}
 `;
 
 const StyleButton = styled.div`
@@ -64,10 +87,16 @@ const StyleButton = styled.div`
 `;
 
 const IntervalInput = styled.input`
-  position: absolute;
-  width: 78px;
-  height: 22px;
   border: none;
+  outline: none;
+  border-top: solid 3px black;
+  ${(props) =>
+    props.active &&
+    css`
+      border-top: solid 3px #b22222;
+    `}
+  width: 92px;
+  height: 17px;
   font-size: 16px;
   font-weight: bold;
   background: rgba(0, 0, 0, 1);
@@ -90,6 +119,7 @@ const DotListBlock = ({
   idx,
   dot,
   columnCount,
+  rowCount,
   interval,
   handleChangeIdx,
   handleCopyDotArt,
@@ -98,10 +128,23 @@ const DotListBlock = ({
   lastIndex,
 }) => {
   const [aniInterval, setAniInterval] = useState(interval);
+  const [pixelSize, setPixelSize] = useState();
 
   useEffect(() => {
     setAniInterval(interval);
   }, [interval]);
+
+  useEffect(() => {
+    const newPixelSize = Math.floor(
+      columnCount > rowCount ? 96 / columnCount : 96 / rowCount,
+    );
+    if (newPixelSize !== pixelSize) {
+      setPixelSize(newPixelSize);
+      if (newPixelSize === 0) {
+        setPixelSize(1);
+      }
+    }
+  }, [rowCount, columnCount]);
 
   const onChangeInput = (e) => {
     setAniInterval(e.target.value);
@@ -130,7 +173,6 @@ const DotListBlock = ({
           {...provided.dragHandleProps}
         >
           <IndexBox>{idx + 1}</IndexBox>
-          <Preview dotSet={dot} column={columnCount} size={3} />
           <ButtonDiv>
             <StyleButton onClick={handleRemoveDotArt}>
               <DeleteIcon fontSize="inherit" />
@@ -139,7 +181,17 @@ const DotListBlock = ({
               <FileCopyRoundedIcon fontSize="inherit" />
             </StyleButton>
           </ButtonDiv>
+          <PreviewBox>
+            <PreviewBlock
+              columnCount={columnCount}
+              rowCount={rowCount}
+              pixelSize={pixelSize}
+            >
+              <Preview dotSet={dot} column={columnCount} size={pixelSize} />
+            </PreviewBlock>
+          </PreviewBox>
           <IntervalInput
+            active={true}
             value={aniInterval}
             type="number"
             onChange={onChangeInput}
@@ -161,7 +213,6 @@ const DotListBlock = ({
           {...provided.dragHandleProps}
         >
           <IndexBox>{idx + 1}</IndexBox>
-          <Preview dotSet={dot} column={columnCount} size={3} />
           <ButtonDiv>
             <StyleButton disabled={true}>
               <DeleteIcon fontSize="inherit" />
@@ -170,6 +221,15 @@ const DotListBlock = ({
               <FileCopyRoundedIcon fontSize="inherit" />
             </StyleButton>
           </ButtonDiv>
+          <PreviewBox>
+            <PreviewBlock
+              columnCount={columnCount}
+              rowCount={rowCount}
+              pixelSize={pixelSize}
+            >
+              <Preview dotSet={dot} column={columnCount} size={pixelSize} />
+            </PreviewBlock>
+          </PreviewBox>
           <IntervalInput value={interval} disabled />
         </CardDiv>
       )}
