@@ -20,9 +20,13 @@ const PreviewWrapper = styled.div`
 
 const PreviewBlock = styled.div`
   width: ${(props) =>
-    props.zoomIn ? `${props.columnCount * 6}px` : `${props.columnCount * 3}px`};
+    props.zoomIn
+      ? `${props.columnCount * props.pixelSize * 2}px`
+      : `${props.columnCount * props.pixelSize}px`};
   height: ${(props) =>
-    props.zoomIn ? `${props.rowCount * 6}px` : `${props.rowCount * 3}px`};
+    props.zoomIn
+      ? `${props.rowCount * props.pixelSize * 2}px`
+      : `${props.rowCount * props.pixelSize}px`};
   max-width: 200px;
   max-height: 200px;
   overflow: hidden;
@@ -45,13 +49,29 @@ const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
   }));
   // dotList는 애니메이션때문에 넣어둠
   const [dotList, setDotList] = useState();
+  const [pixelSize, setPixelSize] = useState();
+
   useEffect(() => {
     setDotList(mergeLayersByDotFrameList(dotFrameList, layerData));
   }, [animation, dotFrameList]);
+
+  useEffect(() => {
+    const newPixelSize = Math.floor(
+      columnCount > rowCount ? 100 / columnCount : 100 / rowCount,
+    );
+    if (newPixelSize !== pixelSize) {
+      setPixelSize(newPixelSize);
+      if (newPixelSize === 0) {
+        setPixelSize(1);
+      }
+    }
+  }, [rowCount, columnCount]);
+
   return (
     <PreviewWrapper>
       <PreviewBlock
         zoomIn={zoomIn}
+        pixelSize={pixelSize}
         columnCount={columnCount}
         rowCount={rowCount}
       >
@@ -59,14 +79,14 @@ const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
           <Preview
             dotSet={layerListMerge(layerList, layerData)}
             column={columnCount}
-            size={zoomIn ? 6 : 3}
+            size={zoomIn ? pixelSize * 2 : pixelSize}
           />
         )}
         {animation && (
           <Preview
             dotList={dotList}
             column={columnCount}
-            size={zoomIn ? 6 : 3}
+            size={zoomIn ? pixelSize * 2 : pixelSize}
             animation={animation}
             duration={animationDuration}
           />

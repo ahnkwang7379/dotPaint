@@ -7,7 +7,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import White from '../../img/white.png';
 
 const ButtonDiv = styled.div`
-  left: 83px;
+  left: 72px;
   position: absolute;
   width: 16px;
   margin: 0px;
@@ -31,11 +31,12 @@ const IndexBox = styled.div`
 `;
 
 const CardDiv = styled.div`
+  position: relative;
   outline: none;
   opacity: 0.6;
   border-radius: 0.3rem;
   border: solid 3px black;
-  box-sizing: content-box;
+  box-sizing: border-box;
   cursor: pointer;
   ${(props) =>
     props.active &&
@@ -87,6 +88,8 @@ const StyleButton = styled.div`
 `;
 
 const IntervalInput = styled.input`
+  padding: 0px;
+  margin: 0px;
   border: none;
   outline: none;
   border-top: solid 3px black;
@@ -95,8 +98,8 @@ const IntervalInput = styled.input`
     css`
       border-top: solid 3px #b22222;
     `}
-  width: 92px;
-  height: 17px;
+  width: 96px;
+  height: 19px;
   font-size: 16px;
   font-weight: bold;
   background: rgba(0, 0, 0, 1);

@@ -187,7 +187,9 @@ const dotActionsHandler = (
             ? state.palettes.leftColor
             : state.palettes.rightColor;
 
-        let fakeDotSet = state.dotArt.present.dot.fakeDotArt.slice();
+        let fakeDotSet = state.dotArt.present.dot.fakeDotArt.map((arr) =>
+          arr.slice(),
+        );
         fakeDotSet[rowIdx][columnIdx] = color;
 
         return {
@@ -496,7 +498,6 @@ const crossSilceReducer = handleActions(
           ...state.observer,
           mousePosition: { x: columnIdx, y: rowIdx },
           startPosition:
-            state.paintTool.paintTool === 'MOVE' &&
             state.paintTool.paintState === 'DRAGGING' &&
             state.observer.startPosition.x === '' &&
             state.observer.startPosition.y === ''

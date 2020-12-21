@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Preview from '../common/Preview';
-import { BUCKET, DOT, ERASER, MOVE, PICKER } from '../../modules/paintTool';
+import { DOT } from '../../modules/paintTool';
 
 const LayerWrapper = styled.div``;
 const Layer = styled.div``;
@@ -26,7 +26,7 @@ const DotLayer = ({
               column={columnCount}
               size={dotSize}
               zIndex={1}
-              opacity={0.5}
+              opacity={0.8}
             />
           );
         } else {

@@ -19,18 +19,13 @@ const DotPaintWrapper = styled.div`
 `;
 
 const DotPaintBox = styled.div`
-  // width: fit-content;
-  // height: fit-content;
   display: flex;
   box-sizing: border-box;
   touch-action: none;
-  // overflow: overlay;
   overflow: auto;
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-    // width: 0px;
-    // height: 0px;
   }
   &::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -137,13 +132,6 @@ const DotPaint = ({
     },
     [onChangePaintStateHandle, onSetDirectionHandle],
   );
-  // const onMouseUpHandler = useCallback(
-  //   (e) => {
-  //     e.preventDefault();
-  //     onChangePaintStateHandle('IDLE');
-  //   },
-  //   [onChangePaintStateHandle],
-  // );
   const onMouseOverHandler = useCallback(
     (e, rowIdx, columnIdx) => {
       e.preventDefault();

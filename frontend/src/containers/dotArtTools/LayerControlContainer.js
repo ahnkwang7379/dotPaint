@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import LayerControl from '../../components/dotArtTools/LayerControl';
 import { useDispatch, useSelector } from 'react-redux';
+import { changeTypingState } from '../../modules/observer';
 import {
   addNewLayer,
   removeLayer,
@@ -61,16 +62,16 @@ const LayerControlContainer = () => {
     [dispatch],
   );
 
-  // const renameLayerHandle = useCallback(
-  //   (name) => {
-  //     dispatch(renameLayer(name));
-  //   },
-  //   [dispatch],
-  // );
-
   const renameLayerHandle = useCallback(
-    (e) => {
-      dispatch(renameLayer(e.target.value));
+    (name) => {
+      dispatch(renameLayer(name));
+    },
+    [dispatch],
+  );
+
+  const handleChangeTyping = useCallback(
+    (typing) => {
+      dispatch(changeTypingState(typing));
     },
     [dispatch],
   );
@@ -88,6 +89,7 @@ const LayerControlContainer = () => {
       moveDownHandle={moveDownHandle}
       selectLayerIdxHandle={selectLayerIdxHandle}
       renameLayerHandle={renameLayerHandle}
+      handleChangeTyping={handleChangeTyping}
     />
   );
 };

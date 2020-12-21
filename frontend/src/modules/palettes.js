@@ -259,9 +259,9 @@ const palettes = handleActions(
           }
         }
         // Left Color setting
-        draft.leftColor = draft.palettes
-          .filter((palette) => palette.id === draft.selectColorId.paletteId)
-          .map((palette) => palette.colors[draft.selectColorId.colorId]);
+        draft.leftColor = draft.palettes.filter(
+          (palette) => palette.id === draft.selectColorId.paletteId,
+        )[0].colors[draft.selectColorId.colorId];
       }),
     [MOVE_DOWN_PALETTE_CELL]: (state) =>
       produce(state, (draft) => {
@@ -290,20 +290,10 @@ const palettes = handleActions(
           }
         }
         // Left Color setting
-        draft.leftColor = draft.palettes
-          .filter((palette) => palette.id === draft.selectColorId.paletteId)
-          .map((palette) => palette.colors[draft.selectColorId.colorId]);
+        draft.leftColor = draft.palettes.filter(
+          (palette) => palette.id === draft.selectColorId.paletteId,
+        )[0].colors[draft.selectColorId.colorId];
       }),
-    // [MOVE_LEFT_PALETTE_CELL]: (state) => ({
-    //   ...state,
-    //   selectColorId: {
-    //     paletteId: state.selectColorId.paletteId,
-    //     colorId:
-    //       state.selectColorId.colorId <= 0
-    //         ? state.selectColorId.colorId
-    //         : state.selectColorId.colorId - 1,
-    //   },
-    // }),
     [MOVE_LEFT_PALETTE_CELL]: (state) =>
       produce(state, (draft) => {
         draft.selectColorId = {
@@ -315,9 +305,9 @@ const palettes = handleActions(
         };
 
         // Left Color setting
-        draft.leftColor = draft.palettes
-          .filter((palette) => palette.id === draft.selectColorId.paletteId)
-          .map((palette) => palette.colors[draft.selectColorId.colorId]);
+        draft.leftColor = draft.palettes.filter(
+          (palette) => palette.id === draft.selectColorId.paletteId,
+        )[0].colors[draft.selectColorId.colorId];
       }),
     [MOVE_RIGHT_PALETTE_CELL]: (state) =>
       produce(state, (draft) => {
@@ -329,9 +319,9 @@ const palettes = handleActions(
           draft.selectColorId.colorId++;
         }
         // Left Color setting
-        draft.leftColor = draft.palettes
-          .filter((palette) => palette.id === draft.selectColorId.paletteId)
-          .map((palette) => palette.colors[draft.selectColorId.colorId]);
+        draft.leftColor = draft.palettes.filter(
+          (palette) => palette.id === draft.selectColorId.paletteId,
+        )[0].colors[draft.selectColorId.colorId];
       }),
   },
   initialState,

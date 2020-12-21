@@ -23,10 +23,9 @@ const ScrollCustom = styled.div`
   overflow: auto;
   position: sticky;
   & > *:not(:last-child) {
-    width: 96px;
-    min-width: 96px;
-    height: 118px;
-    /* height: 96px; */
+    width: 102px;
+    min-width: 102px;
+    height: 121px;
   }
   & > * {
     margin: 8px;
