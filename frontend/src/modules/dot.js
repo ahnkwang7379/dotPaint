@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 import shortid from 'shortid';
-import { DOT, ERASER, BUCKET, PICKER, MOVE } from './paintTool';
+import { DOT, ERASER, BUCKET, PICKER, MOVE, SAMECOLOR } from './paintTool';
 import { defaultDotMaker, dotArrayMerge } from '../util/dotArrayUtil';
 
 export const CLEAR_DOT = 'dot/CLEAR_DOT';
@@ -251,9 +251,9 @@ const dot = handleActions(
 
       const returnDotFrameList = intervalSetter(
         []
-          .concat(dotFrameList.slice(0, activeIdx + 2))
+          .concat(dotFrameList.slice(0, activeIdx + 1))
           .concat({ ...dotFrameList[activeIdx], id: shortid.generate() })
-          .concat(dotFrameList.slice(activeIdx + 2)),
+          .concat(dotFrameList.slice(activeIdx + 1)),
       );
 
       return {
@@ -359,6 +359,9 @@ const dot = handleActions(
         newDotArt = state.fakeDotArt;
       }
       if (selectedPaintTool === MOVE) {
+        newDotArt = state.fakeDotArt;
+      }
+      if (selectedPaintTool === SAMECOLOR) {
         newDotArt = state.fakeDotArt;
       }
 

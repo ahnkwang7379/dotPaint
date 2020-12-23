@@ -7,10 +7,10 @@ const CHANGE_DOT_BORDER_COLOR = 'observer/CHANGE_DOT_BORDER_COLOR';
 const INCREASE_DOT_SIZE = 'observer/INCREASE_DOT_SIZE';
 const DECREASE_DOT_SIZE = 'observer/DECREASE_DOT_SIZE';
 const CHANGE_DOT_SIZE = 'observer/CHANGE_DOT_SIZE';
-const CHANGE_BACKGROUND_COLOR = 'observer/CHANGE_BACKGROUND_COLOR';
 const ALT_DOWN = 'observer/ALT_DOWN';
 const SHIFT_DOWN = 'observer/SHIFT_DOWN';
 const LOAD_DATA = 'observer/LOAD_DATA';
+const CHANGE_SHOW_LAYERS = 'observer/CHANGE_SHOW_LAYERS';
 
 export const changeTypingState = createAction(
   CHANGE_TYPING_STATE,
@@ -32,13 +32,10 @@ export const changeDotSize = createAction(
   CHANGE_DOT_SIZE,
   (dotSize) => dotSize,
 );
-export const changeBackgroundColor = createAction(
-  CHANGE_BACKGROUND_COLOR,
-  (color) => color,
-);
 export const altDown = createAction(ALT_DOWN, (bool) => bool);
 export const shiftDown = createAction(SHIFT_DOWN, (bool) => bool);
 export const loadData = createAction(LOAD_DATA, (observerData) => observerData);
+export const changeShowLayers = createAction(CHANGE_SHOW_LAYERS);
 
 const initialState = {
   isTyping: false,
@@ -46,7 +43,7 @@ const initialState = {
   startPosition: { x: '', y: '' },
   dotSize: 32,
   dotBorder: { size: 0.5, color: '#000000' },
-  backgroundColor: '#777777',
+  showLayers: true,
   altDown: false,
   shiftDown: false,
 };
@@ -87,10 +84,6 @@ const observer = handleActions(
       ...state,
       dotSize: dotSize,
     }),
-    [CHANGE_BACKGROUND_COLOR]: (state, { payload: color }) => ({
-      ...state,
-      backgroundColor: color,
-    }),
     [ALT_DOWN]: (state, { payload: bool }) => ({
       ...state,
       altDown: bool,
@@ -102,6 +95,10 @@ const observer = handleActions(
     [LOAD_DATA]: (state, { payload: observerData }) => ({
       ...state,
       ...observerData,
+    }),
+    [CHANGE_SHOW_LAYERS]: (state) => ({
+      ...state,
+      showLayers: !state.showLayers,
     }),
   },
   initialState,

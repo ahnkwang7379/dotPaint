@@ -12,10 +12,9 @@ const DotpaintContainer = () => {
     rowCount: dotArt.present.dot.rowCount,
     columnCount: dotArt.present.dot.columnCount,
   }));
-  const { border, dotSize, backgroundColor } = useSelector(({ observer }) => ({
+  const { border, dotSize } = useSelector(({ observer }) => ({
     border: observer.dotBorder,
     dotSize: observer.dotSize,
-    backgroundColor: observer.backgroundColor,
   }));
 
   const onWheelHandle = useCallback(
@@ -53,7 +52,6 @@ const DotpaintContainer = () => {
     <DotPaint
       border={border}
       dotSize={dotSize}
-      backgroundColor={backgroundColor}
       rowCount={rowCount}
       columnCount={columnCount}
       onWheelHandle={onWheelHandle}

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import LayerControl from '../../components/dotArtTools/LayerControl';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeTypingState } from '../../modules/observer';
+import { changeTypingState, changeShowLayers } from '../../modules/observer';
 import {
   addNewLayer,
   removeLayer,
@@ -22,8 +22,9 @@ const LayerControlContainer = () => {
       layerData: dotArt.present.dot.layerData,
     }),
   );
-  const { shiftDown } = useSelector(({ observer }) => ({
+  const { shiftDown, showLayers } = useSelector(({ observer }) => ({
     shiftDown: observer.shiftDown,
+    showLayers: observer.showLayers,
   }));
 
   const addNewLayerHandle = useCallback(
@@ -76,12 +77,17 @@ const LayerControlContainer = () => {
     [dispatch],
   );
 
+  const handleChangeShowLayers = useCallback(() => {
+    dispatch(changeShowLayers());
+  }, [dispatch]);
+
   return (
     <LayerControl
       layerList={layerList}
       layerSelectIdx={layerSelectIdx}
       layerData={layerData}
       shiftDown={shiftDown}
+      showLayers={showLayers}
       addNewLayerHandle={addNewLayerHandle}
       removeLayerHandle={removeLayerHandle}
       mergeLayerHandle={mergeLayerHandle}
@@ -90,6 +96,7 @@ const LayerControlContainer = () => {
       selectLayerIdxHandle={selectLayerIdxHandle}
       renameLayerHandle={renameLayerHandle}
       handleChangeTyping={handleChangeTyping}
+      handleChangeShowLayers={handleChangeShowLayers}
     />
   );
 };

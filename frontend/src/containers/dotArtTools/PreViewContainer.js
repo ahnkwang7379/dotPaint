@@ -1,15 +1,14 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
-import { changeAnimationDuration, changePixelSize } from '../../modules/dot';
+import { changeAnimationDuration } from '../../modules/dot';
 import { changeTypingState } from '../../modules/observer';
 import PreViewTools from '../../components/dotArtTools/PreViewTools';
 
 const PreViewContainer = () => {
   const dispatch = useDispatch();
-  const { animationDuration, pixelSize } = useSelector(({ dotArt }) => ({
+  const { animationDuration } = useSelector(({ dotArt }) => ({
     animationDuration: dotArt.present.dot.animationDuration,
-    pixelSize: dotArt.present.dot.pixelSize,
   }));
 
   const handleOpenDialog = useCallback(
@@ -26,13 +25,6 @@ const PreViewContainer = () => {
     [dispatch],
   );
 
-  const handelChangePixelSize = useCallback(
-    (pixelSize) => {
-      dispatch(changePixelSize(pixelSize));
-    },
-    [dispatch],
-  );
-
   const handleChangeTyping = useCallback(
     (typing) => {
       dispatch(changeTypingState(typing));
@@ -43,10 +35,8 @@ const PreViewContainer = () => {
   return (
     <PreViewTools
       animationDuration={animationDuration}
-      pixelSize={pixelSize}
       handleOpenDialog={handleOpenDialog}
       handleChangeAnimationDuration={handleChangeAnimationDuration}
-      handelChangePixelSize={handelChangePixelSize}
       handleChangeTyping={handleChangeTyping}
     />
   );

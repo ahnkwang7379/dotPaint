@@ -33,6 +33,7 @@ import paintTool, {
   ERASER,
   CHANGE_PAINT_TOOL,
   MOVE,
+  SAMECOLOR,
 } from './paintTool';
 import loading from './loading';
 import auth, { authSaga } from './auth';
@@ -426,6 +427,42 @@ const dotActionsHandler = (
           },
         };
       }
+    case SAMECOLOR:
+      if (paintToolState === 'DRAGGING') {
+        const color =
+          direction === 'LEFT'
+            ? state.palettes.leftColor
+            : state.palettes.rightColor;
+
+        let fakeDotSet = state.dotArt.present.dot.fakeDotArt.map((arr) =>
+          arr.slice(),
+        );
+
+        const selectedDotColor = fakeDotSet[rowIdx][columnIdx];
+
+        fakeDotSet = fakeDotSet.map((dotLine) =>
+          dotLine.map((dot) => {
+            if (dot === selectedDotColor) {
+              return color;
+            }
+            return dot;
+          }),
+        );
+
+        return {
+          ...state,
+          dotArt: {
+            ...state.dotArt,
+            present: {
+              ...state.dotArt.present,
+              dot: {
+                ...state.dotArt.present.dot,
+                fakeDotArt: fakeDotSet,
+              },
+            },
+          },
+        };
+      } else return { ...state };
     default:
       return { ...state };
   }
@@ -457,6 +494,7 @@ const fakeDotArtSetHandle = (state) => {
       };
     case BUCKET:
     case ERASER:
+    case SAMECOLOR:
     case MOVE:
       const { activeIdx, layerSelectIdx, layerData } = state.dotArt.present.dot;
       const layerIdx = layerData[layerSelectIdx].dotFrameIdx;

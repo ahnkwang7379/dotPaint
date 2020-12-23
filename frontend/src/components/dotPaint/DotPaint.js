@@ -83,7 +83,6 @@ const ScrollLockButton = styled.button`
 const DotPaint = ({
   border,
   dotSize,
-  backgroundColor,
   rowCount,
   onWheelHandle,
   onChangePaintStateHandle,
@@ -171,7 +170,6 @@ const DotPaint = ({
         <DotPaintBlock
           dotSize={dotSize}
           border={border}
-          backgroundColor={backgroundColor}
           onMouseLeave={onLeavesPaintAreaHandle}
           onMouseDownCapture={onMouseDownHandler} // 캡쳐링으로 state를 먼저 바꿔줘야함
           onContextMenu={(e) => e.preventDefault()}

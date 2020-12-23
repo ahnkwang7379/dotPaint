@@ -13,22 +13,24 @@ const DotLayer = ({
   dotSize,
   layerIdx,
   selectedPaintTool,
+  showLayers,
 }) => {
   return (
     <LayerWrapper>
       {layerList.map((layer, idx) => {
         if (idx !== layerIdx) {
           // 선택된 레이어가 아니면
-          return (
-            <Preview
-              key={idx}
-              dotSet={layer}
-              column={columnCount}
-              size={dotSize}
-              zIndex={1}
-              opacity={0.8}
-            />
-          );
+          if (showLayers)
+            return (
+              <Preview
+                key={idx}
+                dotSet={layer}
+                column={columnCount}
+                size={dotSize}
+                zIndex={1}
+                opacity={0.8}
+              />
+            );
         } else {
           // 선택된 레이어면
           return (

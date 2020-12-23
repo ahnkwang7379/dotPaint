@@ -8,6 +8,7 @@ import {
   PICKER,
   ERASER,
   MOVE,
+  SAMECOLOR,
 } from '../../modules/paintTool';
 import { ActionCreators } from 'redux-undo';
 import {
@@ -100,6 +101,9 @@ const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
           return;
         case 'MOVE':
           dispatch(changePaintTool(MOVE));
+          return;
+        case 'SAMECOLOR':
+          dispatch(changePaintTool(SAMECOLOR));
           return;
         case 'INCREASE_COLUMN':
           dispatch(increaseColumn());

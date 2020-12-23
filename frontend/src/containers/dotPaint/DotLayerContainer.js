@@ -16,8 +16,9 @@ const DotLayerContainer = () => {
     fakeDotArt: dot.fakeDotArt,
     columnCount: dot.columnCount,
   }));
-  const { dotSize } = useSelector(({ observer }) => ({
+  const { dotSize, showLayers } = useSelector(({ observer }) => ({
     dotSize: observer.dotSize,
+    showLayers: observer.showLayers,
   }));
   const { selectedPaintTool } = useSelector(({ paintTool }) => ({
     selectedPaintTool: paintTool.selectedPaintTool,
@@ -32,6 +33,7 @@ const DotLayerContainer = () => {
       dotSize={dotSize}
       layerIdx={layerIdx}
       selectedPaintTool={selectedPaintTool}
+      showLayers={showLayers}
     />
   );
 };

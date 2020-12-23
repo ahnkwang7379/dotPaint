@@ -34,6 +34,8 @@ const LeftToolBox = styled.div`
 
 const RightToolBox = styled.div`
   position: sticky;
+  max-height: 90vh;
+  width: 200px;
   // & > * {
   //   margin: 8px 0px;
   //   max-width: 240px;

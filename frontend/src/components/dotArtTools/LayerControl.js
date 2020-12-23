@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   TiPlus,
   TiArrowUpThick,
@@ -7,28 +7,81 @@ import {
   TiDelete,
   TiFlowMerge,
   TiPen,
+  TiEye,
 } from 'react-icons/ti';
-import CustomButton from '../common/CustomButton';
 
 const LayerWrapper = styled.div`
   border: 2px solid #888;
 `;
 
 const LayerHead = styled.div`
-  font-size: 24px;
+  position: relative;
+  font-size: 20px;
   padding-left: 16px;
   font-weight: bold;
   color: white;
   background: #222222;
 `;
 
+const EyeButton = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.2s linear;
+  ${(props) =>
+    props.showLayers &&
+    css`
+      color: orange;
+    `}
+`;
+
 const ButtonBox = styled.div`
   display: flex;
+`;
+
+const StyledButton = styled.button`
+  outline: none;
+  font-size: 16px;
+  width: 100%;
+  height: 24px;
+  border: 1px solid #333333;
+  transition: all 0.2s ease-in-out;
+  color: #fff;
+  background: #222222;
+  ${(props) =>
+    !props.disable &&
+    css`
+      &:hover {
+        color: orange;
+      }
+    `}
+
+  &:disabled {
+    background: #afafaf;
+    color: #777777;
+  }
 `;
 
 const LayerBox = styled.div`
   display: flex;
   flex-direction: column-reverse;
+  max-height: 30vh;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 const Layer = styled.div`
@@ -37,10 +90,11 @@ const Layer = styled.div`
   cursor: pointer;
   display: flex;
   background: ${(props) => (props.selected ? 'skyblue' : 'white')};
-  border: 1px solid ${(props) => (props.selected ? 'red' : 'black')};
 `;
 
 const LayerNameSpan = styled.span`
+  overflow: hidden;
+  white-space: nowrap;
   width: 100%;
   line-height: 24px;
   color: white;
@@ -51,14 +105,20 @@ const LayerNameSpan = styled.span`
   outline: none;
   cursor: pointer;
   font-size: 12px;
+  ${(props) =>
+    props.selected &&
+    css`
+      color: orange;
+      background: #333333;
+    `}
   ${(props) => (props.active ? `display: none` : '')}
 `;
 
 const LayerNameInput = styled.input`
+  border: 1px solid orange;
   width: 100%;
   padding-left: 8px;
   height: 24px;
-  border: none;
   outline: none;
   cursor: pointer;
   font-size: 12px;
@@ -71,6 +131,7 @@ const LayerControl = ({
   layerSelectIdx,
   layerData,
   shiftDown,
+  showLayers,
   addNewLayerHandle,
   removeLayerHandle,
   mergeLayerHandle,
@@ -79,13 +140,13 @@ const LayerControl = ({
   selectLayerIdxHandle,
   renameLayerHandle,
   handleChangeTyping,
+  handleChangeShowLayers,
 }) => {
   const [reName, setReName] = useState(false);
   const [name, setName] = useState('');
   const inputRef = useRef(null);
 
   useEffect(() => {
-    console.log(layerSelectIdx);
     setName(layerData[layerSelectIdx].layerName);
   }, [layerSelectIdx]);
 
@@ -133,35 +194,64 @@ const LayerControl = ({
   };
   return (
     <LayerWrapper>
-      <LayerHead>Layers</LayerHead>
+      <LayerHead>
+        Layers
+        <EyeButton showLayers={showLayers} onClick={handleChangeShowLayers}>
+          <TiEye />
+        </EyeButton>
+      </LayerHead>
+
       <ButtonBox>
-        <CustomButton onClick={onClickAddNewLayer}>
+        <StyledButton
+          onClick={onClickAddNewLayer}
+          color={`#333333`}
+          baseColor={`#222222`}
+        >
           <TiPlus />
-        </CustomButton>
-        <CustomButton
+        </StyledButton>
+        <StyledButton
           onClick={onClickMoveUp}
+          color={`#333333`}
+          baseColor={`#222222`}
+          disable={layerSelectIdx === layerData.length - 1}
           disabled={layerSelectIdx === layerData.length - 1}
         >
           <TiArrowUpThick />
-        </CustomButton>
-        <CustomButton onClick={onClickMoveDown} disabled={layerSelectIdx === 0}>
+        </StyledButton>
+        <StyledButton
+          onClick={onClickMoveDown}
+          color={`#333333`}
+          baseColor={`#222222`}
+          disable={layerSelectIdx === 0}
+          disabled={layerSelectIdx === 0}
+        >
           <TiArrowDownThick />
-        </CustomButton>
-        <CustomButton onClick={onClickReName}>
+        </StyledButton>
+        <StyledButton
+          color={`#333333`}
+          baseColor={`#222222`}
+          onClick={onClickReName}
+        >
           <TiPen />
-        </CustomButton>
-        <CustomButton
+        </StyledButton>
+        <StyledButton
           onClick={mergeLayerHandle}
+          color={`#333333`}
+          baseColor={`#222222`}
+          disable={layerSelectIdx === 0}
           disabled={layerSelectIdx === 0}
         >
           <TiFlowMerge />
-        </CustomButton>
-        <CustomButton
+        </StyledButton>
+        <StyledButton
           onClick={removeLayerHandle}
+          color={`#333333`}
+          baseColor={`#222222`}
+          disable={layerData.length === 1}
           disabled={layerData.length === 1}
         >
           <TiDelete />
-        </CustomButton>
+        </StyledButton>
       </ButtonBox>
       <LayerBox>
         {layerData.map((layer, idx) => {
@@ -176,7 +266,7 @@ const LayerControl = ({
                   onChange={(e) => setName(e.target.value)}
                   onKeyPress={(e) => onkeyPressHandle(e)}
                 />
-                <LayerNameSpan onClick={onClickHandle} active={reName}>
+                <LayerNameSpan onClick={onClickHandle} active={reName} selected>
                   {layer.layerName}
                 </LayerNameSpan>
               </Layer>

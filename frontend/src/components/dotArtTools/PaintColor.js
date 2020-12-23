@@ -46,7 +46,6 @@ const PaintColor = ({
   const [displayRightColorPicker, setDisplayRightColorPicker] = useState(false);
   const [leftSelectColor, setLeftSelectColor] = useState('');
   const [rightSelectColor, setRightSelectColor] = useState('');
-  console.log(rightSelectColor);
 
   useEffect(() => {
     setLeftSelectColor(leftColor);
@@ -81,10 +80,6 @@ const PaintColor = ({
     }
   };
 
-  // console.log(`rightColor : ${rightColor}`);
-  // console.log(`rightSelectColor : ${rightSelectColor}`);
-  // console.log(`displayRightColorPicker : ${displayRightColorPicker}`);
-
   return (
     <Wrapper>
       <LeftClickBox>
@@ -96,7 +91,7 @@ const PaintColor = ({
           <ColorPickerBlock>
             <Cover onClick={() => handleClose('LEFT')} />
             <ChromePicker
-              // disableAlpha
+              disableAlpha
               color={leftSelectColor}
               onChange={handleLeftColorChange}
             />
@@ -112,7 +107,7 @@ const PaintColor = ({
           <ColorPickerBlock>
             <Cover onClick={() => handleClose('RIGHT')} />
             <ChromePicker
-              // disableAlpha
+              disableAlpha
               color={rightSelectColor}
               onChange={handleRightColorChange}
             />

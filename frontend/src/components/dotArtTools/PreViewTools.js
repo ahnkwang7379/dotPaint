@@ -9,6 +9,7 @@ import {
   MdPause,
   MdContentCopy,
 } from 'react-icons/md';
+import Slider from '@material-ui/core/Slider';
 
 const ButtonBox = styled.div`
   display: flex;
@@ -16,32 +17,26 @@ const ButtonBox = styled.div`
   height: 30px;
 `;
 
-const InputStyle = styled.input`
-  width: 72px;
-  height: 24px;
-  font-size: 16px;
-  font-weight: bold;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  &:focus {
-    background: rgba(230, 230, 230, 1);
-    color: rgba(0, 0, 0, 0.7);
-  }
-  -moz-appearance: textfield;
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+const SliderBox = styled.div`
+  width: 100%;
+  height: 40px;
+  display: flex;
+  background: #afafaf;
+  padding: 8px;
+  font-size: 8px;
+`;
+
+const SliderSpan = styled.div`
+  font-size: 12px;
+  line-height: 26px;
+  margin-right: 8px;
+  white-space: nowrap;
 `;
 
 const PreViewTools = ({
   animationDuration,
-  pixelSize,
   handleOpenDialog,
   handleChangeAnimationDuration,
-  handelChangePixelSize,
-  handleChangeTyping,
 }) => {
   const [play, setPlay] = useState(false);
   const [zoomIn, setZoomIn] = useState(false);
@@ -54,17 +49,8 @@ const PreViewTools = ({
     setZoomIn(!zoomIn);
   };
 
-  const onChangeAnimationDuration = (e) => {
-    setPlay(false);
-    if (e.target.value <= 0 || e.target.value === '') {
-      handleChangeAnimationDuration(0);
-    } else {
-      handleChangeAnimationDuration(e.target.value);
-    }
-  };
-
-  const onChangePixelSize = (e) => {
-    handelChangePixelSize(e.target.value);
+  const onChangeAnimationDuration = (e, newValue) => {
+    handleChangeAnimationDuration(newValue);
   };
 
   return (
@@ -74,6 +60,19 @@ const PreViewTools = ({
         animation={play}
         animationDuration={animationDuration}
       />
+      <SliderBox>
+        <SliderSpan>Duration {animationDuration}S</SliderSpan>
+        <Slider
+          defaultValue={1}
+          aria-labelledby="vertical-slider"
+          valueLabelDisplay="auto"
+          step={1}
+          color="secondary"
+          min={1}
+          max={10}
+          onChange={onChangeAnimationDuration}
+        />
+      </SliderBox>
       <ButtonBox>
         <CustomButton
           onClick={togglePlay}
@@ -93,20 +92,6 @@ const PreViewTools = ({
           <MdContentCopy />
         </CustomButton>
       </ButtonBox>
-      <InputStyle
-        value={animationDuration}
-        type="number"
-        onChange={(e) => onChangeAnimationDuration(e)}
-        onFocus={() => handleChangeTyping(true)}
-        onBlur={() => handleChangeTyping(false)}
-      />
-      <InputStyle
-        value={pixelSize}
-        type="number"
-        onChange={(e) => onChangePixelSize(e)}
-        onFocus={() => handleChangeTyping(true)}
-        onBlur={() => handleChangeTyping(false)}
-      />
     </React.Fragment>
   );
 };
