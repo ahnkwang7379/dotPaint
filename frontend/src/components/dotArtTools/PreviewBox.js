@@ -30,10 +30,16 @@ const PreviewBlock = styled.div`
   max-width: 200px;
   max-height: 200px;
   overflow: hidden;
-  border: 3px solid yellow;
+  border: 3px solid orange;
+  box-sizing: content-box;
 `;
 
-const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
+const PreviewBox = ({
+  zoomIn,
+  animation,
+  animationDuration,
+  onChangeHoverPreviewBox,
+}) => {
   const {
     dotFrameList,
     layerList,
@@ -48,7 +54,9 @@ const PreviewBox = ({ zoomIn, animation, animationDuration }) => {
     layerData: dot.layerData,
   }));
   // dotList는 애니메이션때문에 넣어둠
-  const [dotList, setDotList] = useState();
+  const [dotList, setDotList] = useState(
+    mergeLayersByDotFrameList(dotFrameList, layerData),
+  );
   const [pixelSize, setPixelSize] = useState();
 
   useEffect(() => {

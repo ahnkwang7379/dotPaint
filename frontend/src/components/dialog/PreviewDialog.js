@@ -54,7 +54,7 @@ const PreviewDialog = ({
   handleChangeAnimationDuration,
   handleChangePixelSize,
 }) => {
-  const [animation, setAnimation] = useState(false);
+  const [animation, setAnimation] = useState(true);
   const toggleAnimation = () => {
     setAnimation(!animation);
   };

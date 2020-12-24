@@ -30,7 +30,7 @@ const BorderControl = ({
         aria-labelledby="vertical-slider"
         valueLabelDisplay="auto"
         value={borderSize}
-        step={0.5}
+        step={1}
         color="secondary"
         marks
         min={0}

@@ -11,7 +11,6 @@ const Observer = ({
 }) => {
   useEffect(() => {
     const mouseUpHandle = (e) => {
-      console.log('mouse up!');
       onUpdateDotArtHandle(selectedPaintTool);
       onChangePaintStateHandle('IDLE');
     };
@@ -21,7 +20,6 @@ const Observer = ({
 
     return () => {
       window.removeEventListener('mouseup', mouseUpHandle, false);
-      console.log('remove event');
     };
   }, [
     paintState,

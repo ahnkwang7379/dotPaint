@@ -82,8 +82,6 @@ const LoadDialog = ({
       <PreviewWrapper>
         {loadedData && loadedData.dotArt.length !== 0 ? (
           loadedData.dotArt.map((dotArt, dotArtIdx) => {
-            console.log(dotArt);
-            console.log(dotArt.dot);
             return (
               <CardDiv
                 key={dotArt.dot.id}

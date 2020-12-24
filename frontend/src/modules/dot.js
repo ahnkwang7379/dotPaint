@@ -118,7 +118,7 @@ const initialState = {
   activeIdx: 0,
   layerSelectIdx: 0,
   layerData: [{ layerName: 'Layer 1', dotFrameIdx: 0 }],
-  pixelSize: 10,
+  pixelSize: 32,
 };
 
 const dot = handleActions(

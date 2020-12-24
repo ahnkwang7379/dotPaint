@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import PreviewBox from './PreviewBox';
 import CustomButton from '../../components/common/CustomButton';
 import {
@@ -10,11 +10,72 @@ import {
   MdContentCopy,
 } from 'react-icons/md';
 import Slider from '@material-ui/core/Slider';
+import { useSelector } from 'react-redux';
+import Preview from '../common/Preview';
+import {
+  layerListMerge,
+  mergeLayersByDotFrameList,
+} from '../../util/dotArrayUtil';
+import White from '../../img/white.png';
+
+const PreviewWrapper = styled.div`
+  background-image: url(${White});
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  border: 2px solid #9e9e9e;
+`;
+
+const PreviewBlock = styled.div`
+  width: ${(props) =>
+    props.zoomIn
+      ? `${props.columnCount * props.pixelSize * 2}px`
+      : `${props.columnCount * props.pixelSize}px`};
+  height: ${(props) =>
+    props.zoomIn
+      ? `${props.rowCount * props.pixelSize * 2}px`
+      : `${props.rowCount * props.pixelSize}px`};
+  max-width: 200px;
+  max-height: 200px;
+  overflow: hidden;
+  border: 3px solid orange;
+  box-sizing: content-box;
+`;
 
 const ButtonBox = styled.div`
+  z-index: 10;
+  position: absolute;
   display: flex;
-  width: 100px;
+  width: 80px;
   height: 30px;
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: ${(props) => (props.hovered ? 1 : 0)};
+  transition: opacity 0.3s;
+  & > * {
+    margin: 0px 2px;
+  }
+`;
+
+const StyledButton = styled(CustomButton)`
+  width: 32px;
+  height: 22px;
+  padding: 0;
+  box-shadow: 0 0.2rem #666;
+  font-size: 14px;
+  border-radius: 0.3rem;
+
+  ${(props) =>
+    props.selected === true &&
+    css`
+      color: #fff;
+      background: ${(props) =>
+        props.selectColor ? `${props.selectColor}` : `skyblue`};
+      box-shadow: 0 0.05rem #666;
+      transform: translateY(4px);
+    `}
 `;
 
 const SliderBox = styled.div`
@@ -38,8 +99,43 @@ const PreViewTools = ({
   handleOpenDialog,
   handleChangeAnimationDuration,
 }) => {
-  const [play, setPlay] = useState(false);
+  const [play, setPlay] = useState(true);
   const [zoomIn, setZoomIn] = useState(false);
+  const [hoverPreviewBox, setHoverPreviewBox] = useState(false);
+  const {
+    dotFrameList,
+    layerList,
+    rowCount,
+    columnCount,
+    layerData,
+  } = useSelector(({ dotArt: { present: { dot } } }) => ({
+    dotFrameList: dot.dotFrameList,
+    layerList: dot.dotFrameList[dot.activeIdx].layerList,
+    rowCount: dot.rowCount,
+    columnCount: dot.columnCount,
+    layerData: dot.layerData,
+  }));
+  // dotList는 애니메이션때문에 넣어둠
+  const [dotList, setDotList] = useState(
+    mergeLayersByDotFrameList(dotFrameList, layerData),
+  );
+  const [pixelSize, setPixelSize] = useState();
+
+  useEffect(() => {
+    setDotList(mergeLayersByDotFrameList(dotFrameList, layerData));
+  }, [play, dotFrameList]);
+
+  useEffect(() => {
+    const newPixelSize = Math.floor(
+      columnCount > rowCount ? 100 / columnCount : 100 / rowCount,
+    );
+    if (newPixelSize !== pixelSize) {
+      setPixelSize(newPixelSize);
+      if (newPixelSize === 0) {
+        setPixelSize(1);
+      }
+    }
+  }, [rowCount, columnCount]);
 
   const togglePlay = () => {
     setPlay(!play);
@@ -53,13 +149,65 @@ const PreViewTools = ({
     handleChangeAnimationDuration(newValue);
   };
 
+  const onChangeHoverPreviewBox = (bool) => {
+    setHoverPreviewBox(bool);
+  };
+
   return (
-    <React.Fragment>
-      <PreviewBox
+    <div
+      onMouseOver={() => onChangeHoverPreviewBox(true)}
+      onMouseOut={() => onChangeHoverPreviewBox(false)}
+    >
+      <ButtonBox hovered={hoverPreviewBox}>
+        <StyledButton
+          onClick={togglePlay}
+          selected={play}
+          selectColor="#f05556"
+          color={play ? '#b71b2d' : '#008000'}
+          baseColor="#3db12a"
+        >
+          {play ? <MdPause /> : <MdPlayArrow />}
+        </StyledButton>
+
+        <StyledButton onClick={toggleZoom}>
+          {zoomIn ? <MdFullscreenExit /> : <MdFullscreen />}
+        </StyledButton>
+
+        <StyledButton onClick={() => handleOpenDialog('Preview')}>
+          <MdContentCopy />
+        </StyledButton>
+      </ButtonBox>
+      {/* <PreviewBox
         zoomIn={zoomIn}
         animation={play}
         animationDuration={animationDuration}
-      />
+        onChangeHoverPreviewBox={onChangeHoverPreviewBox}
+      /> */}
+      <PreviewWrapper>
+        <PreviewBlock
+          zoomIn={zoomIn}
+          pixelSize={pixelSize}
+          columnCount={columnCount}
+          rowCount={rowCount}
+        >
+          {!play && (
+            <Preview
+              dotSet={layerListMerge(layerList, layerData)}
+              column={columnCount}
+              size={zoomIn ? pixelSize * 2 : pixelSize}
+            />
+          )}
+          {play && (
+            <Preview
+              dotList={dotList}
+              column={columnCount}
+              size={zoomIn ? pixelSize * 2 : pixelSize}
+              animation={play}
+              duration={animationDuration}
+            />
+          )}
+        </PreviewBlock>
+      </PreviewWrapper>
       <SliderBox>
         <SliderSpan>Duration {animationDuration}S</SliderSpan>
         <Slider
@@ -73,26 +221,7 @@ const PreViewTools = ({
           onChange={onChangeAnimationDuration}
         />
       </SliderBox>
-      <ButtonBox>
-        <CustomButton
-          onClick={togglePlay}
-          selected={play}
-          selectColor="#f05556"
-          color={play ? '#b71b2d' : '#008000'}
-          baseColor="#3db12a"
-        >
-          {play ? <MdPause /> : <MdPlayArrow />}
-        </CustomButton>
-
-        <CustomButton onClick={toggleZoom}>
-          {zoomIn ? <MdFullscreenExit /> : <MdFullscreen />}
-        </CustomButton>
-
-        <CustomButton onClick={() => handleOpenDialog('Preview')}>
-          <MdContentCopy />
-        </CustomButton>
-      </ButtonBox>
-    </React.Fragment>
+    </div>
   );
 };
 
