@@ -6,8 +6,9 @@ import { changeTypeAndOpen } from '../../modules/dialog';
 const KeyBindingsContainer = () => {
   const dispatch = useDispatch();
 
-  const { isTyping } = useSelector(({ observer }) => ({
+  const { isTyping, dotSize } = useSelector(({ observer }) => ({
     isTyping: observer.isTyping,
+    dotSize: observer.dotSize,
   }));
 
   const { keySet } = useSelector(({ keybind }) => ({
@@ -21,6 +22,7 @@ const KeyBindingsContainer = () => {
   return (
     <KeyBingings
       isTyping={isTyping}
+      dotSize={dotSize}
       openKeyBindDialog={openKeyBindDialog}
       keySet={keySet}
     />

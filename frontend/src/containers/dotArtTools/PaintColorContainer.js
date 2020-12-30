@@ -19,7 +19,6 @@ const PaintColorContainer = () => {
 
   const changeRightColor = useCallback(
     (color) => {
-      console.log(color);
       dispatch(selectRightColor({ color }));
     },
     [dispatch],

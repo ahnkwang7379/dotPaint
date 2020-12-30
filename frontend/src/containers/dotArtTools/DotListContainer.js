@@ -26,6 +26,9 @@ const DotListContainer = () => {
     columnCount: dot.columnCount,
     rowCount: dot.rowCount,
   }));
+  const { backgroundImg } = useSelector(({ observer }) => ({
+    backgroundImg: observer.backgroundImg,
+  }));
   const handleChangeIdx = useCallback(
     (idx) => {
       dispatch(changeActiveIdx(idx));
@@ -61,6 +64,7 @@ const DotListContainer = () => {
       layerIdx={layerIdx}
       columnCount={columnCount}
       rowCount={rowCount}
+      backgroundImg={backgroundImg}
       handleChangeIdx={handleChangeIdx}
       handleRemoveDotArt={handleRemoveDotArt}
       handleCopyDotArt={handleCopyDotArt}

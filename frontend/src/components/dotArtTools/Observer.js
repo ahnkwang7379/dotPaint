@@ -1,9 +1,17 @@
 import React, { useEffect } from 'react';
+import styled from 'styled-components';
+
+const ObserverWrapper = styled.div`
+  position: absolute;
+  bottom: 16px;
+`;
 
 const Observer = ({
   mousePosition,
   paintState,
   selectedPaintTool,
+  rowCount,
+  columnCount,
   onChangePaintStateHandle,
   onUpdateDotArtHandle,
   onAltDownHandle,
@@ -56,7 +64,10 @@ const Observer = ({
   }, [onAltDownHandle, onShiftDownHandle]);
 
   return (
-    <div>{mousePosition && `[${mousePosition.x}, ${mousePosition.y}]`}</div>
+    <ObserverWrapper>
+      {`[${columnCount} x ${rowCount}]`}
+      {mousePosition.x && `${mousePosition.x}, ${mousePosition.y}`}
+    </ObserverWrapper>
   );
 };
 

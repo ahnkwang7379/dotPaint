@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import PreviewBox from './PreviewBox';
 import CustomButton from '../../components/common/CustomButton';
 import {
   MdFullscreen,
@@ -10,16 +9,17 @@ import {
   MdContentCopy,
 } from 'react-icons/md';
 import Slider from '@material-ui/core/Slider';
-import { useSelector } from 'react-redux';
 import Preview from '../common/Preview';
 import {
   layerListMerge,
   mergeLayersByDotFrameList,
 } from '../../util/dotArrayUtil';
 import White from '../../img/white.png';
+import Black from '../../img/black.png';
 
 const PreviewWrapper = styled.div`
-  background-image: url(${White});
+  background-image: ${(props) =>
+    props.backgroundImg === 1 ? `url(${White})` : `url(${Black})`};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,25 +96,18 @@ const SliderSpan = styled.div`
 
 const PreViewTools = ({
   animationDuration,
+  dotFrameList,
+  layerList,
+  rowCount,
+  columnCount,
+  layerData,
+  backgroundImg,
   handleOpenDialog,
   handleChangeAnimationDuration,
 }) => {
   const [play, setPlay] = useState(true);
   const [zoomIn, setZoomIn] = useState(false);
   const [hoverPreviewBox, setHoverPreviewBox] = useState(false);
-  const {
-    dotFrameList,
-    layerList,
-    rowCount,
-    columnCount,
-    layerData,
-  } = useSelector(({ dotArt: { present: { dot } } }) => ({
-    dotFrameList: dot.dotFrameList,
-    layerList: dot.dotFrameList[dot.activeIdx].layerList,
-    rowCount: dot.rowCount,
-    columnCount: dot.columnCount,
-    layerData: dot.layerData,
-  }));
   // dotList는 애니메이션때문에 넣어둠
   const [dotList, setDotList] = useState(
     mergeLayersByDotFrameList(dotFrameList, layerData),
@@ -177,13 +170,7 @@ const PreViewTools = ({
           <MdContentCopy />
         </StyledButton>
       </ButtonBox>
-      {/* <PreviewBox
-        zoomIn={zoomIn}
-        animation={play}
-        animationDuration={animationDuration}
-        onChangeHoverPreviewBox={onChangeHoverPreviewBox}
-      /> */}
-      <PreviewWrapper>
+      <PreviewWrapper backgroundImg={backgroundImg}>
         <PreviewBlock
           zoomIn={zoomIn}
           pixelSize={pixelSize}

@@ -108,10 +108,12 @@ const palettes = handleActions(
         paletteId: paletteId,
         colorId: selectIdx,
       },
+      trashCan: state.trashCan.concat(color),
     }),
     [SELECT_RIGHT_COLOR]: (state, { payload: { color } }) => ({
       ...state,
       rightColor: color,
+      trashCan: state.trashCan.concat(color),
     }),
     [SWAP_LEFT_RIGHT_COLOR]: (state) => ({
       ...state,

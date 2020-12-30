@@ -57,8 +57,7 @@ const PaintColor = ({
   };
 
   const handleRightColorChange = (pick) => {
-    console.log(pick);
-    setRightSelectColor(pick.rgb);
+    setRightSelectColor(pick.hex);
   };
 
   const handleOpenColorPicker = (type) => {
@@ -75,7 +74,6 @@ const PaintColor = ({
       changeLeftColor(leftSelectColor);
     } else {
       setDisplayRightColorPicker(false);
-      console.log(rightSelectColor);
       changeRightColor(rightSelectColor);
     }
   };

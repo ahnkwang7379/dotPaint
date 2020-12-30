@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CustomButton from '../common/CustomButton';
-import { TiPlusOutline, TiMinusOutline } from 'react-icons/ti';
+import { FaArrowsAltH, FaArrowsAltV } from 'react-icons/fa';
 
 const DotAreaBlock = styled.div`
   display: flex;
   width: 120px;
   height: 40px;
 `;
+
 const AreaInput = styled.input`
   font-size: 20px;
   width: 40px;
@@ -35,48 +36,18 @@ const DotAreaControl = ({ onChangeArea, row, column, dotClear }) => {
   return (
     <>
       <DotAreaBlock>
-        <CustomButton
-          onClick={() => {
-            setRowCount(rowCount + 1);
-            onChangeArea(rowCount + 1, columnCount);
-          }}
-        >
-          <TiPlusOutline />
-        </CustomButton>
+        <FaArrowsAltV />
         <AreaInput value={rowCount} onChange={onChangeRow} />
-        <CustomButton
-          onClick={() => {
-            setRowCount(rowCount - 1);
-            onChangeArea(rowCount - 1, columnCount);
-          }}
-        >
-          <TiMinusOutline />
-        </CustomButton>
       </DotAreaBlock>
       <DotAreaBlock>
-        <CustomButton
-          onClick={() => {
-            setColumnCount(columnCount + 1);
-            onChangeArea(rowCount, columnCount + 1);
-          }}
-        >
-          <TiPlusOutline />
-        </CustomButton>
+        <FaArrowsAltH />
         <AreaInput value={columnCount} onChange={onChangeColumn} />
-        <CustomButton
-          onClick={() => {
-            setColumnCount(columnCount - 1);
-            onChangeArea(rowCount, columnCount - 1);
-          }}
-        >
-          <TiMinusOutline />
-        </CustomButton>
       </DotAreaBlock>
       <DotAreaBlock>
-        <button onClick={() => onChangeArea(rowCount, columnCount)}>
-          커밋
-        </button>
-        <button onClick={dotClear}>초기화버튼임</button>
+        <CustomButton onClick={() => onChangeArea(rowCount, columnCount)}>
+          Change
+        </CustomButton>
+        <CustomButton onClick={dotClear}>Clear</CustomButton>
       </DotAreaBlock>
     </>
   );

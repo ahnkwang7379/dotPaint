@@ -263,58 +263,27 @@ const dotActionsHandler = (
       }
     case PICKER:
       if (paintToolState === 'DRAGGING') {
-        const dot = state.dotArt.present.dot;
-        const activeIdx = dot.activeIdx;
-        const dotColor = dot.dotList[activeIdx].dot[rowIdx][columnIdx];
-        const selectPaletteId = state.palettes.selectColorId.paletteId;
-        const selectColorId = state.palettes.selectColorId.colorId;
+        const dotColor = state.dotArt.present.dot.fakeDotArt[rowIdx][columnIdx];
 
         // 색이 없는 셀을 클릭했다면
         if (!dotColor) return { ...state };
 
-        // 해당 색상이 이미 palette안에 있는지 순회
-        const palettes = state.palettes.palettes;
-        let existedColor = '';
-        palettes.map((palette) =>
-          palette.colors.map((color, colorIdx) =>
-            color === dotColor
-              ? (existedColor = { paletteId: palette.id, colorId: colorIdx })
-              : '',
-          ),
-        );
-        if (existedColor) {
-          return produce(state, (draft) => {
-            draft.palettes.selectColorId = existedColor;
-            direction === 'LEFT'
-              ? (draft.palettes.leftColor = dotColor)
-              : (draft.palettes.rightColor = dotColor);
-          });
+        if (direction === 'LEFT') {
+          return {
+            ...state,
+            palettes: {
+              ...state.palettes,
+              leftColor: dotColor,
+            },
+          };
         } else {
-          if (
-            state.palettes.trashCan.filter((color) => color === dotColor)
-              .length > 0
-          ) {
-            return produce(state, (draft) => {
-              direction === 'LEFT'
-                ? (draft.palettes.leftColor = dotColor)
-                : (draft.palettes.rightColor = dotColor);
-            });
-          } else {
-            return produce(state, (draft) => {
-              direction === 'LEFT'
-                ? (draft.palettes.leftColor = dotColor)
-                : (draft.palettes.rightColor = dotColor);
-
-              draft.palettes.palettes.map((palette) => {
-                if (palette.id === selectPaletteId) {
-                  draft.palettes.trashCan.unshift(
-                    palette.colors[selectColorId],
-                  );
-                  palette.colors[selectColorId] = dotColor;
-                }
-              });
-            });
-          }
+          return {
+            ...state,
+            palettes: {
+              ...state.palettes,
+              rightColor: dotColor,
+            },
+          };
         }
       } else {
         return { ...state };
@@ -495,6 +464,7 @@ const fakeDotArtSetHandle = (state) => {
     case BUCKET:
     case ERASER:
     case SAMECOLOR:
+    case PICKER:
     case MOVE:
       const { activeIdx, layerSelectIdx, layerData } = state.dotArt.present.dot;
       const layerIdx = layerData[layerSelectIdx].dotFrameIdx;

@@ -1,7 +1,8 @@
-import { exampleCat, examplePalette } from './json-example';
+import { exampleCat } from './json-example';
 
 const STORAGE_KEY = 'dotArt_storage';
 const STORAGE_PALETTES_KEY = 'dotArt_palettes_storage';
+const STORAGE_PRIVATE_SETTING = 'dotArt_private_setting';
 
 function saveDataToStorage(storage, data) {
   try {
@@ -19,7 +20,6 @@ export function initialStorage(storage) {
       dotArt: [
         {
           dot: { ...exampleCat },
-          palettes: examplePalette,
         },
       ],
       current: 0,
@@ -98,4 +98,25 @@ export function removeDotArtFromStorage(storage, dotArtIdx) {
     return saveDataToStorage(storage, storageData);
   }
   return false;
+}
+
+export function getPrivateSettingFromStorage(storage) {
+  try {
+    const data = storage.getItem(STORAGE_PRIVATE_SETTING);
+    return data ? JSON.parse(data) : false;
+  } catch (e) {
+    return false;
+  }
+}
+
+export function savePrivateSettingToStorage(storage, data) {
+  try {
+    let storageData = {
+      ...getPrivateSettingFromStorage(storage),
+      ...data,
+    };
+    storage.setItem(STORAGE_PRIVATE_SETTING, JSON.stringify(storageData));
+  } catch (e) {
+    return false;
+  }
 }

@@ -14,6 +14,10 @@ const ObserverContainer = () => {
     paintState: paintTool.paintState,
     selectedPaintTool: paintTool.selectedPaintTool,
   }));
+  const { rowCount, columnCount } = useSelector(({ dotArt }) => ({
+    rowCount: dotArt.present.dot.rowCount,
+    columnCount: dotArt.present.dot.columnCount,
+  }));
 
   const onChangePaintStateHandle = useCallback(
     (paintState) => {
@@ -48,6 +52,8 @@ const ObserverContainer = () => {
       mousePosition={mousePosition}
       paintState={paintState}
       selectedPaintTool={selectedPaintTool}
+      rowCount={rowCount}
+      columnCount={columnCount}
       onChangePaintStateHandle={onChangePaintStateHandle}
       onUpdateDotArtHandle={onUpdateDotArtHandle}
       onAltDownHandle={onAltDownHandle}

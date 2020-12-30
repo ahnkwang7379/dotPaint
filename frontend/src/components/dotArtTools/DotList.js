@@ -54,6 +54,7 @@ const DotList = ({
   layerIdx,
   columnCount,
   rowCount,
+  backgroundImg,
   handleChangeIdx,
   handleRemoveDotArt,
   handleCopyDotArt,
@@ -88,6 +89,7 @@ const DotList = ({
                       interval={dotFrame.interval}
                       columnCount={columnCount}
                       rowCount={rowCount}
+                      backgroundImg={backgroundImg}
                       handleCopyDotArt={handleCopyDotArt}
                       handleRemoveDotArt={handleRemoveDotArt}
                       handleChangeInterval={handleChangeInterval}

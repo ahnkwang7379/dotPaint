@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import SaveLoad from '../../components/dotArtTools/SaveLoad';
-import { saveDotArtToStorage } from '../../util/localStorage';
+import {
+  saveDotArtToStorage,
+  savePrivateSettingToStorage,
+  getPrivateSettingFromStorage,
+} from '../../util/localStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
 import {
@@ -9,6 +13,7 @@ import {
 } from '../../util/localStorage';
 import { newDotArtProject, loadDotArt } from '../../modules/dot';
 import { loadPalettes } from '../../modules/palettes';
+import { loadData } from '../../modules/observer';
 import shortid from 'shortid';
 import { useSnackbar } from 'notistack';
 
@@ -17,14 +22,12 @@ const SaveLoadContainer = () => {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const {
-    dotList,
     dotFrameList,
     columnCount,
     rowCount,
     animationDuration,
     layerData,
   } = useSelector(({ dotArt: { present: { dot } } }) => ({
-    dotList: dot.dotList,
     dotFrameList: dot.dotFrameList,
     columnCount: dot.columnCount,
     rowCount: dot.rowCount,
@@ -34,23 +37,24 @@ const SaveLoadContainer = () => {
   const { palettes } = useSelector(({ palettes }) => ({
     palettes: palettes.palettes,
   }));
-  const { dotBorder, backgroundColor } = useSelector(({ observer }) => ({
+  const { dotBorder, backgroundImg } = useSelector(({ observer }) => ({
     dotBorder: observer.dotBorder,
-    backgroundColor: observer.backgroundColor,
+    backgroundImg: observer.backgroundImg,
   }));
 
   // first load
   useEffect(() => {
     let loadedData = getDotArtDataFromStorage(localStorage);
+    let loadedPrivateData = getPrivateSettingFromStorage(localStorage);
     if (loadedData) {
       dispatch(loadDotArt(loadedData.dotArt[loadedData.current].dot));
-      dispatch(loadPalettes(loadedData.dotArt[loadedData.current].palettes));
     } else {
       initialStorage(localStorage);
       loadedData = getDotArtDataFromStorage(localStorage);
       dispatch(loadDotArt(loadedData.dotArt[loadedData.current].dot));
-      dispatch(loadPalettes(loadedData.dotArt[loadedData.current].palettes));
     }
+    // observer는 상관없음
+    dispatch(loadData(loadedPrivateData));
   }, []);
 
   const newProjectHandle = useCallback(() => {
@@ -75,11 +79,6 @@ const SaveLoadContainer = () => {
           animationDuration: animationDuration,
           layerData: layerData,
         },
-        palettes: palettes,
-        observer: {
-          dotBorder: dotBorder,
-          backgroundColor: backgroundColor,
-        },
       };
 
       const result = saveDotArtToStorage(localStorage, saveDotArtData);
@@ -91,6 +90,23 @@ const SaveLoadContainer = () => {
       setSaveStart(false);
     }
   }, [saveStart]);
+
+  useEffect(() => {
+    const savePrivateData = {
+      dotBorder: dotBorder,
+      backgroundImg: backgroundImg,
+    };
+
+    const autoSave = () => {
+      savePrivateSettingToStorage(localStorage, savePrivateData);
+    };
+
+    window.addEventListener('beforeunload', autoSave, false);
+
+    return () => {
+      window.removeEventListener('beforeunload', autoSave, false);
+    };
+  }, [dotBorder, backgroundImg]);
 
   const saveHandle = () => {
     setSaveStart(true);

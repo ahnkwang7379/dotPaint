@@ -44,6 +44,7 @@ const initialState = {
   dotSize: 32,
   dotBorder: { size: 1, color: '#000000' },
   showLayers: true,
+  backgroundImg: 1,
   altDown: false,
   shiftDown: false,
 };

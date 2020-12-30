@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
 import DotLayerContainer from '../../containers/dotPaint/DotLayerContainer';
 import White from '../../img/white.png';
+import Black from '../../img/black.png';
 
 const DotPaintWrapper = styled.div`
   width: 100%;
@@ -13,7 +14,7 @@ const DotPaintWrapper = styled.div`
   flex-direction: column;
   overflow: hidden;
   background: #afafaf;
-  padding: 16px;
+  /* padding: 16px; */
   margin-right: 8px;
   // align-items: center;
 `;
@@ -39,7 +40,8 @@ const DotPaintBox = styled.div`
 `;
 
 const DotPaintBlock = styled.div`
-  background-image: url(${White});
+  background-image: ${(props) =>
+    props.backgroundImg === 1 ? `url(${White})` : `url(${Black})`};
   display: inline-flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -49,9 +51,8 @@ const DotPaintBlock = styled.div`
   padding: 0;
   box-sizing: border-box;
   ${(props) =>
-    props.border &&
     css`
-      border: ${props.border.size}px solid ${props.border.color};
+      border: ${props.borderSize}px solid ${props.borderColor};
     `};
   & > :nth-child(n + 2) {
     display: flex;
@@ -63,9 +64,8 @@ const DotPaintBlock = styled.div`
         background: rgba(255, 255, 255, 0.2);
       }
       ${(props) =>
-        props.border &&
         css`
-          border: ${props.border.size}px solid ${props.border.color};
+          border: ${props.borderSize}px solid ${props.borderColor};
           width: ${props.dotSize}px;
           height: ${props.dotSize}px;
           min-width: ${props.dotSize}px;
@@ -84,42 +84,27 @@ const DotPaint = ({
   border,
   dotSize,
   rowCount,
+  columnCount,
+  backgroundImg,
   onWheelHandle,
   onChangePaintStateHandle,
   onDotActionHandle,
   onSetDirectionHandle,
   onLeavesPaintAreaHandle,
 }) => {
-  // const [lock, setLock] = useState(false);
-  // const lockHandle = () => {
-  //   setLock(!lock);
-  //   console.log(!lock);
-  // };
+  useEffect(() => {
+    const paintBox = document.getElementById('paintBox');
 
-  // useEffect(() => {
-  //   const paintBox = document.getElementById('paintBox');
-  //   const lockedX = paintBox.scrollTop;
-  //   const lockedY = paintBox.scrollLeft;
+    const preventDefault = (e) => {
+      e.preventDefault();
+    };
 
-  //   console.log(paintBox.scrollHeight);
-  //   console.log(paintBox.scrollWidth);
+    paintBox.addEventListener('wheel', preventDefault);
 
-  //   const lockTest = (e) => {
-  //     let paintBox = document.getElementById('paintBox');
-  //     if (lock) {
-  //       paintBox.scrollTo(lockedX, lockedY);
-  //       e.preventDefault();
-  //     }
-  //   };
-
-  //   if (lock) {
-  //     paintBox.addEventListener('scroll', lockTest, false);
-  //   }
-
-  //   return () => {
-  //     paintBox.removeEventListener('scroll', lockTest, false);
-  //   };
-  // }, [lock]);
+    return () => {
+      paintBox.removeEventListener('wheel', preventDefault);
+    };
+  }, []);
 
   const onMouseDownHandler = useCallback(
     (e) => {
@@ -152,30 +137,24 @@ const DotPaint = ({
       );
     }
     return dotLineArr;
-    // }, [rowCount, onMouseDownHandler, onMouseUpHandler, onMouseOverHandler]);
   }, [rowCount, onMouseDownHandler, onMouseOverHandler]);
 
   return (
     <DotPaintWrapper
-      // onWheel={(e) => (lock ? onWheelHandle(e) : console.log('not lock'))}
       onWheel={(e) => onWheelHandle(e)}
       onContextMenu={(e) => e.preventDefault()}
     >
-      {/* <ScrollLockButton onClick={lockHandle}>Scroll Lock?</ScrollLockButton> */}
-      <DotPaintBox
-        id="paintBox"
-        // onMouseLeave={(e) => onMouseUpHandler(e)}
-        // onMouseUp={(e) => onMouseUpHandler(e)}
-      >
+      <DotPaintBox id="paintBox">
         <DotPaintBlock
           dotSize={dotSize}
-          border={border}
+          borderColor={border.color}
+          borderSize={dotSize > 16 ? border.size : dotSize > 4 ? 1 : 0}
+          backgroundImg={backgroundImg}
           onMouseLeave={onLeavesPaintAreaHandle}
           onMouseDownCapture={onMouseDownHandler} // 캡쳐링으로 state를 먼저 바꿔줘야함
           onContextMenu={(e) => e.preventDefault()}
         >
           <DotLayerContainer />
-          {/* <TestLayerContainer /> */}
           {dotLineMaker()}
         </DotPaintBlock>
       </DotPaintBox>

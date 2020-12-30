@@ -7,8 +7,23 @@ import PreViewTools from '../../components/dotArtTools/PreViewTools';
 
 const PreViewContainer = () => {
   const dispatch = useDispatch();
-  const { animationDuration } = useSelector(({ dotArt }) => ({
-    animationDuration: dotArt.present.dot.animationDuration,
+  const {
+    dotFrameList,
+    layerList,
+    rowCount,
+    columnCount,
+    animationDuration,
+    layerData,
+  } = useSelector(({ dotArt: { present: { dot } } }) => ({
+    dotFrameList: dot.dotFrameList,
+    layerList: dot.dotFrameList[dot.activeIdx].layerList,
+    rowCount: dot.rowCount,
+    columnCount: dot.columnCount,
+    animationDuration: dot.animationDuration,
+    layerData: dot.layerData,
+  }));
+  const { backgroundImg } = useSelector(({ observer }) => ({
+    backgroundImg: observer.backgroundImg,
   }));
 
   const handleOpenDialog = useCallback(
@@ -35,6 +50,12 @@ const PreViewContainer = () => {
   return (
     <PreViewTools
       animationDuration={animationDuration}
+      dotFrameList={dotFrameList}
+      layerList={layerList}
+      rowCount={rowCount}
+      columnCount={columnCount}
+      layerData={layerData}
+      backgroundImg={backgroundImg}
       handleOpenDialog={handleOpenDialog}
       handleChangeAnimationDuration={handleChangeAnimationDuration}
       handleChangeTyping={handleChangeTyping}

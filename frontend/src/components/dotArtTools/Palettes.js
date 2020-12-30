@@ -6,6 +6,10 @@ import TempBlock from './TempBlock';
 import styled from 'styled-components';
 import ColorCell from '../common/ColorCell';
 
+const PalettesWrapper = styled.div`
+  border: 2px solid #9e9e9e;
+`;
+
 const DraggablePaletteBlock = styled.div`
   padding: 8px 0px;
   background: gray;
@@ -85,56 +89,58 @@ const Palettes = ({
   };
 
   return (
-    <DragDropContext
-      onDragEnd={onDragEnd}
-      onBeforeDragStart={onBeforeDragStart}
-      onBeforeCapture={onBeforeCapture}
-    >
-      <TrashBlock>
-        <TrashCan dragType={dragType} />
-        <TempBlock trashCan={trashCan} />
-      </TrashBlock>
-      <Droppable
-        droppableId="palettes"
-        type="palettes"
-        renderClone={(provided) => (
-          <CloneBlock
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-          >
-            <ColorCell />
-            <ColorCell />
-            <ColorCell />
-            <ColorCell />
-            <ColorCell />
-          </CloneBlock>
-        )}
+    <PalettesWrapper>
+      <DragDropContext
+        onDragEnd={onDragEnd}
+        onBeforeDragStart={onBeforeDragStart}
+        onBeforeCapture={onBeforeCapture}
       >
-        {(provided, snapshot) => (
-          <DraggablePaletteBlock
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            style={getListStyle(snapshot.isDraggingOver)}
-          >
-            {palettes.map((palette, idx) => (
-              <Palette
-                palette={palette}
-                key={palette.id}
-                idx={idx}
-                dragIdx={dragIdx}
-                selectColorId={selectColorId}
-                handleSelectColorCell={handleSelectColorCell}
-                handleSelectLeftColor={handleSelectLeftColor}
-                handleSelectRightColor={handleSelectRightColor}
-              />
-            ))}
-            {provided.placeholder}
-          </DraggablePaletteBlock>
-        )}
-      </Droppable>
-      <button onClick={() => handleSavePalettes('test')}>save</button>
-    </DragDropContext>
+        <TrashBlock>
+          <TrashCan dragType={dragType} />
+          <TempBlock trashCan={trashCan} />
+        </TrashBlock>
+        <Droppable
+          droppableId="palettes"
+          type="palettes"
+          renderClone={(provided) => (
+            <CloneBlock
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+            >
+              <ColorCell />
+              <ColorCell />
+              <ColorCell />
+              <ColorCell />
+              <ColorCell />
+            </CloneBlock>
+          )}
+        >
+          {(provided, snapshot) => (
+            <DraggablePaletteBlock
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              style={getListStyle(snapshot.isDraggingOver)}
+            >
+              {palettes.map((palette, idx) => (
+                <Palette
+                  palette={palette}
+                  key={palette.id}
+                  idx={idx}
+                  dragIdx={dragIdx}
+                  selectColorId={selectColorId}
+                  handleSelectColorCell={handleSelectColorCell}
+                  handleSelectLeftColor={handleSelectLeftColor}
+                  handleSelectRightColor={handleSelectRightColor}
+                />
+              ))}
+              {provided.placeholder}
+            </DraggablePaletteBlock>
+          )}
+        </Droppable>
+        <button onClick={() => handleSavePalettes('test')}>save</button>
+      </DragDropContext>
+    </PalettesWrapper>
   );
 };
 

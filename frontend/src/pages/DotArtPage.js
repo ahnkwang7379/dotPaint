@@ -23,7 +23,7 @@ const MainWrapper = styled.div`
 const LeftToolBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   left: 0px;
   width: 150px;
   & > * {

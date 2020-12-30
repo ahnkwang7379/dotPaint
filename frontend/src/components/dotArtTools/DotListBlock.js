@@ -5,27 +5,30 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
 import { Draggable } from 'react-beautiful-dnd';
 import White from '../../img/white.png';
+import Black from '../../img/black.png';
 
 const ButtonDiv = styled.div`
+  z-index: 1;
+  display: none;
   left: 72px;
   position: absolute;
-  width: 16px;
+  width: 24px;
   margin: 0px;
   padding: 0px;
   & > * + * {
     margin-top: 48px;
   }
-  z-index: 2;
 `;
 
 const IndexBox = styled.div`
   background: orange;
   color: black;
   text-align: center;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
   position: absolute;
-  z-index: 2;
+  z-index: 10;
   font-weight: 900;
   font-size: 12px;
 `;
@@ -44,6 +47,11 @@ const CardDiv = styled.div`
       opacity: 1;
       border: solid 3px #b22222;
     `}
+  &:hover {
+    & > :nth-child(2) {
+      display: block;
+    }
+  }
 `;
 
 const PreviewBox = styled.div`
@@ -55,16 +63,17 @@ const PreviewBox = styled.div`
 `;
 
 const PreviewBlock = styled.div`
-  background-image: url(${White});
-  width: ${(props) => `${props.columnCount * props.pixelSize}px`};
-  height: ${(props) => `${props.rowCount * props.pixelSize}px`};
+  background-image: ${(props) =>
+    props.backgroundImg === 1 ? `url(${White})` : `url(${Black})`};
   ${(props) =>
     props.columnCount > props.rowCount
       ? css`
           width: 96px;
+          height: ${(props) => `${props.rowCount * props.pixelSize}px`};
         `
       : css`
           height: 96px;
+          width: ${(props) => `${props.columnCount * props.pixelSize}px`};
         `}
 `;
 
@@ -73,8 +82,8 @@ const StyleButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 24px;
+  height: 24px;
   font-size: 1rem;
   color: #f0f0f0;
   ${(props) =>
@@ -121,9 +130,10 @@ const DotListBlock = ({
   active,
   idx,
   dot,
+  interval,
   columnCount,
   rowCount,
-  interval,
+  backgroundImg,
   handleChangeIdx,
   handleCopyDotArt,
   handleRemoveDotArt,
@@ -188,6 +198,7 @@ const DotListBlock = ({
             <PreviewBlock
               columnCount={columnCount}
               rowCount={rowCount}
+              backgroundImg={backgroundImg}
               pixelSize={pixelSize}
             >
               <Preview dotSet={dot} column={columnCount} size={pixelSize} />
@@ -209,6 +220,7 @@ const DotListBlock = ({
     <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
       {(provided) => (
         <CardDiv
+          id="Card"
           active={false}
           onClick={() => handleChangeIdx(idx)}
           ref={provided.innerRef}
@@ -228,6 +240,7 @@ const DotListBlock = ({
             <PreviewBlock
               columnCount={columnCount}
               rowCount={rowCount}
+              backgroundImg={backgroundImg}
               pixelSize={pixelSize}
             >
               <Preview dotSet={dot} column={columnCount} size={pixelSize} />

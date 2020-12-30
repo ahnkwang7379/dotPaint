@@ -102,13 +102,16 @@ const getAnimationKeyframes = function getAnimationKeyframes(frames, opt) {
           pSize: opt.pSize,
           c: opt.c,
         });
+        if (currentBoxShadow === '') {
+          currentBoxShadow = '0px 0px #00000000';
+        }
         var minValue = index === 0 ? 0 : intervalData[index] + 0.01;
         var maxValue = intervalData[index + 1];
         intervalAcc[''.concat(minValue, '%, ').concat(maxValue, '%')] = {
           boxShadow: ''
             .concat(currentBoxShadow, ';height: ')
             .concat(opt.pSize, 'px; width: ')
-            .concat(opt.pSize, 'px;'),
+            .concat(opt.pSize, 'px'),
         };
       }
     } catch (error) {

@@ -46,7 +46,7 @@ const Button = styled.div`
   }
 `;
 
-const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
+const KeyBindings = ({ isTyping, dotSize, openKeyBindDialog, keySet }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -61,6 +61,8 @@ const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
       }
     }
     keyCombinationMaker(keySet);
+
+    const paintBox = document.getElementById('paintBox');
 
     const keybindActionMaker = (action) => {
       switch (action) {
@@ -123,14 +125,18 @@ const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
         case 'DECREASE_DOTSIZE':
           dispatch(decreaseDotSize());
           return;
-        // case 'MOVE_VIEWPORT_UP':
-        //   return;
-        // case 'MOVE_VIEWPORT_RIGHT':
-        //   return;
-        // case 'MOVE_VIEWPORT_DOWN':
-        //   return;
-        // case 'MOVE_VIEWPORT_LEFT':
-        //   return;
+        case 'MOVE_VIEWPORT_UP':
+          paintBox.scrollBy(0, -dotSize);
+          return;
+        case 'MOVE_VIEWPORT_RIGHT':
+          paintBox.scrollBy(dotSize, 0);
+          return;
+        case 'MOVE_VIEWPORT_DOWN':
+          paintBox.scrollBy(0, dotSize);
+          return;
+        case 'MOVE_VIEWPORT_LEFT':
+          paintBox.scrollBy(-dotSize, 0);
+          return;
         default:
           return console.log('bind error');
       }
@@ -145,7 +151,7 @@ const KeyBindings = ({ isTyping, openKeyBindDialog, keySet }) => {
     return () => {
       unsubscribe();
     };
-  }, [isTyping, keySet, dispatch]);
+  }, [isTyping, dotSize, keySet, dispatch]);
   return (
     <Button>
       <TiKeyboard size="2.5rem" onClick={openKeyBindDialog} />
