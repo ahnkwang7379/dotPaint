@@ -11,9 +11,9 @@ const DotSizeChanger = ({ dotSize, onChangeDotSize }) => {
         aria-labelledby="vertical-slider"
         valueLabelDisplay="auto"
         value={dotSize}
-        step={4}
+        step={2}
         color="secondary"
-        marks
+        // marks
         min={4}
         max={100}
         onChange={onChangeDotSize}

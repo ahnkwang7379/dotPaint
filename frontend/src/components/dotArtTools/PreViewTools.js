@@ -116,7 +116,7 @@ const PreViewTools = ({
 
   useEffect(() => {
     setDotList(mergeLayersByDotFrameList(dotFrameList, layerData));
-  }, [play, dotFrameList]);
+  }, [play, dotFrameList, layerData]);
 
   useEffect(() => {
     const newPixelSize = Math.floor(
@@ -128,7 +128,7 @@ const PreViewTools = ({
         setPixelSize(1);
       }
     }
-  }, [rowCount, columnCount]);
+  }, [rowCount, columnCount, pixelSize]);
 
   const togglePlay = () => {
     setPlay(!play);
@@ -198,7 +198,7 @@ const PreViewTools = ({
       <SliderBox>
         <SliderSpan>Duration {animationDuration}S</SliderSpan>
         <Slider
-          defaultValue={1}
+          defaultValue={2}
           aria-labelledby="vertical-slider"
           valueLabelDisplay="auto"
           step={1}

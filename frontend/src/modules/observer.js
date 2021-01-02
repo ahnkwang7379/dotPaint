@@ -75,7 +75,7 @@ const observer = handleActions(
     }),
     [INCREASE_DOT_SIZE]: (state) => ({
       ...state,
-      dotSize: state.dotSize < 101 ? state.dotSize + 4 : state.dotSize,
+      dotSize: state.dotSize < 100 ? state.dotSize + 4 : state.dotSize,
     }),
     [DECREASE_DOT_SIZE]: (state) => ({
       ...state,

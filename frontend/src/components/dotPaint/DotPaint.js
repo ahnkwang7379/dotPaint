@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import DotPaintLine from './DotPaintLine';
 import DotLayerContainer from '../../containers/dotPaint/DotLayerContainer';
@@ -14,9 +14,7 @@ const DotPaintWrapper = styled.div`
   flex-direction: column;
   overflow: hidden;
   background: #afafaf;
-  /* padding: 16px; */
   margin-right: 8px;
-  // align-items: center;
 `;
 
 const DotPaintBox = styled.div`
@@ -92,20 +90,6 @@ const DotPaint = ({
   onSetDirectionHandle,
   onLeavesPaintAreaHandle,
 }) => {
-  useEffect(() => {
-    const paintBox = document.getElementById('paintBox');
-
-    const preventDefault = (e) => {
-      e.preventDefault();
-    };
-
-    paintBox.addEventListener('wheel', preventDefault);
-
-    return () => {
-      paintBox.removeEventListener('wheel', preventDefault);
-    };
-  }, []);
-
   const onMouseDownHandler = useCallback(
     (e) => {
       e.preventDefault();

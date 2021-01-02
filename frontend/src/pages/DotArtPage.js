@@ -4,7 +4,6 @@ import DotListContainer from '../containers/dotArtTools/DotListContainer';
 import PreViewContainer from '../containers/dotArtTools/PreViewContainer';
 import DotPaintContainer from '../containers/dotPaint/DotPaintContainer';
 import PaintToolContainer from '../containers/dotArtTools/PaintToolContainer';
-import UndoRedoContainer from '../containers/dotArtTools/UndoRedoContainer';
 import SaveLoadContainer from '../containers/dotArtTools/SaveLoadContainer';
 import PalettesContainer from '../containers/dotArtTools/PalettesContainer';
 import DotBorderContainer from '../containers/dotArtTools/DotBorderContainer';
@@ -49,7 +48,6 @@ const DotArtPage = () => {
         <LeftToolBox>
           <SaveLoadContainer />
           <PaintToolContainer />
-          <UndoRedoContainer />
           <DotBorderContainer />
           <DotSizeContainer />
           <DotAreaContainer />

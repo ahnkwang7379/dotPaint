@@ -28,7 +28,7 @@ const DotLayer = ({
                 column={columnCount}
                 size={dotSize}
                 zIndex={1}
-                opacity={0.8}
+                opacity={0.45}
               />
             );
         } else {
