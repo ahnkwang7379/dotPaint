@@ -10,6 +10,7 @@ import {
   layerListMerge,
   mergeLayersByDotFrameList,
 } from '../../util/dotArrayUtil';
+import TextField from '@material-ui/core/TextField';
 import { useSnackbar } from 'notistack';
 
 const Wrapper = styled.div`
@@ -66,7 +67,13 @@ const CssTextArea = styled.textarea`
   color: white;
 `;
 
-const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
+const DownLoadDialog = ({
+  dot,
+  dialogType,
+  saveFileHandler,
+  handleChangeAnimationDuration,
+  handleChangePixelSize,
+}) => {
   const { enqueueSnackbar } = useSnackbar();
   const [dialog, setDialog] = useState('');
   const [type, setType] = useState('single');
@@ -89,9 +96,38 @@ const DownLoadDialog = ({ dot, dialogType, saveFileHandler }) => {
   useEffect(() => {
     setDialog(dialogType);
   }, [dialogType]);
+
+  const onChangePixelSize = (e) => {
+    handleChangePixelSize(e.target.value);
+  };
+
+  const onChangeAnimationDuration = (e) => {
+    if (e.target.value <= 0 || e.target.value === '') {
+      handleChangeAnimationDuration(0);
+    } else {
+      handleChangeAnimationDuration(e.target.value);
+    }
+  };
+
   return (
     <Wrapper>
       <ButtonWrapper>
+        <TextField
+          size="small"
+          variant="outlined"
+          type="number"
+          label="Animation"
+          value={animationDuration}
+          onChange={(e) => onChangeAnimationDuration(e)}
+        />
+        <TextField
+          size="small"
+          variant="outlined"
+          type="number"
+          label="PixelSize"
+          value={pixelSize}
+          onChange={(e) => onChangePixelSize(e)}
+        />
         <CustomButton
           selected={type === 'single'}
           onClick={() => setType('single')}

@@ -10,6 +10,7 @@ import {
 } from 'react-icons/md';
 import Slider from '@material-ui/core/Slider';
 import Preview from '../common/Preview';
+import ViewBox from './ViewBox';
 import {
   layerListMerge,
   mergeLayersByDotFrameList,
@@ -26,21 +27,22 @@ const PreviewWrapper = styled.div`
   width: 200px;
   height: 200px;
   border: 2px solid #9e9e9e;
+  overflow: hidden;
 `;
 
 const PreviewBlock = styled.div`
-  width: ${(props) =>
+  width: ${(props) => `${props.columnCount}px`};
+  height: ${(props) => `${props.rowCount}px`};
+  transform: ${(props) =>
     props.zoomIn
-      ? `${props.columnCount * props.pixelSize * 2}px`
-      : `${props.columnCount * props.pixelSize}px`};
-  height: ${(props) =>
-    props.zoomIn
-      ? `${props.rowCount * props.pixelSize * 2}px`
-      : `${props.rowCount * props.pixelSize}px`};
-  max-width: 200px;
-  max-height: 200px;
+      ? props.columnCount > props.rowCount
+        ? `scale(${200 / props.columnCount})`
+        : `scale(${200 / props.rowCount})`
+      : props.columnCount > props.rowCount
+      ? `scale(${100 / props.columnCount})`
+      : `scale(${100 / props.rowCount})`};
+
   overflow: hidden;
-  border: 3px solid orange;
   box-sizing: content-box;
 `;
 
@@ -66,7 +68,6 @@ const StyledButton = styled(CustomButton)`
   box-shadow: 0 0.2rem #666;
   font-size: 14px;
   border-radius: 0.3rem;
-
   ${(props) =>
     props.selected === true &&
     css`
@@ -106,13 +107,17 @@ const PreViewTools = ({
   handleChangeAnimationDuration,
 }) => {
   const [play, setPlay] = useState(true);
-  const [zoomIn, setZoomIn] = useState(false);
+  const [zoomIn, setZoomIn] = useState(true);
   const [hoverPreviewBox, setHoverPreviewBox] = useState(false);
   // dotList는 애니메이션때문에 넣어둠
   const [dotList, setDotList] = useState(
     mergeLayersByDotFrameList(dotFrameList, layerData),
   );
-  const [pixelSize, setPixelSize] = useState();
+  const [pixelSize, setPixelSize] = useState(0);
+  const [top, setTop] = useState(0);
+  const [left, setLeft] = useState(0);
+  const [height, setHeight] = useState(200);
+  const [width, setWidth] = useState(200);
 
   useEffect(() => {
     setDotList(mergeLayersByDotFrameList(dotFrameList, layerData));
@@ -129,6 +134,25 @@ const PreViewTools = ({
       }
     }
   }, [rowCount, columnCount, pixelSize]);
+
+  useEffect(() => {
+    const paintBox = document.getElementById('paintBox');
+
+    const scrollEvent = (e) => {
+      setTop(parseInt((paintBox.scrollTop / paintBox.scrollHeight) * 200));
+      setHeight(
+        parseInt((paintBox.clientHeight / paintBox.scrollHeight) * 200),
+      );
+      setLeft(parseInt((paintBox.scrollLeft / paintBox.scrollWidth) * 200));
+      setWidth(parseInt((paintBox.clientWidth / paintBox.scrollWidth) * 200));
+    };
+
+    paintBox.addEventListener('scroll', scrollEvent);
+
+    return () => {
+      paintBox.removeEventListener('scroll', scrollEvent);
+    };
+  }, [rowCount, columnCount]);
 
   const togglePlay = () => {
     setPlay(!play);
@@ -170,7 +194,8 @@ const PreViewTools = ({
           <MdContentCopy />
         </StyledButton>
       </ButtonBox>
-      <PreviewWrapper backgroundImg={backgroundImg}>
+      <PreviewWrapper backgroundImg={backgroundImg} id="previewWrapper">
+        <ViewBox top={top} left={left} height={height} width={width} />
         <PreviewBlock
           zoomIn={zoomIn}
           pixelSize={pixelSize}
@@ -181,14 +206,14 @@ const PreViewTools = ({
             <Preview
               dotSet={layerListMerge(layerList, layerData)}
               column={columnCount}
-              size={zoomIn ? pixelSize * 2 : pixelSize}
+              size={1}
             />
           )}
           {play && (
             <Preview
               dotList={dotList}
               column={columnCount}
-              size={zoomIn ? pixelSize * 2 : pixelSize}
+              size={1}
               animation={play}
               duration={animationDuration}
             />

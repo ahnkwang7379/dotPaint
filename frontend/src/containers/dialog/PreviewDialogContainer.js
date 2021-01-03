@@ -13,7 +13,7 @@ const PreviewDialogContainer = ({ dot }) => {
   );
   const handleChangePixelSize = useCallback(
     (pixelSize) => {
-      dispatch(changePixelSize(pixelSize));
+      dispatch(changePixelSize(parseInt(pixelSize)));
     },
     [dispatch],
   );

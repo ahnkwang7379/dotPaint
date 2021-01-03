@@ -73,11 +73,6 @@ const DotPaintBlock = styled.div`
   }
 `;
 
-const ScrollLockButton = styled.button`
-  width: 240px;
-  height: 40px;
-`;
-
 const DotPaint = ({
   border,
   dotSize,
