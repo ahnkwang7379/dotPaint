@@ -10,7 +10,6 @@ import {
 } from 'react-icons/md';
 import Slider from '@material-ui/core/Slider';
 import Preview from '../common/Preview';
-import ViewBox from './ViewBox';
 import {
   layerListMerge,
   mergeLayersByDotFrameList,
@@ -19,8 +18,7 @@ import White from '../../img/white.png';
 import Black from '../../img/black.png';
 
 const PreviewWrapper = styled.div`
-  background-image: ${(props) =>
-    props.backgroundImg === 1 ? `url(${White})` : `url(${Black})`};
+  background-color: #333333;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,22 +26,6 @@ const PreviewWrapper = styled.div`
   height: 200px;
   border: 2px solid #9e9e9e;
   overflow: hidden;
-`;
-
-const PreviewBlock = styled.div`
-  width: ${(props) => `${props.columnCount}px`};
-  height: ${(props) => `${props.rowCount}px`};
-  transform: ${(props) =>
-    props.zoomIn
-      ? props.columnCount > props.rowCount
-        ? `scale(${200 / props.columnCount})`
-        : `scale(${200 / props.rowCount})`
-      : props.columnCount > props.rowCount
-      ? `scale(${100 / props.columnCount})`
-      : `scale(${100 / props.rowCount})`};
-
-  overflow: hidden;
-  box-sizing: content-box;
 `;
 
 const ButtonBox = styled.div`
@@ -108,51 +90,157 @@ const PreViewTools = ({
 }) => {
   const [play, setPlay] = useState(true);
   const [zoomIn, setZoomIn] = useState(true);
+  const [pixelSize, setPixelSize] = useState(1);
   const [hoverPreviewBox, setHoverPreviewBox] = useState(false);
   // dotList는 애니메이션때문에 넣어둠
   const [dotList, setDotList] = useState(
     mergeLayersByDotFrameList(dotFrameList, layerData),
   );
-  const [pixelSize, setPixelSize] = useState(0);
-  const [top, setTop] = useState(0);
-  const [left, setLeft] = useState(0);
-  const [height, setHeight] = useState(200);
-  const [width, setWidth] = useState(200);
 
   useEffect(() => {
     setDotList(mergeLayersByDotFrameList(dotFrameList, layerData));
   }, [play, dotFrameList, layerData]);
 
   useEffect(() => {
-    const newPixelSize = Math.floor(
-      columnCount > rowCount ? 100 / columnCount : 100 / rowCount,
-    );
-    if (newPixelSize !== pixelSize) {
-      setPixelSize(newPixelSize);
-      if (newPixelSize === 0) {
-        setPixelSize(1);
-      }
-    }
-  }, [rowCount, columnCount, pixelSize]);
+    const previewBlock = document.getElementById('previewBlock');
+
+    let pixel = rowCount < columnCount ? 196 / columnCount : 196 / rowCount;
+    setPixelSize(zoomIn ? pixel : pixel / 2);
+
+    previewBlock.style.backgroundImage = previewBlock
+      ? `url(${White})`
+      : `url(${Black})`;
+    previewBlock.style.position = 'absolute';
+    previewBlock.style.width = `${Math.min(pixel * columnCount, 196)}px`;
+    previewBlock.style.height = `${Math.min(pixel * rowCount, 196)}px`;
+  }, [rowCount, columnCount, backgroundImg, zoomIn]);
 
   useEffect(() => {
     const paintBox = document.getElementById('paintBox');
+    const parentNode = paintBox.parentNode;
+    const childNode = paintBox.childNodes[0];
+
+    const previewBlock = document.getElementById('previewBlock');
+    let viewBox = document.createElement('div');
+    viewBox.style.position = 'absolute';
+    viewBox.style.zIndex = 3;
+    viewBox.style.border = '3px solid red';
+    viewBox.style.display = 'none';
+    viewBox.style.cursor = 'pointer';
+    viewBox.attributes.draggable = false;
+
+    previewBlock.appendChild(viewBox);
 
     const scrollEvent = (e) => {
-      setTop(parseInt((paintBox.scrollTop / paintBox.scrollHeight) * 200));
-      setHeight(
-        parseInt((paintBox.clientHeight / paintBox.scrollHeight) * 200),
-      );
-      setLeft(parseInt((paintBox.scrollLeft / paintBox.scrollWidth) * 200));
-      setWidth(parseInt((paintBox.clientWidth / paintBox.scrollWidth) * 200));
+      const overTop = paintBox.offsetTop === parentNode.offsetTop;
+      const overLeft = paintBox.offsetLeft === childNode.offsetLeft;
+
+      if (overTop || overLeft) {
+        viewBox.style.display = 'block';
+
+        if (overTop) {
+          viewBox.style.top = `${
+            (paintBox.scrollTop / paintBox.scrollHeight) *
+            previewBlock.clientHeight
+          }px`;
+          viewBox.style.height = `${
+            (paintBox.clientHeight / paintBox.scrollHeight) *
+            previewBlock.clientHeight
+          }px`;
+        } else {
+          let viewBoxHeight = Math.min(
+            (parentNode.clientHeight / paintBox.clientHeight) *
+              previewBlock.clientHeight,
+            196,
+          );
+
+          viewBox.style.height = `${viewBoxHeight}px`;
+          viewBox.style.top = `-${
+            (viewBoxHeight - previewBlock.clientHeight) / 2
+          }px`;
+        }
+
+        if (overLeft) {
+          viewBox.style.left = `${
+            (paintBox.scrollLeft / paintBox.scrollWidth) *
+            previewBlock.clientWidth
+          }px`;
+          viewBox.style.width = `${
+            (paintBox.clientWidth / paintBox.scrollWidth) *
+            previewBlock.clientWidth
+          }px`;
+        } else {
+          let viewBoxWidth = Math.min(
+            (paintBox.clientWidth / childNode.clientWidth) *
+              previewBlock.clientWidth,
+            196,
+          );
+
+          viewBox.style.width = `${viewBoxWidth}px`;
+          viewBox.style.left = `-${
+            (viewBoxWidth - previewBlock.clientWidth) / 2
+          }px`;
+        }
+      } else {
+        // viewBox가 표시 될 필요 없을 때
+        viewBox.style.display = 'none';
+      }
     };
 
-    paintBox.addEventListener('scroll', scrollEvent);
+    let isClick = false;
+
+    const onMouseDownEvent = (e) => {
+      isClick = true;
+    };
+
+    const onMouseUpEvent = (e) => {
+      isClick = false;
+    };
+
+    const onMouseMoveEvent = (e) => {
+      if (isClick) {
+        const previewData = previewBlock.getBoundingClientRect();
+
+        const x = e.clientX - previewData.x;
+        const y = e.clientY - previewData.y;
+
+        const moveX =
+          (paintBox.scrollWidth / 196) * x - paintBox.clientWidth / 2;
+        const moveY =
+          (paintBox.scrollHeight / 196) * y - paintBox.clientHeight / 2;
+
+        paintBox.scrollTo(moveX, moveY);
+      }
+    };
+
+    // previewBlock을 감시하면서 width와 height에 변경이 생기면 viewBox를 재 설정해 주기 위함
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        scrollEvent();
+      });
+    });
+
+    var config = {
+      attributes: true,
+    };
+
+    observer.observe(previewBlock, config);
+
+    paintBox.addEventListener('scroll', scrollEvent, {
+      passive: true,
+    });
+    viewBox.addEventListener('mousedown', onMouseDownEvent, { passive: true });
+    document.body.addEventListener('mouseup', onMouseUpEvent, {
+      passive: true,
+    });
+    document.body.addEventListener('mousemove', onMouseMoveEvent, {
+      passive: true,
+    });
 
     return () => {
-      paintBox.removeEventListener('scroll', scrollEvent);
+      paintBox.removeEventListener('scroll', scrollEvent, { passive: true });
     };
-  }, [rowCount, columnCount]);
+  }, []);
 
   const togglePlay = () => {
     setPlay(!play);
@@ -195,30 +283,24 @@ const PreViewTools = ({
         </StyledButton>
       </ButtonBox>
       <PreviewWrapper backgroundImg={backgroundImg} id="previewWrapper">
-        <ViewBox top={top} left={left} height={height} width={width} />
-        <PreviewBlock
-          zoomIn={zoomIn}
-          pixelSize={pixelSize}
-          columnCount={columnCount}
-          rowCount={rowCount}
-        >
+        <div id="previewBlock">
           {!play && (
             <Preview
               dotSet={layerListMerge(layerList, layerData)}
               column={columnCount}
-              size={1}
+              size={pixelSize}
             />
           )}
           {play && (
             <Preview
               dotList={dotList}
               column={columnCount}
-              size={1}
+              size={pixelSize}
               animation={play}
               duration={animationDuration}
             />
           )}
-        </PreviewBlock>
+        </div>
       </PreviewWrapper>
       <SliderBox>
         <SliderSpan>Duration {animationDuration}S</SliderSpan>
