@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/dotPaint/static/css/main.75a5490e.chunk.css",
-    "main.js": "/dotPaint/static/js/main.f39416d0.chunk.js",
-    "main.js.map": "/dotPaint/static/js/main.f39416d0.chunk.js.map",
+    "main.css": "/dotPaint/static/css/main.f3983aca.chunk.css",
+    "main.js": "/dotPaint/static/js/main.d3ac0657.chunk.js",
+    "main.js.map": "/dotPaint/static/js/main.d3ac0657.chunk.js.map",
     "runtime-main.js": "/dotPaint/static/js/runtime-main.a416796f.js",
     "runtime-main.js.map": "/dotPaint/static/js/runtime-main.a416796f.js.map",
-    "static/js/2.b4be3340.chunk.js": "/dotPaint/static/js/2.b4be3340.chunk.js",
-    "static/js/2.b4be3340.chunk.js.map": "/dotPaint/static/js/2.b4be3340.chunk.js.map",
+    "static/js/2.fab75e57.chunk.js": "/dotPaint/static/js/2.fab75e57.chunk.js",
+    "static/js/2.fab75e57.chunk.js.map": "/dotPaint/static/js/2.fab75e57.chunk.js.map",
     "index.html": "/dotPaint/index.html",
-    "precache-manifest.f9695d2b8df7010850ca3a3dd8f1b4c6.js": "/dotPaint/precache-manifest.f9695d2b8df7010850ca3a3dd8f1b4c6.js",
+    "precache-manifest.1ba8195806896fd1bd5d39c551306813.js": "/dotPaint/precache-manifest.1ba8195806896fd1bd5d39c551306813.js",
     "service-worker.js": "/dotPaint/service-worker.js",
-    "static/css/main.75a5490e.chunk.css.map": "/dotPaint/static/css/main.75a5490e.chunk.css.map",
-    "static/js/2.b4be3340.chunk.js.LICENSE.txt": "/dotPaint/static/js/2.b4be3340.chunk.js.LICENSE.txt"
+    "static/css/main.f3983aca.chunk.css.map": "/dotPaint/static/css/main.f3983aca.chunk.css.map",
+    "static/js/2.fab75e57.chunk.js.LICENSE.txt": "/dotPaint/static/js/2.fab75e57.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a416796f.js",
-    "static/js/2.b4be3340.chunk.js",
-    "static/css/main.75a5490e.chunk.css",
-    "static/js/main.f39416d0.chunk.js"
+    "static/js/2.fab75e57.chunk.js",
+    "static/css/main.f3983aca.chunk.css",
+    "static/js/main.d3ac0657.chunk.js"
   ]
 }
