@@ -3,39 +3,50 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   changeDotBorderSize,
   changeDotBorderColor,
+  changeBackgroundImg,
 } from '../../modules/observer';
 import BorderControl from '../../components/dotArtTools/BorderControl';
 
 const DotBorderContainer = () => {
   const dispatch = useDispatch();
-  const { borderSize, borderColor } = useSelector(({ observer }) => ({
-    borderSize: observer.dotBorder.size,
-    borderColor: observer.dotBorder.color,
-  }));
+  const { borderSize, borderColor, backgroundImg } = useSelector(
+    ({ observer }) => ({
+      borderSize: observer.dotBorder.size,
+      borderColor: observer.dotBorder.color,
+      backgroundImg: observer.backgroundImg,
+    }),
+  );
 
   const onChangeDotBorderSize = useCallback(
-    (e, newValue) => {
-      dispatch(changeDotBorderSize(newValue));
+    (dotSize) => {
+      dispatch(changeDotBorderSize(dotSize));
     },
     [dispatch],
   );
 
   const onChangeDotBorderColor = useCallback(
     (pick) => {
-      dispatch(changeDotBorderColor(pick));
+      dispatch(changeDotBorderColor(pick.hex));
+    },
+    [dispatch],
+  );
+
+  const onChangeBackgroundImg = useCallback(
+    (type) => {
+      dispatch(changeBackgroundImg(type));
     },
     [dispatch],
   );
 
   return (
-    <React.Fragment>
-      <BorderControl
-        borderSize={borderSize}
-        backgroundColor={borderColor}
-        onChangeDotBorderSize={onChangeDotBorderSize}
-        onChangeDotBorderColor={onChangeDotBorderColor}
-      />
-    </React.Fragment>
+    <BorderControl
+      borderSize={borderSize}
+      borderColor={borderColor}
+      backgroundImg={backgroundImg}
+      onChangeDotBorderSize={onChangeDotBorderSize}
+      onChangeDotBorderColor={onChangeDotBorderColor}
+      onChangeBackgroundImg={onChangeBackgroundImg}
+    />
   );
 };
 

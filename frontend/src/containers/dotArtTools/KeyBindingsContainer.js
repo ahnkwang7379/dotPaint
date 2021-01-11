@@ -11,8 +11,11 @@ const KeyBindingsContainer = () => {
     dotSize: observer.dotSize,
   }));
 
-  const { keySet } = useSelector(({ keybind }) => ({
-    keySet: keybind.keySet,
+  const { paintTools, color, storage, misc } = useSelector(({ keybind }) => ({
+    paintTools: keybind.paintTools,
+    color: keybind.color,
+    storage: keybind.storage,
+    misc: keybind.misc,
   }));
 
   const openKeyBindDialog = useCallback(() => {
@@ -23,8 +26,11 @@ const KeyBindingsContainer = () => {
     <KeyBingings
       isTyping={isTyping}
       dotSize={dotSize}
+      paintTools={paintTools}
+      color={color}
+      storage={storage}
+      misc={misc}
       openKeyBindDialog={openKeyBindDialog}
-      keySet={keySet}
     />
   );
 };

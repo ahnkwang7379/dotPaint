@@ -9,32 +9,34 @@ import {
   TiPen,
   TiEye,
 } from 'react-icons/ti';
+import ToolTip from '../common/ToolTip';
 
 const LayerWrapper = styled.div`
-  border: 2px solid #888;
+  border: 2px solid #59564f;
+  border-radius: 3px;
 `;
 
 const LayerHead = styled.div`
-  position: relative;
+  display: flex;
   font-size: 20px;
   padding-left: 16px;
-  font-weight: bold;
-  color: white;
-  background: #222222;
+  color: black;
+  background: #f2e8dc;
+  line-height: 24px;
+  border-bottom: 1px solid #0d0d0d;
 `;
 
 const EyeButton = styled.div`
   position: absolute;
-  top: 0;
   right: 0.5rem;
-  color: white;
+  color: #0d0d0d;
   font-size: 24px;
   cursor: pointer;
   transition: 0.2s linear;
   ${(props) =>
     props.showLayers &&
     css`
-      color: orange;
+      color: #e83838;
     `}
 `;
 
@@ -45,23 +47,23 @@ const ButtonBox = styled.div`
 const StyledButton = styled.button`
   outline: none;
   font-size: 16px;
-  width: 100%;
+  width: 33.3px;
   height: 24px;
   border: 1px solid #333333;
   transition: all 0.2s ease-in-out;
-  color: #fff;
-  background: #222222;
+  color: #0d0d0d;
+  background: #f2e8dc;
   ${(props) =>
     !props.disable &&
     css`
       &:hover {
-        color: orange;
+        color: #1261a6;
       }
     `}
 
   &:disabled {
-    background: #afafaf;
-    color: #777777;
+    background: #a69e94;
+    color: #59564f;
   }
 `;
 
@@ -89,7 +91,6 @@ const Layer = styled.div`
   height: 24px;
   cursor: pointer;
   display: flex;
-  background: ${(props) => (props.selected ? 'skyblue' : 'white')};
 `;
 
 const LayerNameSpan = styled.span`
@@ -97,19 +98,27 @@ const LayerNameSpan = styled.span`
   white-space: nowrap;
   width: 100%;
   line-height: 24px;
-  color: white;
+  color: #0d0d0d;
   padding-left: 8px;
   height: 24px;
-  background: #222222;
+  background: #f2e8dc;
   border: none;
   outline: none;
   cursor: pointer;
   font-size: 12px;
+  border-top: 2px solid #0d0d0d;
+  &:hover {
+    ${(props) =>
+      !props.selected &&
+      css`
+        background-color: #d2c9be;
+      `}
+  }
   ${(props) =>
     props.selected &&
     css`
       color: orange;
-      background: #333333;
+      background: #59564f;
     `}
   ${(props) => (props.active ? `display: none` : '')}
 `;
@@ -125,6 +134,22 @@ const LayerNameInput = styled.input`
   color: white;
   background: rgba(50, 50, 50, 1);
   ${(props) => (props.active ? `display: none` : '')}
+`;
+
+const ToolTipSpan = styled.div`
+  color: #999;
+  font-size: 10px;
+`;
+
+const ToolTipKey = styled.span`
+  padding: 2px;
+  border: 1px Solid #999;
+  font-size: 0.8em;
+  margin-right: 5px;
+  text-align: center;
+  border-radius: 3px;
+  display: inline-block;
+  line-height: 10px;
 `;
 
 const LayerControl = ({
@@ -148,7 +173,7 @@ const LayerControl = ({
 
   useEffect(() => {
     setName(layerData[layerSelectIdx].layerName);
-  }, [layerSelectIdx]);
+  }, [layerSelectIdx, layerData]);
 
   const onClickAddNewLayer = () => {
     addNewLayerHandle(shiftDown);
@@ -177,7 +202,7 @@ const LayerControl = ({
     } else {
       handleChangeTyping(false);
     }
-  }, [reName]);
+  }, [reName, handleChangeTyping]);
 
   const onBlurHandle = () => {
     setReName(false);
@@ -197,61 +222,100 @@ const LayerControl = ({
       <LayerHead>
         Layers
         <EyeButton showLayers={showLayers} onClick={handleChangeShowLayers}>
-          <TiEye />
+          <ToolTip
+            direction="left"
+            toolTipText={<>Show all layers</>}
+            toolTipWidth="100"
+          >
+            <TiEye />
+          </ToolTip>
         </EyeButton>
       </LayerHead>
-
       <ButtonBox>
-        <StyledButton
-          onClick={onClickAddNewLayer}
-          color={`#333333`}
-          baseColor={`#222222`}
+        <ToolTip
+          toolTipText={
+            <>
+              Add new layer
+              <ToolTipSpan>
+                <ToolTipKey>SHIFT</ToolTipKey>Copy select layer
+              </ToolTipSpan>
+            </>
+          }
+          toolTipWidth="140"
         >
-          <TiPlus />
-        </StyledButton>
-        <StyledButton
-          onClick={onClickMoveUp}
-          color={`#333333`}
-          baseColor={`#222222`}
-          disable={layerSelectIdx === layerData.length - 1}
-          disabled={layerSelectIdx === layerData.length - 1}
+          <StyledButton onClick={onClickAddNewLayer}>
+            <TiPlus />
+          </StyledButton>
+        </ToolTip>
+        <ToolTip
+          toolTipText={
+            <>
+              Move up selected layer
+              <ToolTipSpan>
+                <ToolTipKey>SHIFT</ToolTipKey>Move to Top
+              </ToolTipSpan>
+            </>
+          }
+          toolTipWidth="140"
         >
-          <TiArrowUpThick />
-        </StyledButton>
-        <StyledButton
-          onClick={onClickMoveDown}
-          color={`#333333`}
-          baseColor={`#222222`}
-          disable={layerSelectIdx === 0}
-          disabled={layerSelectIdx === 0}
+          <StyledButton
+            onClick={onClickMoveUp}
+            disable={layerSelectIdx === layerData.length - 1}
+            disabled={layerSelectIdx === layerData.length - 1}
+          >
+            <TiArrowUpThick />
+          </StyledButton>
+        </ToolTip>
+        <ToolTip
+          toolTipText={
+            <>
+              Move down selected layer
+              <ToolTipSpan>
+                <ToolTipKey>SHIFT</ToolTipKey>Move to down
+              </ToolTipSpan>
+            </>
+          }
+          toolTipWidth="140"
         >
-          <TiArrowDownThick />
-        </StyledButton>
-        <StyledButton
-          color={`#333333`}
-          baseColor={`#222222`}
-          onClick={onClickReName}
+          <StyledButton
+            onClick={onClickMoveDown}
+            disable={layerSelectIdx === 0}
+            disabled={layerSelectIdx === 0}
+          >
+            <TiArrowDownThick />
+          </StyledButton>
+        </ToolTip>
+        <ToolTip toolTipText={<>Edit layer name</>} toolTipWidth="100">
+          <StyledButton onClick={onClickReName}>
+            <TiPen />
+          </StyledButton>
+        </ToolTip>
+        <ToolTip
+          // direction="left"
+          toolTipText={<>Merge with below layer</>}
+          toolTipWidth="100"
         >
-          <TiPen />
-        </StyledButton>
-        <StyledButton
-          onClick={mergeLayerHandle}
-          color={`#333333`}
-          baseColor={`#222222`}
-          disable={layerSelectIdx === 0}
-          disabled={layerSelectIdx === 0}
+          <StyledButton
+            onClick={mergeLayerHandle}
+            disable={layerSelectIdx === 0}
+            disabled={layerSelectIdx === 0}
+          >
+            <TiFlowMerge />
+          </StyledButton>
+        </ToolTip>
+        <ToolTip
+          direction="left"
+          toolTipText={<>Delete selected layer</>}
+          toolTipWidth="100"
         >
-          <TiFlowMerge />
-        </StyledButton>
-        <StyledButton
-          onClick={removeLayerHandle}
-          color={`#333333`}
-          baseColor={`#222222`}
-          disable={layerData.length === 1}
-          disabled={layerData.length === 1}
-        >
-          <TiDelete />
-        </StyledButton>
+          <StyledButton
+            onClick={removeLayerHandle}
+            disable={layerData.length === 1}
+            disabled={layerData.length === 1}
+          >
+            <TiDelete />
+          </StyledButton>
+        </ToolTip>
       </ButtonBox>
       <LayerBox>
         {layerData.map((layer, idx) => {

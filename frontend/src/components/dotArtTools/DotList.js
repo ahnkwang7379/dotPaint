@@ -6,21 +6,23 @@ import AddIcon from '@material-ui/icons/Add';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 
 const DotListDiv = styled.div`
-  max-height: 90vh;
-  width: fit-content;
+  z-index: 10;
+  max-height: 92vh;
+  width: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const ScrollCustom = styled.div`
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 0.5rem;
-  width: auto;
+  z-index: 10;
+  background: #a69e94;
+  border-radius: 0.2rem;
+  width: 130px;
   height: 100%;
   margin: 0px 8px;
-  flex-wrap: nowrap;
-  overflow: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   position: sticky;
   & > *:not(:last-child) {
     width: 102px;
@@ -101,11 +103,11 @@ const DotList = ({
               {provided.placeholder}
               <CustomButton
                 width="96"
-                height="50"
+                height="30"
                 onClick={() => handleAddDotArt()}
               >
                 <AddIcon />
-                <Span>Add new</Span>
+                <Span>Add</Span>
               </CustomButton>
             </ScrollCustom>
           )}

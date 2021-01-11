@@ -11,6 +11,8 @@ const ALT_DOWN = 'observer/ALT_DOWN';
 const SHIFT_DOWN = 'observer/SHIFT_DOWN';
 const LOAD_DATA = 'observer/LOAD_DATA';
 const CHANGE_SHOW_LAYERS = 'observer/CHANGE_SHOW_LAYERS';
+const CHANGE_BACKGROUND_IMG = 'observer/CHANGE_BACKGROUND_IMG';
+const SAVE_START = 'observer/SAVE_START';
 
 export const changeTypingState = createAction(
   CHANGE_TYPING_STATE,
@@ -36,6 +38,11 @@ export const altDown = createAction(ALT_DOWN, (bool) => bool);
 export const shiftDown = createAction(SHIFT_DOWN, (bool) => bool);
 export const loadData = createAction(LOAD_DATA, (observerData) => observerData);
 export const changeShowLayers = createAction(CHANGE_SHOW_LAYERS);
+export const changeBackgroundImg = createAction(
+  CHANGE_BACKGROUND_IMG,
+  (type) => type,
+);
+export const saveStart = createAction(SAVE_START, (flag) => flag);
 
 const initialState = {
   isTyping: false,
@@ -45,6 +52,7 @@ const initialState = {
   dotBorder: { size: 1, color: '#000000' },
   showLayers: true,
   backgroundImg: 1,
+  saveState: false,
   altDown: false,
   shiftDown: false,
 };
@@ -100,6 +108,14 @@ const observer = handleActions(
     [CHANGE_SHOW_LAYERS]: (state) => ({
       ...state,
       showLayers: !state.showLayers,
+    }),
+    [CHANGE_BACKGROUND_IMG]: (state, { payload: type }) => ({
+      ...state,
+      backgroundImg: type,
+    }),
+    [SAVE_START]: (state, { payload: flag }) => ({
+      ...state,
+      saveState: flag,
     }),
   },
   initialState,

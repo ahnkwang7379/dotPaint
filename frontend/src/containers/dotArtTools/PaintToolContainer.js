@@ -8,12 +8,16 @@ const PaintToolContainer = () => {
   const { selectedPaintTool } = useSelector(({ paintTool }) => ({
     selectedPaintTool: paintTool.selectedPaintTool,
   }));
+  const { paintTools } = useSelector(({ keybind }) => ({
+    paintTools: keybind.paintTools,
+  }));
   const onChangePaintTool = useCallback(
     (paintTool) => dispatch(changePaintTool(paintTool)),
     [dispatch],
   );
   return (
     <PaintTool
+      paintTools={paintTools}
       onChangePaintTool={onChangePaintTool}
       selectedPaintTool={selectedPaintTool}
     />

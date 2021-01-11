@@ -3,10 +3,20 @@ import KeyBindDialog from '../../components/dialog/KeyBindDialog';
 import { useSelector } from 'react-redux';
 
 const KeyBindDialogContainer = () => {
-  const { keySet } = useSelector(({ keybind }) => ({
-    keySet: keybind.keySet,
+  const { paintTools, color, storage, misc } = useSelector(({ keybind }) => ({
+    paintTools: keybind.paintTools,
+    color: keybind.color,
+    storage: keybind.storage,
+    misc: keybind.misc,
   }));
-  return <KeyBindDialog keySet={keySet} />;
+  return (
+    <KeyBindDialog
+      paintTools={paintTools}
+      color={color}
+      storage={storage}
+      misc={misc}
+    />
+  );
 };
 
 export default KeyBindDialogContainer;

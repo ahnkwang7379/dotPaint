@@ -14,17 +14,22 @@ import {
   layerListMerge,
   mergeLayersByDotFrameList,
 } from '../../util/dotArrayUtil';
+import ToolTip from '../common/ToolTip';
 import White from '../../img/white.png';
 import Black from '../../img/black.png';
 
+const PreviewToolsWrapper = styled.div`
+  border: 2px solid #59564f;
+  border-radius: 3px;
+`;
+
 const PreviewWrapper = styled.div`
-  background-color: #333333;
+  background-color: #a69e94;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 200px;
   height: 200px;
-  border: 2px solid #9e9e9e;
   overflow: hidden;
 `;
 
@@ -35,7 +40,7 @@ const ButtonBox = styled.div`
   width: 80px;
   height: 30px;
   top: 0.5rem;
-  right: 0.5rem;
+  left: 1rem;
   opacity: ${(props) => (props.hovered ? 1 : 0)};
   transition: opacity 0.3s;
   & > * {
@@ -44,7 +49,7 @@ const ButtonBox = styled.div`
 `;
 
 const StyledButton = styled(CustomButton)`
-  width: 32px;
+  width: 22px;
   height: 22px;
   padding: 0;
   box-shadow: 0 0.2rem #666;
@@ -62,10 +67,10 @@ const StyledButton = styled(CustomButton)`
 `;
 
 const SliderBox = styled.div`
-  width: 100%;
+  width: 200px;
   height: 40px;
   display: flex;
-  background: #afafaf;
+  background: #f2e8dc;
   padding: 8px;
   font-size: 8px;
 `;
@@ -104,15 +109,17 @@ const PreViewTools = ({
   useEffect(() => {
     const previewBlock = document.getElementById('previewBlock');
 
-    let pixel = rowCount < columnCount ? 196 / columnCount : 196 / rowCount;
-    setPixelSize(zoomIn ? pixel : pixel / 2);
+    let maxSize = zoomIn ? 200 : 100;
+    let pixel =
+      rowCount < columnCount ? maxSize / columnCount : maxSize / rowCount;
+    setPixelSize(pixel);
 
-    previewBlock.style.backgroundImage = previewBlock
+    previewBlock.style.backgroundImage = backgroundImg
       ? `url(${White})`
       : `url(${Black})`;
     previewBlock.style.position = 'absolute';
-    previewBlock.style.width = `${Math.min(pixel * columnCount, 196)}px`;
-    previewBlock.style.height = `${Math.min(pixel * rowCount, 196)}px`;
+    previewBlock.style.width = `${Math.min(pixel * columnCount, maxSize)}px`;
+    previewBlock.style.height = `${Math.min(pixel * rowCount, maxSize)}px`;
   }, [rowCount, columnCount, backgroundImg, zoomIn]);
 
   useEffect(() => {
@@ -123,7 +130,7 @@ const PreViewTools = ({
     const previewBlock = document.getElementById('previewBlock');
     let viewBox = document.createElement('div');
     viewBox.style.position = 'absolute';
-    viewBox.style.zIndex = 3;
+    viewBox.style.zIndex = 1;
     viewBox.style.border = '3px solid red';
     viewBox.style.display = 'none';
     viewBox.style.cursor = 'pointer';
@@ -151,7 +158,7 @@ const PreViewTools = ({
           let viewBoxHeight = Math.min(
             (parentNode.clientHeight / paintBox.clientHeight) *
               previewBlock.clientHeight,
-            196,
+            200,
           );
 
           viewBox.style.height = `${viewBoxHeight}px`;
@@ -173,7 +180,7 @@ const PreViewTools = ({
           let viewBoxWidth = Math.min(
             (paintBox.clientWidth / childNode.clientWidth) *
               previewBlock.clientWidth,
-            196,
+            200,
           );
 
           viewBox.style.width = `${viewBoxWidth}px`;
@@ -199,15 +206,19 @@ const PreViewTools = ({
 
     const onMouseMoveEvent = (e) => {
       if (isClick) {
-        const previewData = previewBlock.getBoundingClientRect();
+        const previewData = document
+          .getElementById('previewWrapper')
+          .getBoundingClientRect();
 
         const x = e.clientX - previewData.x;
         const y = e.clientY - previewData.y;
 
+        // 움직임이 부자연스러우면 200을 변수로 바꿔줘야 함
+        // previewBlock 크기 계산식 바꾸면서 200px로 나누면 zoomIn false일 때는 약간 부자연스러울 수 있음
         const moveX =
-          (paintBox.scrollWidth / 196) * x - paintBox.clientWidth / 2;
+          (paintBox.scrollWidth / 200) * x - paintBox.clientWidth / 2;
         const moveY =
-          (paintBox.scrollHeight / 196) * y - paintBox.clientHeight / 2;
+          (paintBox.scrollHeight / 200) * y - paintBox.clientHeight / 2;
 
         paintBox.scrollTo(moveX, moveY);
       }
@@ -259,28 +270,47 @@ const PreViewTools = ({
   };
 
   return (
-    <div
+    <PreviewToolsWrapper
       onMouseOver={() => onChangeHoverPreviewBox(true)}
       onMouseOut={() => onChangeHoverPreviewBox(false)}
     >
       <ButtonBox hovered={hoverPreviewBox}>
-        <StyledButton
-          onClick={togglePlay}
-          selected={play}
-          selectColor="#f05556"
-          color={play ? '#b71b2d' : '#008000'}
-          baseColor="#3db12a"
+        <ToolTip
+          direction="bottom"
+          toolTipWidth="90"
+          toolTipHeight="80"
+          toolTipText={<>Toggle animation</>}
         >
-          {play ? <MdPause /> : <MdPlayArrow />}
-        </StyledButton>
-
-        <StyledButton onClick={toggleZoom}>
-          {zoomIn ? <MdFullscreenExit /> : <MdFullscreen />}
-        </StyledButton>
-
-        <StyledButton onClick={() => handleOpenDialog('Preview')}>
-          <MdContentCopy />
-        </StyledButton>
+          <StyledButton
+            onClick={togglePlay}
+            selected={play}
+            selectColor="#f05556"
+            color={play ? '#b71b2d' : '#008000'}
+            baseColor="#3db12a"
+          >
+            {play ? <MdPause /> : <MdPlayArrow />}
+          </StyledButton>
+        </ToolTip>
+        <ToolTip
+          direction="bottom"
+          toolTipWidth="80"
+          toolTipHeight="80"
+          toolTipText={<>Preview zoom {zoomIn ? 'Out' : 'In'}</>}
+        >
+          <StyledButton onClick={toggleZoom}>
+            {zoomIn ? <MdFullscreenExit /> : <MdFullscreen />}
+          </StyledButton>
+        </ToolTip>
+        <ToolTip
+          direction="bottom"
+          toolTipWidth="80"
+          toolTipHeight="80"
+          toolTipText={<>Open preview dialog</>}
+        >
+          <StyledButton onClick={() => handleOpenDialog('Preview')}>
+            <MdContentCopy />
+          </StyledButton>
+        </ToolTip>
       </ButtonBox>
       <PreviewWrapper backgroundImg={backgroundImg} id="previewWrapper">
         <div id="previewBlock">
@@ -302,20 +332,27 @@ const PreViewTools = ({
           )}
         </div>
       </PreviewWrapper>
-      <SliderBox>
-        <SliderSpan>Duration {animationDuration}S</SliderSpan>
-        <Slider
-          defaultValue={2}
-          aria-labelledby="vertical-slider"
-          valueLabelDisplay="auto"
-          step={1}
-          color="secondary"
-          min={1}
-          max={10}
-          onChange={onChangeAnimationDuration}
-        />
-      </SliderBox>
-    </div>
+
+      <ToolTip
+        direction="bottom"
+        toolTipWidth="200"
+        toolTipText={<>Show animation in {animationDuration} second </>}
+      >
+        <SliderBox>
+          <SliderSpan>Duration {animationDuration}S</SliderSpan>
+          <Slider
+            defaultValue={2}
+            aria-labelledby="vertical-slider"
+            valueLabelDisplay="auto"
+            step={1}
+            color="secondary"
+            min={1}
+            max={10}
+            onChange={onChangeAnimationDuration}
+          />
+        </SliderBox>
+      </ToolTip>
+    </PreviewToolsWrapper>
   );
 };
 

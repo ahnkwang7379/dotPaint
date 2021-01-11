@@ -12,10 +12,11 @@ import CustomButton from '../common/CustomButton';
 import { TiPencil, TiPipette } from 'react-icons/ti';
 import { BsFillBucketFill } from 'react-icons/bs';
 import { FaEraser, FaHandPaper, FaBorderAll } from 'react-icons/fa';
+import ToolTip from '../common/ToolTip';
 
 const PaintToolBlock = styled.div`
   /* display: flex; */
-  height: 64px;
+  /* height: 64px; */
 `;
 
 const PaintButtonBlock = styled.div`
@@ -23,28 +24,39 @@ const PaintButtonBlock = styled.div`
   height: 32px;
 `;
 
-const PaintTool = ({ onChangePaintTool, selectedPaintTool }) => {
+const PaintTool = ({ paintTools, onChangePaintTool, selectedPaintTool }) => {
   return (
     <PaintToolBlock>
       <PaintButtonBlock>
-        <CustomButton
-          selected={selectedPaintTool === DOT}
-          onClick={() => onChangePaintTool(DOT)}
+        <ToolTip
+          direction="bottom"
+          // toolTipWidth="60"
+          toolTipText={<></>}
         >
-          <TiPencil />
-        </CustomButton>
-        <CustomButton
-          selected={selectedPaintTool === BUCKET}
-          onClick={() => onChangePaintTool(BUCKET)}
-        >
-          <BsFillBucketFill />
-        </CustomButton>
-        <CustomButton
-          selected={selectedPaintTool === PICKER}
-          onClick={() => onChangePaintTool(PICKER)}
-        >
-          <TiPipette />
-        </CustomButton>
+          <CustomButton
+            selected={selectedPaintTool === DOT}
+            onClick={() => onChangePaintTool(DOT)}
+          >
+            <TiPencil />
+          </CustomButton>
+        </ToolTip>
+
+        <ToolTip direction="right" toolTipText={<></>}>
+          <CustomButton
+            selected={selectedPaintTool === BUCKET}
+            onClick={() => onChangePaintTool(BUCKET)}
+          >
+            <BsFillBucketFill />
+          </CustomButton>
+        </ToolTip>
+        <ToolTip direction="left" toolTipWidth="80" toolTipText={<></>}>
+          <CustomButton
+            selected={selectedPaintTool === PICKER}
+            onClick={() => onChangePaintTool(PICKER)}
+          >
+            <TiPipette />
+          </CustomButton>
+        </ToolTip>
       </PaintButtonBlock>
       <PaintButtonBlock>
         <CustomButton

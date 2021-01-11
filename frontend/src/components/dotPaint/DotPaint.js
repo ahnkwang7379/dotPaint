@@ -6,14 +6,15 @@ import White from '../../img/white.png';
 import Black from '../../img/black.png';
 
 const DotPaintWrapper = styled.div`
+  z-index: 0;
   width: 100%;
-  height: 90vh;
-  max-height: 90vh;
+  height: 92vh;
+  max-height: 92vh;
   display: flex;
   justify-content: center;
   flex-direction: column;
   overflow: hidden;
-  background: #afafaf;
+  background: #a69e94;
   margin-right: 8px;
 `;
 
@@ -117,6 +118,14 @@ const DotPaint = ({
     }
     return dotLineArr;
   }, [rowCount, onMouseDownHandler, onMouseOverHandler]);
+
+  // const dotSizeCtrl = (dotSize) => {
+  //   let returnSize = dotSize;
+  //   if (returnSize < 32) {
+
+  //   }
+  //   return returnSize;
+  // }
 
   return (
     <DotPaintWrapper

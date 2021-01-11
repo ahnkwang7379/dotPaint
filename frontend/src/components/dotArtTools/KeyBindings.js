@@ -17,7 +17,11 @@ import {
   increaseRow,
   decreaseRow,
 } from '../../modules/dot';
-import { increaseDotSize, decreaseDotSize } from '../../modules/observer';
+import {
+  increaseDotSize,
+  decreaseDotSize,
+  saveStart,
+} from '../../modules/observer';
 import {
   swapLeftRightColor,
   moveUpPaletteCell,
@@ -28,39 +32,49 @@ import {
 import { TiKeyboard } from 'react-icons/ti';
 import styled from 'styled-components';
 import tinykeys from 'tinykeys';
+import ToolTip from '../common/ToolTip';
 
 const Button = styled.div`
-  border: 3px solid #6e6e6e;
-  color: #6e6e6e;
+  color: #59564f;
   border-radius: 5px;
   width: 3rem;
   height: 3rem;
   text-align: center;
   position: fixed;
-  left: 64px;
-  bottom: 16px;
+  bottom: 8px;
 
   &:hover {
-    color: #87ceeb;
-    border: 3px solid #87ceeb;
+    color: #0d0d0d;
   }
 `;
 
-const KeyBindings = ({ isTyping, dotSize, openKeyBindDialog, keySet }) => {
+const KeyBindings = ({
+  isTyping,
+  dotSize,
+  openKeyBindDialog,
+  paintTools,
+  color,
+  storage,
+  misc,
+}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     let keyCombinations = {};
 
     function keyCombinationMaker(keySet) {
-      for (let keyData of keySet) {
-        keyCombinations[keyData.code] = (event) => {
+      for (let keyData in keySet) {
+        keyCombinations[keySet[keyData].code] = (event) => {
           event.preventDefault();
-          keybindActionMaker(keyData.action);
+          keybindActionMaker(keyData);
         };
       }
     }
-    keyCombinationMaker(keySet);
+
+    keyCombinationMaker(paintTools);
+    keyCombinationMaker(color);
+    keyCombinationMaker(storage);
+    keyCombinationMaker(misc);
 
     const paintBox = document.getElementById('paintBox');
 
@@ -137,6 +151,9 @@ const KeyBindings = ({ isTyping, dotSize, openKeyBindDialog, keySet }) => {
         case 'MOVE_VIEWPORT_LEFT':
           paintBox.scrollBy(-dotSize, 0);
           return;
+        case 'SAVE_DOTART':
+          dispatch(saveStart(true));
+          return;
         default:
           return console.log('bind error');
       }
@@ -151,12 +168,14 @@ const KeyBindings = ({ isTyping, dotSize, openKeyBindDialog, keySet }) => {
     return () => {
       unsubscribe();
     };
-  }, [isTyping, dotSize, keySet, dispatch]);
+  }, [isTyping, dotSize, paintTools, color, storage, misc, dispatch]);
   return (
     <Button>
-      <TiKeyboard size="2.5rem" onClick={openKeyBindDialog} />
+      <ToolTip direction="right" toolTipText={<>Key bind help</>}>
+        <TiKeyboard size="2.5rem" onClick={openKeyBindDialog} />
+      </ToolTip>
     </Button>
   );
 };
 
-export default KeyBindings;
+export default React.memo(KeyBindings);

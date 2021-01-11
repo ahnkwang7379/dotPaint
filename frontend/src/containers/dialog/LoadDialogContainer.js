@@ -8,7 +8,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { loadDotArt } from '../../modules/dot';
-import { loadPalettes } from '../../modules/palettes';
+// import { loadPalettes } from '../../modules/palettes';
 import { closeDialog } from '../../modules/dialog';
 
 const LoadDialogContainer = () => {

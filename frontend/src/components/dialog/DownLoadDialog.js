@@ -38,16 +38,25 @@ const PreviewScrollWrapper = styled.div`
   max-height: 100%;
   border: 1px solid #9e9e9e;
   margin-bottom: 16px;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f2f2f2;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #a69e94;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #59564f;
+  }
 `;
 
-const PreviewBlock = styled.div.attrs(
-  ({ pixelSize, columnCount, rowCount }) => ({
-    style: {
-      width: `${columnCount * pixelSize}px`,
-      height: `${rowCount * pixelSize}px`,
-    },
-  }),
-)``;
+const PreviewBlock = styled.div`
+  width: ${(props) => props.columnCount * props.pixelSize}px;
+  height: ${(props) => props.rowCount * props.pixelSize}px;
+`;
 
 const CssDiv = styled.div`
   width: 100%;
@@ -61,10 +70,10 @@ const CssTextArea = styled.textarea`
   display: block;
   resize: none;
   height: 20em;
-  background: #089cd9;
+  background-color: #f2e8dc;
   font-weight: bold;
   font-size: 15px;
-  color: white;
+  color: #0d0d0d;
 `;
 
 const DownLoadDialog = ({
@@ -117,6 +126,7 @@ const DownLoadDialog = ({
           variant="outlined"
           type="number"
           label="Animation"
+          color="secondary"
           value={animationDuration}
           onChange={(e) => onChangeAnimationDuration(e)}
         />
@@ -125,6 +135,7 @@ const DownLoadDialog = ({
           variant="outlined"
           type="number"
           label="PixelSize"
+          color="secondary"
           value={pixelSize}
           onChange={(e) => onChangePixelSize(e)}
         />

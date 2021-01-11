@@ -7,8 +7,9 @@ import { altDown, shiftDown } from '../../modules/observer';
 
 const ObserverContainer = () => {
   const dispatch = useDispatch();
-  const { mousePosition } = useSelector(({ observer }) => ({
+  const { mousePosition, dotSize } = useSelector(({ observer }) => ({
     mousePosition: observer.mousePosition,
+    dotSize: observer.dotSize,
   }));
   const { paintState, selectedPaintTool } = useSelector(({ paintTool }) => ({
     paintState: paintTool.paintState,
@@ -50,6 +51,7 @@ const ObserverContainer = () => {
   return (
     <Observer
       mousePosition={mousePosition}
+      dotSize={dotSize}
       paintState={paintState}
       selectedPaintTool={selectedPaintTool}
       rowCount={rowCount}

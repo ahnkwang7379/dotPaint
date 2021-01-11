@@ -1,112 +1,129 @@
 export const initShortcut = {
-  keySet: [
-    { action: 'DOT', key: 'q', code: 'KeyQ', helpText: 'Pen tool' },
-    { action: 'BUCKET', key: 'b', code: 'KeyB', helpText: 'Bucket tool' },
-    { action: 'PIKCER', key: 'p', code: 'KeyP', helpText: 'Color picker tool' },
-    { action: 'ERASER', key: 'e', code: 'KeyE', helpText: 'Eraser tool' },
-    { action: 'MOVE', key: 'm', code: 'KeyM', helpText: 'Move tool' },
-    {
-      action: 'SAMECOLOR',
-      key: 'a',
+  paintTools: {
+    DOT: { key: 'Q', code: 'KeyQ', helpText: 'Pen tool' },
+    BUCKET: { key: 'B', code: 'KeyB', helpText: 'Bucket tool' },
+    PIKCER: { key: 'P', code: 'KeyP', helpText: 'Color picker tool' },
+    ERASER: { key: 'E', code: 'KeyE', helpText: 'Eraser tool' },
+    MOVE: { key: 'M', code: 'KeyM', helpText: 'Move tool' },
+    SAMECOLOR: {
+      key: 'A',
       code: 'KeyA',
       helpText: 'Bucket all same colors pixel',
     },
-    {
-      action: 'SWAP',
-      key: 'x',
+    category: ['DOT', 'BUCKET', 'PIKCER', 'ERASER', 'MOVE', 'SAMECOLOR'],
+  },
+  color: {
+    SWAP: {
+      key: 'X',
       code: 'KeyX',
       helpText: 'Swap first/second Color',
     },
-    {
-      action: 'PALETTE_UP',
-      key: 'arrowUp',
+    PALETTE_UP: {
+      key: '↑',
       code: 'ArrowUp',
       helpText: 'Select palette move up',
     },
-    {
-      action: 'PALETTE_DOWN',
-      key: 'arrowDown',
+    PALETTE_DOWN: {
+      key: '↓',
       code: 'ArrowDown',
       helpText: 'Select palette move down',
     },
-    {
-      action: 'PALETTE_LEFT',
-      key: 'arrowLeft',
+    PALETTE_LEFT: {
+      key: '←',
       code: 'ArrowLeft',
       helpText: 'Select palette move left',
     },
-    {
-      action: 'PALETTE_RIGHT',
-      key: 'arrowRight',
+    PALETTE_RIGHT: {
+      key: '→',
       code: 'ArrowRight',
       helpText: 'Select palette move right',
     },
-    { action: 'UNDO', key: 'ctrl + z', code: '$mod+KeyZ', helpText: 'Undo' },
-    {
-      action: 'REDO',
-      key: 'ctrl + shift + z',
-      code: '$mod+Shift+KeyZ',
-      helpText: 'Redo',
+    category: [
+      'SWAP',
+      'PALETTE_UP',
+      'PALETTE_DOWN',
+      'PALETTE_LEFT',
+      'PALETTE_RIGHT',
+    ],
+  },
+  storage: {
+    SAVE_DOTART: {
+      key: 'ctrl + S',
+      code: '$mod+KeyS',
+      helpText: 'Save to localStorage',
     },
-    {
-      action: 'INCREASE_COLUMN',
-      key: 'ctrl + arrowRight',
-      code: '$mod+ArrowRight',
-      helpText: 'Column + 1',
-    },
-    {
-      action: 'DECREASE_COLUMN',
-      key: 'ctrl + arrowLeft',
-      code: '$mod+ArrowLeft',
-      helpText: 'Column - 1',
-    },
-    {
-      action: 'INCREASE_ROW',
-      key: 'ctrl + arrowDown',
-      code: '$mod+ArrowDown',
-      helpText: 'Row + 1',
-    },
-    {
-      action: 'DECREASE_ROW',
-      key: 'ctrl + arrowUp',
-      code: '$mod+ArrowUp',
-      helpText: 'Row - 1',
-    },
-    {
-      action: 'INCREASE_DOTSIZE',
+    category: ['SAVE_DOTART'],
+  },
+  misc: {
+    INCREASE_DOTSIZE: {
       key: '-',
       code: 'Equal',
       helpText: 'Increase dot size',
     },
-    {
-      action: 'DECREASE_DOTSIZE',
+    DECREASE_DOTSIZE: {
       key: '+',
       code: 'Minus',
       helpText: 'Decrease dot size',
     },
-    {
-      action: 'MOVE_VIEWPORT_UP',
-      key: 'shift + arrowUp',
+    INCREASE_COLUMN: {
+      key: 'ctrl + →',
+      code: '$mod+ArrowRight',
+      helpText: 'Column + 1',
+    },
+    DECREASE_COLUMN: {
+      key: 'ctrl + ←',
+      code: '$mod+ArrowLeft',
+      helpText: 'Column - 1',
+    },
+    INCREASE_ROW: {
+      key: 'ctrl + ↓',
+      code: '$mod+ArrowDown',
+      helpText: 'Row + 1',
+    },
+    DECREASE_ROW: {
+      key: 'ctrl + ↑',
+      code: '$mod+ArrowUp',
+      helpText: 'Row - 1',
+    },
+    UNDO: { key: 'ctrl + Z', code: '$mod+KeyZ', helpText: 'Undo' },
+    REDO: {
+      key: 'ctrl + shift + Z',
+      code: '$mod+Shift+KeyZ',
+      helpText: 'Redo',
+    },
+    MOVE_VIEWPORT_UP: {
+      key: 'shift + ↑',
       code: 'Shift+ArrowUp',
       helpText: 'Move viewport up',
     },
-    {
-      action: 'MOVE_VIEWPORT_RIGHT',
-      key: 'shift + arrowRight',
+    MOVE_VIEWPORT_RIGHT: {
+      key: 'shift + →',
       code: 'Shift+ArrowRight',
       helpText: 'Move viewport right',
     },
-    {
-      action: 'MOVE_VIEWPORT_DOWN',
-      key: 'shift + arrowDown',
+    MOVE_VIEWPORT_DOWN: {
+      key: 'shift + ↓',
       code: 'Shift+ArrowDown',
       helpText: 'Move viewport down',
     },
-    {
-      action: 'MOVE_VIEWPORT_LEFT',
-      key: 'shift + arrowLeft',
+    MOVE_VIEWPORT_LEFT: {
+      key: 'shift + ←',
       code: 'Shift+ArrowLeft',
       helpText: 'Move viewport left',
     },
-  ],
+    category: [
+      'INCREASE_DOTSIZE',
+      'DECREASE_DOTSIZE',
+      'INCREASE_COLUMN',
+      'DECREASE_COLUMN',
+      'INCREASE_ROW',
+      'DECREASE_ROW',
+      'UNDO',
+      'REDO',
+      'MOVE_VIEWPORT_UP',
+      'MOVE_VIEWPORT_RIGHT',
+      'MOVE_VIEWPORT_DOWN',
+      'MOVE_VIEWPORT_LEFT',
+    ],
+  },
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage';
-import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
-import IndexPage from './pages/IndexPage';
+// import LoginPage from './pages/LoginPage';
+// import SignUpPage from './pages/SignUpPage';
+// import IndexPage from './pages/IndexPage';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { SnackbarProvider } from 'notistack';
@@ -11,13 +11,13 @@ import { SnackbarProvider } from 'notistack';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#9e9e9e',
-      light: '#b1b1b1',
-      dark: '#6e6e6e',
-      contrastText: '#fff',
+      main: '#F2E8DC',
+      light: '#F2F2F2',
+      dark: '#59564F',
+      contrastText: '#0D0D0D',
     },
     secondary: {
-      main: '#E83838',
+      main: '#59564F',
     },
   },
 });

@@ -42,7 +42,6 @@ import palettes from './palettes';
 import dialog from './dialog';
 import observer from './observer';
 import keybind from './keybind';
-import { produce } from 'immer';
 import undoable, { includeAction } from 'redux-undo';
 
 const DOT_ACTIONS = 'index/DOT_ACTIONS';
@@ -395,6 +394,8 @@ const dotActionsHandler = (
             },
           },
         };
+      } else {
+        return { ...state };
       }
     case SAMECOLOR:
       if (paintToolState === 'DRAGGING') {
@@ -490,7 +491,7 @@ const fakeDotArtSetHandle = (state) => {
         },
       };
     case PICKER:
-      return produce(state, (draft) => {});
+      return { ...state };
     default:
       return { ...state };
   }

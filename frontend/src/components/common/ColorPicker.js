@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ChromePicker } from 'react-color';
+import { ChromePicker, BlockPicker, TwitterPicker } from 'react-color';
 
 const ColorBlock = styled.div`
   margin: 0 auto;
@@ -16,7 +16,7 @@ const Color = styled.div.attrs((props) => ({
   },
 }))`
   border-radius: 2px;
-  width: 48px;
+  width: 24px;
   height: 16px;
   color: white;
   font-size: 0.5rem;
@@ -64,12 +64,17 @@ const ColorPicker = ({ backgroundColor, onChangeColor }) => {
   return (
     <div>
       <ColorBlock onClick={handleClick}>
-        <Color backgroundColor={color}>{color}</Color>
+        <Color backgroundColor={color} />
       </ColorBlock>
       {displayColorPicker ? (
         <ColorPickerBlock>
           <Cover onClick={handleClose} />
-          <ChromePicker disableAlpha color={color} onChange={handleChange} />
+          {/* <ChromePicker disableAlpha color={color} onChange={handleChange} /> */}
+          <TwitterPicker
+            triangle={`top-right`}
+            color={color}
+            onChange={handleChange}
+          />
         </ColorPickerBlock>
       ) : null}
     </div>

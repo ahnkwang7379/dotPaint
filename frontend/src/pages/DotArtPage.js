@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import DialogContainer from '../containers/dialog/DialogContainer';
 import DotListContainer from '../containers/dotArtTools/DotListContainer';
 import PreViewContainer from '../containers/dotArtTools/PreViewContainer';
@@ -7,7 +7,6 @@ import PaintToolContainer from '../containers/dotArtTools/PaintToolContainer';
 import SaveLoadContainer from '../containers/dotArtTools/SaveLoadContainer';
 import PalettesContainer from '../containers/dotArtTools/PalettesContainer';
 import DotBorderContainer from '../containers/dotArtTools/DotBorderContainer';
-import DotSizeContainer from '../containers/dotArtTools/DotSizeContainer';
 import DotAreaContainer from '../containers/dotArtTools/DotAreaContainer';
 import LayerControlContainer from '../containers/dotArtTools/LayerControlContainer';
 import PaintColorContainer from '../containers/dotArtTools/PaintColorContainer';
@@ -22,25 +21,32 @@ const MainWrapper = styled.div`
 const LeftToolBox = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   left: 0px;
-  width: 150px;
+  width: 200px;
   & > * {
     margin: 8px 0px;
     max-width: 240px;
+    width: 200px;
   }
 `;
 
 const RightToolBox = styled.div`
   position: sticky;
   max-height: 90vh;
-  width: 200px;
+  width: 204px;
   & > *:not(:first-child) {
-    margin: 8px 0px;
+    margin: 4px 0px;
   }
 `;
 
 const DotArtPage = () => {
+  // toolTip의 위치 조절을 위해 넣어둠
+  useEffect(() => {
+    const toolTipLeftRight = document.getElementsByClassName('toolTip');
+    for (let toolTip of toolTipLeftRight) {
+      toolTip.style.marginTop = `-${toolTip.clientHeight / 2}px`;
+    }
+  }, []);
   return (
     <React.Fragment>
       <DialogContainer />
@@ -48,17 +54,16 @@ const DotArtPage = () => {
         <LeftToolBox>
           <SaveLoadContainer />
           <PaintToolContainer />
-          <DotBorderContainer />
-          <DotSizeContainer />
           <DotAreaContainer />
+          <PalettesContainer />
           <PaintColorContainer />
         </LeftToolBox>
         <DotListContainer />
         <DotPaintContainer />
         <RightToolBox>
           <PreViewContainer />
+          <DotBorderContainer />
           <LayerControlContainer />
-          <PalettesContainer />
           <ObserberContainer />
         </RightToolBox>
       </MainWrapper>

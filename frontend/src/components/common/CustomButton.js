@@ -2,11 +2,12 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 
 const CustomButtonStyled = styled.button`
+  background-color: #f2f2f2;
   font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #6e6e6e;
+  color: #59564f;
   ${(props) =>
     props.baseColor &&
     css`
@@ -15,7 +16,7 @@ const CustomButtonStyled = styled.button`
     `}
   width: ${(props) => (props.width ? `${props.width}px` : `100%`)};
   height: ${(props) => (props.height ? `${props.height}px` : `auto`)};
-  border: 1px solid #225ea7;
+  border: 2px solid #59564f;
   outline: none;
   border-radius: 0.5rem;
   text-align: center;
@@ -25,12 +26,12 @@ const CustomButtonStyled = styled.button`
     !props.disable &&
     css`
       &:hover {
-        color: #fff;
-        background: ${(props) => (props.color ? `${props.color}` : `skyblue`)};
+        color: #0d0d0d;
+        background: ${(props) => (props.color ? `${props.color}` : `#F2E8DC`)};
       }
       &:active {
-        color: #fff;
-        background: ${(props) => (props.color ? `${props.color}` : `skyblue`)};
+        color: #0d0d0d;
+        background: ${(props) => (props.color ? `${props.color}` : `#F2E8DC`)};
         box-shadow: 0 0.1rem #666;
         transform: translateY(4px);
       }
@@ -44,9 +45,9 @@ const CustomButtonStyled = styled.button`
   ${(props) =>
     props.selected === true &&
     css`
-      color: #fff;
+      color: #0d0d0d;
       background: ${(props) =>
-        props.selectColor ? `${props.selectColor}` : `skyblue`};
+        props.selectColor ? `${props.selectColor}` : `#F2E8DC`};
       box-shadow: 0 0.1rem #666;
       transform: translateY(4px);
     `}

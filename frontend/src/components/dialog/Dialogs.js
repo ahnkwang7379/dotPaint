@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 const Dialog = withStyles((theme) => ({
   paperScrollPaper: {
     height: `calc(100% - 64px)`,
+    backgroundColor: '#F2E8DC',
   },
 }))(MuiDialog);
 

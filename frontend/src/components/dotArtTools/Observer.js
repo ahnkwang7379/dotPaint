@@ -8,6 +8,7 @@ const ObserverWrapper = styled.div`
 
 const Observer = ({
   mousePosition,
+  dotSize,
   paintState,
   selectedPaintTool,
   rowCount,
@@ -124,8 +125,11 @@ const Observer = ({
 
   return (
     <ObserverWrapper>
-      {`[${columnCount} x ${rowCount}]`}
-      {mousePosition.x !== '' && `${mousePosition.x}, ${mousePosition.y}`}
+      <h5>{dotSize}px</h5>
+      <h5>
+        [{columnCount} x {rowCount}]
+        {mousePosition.x !== '' && `${mousePosition.x}, ${mousePosition.y}`}
+      </h5>
     </ObserverWrapper>
   );
 };

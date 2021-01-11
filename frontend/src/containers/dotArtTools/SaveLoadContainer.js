@@ -12,13 +12,12 @@ import {
   initialStorage,
 } from '../../util/localStorage';
 import { newDotArtProject, loadDotArt } from '../../modules/dot';
-import { loadPalettes } from '../../modules/palettes';
-import { loadData } from '../../modules/observer';
+// import { loadPalettes } from '../../modules/palettes';
+import { loadData, saveStart } from '../../modules/observer';
 import shortid from 'shortid';
 import { useSnackbar } from 'notistack';
 
 const SaveLoadContainer = () => {
-  const [saveStart, setSaveStart] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const {
@@ -34,13 +33,16 @@ const SaveLoadContainer = () => {
     animationDuration: dot.animationDuration,
     layerData: dot.layerData,
   }));
-  const { palettes } = useSelector(({ palettes }) => ({
-    palettes: palettes.palettes,
-  }));
-  const { dotBorder, backgroundImg } = useSelector(({ observer }) => ({
-    dotBorder: observer.dotBorder,
-    backgroundImg: observer.backgroundImg,
-  }));
+  // const { palettes } = useSelector(({ palettes }) => ({
+  //   palettes: palettes.palettes,
+  // }));
+  const { dotBorder, backgroundImg, saveState } = useSelector(
+    ({ observer }) => ({
+      dotBorder: observer.dotBorder,
+      backgroundImg: observer.backgroundImg,
+      saveState: observer.saveState,
+    }),
+  );
 
   // first load
   useEffect(() => {
@@ -69,7 +71,7 @@ const SaveLoadContainer = () => {
   );
 
   useEffect(() => {
-    if (saveStart) {
+    if (saveState) {
       const saveDotArtData = {
         dot: {
           id: shortid.generate(),
@@ -87,10 +89,11 @@ const SaveLoadContainer = () => {
       } else {
         enqueueSnackbar('Save Fail!', { variant: 'error' });
       }
-      setSaveStart(false);
+      dispatch(saveStart(false));
     }
-  }, [saveStart]);
+  }, [saveState, dispatch]);
 
+  // border나 background 관련 정보 수정 시 자동저장
   useEffect(() => {
     const savePrivateData = {
       dotBorder: dotBorder,
@@ -108,9 +111,9 @@ const SaveLoadContainer = () => {
     };
   }, [dotBorder, backgroundImg]);
 
-  const saveHandle = () => {
-    setSaveStart(true);
-  };
+  const saveHandle = useCallback(() => {
+    dispatch(saveStart(true));
+  }, [dispatch]);
 
   return (
     <SaveLoad

@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
 import { Draggable } from 'react-beautiful-dnd';
+import ToolTip from '../common/ToolTip';
 import White from '../../img/white.png';
 import Black from '../../img/black.png';
 
@@ -28,15 +29,18 @@ const IndexBox = styled.div`
   height: 24px;
   line-height: 24px;
   position: absolute;
-  z-index: 10;
+  z-index: 1;
   font-weight: 900;
   font-size: 12px;
 `;
 
 const CardDiv = styled.div`
+  /* z-index: 99; */
   position: relative;
+  width: 96px;
+  height: 96px;
   outline: none;
-  opacity: 0.6;
+  opacity: 0.8;
   border-radius: 0.3rem;
   border: solid 3px black;
   box-sizing: border-box;
@@ -157,7 +161,7 @@ const DotListBlock = ({
         setPixelSize(1);
       }
     }
-  }, [rowCount, columnCount]);
+  }, [rowCount, columnCount, pixelSize]);
 
   const onChangeInput = (e) => {
     setAniInterval(e.target.value);
@@ -176,52 +180,93 @@ const DotListBlock = ({
     [handleChangeInterval, idx, interval],
   );
 
-  return active === true ? (
+  // return active === true ? (
+  //   <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
+  //     {(provided) => (
+  //       <CardDiv
+  //         id="asd"
+  //         active={true}
+  //         ref={provided.innerRef}
+  //         {...provided.draggableProps}
+  //         {...provided.dragHandleProps}
+  //       >
+  //         <IndexBox>{idx + 1}</IndexBox>
+  //         <ButtonDiv>
+  //           <ToolTip direction="left" toolTipText={<> Delete this frame</>}>
+  //             <StyleButton onClick={handleRemoveDotArt}>
+  //               <DeleteIcon fontSize="inherit" />
+  //             </StyleButton>
+  //           </ToolTip>
+  //           <ToolTip direction="right" toolTipText={<> Delete this frame</>}>
+  //             <StyleButton onClick={handleCopyDotArt}>
+  //               <FileCopyRoundedIcon fontSize="inherit" />
+  //             </StyleButton>
+  //           </ToolTip>
+  //         </ButtonDiv>
+  //         <PreviewBox>
+  //           <PreviewBlock
+  //             columnCount={columnCount}
+  //             rowCount={rowCount}
+  //             backgroundImg={backgroundImg}
+  //             pixelSize={pixelSize}
+  //           >
+  //             <Preview dotSet={dot} column={columnCount} size={pixelSize} />
+  //           </PreviewBlock>
+  //         </PreviewBox>
+  //         <ToolTip direction="top" toolTipText={<> Interval set</>}>
+  //           <IntervalInput
+  //             active={true}
+  //             value={aniInterval}
+  //             type="number"
+  //             onChange={onChangeInput}
+  //             onBlur={(e) => onBlurHandle(e)}
+  //             disabled={lastIndex} // 애니메이션의 마지막은 100%로 고정
+  //             step="0.1"
+  //           />
+  //         </ToolTip>
+  //       </CardDiv>
+  //     )}
+  //   </Draggable>
+  // ) : (
+  //   <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
+  //     {(provided) => (
+  //       <CardDiv
+  //         id="Card"
+  //         active={false}
+  //         onClick={() => handleChangeIdx(idx)}
+  //         ref={provided.innerRef}
+  //         {...provided.draggableProps}
+  //         {...provided.dragHandleProps}
+  //       >
+  //         <IndexBox>{idx + 1}</IndexBox>
+  //         <ButtonDiv>
+  //           <StyleButton disabled={true}>
+  //             <DeleteIcon fontSize="inherit" />
+  //           </StyleButton>
+  //           <StyleButton disabled={true}>
+  //             <FileCopyRoundedIcon fontSize="inherit" />
+  //           </StyleButton>
+  //         </ButtonDiv>
+  //         <PreviewBox>
+  //           <PreviewBlock
+  //             columnCount={columnCount}
+  //             rowCount={rowCount}
+  //             backgroundImg={backgroundImg}
+  //             pixelSize={pixelSize}
+  //           >
+  //             <Preview dotSet={dot} column={columnCount} size={pixelSize} />
+  //           </PreviewBlock>
+  //         </PreviewBox>
+  //         <IntervalInput value={interval} disabled />
+  //       </CardDiv>
+  //     )}
+  //   </Draggable>
+  // );
+  return (
     <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
       {(provided) => (
         <CardDiv
-          active={true}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <IndexBox>{idx + 1}</IndexBox>
-          <ButtonDiv>
-            <StyleButton onClick={handleRemoveDotArt}>
-              <DeleteIcon fontSize="inherit" />
-            </StyleButton>
-            <StyleButton onClick={handleCopyDotArt}>
-              <FileCopyRoundedIcon fontSize="inherit" />
-            </StyleButton>
-          </ButtonDiv>
-          <PreviewBox>
-            <PreviewBlock
-              columnCount={columnCount}
-              rowCount={rowCount}
-              backgroundImg={backgroundImg}
-              pixelSize={pixelSize}
-            >
-              <Preview dotSet={dot} column={columnCount} size={pixelSize} />
-            </PreviewBlock>
-          </PreviewBox>
-          <IntervalInput
-            active={true}
-            value={aniInterval}
-            type="number"
-            onChange={onChangeInput}
-            onBlur={(e) => onBlurHandle(e)}
-            disabled={lastIndex} // 애니메이션의 마지막은 100%로 고정
-            step="0.1"
-          />
-        </CardDiv>
-      )}
-    </Draggable>
-  ) : (
-    <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
-      {(provided) => (
-        <CardDiv
-          id="Card"
-          active={false}
+          active={active ? true : false}
           onClick={() => handleChangeIdx(idx)}
           ref={provided.innerRef}
           {...provided.draggableProps}
@@ -229,12 +274,16 @@ const DotListBlock = ({
         >
           <IndexBox>{idx + 1}</IndexBox>
           <ButtonDiv>
-            <StyleButton disabled={true}>
-              <DeleteIcon fontSize="inherit" />
-            </StyleButton>
-            <StyleButton disabled={true}>
-              <FileCopyRoundedIcon fontSize="inherit" />
-            </StyleButton>
+            <ToolTip direction="left" toolTipText={<> Delete this frame</>}>
+              <StyleButton onClick={handleRemoveDotArt}>
+                <DeleteIcon fontSize="inherit" />
+              </StyleButton>
+            </ToolTip>
+            <ToolTip direction="right" toolTipText={<> Delete this frame</>}>
+              <StyleButton onClick={handleCopyDotArt}>
+                <FileCopyRoundedIcon fontSize="inherit" />
+              </StyleButton>
+            </ToolTip>
           </ButtonDiv>
           <PreviewBox>
             <PreviewBlock
@@ -246,7 +295,17 @@ const DotListBlock = ({
               <Preview dotSet={dot} column={columnCount} size={pixelSize} />
             </PreviewBlock>
           </PreviewBox>
-          <IntervalInput value={interval} disabled />
+          <ToolTip direction="top" toolTipText={<> Interval set</>}>
+            <IntervalInput
+              active={true}
+              value={aniInterval}
+              type="number"
+              onChange={onChangeInput}
+              onBlur={(e) => onBlurHandle(e)}
+              disabled={lastIndex} // 애니메이션의 마지막은 100%로 고정
+              step="0.1"
+            />
+          </ToolTip>
         </CardDiv>
       )}
     </Draggable>
