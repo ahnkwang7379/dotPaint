@@ -23,19 +23,6 @@ const DotPaintBox = styled.div`
   box-sizing: border-box;
   touch-action: none;
   overflow: auto;
-  &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
 `;
 
 const DotPaintBlock = styled.div`
@@ -118,14 +105,6 @@ const DotPaint = ({
     }
     return dotLineArr;
   }, [rowCount, onMouseDownHandler, onMouseOverHandler]);
-
-  // const dotSizeCtrl = (dotSize) => {
-  //   let returnSize = dotSize;
-  //   if (returnSize < 32) {
-
-  //   }
-  //   return returnSize;
-  // }
 
   return (
     <DotPaintWrapper

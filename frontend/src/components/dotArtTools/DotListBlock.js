@@ -8,7 +8,7 @@ import ToolTip from '../common/ToolTip';
 import White from '../../img/white.png';
 import Black from '../../img/black.png';
 
-const ButtonDiv = styled.div`
+const ButtonDiv = styled.span`
   z-index: 1;
   display: none;
   left: 72px;
@@ -16,9 +16,11 @@ const ButtonDiv = styled.div`
   width: 24px;
   margin: 0px;
   padding: 0px;
-  & > * + * {
-    margin-top: 48px;
-  }
+  ${(props) =>
+    props.offsetTop &&
+    css`
+      top: ${props.offsetTop}px;
+    `};
 `;
 
 const IndexBox = styled.div`
@@ -35,7 +37,6 @@ const IndexBox = styled.div`
 `;
 
 const CardDiv = styled.div`
-  /* z-index: 99; */
   position: relative;
   width: 96px;
   height: 96px;
@@ -52,7 +53,7 @@ const CardDiv = styled.div`
       border: solid 3px #b22222;
     `}
   &:hover {
-    & > :nth-child(2) {
+    & > span {
       display: block;
     }
   }
@@ -180,106 +181,26 @@ const DotListBlock = ({
     [handleChangeInterval, idx, interval],
   );
 
-  // return active === true ? (
-  //   <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
-  //     {(provided) => (
-  //       <CardDiv
-  //         id="asd"
-  //         active={true}
-  //         ref={provided.innerRef}
-  //         {...provided.draggableProps}
-  //         {...provided.dragHandleProps}
-  //       >
-  //         <IndexBox>{idx + 1}</IndexBox>
-  //         <ButtonDiv>
-  //           <ToolTip direction="left" toolTipText={<> Delete this frame</>}>
-  //             <StyleButton onClick={handleRemoveDotArt}>
-  //               <DeleteIcon fontSize="inherit" />
-  //             </StyleButton>
-  //           </ToolTip>
-  //           <ToolTip direction="right" toolTipText={<> Delete this frame</>}>
-  //             <StyleButton onClick={handleCopyDotArt}>
-  //               <FileCopyRoundedIcon fontSize="inherit" />
-  //             </StyleButton>
-  //           </ToolTip>
-  //         </ButtonDiv>
-  //         <PreviewBox>
-  //           <PreviewBlock
-  //             columnCount={columnCount}
-  //             rowCount={rowCount}
-  //             backgroundImg={backgroundImg}
-  //             pixelSize={pixelSize}
-  //           >
-  //             <Preview dotSet={dot} column={columnCount} size={pixelSize} />
-  //           </PreviewBlock>
-  //         </PreviewBox>
-  //         <ToolTip direction="top" toolTipText={<> Interval set</>}>
-  //           <IntervalInput
-  //             active={true}
-  //             value={aniInterval}
-  //             type="number"
-  //             onChange={onChangeInput}
-  //             onBlur={(e) => onBlurHandle(e)}
-  //             disabled={lastIndex} // 애니메이션의 마지막은 100%로 고정
-  //             step="0.1"
-  //           />
-  //         </ToolTip>
-  //       </CardDiv>
-  //     )}
-  //   </Draggable>
-  // ) : (
-  //   <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
-  //     {(provided) => (
-  //       <CardDiv
-  //         id="Card"
-  //         active={false}
-  //         onClick={() => handleChangeIdx(idx)}
-  //         ref={provided.innerRef}
-  //         {...provided.draggableProps}
-  //         {...provided.dragHandleProps}
-  //       >
-  //         <IndexBox>{idx + 1}</IndexBox>
-  //         <ButtonDiv>
-  //           <StyleButton disabled={true}>
-  //             <DeleteIcon fontSize="inherit" />
-  //           </StyleButton>
-  //           <StyleButton disabled={true}>
-  //             <FileCopyRoundedIcon fontSize="inherit" />
-  //           </StyleButton>
-  //         </ButtonDiv>
-  //         <PreviewBox>
-  //           <PreviewBlock
-  //             columnCount={columnCount}
-  //             rowCount={rowCount}
-  //             backgroundImg={backgroundImg}
-  //             pixelSize={pixelSize}
-  //           >
-  //             <Preview dotSet={dot} column={columnCount} size={pixelSize} />
-  //           </PreviewBlock>
-  //         </PreviewBox>
-  //         <IntervalInput value={interval} disabled />
-  //       </CardDiv>
-  //     )}
-  //   </Draggable>
-  // );
   return (
     <Draggable key={idx} draggableId={`dotArt-${idx}`} index={idx}>
       {(provided) => (
         <CardDiv
           active={active ? true : false}
-          onClick={() => handleChangeIdx(idx)}
+          onClickCapture={() => handleChangeIdx(idx)} // capture로 changeIdx 먼저 실행
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
           <IndexBox>{idx + 1}</IndexBox>
           <ButtonDiv>
-            <ToolTip direction="left" toolTipText={<> Delete this frame</>}>
+            <ToolTip tooltip={<>Delete frame </>}>
               <StyleButton onClick={handleRemoveDotArt}>
                 <DeleteIcon fontSize="inherit" />
               </StyleButton>
             </ToolTip>
-            <ToolTip direction="right" toolTipText={<> Delete this frame</>}>
+          </ButtonDiv>
+          <ButtonDiv offsetTop="72">
+            <ToolTip tooltip={<>Copy frame </>}>
               <StyleButton onClick={handleCopyDotArt}>
                 <FileCopyRoundedIcon fontSize="inherit" />
               </StyleButton>
@@ -295,7 +216,15 @@ const DotListBlock = ({
               <Preview dotSet={dot} column={columnCount} size={pixelSize} />
             </PreviewBlock>
           </PreviewBox>
-          <ToolTip direction="top" toolTipText={<> Interval set</>}>
+          <ToolTip
+            placement="bottom"
+            tooltip={
+              <>
+                Change interval of this frame
+                {lastIndex && <span> But last frame is only 100</span>}
+              </>
+            }
+          >
             <IntervalInput
               active={true}
               value={aniInterval}

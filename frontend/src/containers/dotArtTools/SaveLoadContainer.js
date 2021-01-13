@@ -11,8 +11,7 @@ import {
   getDotArtDataFromStorage,
   initialStorage,
 } from '../../util/localStorage';
-import { newDotArtProject, loadDotArt } from '../../modules/dot';
-// import { loadPalettes } from '../../modules/palettes';
+import { newDotArtProject, loadDotArt, clearDot } from '../../modules/dot';
 import { loadData, saveStart } from '../../modules/observer';
 import shortid from 'shortid';
 import { useSnackbar } from 'notistack';
@@ -33,9 +32,6 @@ const SaveLoadContainer = () => {
     animationDuration: dot.animationDuration,
     layerData: dot.layerData,
   }));
-  // const { palettes } = useSelector(({ palettes }) => ({
-  //   palettes: palettes.palettes,
-  // }));
   const { dotBorder, backgroundImg, saveState } = useSelector(
     ({ observer }) => ({
       dotBorder: observer.dotBorder,
@@ -43,6 +39,9 @@ const SaveLoadContainer = () => {
       saveState: observer.saveState,
     }),
   );
+  const { storageShortcuts } = useSelector(({ keybind }) => ({
+    storageShortcuts: keybind.storage,
+  }));
 
   // first load
   useEffect(() => {
@@ -61,6 +60,10 @@ const SaveLoadContainer = () => {
 
   const newProjectHandle = useCallback(() => {
     dispatch(newDotArtProject());
+  }, [dispatch]);
+
+  const dotClearHandle = useCallback(() => {
+    dispatch(clearDot());
   }, [dispatch]);
 
   const dialogOpenHandle = useCallback(
@@ -117,11 +120,13 @@ const SaveLoadContainer = () => {
 
   return (
     <SaveLoad
+      storageShortcuts={storageShortcuts}
       newProjectHandle={newProjectHandle}
+      dotClearHandle={dotClearHandle}
       saveHandle={saveHandle}
       dialogOpenHandle={dialogOpenHandle}
     />
   );
 };
 
-export default React.memo(SaveLoadContainer);
+export default SaveLoadContainer;

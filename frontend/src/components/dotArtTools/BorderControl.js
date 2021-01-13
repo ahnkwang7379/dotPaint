@@ -75,14 +75,14 @@ const BorderControl = ({
     <BorderWrapper>
       <BackgroundBlock>
         <h4>Background</h4>
-        <ToolTip toolTipWidth={40} toolTipText={<>dark</>}>
+        <ToolTip placement="top" tooltip={<>dark</>}>
           <BackgroundCell
             backgroundImg={0}
             selected={backgroundImg === 0}
             onClick={() => onChangeBackgroundImg(0)}
           />
         </ToolTip>
-        <ToolTip toolTipWidth={40} toolTipText={<>white</>}>
+        <ToolTip placement="top" tooltip={<>white</>}>
           <BackgroundCell
             backgroundImg={1}
             selected={backgroundImg === 1}
@@ -92,7 +92,7 @@ const BorderControl = ({
       </BackgroundBlock>
       <BorderBlock>
         <h4>Dot Border</h4>
-        <ToolTip toolTipWidth={40} toolTipText={<>none</>}>
+        <ToolTip placement="top" tooltip={<>none</>}>
           <BorderPickBox
             onClick={() => onChangeDotBorderSize(0)}
             pixel={-2}
@@ -100,7 +100,7 @@ const BorderControl = ({
             borderColor={borderColor}
           />
         </ToolTip>
-        <ToolTip toolTipWidth={40} toolTipText={<>1px</>}>
+        <ToolTip placement="top" tooltip={<>1px</>}>
           <BorderPickBox
             onClick={() => onChangeDotBorderSize(1)}
             pixel={1}
@@ -108,7 +108,7 @@ const BorderControl = ({
             borderColor={borderColor}
           />
         </ToolTip>
-        <ToolTip toolTipWidth={40} toolTipText={<>2px</>}>
+        <ToolTip placement="top" tooltip={<>2px</>}>
           <BorderPickBox
             onClick={() => onChangeDotBorderSize(2)}
             pixel={2}
@@ -116,7 +116,7 @@ const BorderControl = ({
             borderColor={borderColor}
           />
         </ToolTip>
-        <ToolTip toolTipWidth={40} toolTipText={<>3px</>}>
+        <ToolTip placement="top" tooltip={<>3px</>}>
           <BorderPickBox
             onClick={() => onChangeDotBorderSize(3)}
             pixel={3}
@@ -126,11 +126,7 @@ const BorderControl = ({
         </ToolTip>
       </BorderBlock>
       <ColorPicker>
-        <ToolTip
-          direction="bottom"
-          toolTipWidth={100}
-          toolTipText={<>Set border color</>}
-        >
+        <ToolTip placement="bottom" tooltip={<>Set border color</>}>
           <GithubPicker
             onChange={onChangeDotBorderColor}
             width={190}

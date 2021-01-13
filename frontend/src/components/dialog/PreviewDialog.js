@@ -80,6 +80,7 @@ const PreviewDialog = ({
           variant="outlined"
           type="number"
           label="Animation Duration"
+          color="secondary"
           value={animationDuration}
           onChange={(e) => onChangeAnimationDuration(e)}
         />
@@ -88,6 +89,7 @@ const PreviewDialog = ({
           variant="outlined"
           type="number"
           label="PixelSize"
+          color="secondary"
           value={pixelSize}
           onChange={(e) => onChangePixelSize(e)}
         />

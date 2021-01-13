@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeDotArea, clearDot } from '../../modules/dot';
+import { changeDotArea } from '../../modules/dot';
 import DotAreaControl from '../../components/dotArtTools/DotAreaControl';
 
 const DotAreaContainer = () => {
@@ -19,17 +19,12 @@ const DotAreaContainer = () => {
     [dispatch],
   );
 
-  const handleDotClear = useCallback(() => {
-    dispatch(clearDot());
-  }, [dispatch]);
-
   return (
     <>
       <DotAreaControl
+        rowCount={rowCount}
+        columnCount={columnCount}
         onChangeArea={onChangeArea}
-        row={rowCount}
-        column={columnCount}
-        dotClear={handleDotClear}
       />
     </>
   );

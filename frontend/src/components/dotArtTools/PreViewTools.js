@@ -275,12 +275,7 @@ const PreViewTools = ({
       onMouseOut={() => onChangeHoverPreviewBox(false)}
     >
       <ButtonBox hovered={hoverPreviewBox}>
-        <ToolTip
-          direction="bottom"
-          toolTipWidth="90"
-          toolTipHeight="80"
-          toolTipText={<>Toggle animation</>}
-        >
+        <ToolTip placement="bottom" tooltip={<>Toggle animation</>}>
           <StyledButton
             onClick={togglePlay}
             selected={play}
@@ -292,21 +287,14 @@ const PreViewTools = ({
           </StyledButton>
         </ToolTip>
         <ToolTip
-          direction="bottom"
-          toolTipWidth="80"
-          toolTipHeight="80"
-          toolTipText={<>Preview zoom {zoomIn ? 'Out' : 'In'}</>}
+          placement="bottom"
+          tooltip={<>Preview zoom {zoomIn ? 'Out' : 'In'}</>}
         >
           <StyledButton onClick={toggleZoom}>
             {zoomIn ? <MdFullscreenExit /> : <MdFullscreen />}
           </StyledButton>
         </ToolTip>
-        <ToolTip
-          direction="bottom"
-          toolTipWidth="80"
-          toolTipHeight="80"
-          toolTipText={<>Open preview dialog</>}
-        >
+        <ToolTip placement="bottom" tooltip={<>Open preview dialog</>}>
           <StyledButton onClick={() => handleOpenDialog('Preview')}>
             <MdContentCopy />
           </StyledButton>
@@ -334,9 +322,15 @@ const PreViewTools = ({
       </PreviewWrapper>
 
       <ToolTip
-        direction="bottom"
-        toolTipWidth="200"
-        toolTipText={<>Show animation in {animationDuration} second </>}
+        placement="bottom"
+        tooltip={
+          <>
+            Show animation for {animationDuration} seconds
+            <span>
+              and animation divided by each frame what you set interval
+            </span>
+          </>
+        }
       >
         <SliderBox>
           <SliderSpan>Duration {animationDuration}S</SliderSpan>

@@ -2,7 +2,7 @@ export const initShortcut = {
   paintTools: {
     DOT: { key: 'Q', code: 'KeyQ', helpText: 'Pen tool' },
     BUCKET: { key: 'B', code: 'KeyB', helpText: 'Bucket tool' },
-    PIKCER: { key: 'P', code: 'KeyP', helpText: 'Color picker tool' },
+    PICKER: { key: 'P', code: 'KeyP', helpText: 'Color picker tool' },
     ERASER: { key: 'E', code: 'KeyE', helpText: 'Eraser tool' },
     MOVE: { key: 'M', code: 'KeyM', helpText: 'Move tool' },
     SAMECOLOR: {
@@ -10,7 +10,7 @@ export const initShortcut = {
       code: 'KeyA',
       helpText: 'Bucket all same colors pixel',
     },
-    category: ['DOT', 'BUCKET', 'PIKCER', 'ERASER', 'MOVE', 'SAMECOLOR'],
+    category: ['DOT', 'BUCKET', 'PICKER', 'ERASER', 'MOVE', 'SAMECOLOR'],
   },
   color: {
     SWAP: {
@@ -52,7 +52,12 @@ export const initShortcut = {
       code: '$mod+KeyS',
       helpText: 'Save to localStorage',
     },
-    category: ['SAVE_DOTART'],
+    LOAD_DOTART: {
+      key: 'alt + L',
+      code: 'Alt+KeyL',
+      helpText: 'Open load dialog',
+    },
+    category: ['SAVE_DOTART', 'LOAD_DOTART'],
   },
   misc: {
     INCREASE_DOTSIZE: {

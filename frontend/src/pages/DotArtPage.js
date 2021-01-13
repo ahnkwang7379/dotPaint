@@ -23,11 +23,12 @@ const LeftToolBox = styled.div`
   flex-direction: column;
   left: 0px;
   width: 200px;
-  & > * {
+  margin-right: 4px;
+  /* & > * {
     margin: 8px 0px;
     max-width: 240px;
     width: 200px;
-  }
+  } */
 `;
 
 const RightToolBox = styled.div`

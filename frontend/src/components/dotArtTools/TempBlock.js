@@ -16,19 +16,6 @@ const TempBlockDiv = styled.div`
     min-width: 30px;
     /* margin-top: 8px; */
   }
-  &::-webkit-scrollbar {
-    width: 2px;
-    height: 2px;
-  }
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
 `;
 const TempBlock = ({ trashCan }) => {
   return (

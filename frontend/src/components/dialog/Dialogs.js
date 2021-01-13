@@ -76,8 +76,6 @@ const Dialogs = ({ dialogType, open, handleCloseDialog }) => {
                       dialogType={dialogType}
                     />
                   );
-                case 'Palettes':
-                  return <div>a</div>;
                 case 'KeyBind':
                   return <KeyBindDialogConainter />;
                 default:

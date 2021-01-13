@@ -10,6 +10,8 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    maxWidth: '100%',
+    overflow: 'hidden',
   },
   title: {
     flexGrow: 1,

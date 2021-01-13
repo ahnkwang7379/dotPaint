@@ -29,19 +29,21 @@ import {
   moveLeftPaletteCell,
   moveRightPaletteCell,
 } from '../../modules/palettes';
+import { changeTypeAndOpen } from '../../modules/dialog';
 import { TiKeyboard } from 'react-icons/ti';
 import styled from 'styled-components';
 import tinykeys from 'tinykeys';
 import ToolTip from '../common/ToolTip';
 
+const KeyBindWrapper = styled.div`
+  position: fixed;
+  bottom: 8px;
+`;
+
 const Button = styled.div`
   color: #59564f;
   border-radius: 5px;
-  width: 3rem;
-  height: 3rem;
   text-align: center;
-  position: fixed;
-  bottom: 8px;
 
   &:hover {
     color: #0d0d0d;
@@ -103,22 +105,22 @@ const KeyBindings = ({
         case 'PALETTE_RIGHT':
           dispatch(moveRightPaletteCell());
           return;
-        case 'DOT':
+        case DOT:
           dispatch(changePaintTool(DOT));
           return;
-        case 'BUCKET':
+        case BUCKET:
           dispatch(changePaintTool(BUCKET));
           return;
-        case 'PIKCER':
+        case PICKER:
           dispatch(changePaintTool(PICKER));
           return;
-        case 'ERASER':
+        case ERASER:
           dispatch(changePaintTool(ERASER));
           return;
-        case 'MOVE':
+        case MOVE:
           dispatch(changePaintTool(MOVE));
           return;
-        case 'SAMECOLOR':
+        case SAMECOLOR:
           dispatch(changePaintTool(SAMECOLOR));
           return;
         case 'INCREASE_COLUMN':
@@ -154,6 +156,10 @@ const KeyBindings = ({
         case 'SAVE_DOTART':
           dispatch(saveStart(true));
           return;
+        case 'LOAD_DOTART':
+          console.log('?');
+          dispatch(changeTypeAndOpen('Load'));
+          return;
         default:
           return console.log('bind error');
       }
@@ -170,11 +176,13 @@ const KeyBindings = ({
     };
   }, [isTyping, dotSize, paintTools, color, storage, misc, dispatch]);
   return (
-    <Button>
-      <ToolTip direction="right" toolTipText={<>Key bind help</>}>
-        <TiKeyboard size="2.5rem" onClick={openKeyBindDialog} />
+    <KeyBindWrapper>
+      <ToolTip tooltip={<>Key bind help</>}>
+        <Button>
+          <TiKeyboard size="2.5rem" onClick={openKeyBindDialog} />
+        </Button>
       </ToolTip>
-    </Button>
+    </KeyBindWrapper>
   );
 };
 

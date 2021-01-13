@@ -28,6 +28,7 @@ const LayerHead = styled.div`
 
 const EyeButton = styled.div`
   position: absolute;
+  cursor: pointer;
   right: 0.5rem;
   color: #0d0d0d;
   font-size: 24px;
@@ -46,6 +47,7 @@ const ButtonBox = styled.div`
 
 const StyledButton = styled.button`
   outline: none;
+  cursor: pointer;
   font-size: 16px;
   width: 33.3px;
   height: 24px;
@@ -62,6 +64,7 @@ const StyledButton = styled.button`
     `}
 
   &:disabled {
+    cursor: no-drop;
     background: #a69e94;
     color: #59564f;
   }
@@ -72,18 +75,6 @@ const LayerBox = styled.div`
   flex-direction: column-reverse;
   max-height: 30vh;
   overflow: auto;
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
 `;
 
 const Layer = styled.div`
@@ -134,22 +125,6 @@ const LayerNameInput = styled.input`
   color: white;
   background: rgba(50, 50, 50, 1);
   ${(props) => (props.active ? `display: none` : '')}
-`;
-
-const ToolTipSpan = styled.div`
-  color: #999;
-  font-size: 10px;
-`;
-
-const ToolTipKey = styled.span`
-  padding: 2px;
-  border: 1px Solid #999;
-  font-size: 0.8em;
-  margin-right: 5px;
-  text-align: center;
-  border-radius: 3px;
-  display: inline-block;
-  line-height: 10px;
 `;
 
 const LayerControl = ({
@@ -222,41 +197,38 @@ const LayerControl = ({
       <LayerHead>
         Layers
         <EyeButton showLayers={showLayers} onClick={handleChangeShowLayers}>
-          <ToolTip
-            direction="left"
-            toolTipText={<>Show all layers</>}
-            toolTipWidth="100"
-          >
+          <ToolTip placement="left" tooltip={<>Show all layers</>}>
             <TiEye />
           </ToolTip>
         </EyeButton>
       </LayerHead>
       <ButtonBox>
         <ToolTip
-          toolTipText={
+          placement="top"
+          tooltip={
             <>
               Add new layer
-              <ToolTipSpan>
-                <ToolTipKey>SHIFT</ToolTipKey>Copy select layer
-              </ToolTipSpan>
+              <span className="tooltip-name">
+                <span className="tooltip-key">SHIFT</span>Copy select layer
+              </span>
             </>
           }
-          toolTipWidth="140"
         >
           <StyledButton onClick={onClickAddNewLayer}>
             <TiPlus />
           </StyledButton>
         </ToolTip>
         <ToolTip
-          toolTipText={
+          placement="top"
+          tooltip={
             <>
               Move up selected layer
-              <ToolTipSpan>
-                <ToolTipKey>SHIFT</ToolTipKey>Move to Top
-              </ToolTipSpan>
+              <span className="tooltip-name">
+                <span className="tooltip-key">SHIFT</span>Move to Top
+              </span>
             </>
           }
-          toolTipWidth="140"
+          disable={layerSelectIdx === layerData.length - 1}
         >
           <StyledButton
             onClick={onClickMoveUp}
@@ -267,15 +239,16 @@ const LayerControl = ({
           </StyledButton>
         </ToolTip>
         <ToolTip
-          toolTipText={
+          placement="top"
+          tooltip={
             <>
               Move down selected layer
-              <ToolTipSpan>
-                <ToolTipKey>SHIFT</ToolTipKey>Move to down
-              </ToolTipSpan>
+              <span className="tooltip-name">
+                <span className="tooltip-key">SHIFT</span>Move to down
+              </span>
             </>
           }
-          toolTipWidth="140"
+          disable={layerSelectIdx === 0}
         >
           <StyledButton
             onClick={onClickMoveDown}
@@ -285,15 +258,15 @@ const LayerControl = ({
             <TiArrowDownThick />
           </StyledButton>
         </ToolTip>
-        <ToolTip toolTipText={<>Edit layer name</>} toolTipWidth="100">
+        <ToolTip placement="top" tooltip={<>Edit layer name</>}>
           <StyledButton onClick={onClickReName}>
             <TiPen />
           </StyledButton>
         </ToolTip>
         <ToolTip
-          // direction="left"
-          toolTipText={<>Merge with below layer</>}
-          toolTipWidth="100"
+          placement="top"
+          tooltip={<>Merge with below layer</>}
+          disable={layerSelectIdx === 0}
         >
           <StyledButton
             onClick={mergeLayerHandle}
@@ -304,9 +277,9 @@ const LayerControl = ({
           </StyledButton>
         </ToolTip>
         <ToolTip
-          direction="left"
-          toolTipText={<>Delete selected layer</>}
-          toolTipWidth="100"
+          placement="top"
+          tooltip={<>Delete selected layer</>}
+          disable={layerData.length === 1}
         >
           <StyledButton
             onClick={removeLayerHandle}

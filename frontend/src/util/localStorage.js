@@ -1,8 +1,8 @@
 import { exampleCat } from './json-example';
 
-const STORAGE_KEY = 'dotArt_storage';
+const STORAGE_KEY = 'dotArt_storage_v1';
 const STORAGE_PALETTES_KEY = 'dotArt_palettes_storage';
-const STORAGE_PRIVATE_SETTING = 'dotArt_private_setting';
+const STORAGE_PRIVATE_SETTING = 'dotArt_private_setting_v1';
 
 function saveDataToStorage(storage, data) {
   try {

@@ -12,6 +12,7 @@ import {
 } from '../../util/dotArrayUtil';
 import TextField from '@material-ui/core/TextField';
 import { useSnackbar } from 'notistack';
+import ToolTip from '../common/ToolTip';
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,7 +28,7 @@ const ButtonWrapper = styled.div`
   margin-bottom: 8px;
   & > * {
     margin: 8px;
-    height: 40px;
+    height: 30px;
     width: 80px;
   }
 `;
@@ -38,19 +39,6 @@ const PreviewScrollWrapper = styled.div`
   max-height: 100%;
   border: 1px solid #9e9e9e;
   margin-bottom: 16px;
-  &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background: #f2f2f2;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #a69e94;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: #59564f;
-  }
 `;
 
 const PreviewBlock = styled.div`
@@ -58,22 +46,35 @@ const PreviewBlock = styled.div`
   height: ${(props) => props.rowCount * props.pixelSize}px;
 `;
 
-const CssDiv = styled.div`
-  width: 100%;
-`;
-
 const CssTextArea = styled.textarea`
+  border: none;
   margin-top: 0.5em;
   width: 100%;
   padding: 1em 0.5em 0;
   text-align: left;
   display: block;
   resize: none;
-  height: 20em;
+  height: 25em;
   background-color: #f2e8dc;
   font-weight: bold;
   font-size: 15px;
   color: #0d0d0d;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 const DownLoadDialog = ({
@@ -139,22 +140,31 @@ const DownLoadDialog = ({
           value={pixelSize}
           onChange={(e) => onChangePixelSize(e)}
         />
-        <CustomButton
-          selected={type === 'single'}
-          onClick={() => setType('single')}
-        >
-          single
-        </CustomButton>
-        <CustomButton selected={type === 'gif'} onClick={() => setType('gif')}>
-          gif
-        </CustomButton>
-        {dialog === 'DownLoad' && (
+        <ToolTip placement="bottom" tooltip={<>View in single</>}>
           <CustomButton
-            selected={type === 'spritesheet'}
-            onClick={() => setType('spritesheet')}
+            selected={type === 'single'}
+            onClick={() => setType('single')}
           >
-            sprite
+            single
           </CustomButton>
+        </ToolTip>
+        <ToolTip placement="bottom" tooltip={<>View in gif format</>}>
+          <CustomButton
+            selected={type === 'gif'}
+            onClick={() => setType('gif')}
+          >
+            gif
+          </CustomButton>
+        </ToolTip>
+        {dialog === 'DownLoad' && (
+          <ToolTip placement="bottom" tooltip={<>View in spritesheet format</>}>
+            <CustomButton
+              selected={type === 'spritesheet'}
+              onClick={() => setType('spritesheet')}
+            >
+              sprite
+            </CustomButton>
+          </ToolTip>
         )}
       </ButtonWrapper>
 
@@ -178,19 +188,34 @@ const DownLoadDialog = ({
         </PreviewBlock>
       </PreviewScrollWrapper>
       {dialog === 'DownLoad' && (
-        <CustomButton
-          baseColor="#0f0f0f"
-          width="160"
-          onClick={() => saveFileHandler(type)}
+        <ToolTip
+          placement="top"
+          tooltip={
+            <>
+              Download in selected format
+              <span className="tooltip-name">
+                you select <span className="tooltip-shortcut">{type} </span>
+                format
+              </span>
+            </>
+          }
         >
-          download!
-        </CustomButton>
+          <CustomButton
+            baseColor="#0f0f0f"
+            width="160"
+            onClick={() => saveFileHandler(type)}
+          >
+            Download
+          </CustomButton>
+        </ToolTip>
       )}
       {dialog === 'Css' && (
-        <CssDiv>
-          <CustomButton width="240" height="40" onClick={copyToClipboard}>
-            Copy To ClipBoard
-          </CustomButton>
+        <>
+          <ToolTip placement="top" tooltip={<>Copy your Clipboard</>}>
+            <CustomButton width="120" height="40" onClick={copyToClipboard}>
+              Copy
+            </CustomButton>
+          </ToolTip>
           <CssTextArea
             ref={textAreaRef}
             value={
@@ -212,7 +237,7 @@ const DownLoadDialog = ({
             }
             readOnly
           />
-        </CssDiv>
+        </>
       )}
     </Wrapper>
   );

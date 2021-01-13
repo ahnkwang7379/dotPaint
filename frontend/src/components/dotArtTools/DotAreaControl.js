@@ -1,55 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CustomButton from '../common/CustomButton';
-import { FaArrowsAltH, FaArrowsAltV } from 'react-icons/fa';
+import ToolTip from '../common/ToolTip';
+import TextField from '@material-ui/core/TextField';
+
+const DotAreaWrapper = styled.div`
+  border: 2px solid #59564f;
+  border-radius: 3px;
+  padding: 4px 6px;
+  background-color: #f2e8dc;
+`;
 
 const DotAreaBlock = styled.div`
   display: flex;
-  width: 120px;
+  width: 100%;
   height: 40px;
 `;
 
-const AreaInput = styled.input`
-  font-size: 20px;
-  width: 40px;
-  height: 40px;
-  border: 1px solid #225ea7;
-  outline: none;
-  border-radius: 0.5rem;
-  text-align: center;
-  box-shadow: 0 0.3rem #999;
-  transition: all 0.3s ease-in-out;
-`;
+const DotAreaControl = ({ onChangeArea, rowCount, columnCount }) => {
+  const [row, setRow] = useState(rowCount);
+  const [column, setColumn] = useState(columnCount);
 
-const DotAreaControl = ({ onChangeArea, row, column, dotClear }) => {
-  const [rowCount, setRowCount] = useState(row);
-  const [columnCount, setColumnCount] = useState(column);
+  useEffect(() => {
+    setRow(rowCount);
+    setColumn(columnCount);
+  }, [rowCount, columnCount]);
 
   const onChangeRow = (e) => {
-    setRowCount(e.target.value.replace(/[^0-9]/g, ''));
+    setRow(e.target.value);
   };
 
   const onChangeColumn = (e) => {
-    setColumnCount(e.target.value.replace(/[^0-9]/g, ''));
+    setColumn(e.target.value);
   };
 
   return (
-    <>
+    <DotAreaWrapper>
       <DotAreaBlock>
-        <FaArrowsAltV />
-        <AreaInput value={rowCount} onChange={onChangeRow} />
+        <TextField
+          size="small"
+          variant="outlined"
+          type="number"
+          label="Row"
+          color="secondary"
+          value={row}
+          onChange={(e) => onChangeRow(e)}
+        />
+        <TextField
+          size="small"
+          variant="outlined"
+          type="number"
+          label="Column"
+          color="secondary"
+          value={column}
+          onChange={(e) => onChangeColumn(e)}
+        />
       </DotAreaBlock>
       <DotAreaBlock>
-        <FaArrowsAltH />
-        <AreaInput value={columnCount} onChange={onChangeColumn} />
+        <ToolTip placement="top" tooltip={<>Apply dot area size</>}>
+          <CustomButton onClick={() => onChangeArea(row, column)}>
+            Apply
+          </CustomButton>
+        </ToolTip>
       </DotAreaBlock>
-      <DotAreaBlock>
-        <CustomButton onClick={() => onChangeArea(rowCount, columnCount)}>
-          Change
-        </CustomButton>
-        <CustomButton onClick={dotClear}>Clear</CustomButton>
-      </DotAreaBlock>
-    </>
+    </DotAreaWrapper>
   );
 };
 

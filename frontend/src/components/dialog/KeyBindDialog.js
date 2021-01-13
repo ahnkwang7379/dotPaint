@@ -56,48 +56,40 @@ const KeyBindDialog = ({ paintTools, color, storage, misc }) => {
   return (
     <Wrapper>
       <KeyBindCategory>
-        <KeyBindHeader>Paint Tools Key</KeyBindHeader>
-        {paintTools.category.map((name) => {
-          return (
-            <KeyBindLine key={name}>
-              <KeyBindBlock key={name}>{paintTools[name].key}</KeyBindBlock>
-              <HelpText>{paintTools[name].helpText}</HelpText>
-            </KeyBindLine>
-          );
-        })}
-      </KeyBindCategory>
-      <KeyBindCategory>
-        <KeyBindHeader>Color Tools Key</KeyBindHeader>
-        {color.category.map((name) => {
-          return (
-            <KeyBindLine key={name}>
-              <KeyBindBlock key={name}>{color[name].key}</KeyBindBlock>
-              <HelpText>{color[name].helpText}</HelpText>
-            </KeyBindLine>
-          );
-        })}
+        <KeyBindHeader>Misc Key</KeyBindHeader>
+        {misc.category.map((name) => (
+          <KeyBindLine key={name}>
+            <KeyBindBlock key={name}>{misc[name].key}</KeyBindBlock>
+            <HelpText>{misc[name].helpText}</HelpText>
+          </KeyBindLine>
+        ))}
       </KeyBindCategory>
       <KeyBindCategory>
         <KeyBindHeader>Storage Key</KeyBindHeader>
-        {storage.category.map((name) => {
-          return (
-            <KeyBindLine key={name}>
-              <KeyBindBlock key={name}>{storage[name].key}</KeyBindBlock>
-              <HelpText>{storage[name].helpText}</HelpText>
-            </KeyBindLine>
-          );
-        })}
+        {storage.category.map((name) => (
+          <KeyBindLine key={name}>
+            <KeyBindBlock key={name}>{storage[name].key}</KeyBindBlock>
+            <HelpText>{storage[name].helpText}</HelpText>
+          </KeyBindLine>
+        ))}
       </KeyBindCategory>
       <KeyBindCategory>
-        <KeyBindHeader>Misc Key</KeyBindHeader>
-        {misc.category.map((name) => {
-          return (
-            <KeyBindLine key={name}>
-              <KeyBindBlock key={name}>{misc[name].key}</KeyBindBlock>
-              <HelpText>{misc[name].helpText}</HelpText>
-            </KeyBindLine>
-          );
-        })}
+        <KeyBindHeader>Paint Tools Key</KeyBindHeader>
+        {paintTools.category.map((name) => (
+          <KeyBindLine key={name}>
+            <KeyBindBlock key={name}>{paintTools[name].key}</KeyBindBlock>
+            <HelpText>{paintTools[name].helpText}</HelpText>
+          </KeyBindLine>
+        ))}
+      </KeyBindCategory>
+      <KeyBindCategory>
+        <KeyBindHeader>Color Tools Key</KeyBindHeader>
+        {color.category.map((name) => (
+          <KeyBindLine key={name}>
+            <KeyBindBlock key={name}>{color[name].key}</KeyBindBlock>
+            <HelpText>{color[name].helpText}</HelpText>
+          </KeyBindLine>
+        ))}
       </KeyBindCategory>
     </Wrapper>
   );

@@ -27,11 +27,11 @@ const CustomButtonStyled = styled.button`
     css`
       &:hover {
         color: #0d0d0d;
-        background: ${(props) => (props.color ? `${props.color}` : `#F2E8DC`)};
+        background: ${(props) => (props.color ? `${props.color}` : `#a69e94`)};
       }
       &:active {
         color: #0d0d0d;
-        background: ${(props) => (props.color ? `${props.color}` : `#F2E8DC`)};
+        background: ${(props) => (props.color ? `${props.color}` : `#a69e94`)};
         box-shadow: 0 0.1rem #666;
         transform: translateY(4px);
       }
@@ -47,7 +47,7 @@ const CustomButtonStyled = styled.button`
     css`
       color: #0d0d0d;
       background: ${(props) =>
-        props.selectColor ? `${props.selectColor}` : `#F2E8DC`};
+        props.selectColor ? `${props.selectColor}` : `#a69e94`};
       box-shadow: 0 0.1rem #666;
       transform: translateY(4px);
     `}

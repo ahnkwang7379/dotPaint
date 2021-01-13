@@ -4,6 +4,9 @@ import Preview from '../common/Preview';
 import styled from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { mergeLayersByDotFrameList } from '../../util/dotArrayUtil';
+import ToolTip from '../common/ToolTip';
+import Black from '../../img/black.png';
+import White from '../../img/white.png';
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,6 +36,8 @@ const PreviewWrapper = styled.div`
 `;
 
 const PreviewBlock = styled.div`
+  background-image: ${(props) =>
+    props.backgroundImg === 1 ? `url(${White})` : `url(${Black})`};
   width: ${(props) => props.columnCount * props.size}px;
   height: ${(props) => props.rowCount * props.size}px;
 `;
@@ -44,6 +49,7 @@ const CardDiv = styled.div`
   border: solid 1px black;
   box-sizing: border-box;
   display: flex;
+  align-items: end;
   cursor: pointer;
 `;
 
@@ -63,6 +69,7 @@ const StyleButton = styled.div`
 `;
 
 const LoadDialog = ({
+  backgroundImg,
   loadedData,
   removeDotArtHandle,
   loadDotArtHandle,
@@ -75,8 +82,8 @@ const LoadDialog = ({
   return (
     <Wrapper>
       <ButtonWrapper>
-        <CustomButton width="100" height="50" onClick={clearStorageHandler}>
-          Clear storage!
+        <CustomButton width="150" height="50" onClick={clearStorageHandler}>
+          Clear
         </CustomButton>
       </ButtonWrapper>
       <PreviewWrapper>
@@ -87,27 +94,32 @@ const LoadDialog = ({
                 key={dotArt.dot.id}
                 onClick={() => loadDotArtHandle(dotArt)}
               >
-                <PreviewBlock
-                  size="4"
-                  columnCount={dotArt.dot.columnCount}
-                  rowCount={dotArt.dot.rowCount}
-                  key={dotArt.dot.id}
-                >
-                  <Preview
-                    dotList={mergeLayersByDotFrameList(
-                      dotArt.dot.dotFrameList,
-                      dotArt.dot.layerData,
-                    )}
-                    column={dotArt.dot.columnCount}
+                <ToolTip placement="top" tooltip={<>Load this save data</>}>
+                  <PreviewBlock
                     size="4"
-                    duration={dotArt.dot.animationDuration}
+                    backgroundImg={backgroundImg}
+                    columnCount={dotArt.dot.columnCount}
+                    rowCount={dotArt.dot.rowCount}
                     key={dotArt.dot.id}
-                    animation={true}
-                  />
-                </PreviewBlock>
-                <StyleButton onClick={(e) => onClickRemove(dotArtIdx, e)}>
-                  <DeleteIcon />
-                </StyleButton>
+                  >
+                    <Preview
+                      dotList={mergeLayersByDotFrameList(
+                        dotArt.dot.dotFrameList,
+                        dotArt.dot.layerData,
+                      )}
+                      column={dotArt.dot.columnCount}
+                      size="4"
+                      duration={dotArt.dot.animationDuration}
+                      key={dotArt.dot.id}
+                      animation={true}
+                    />
+                  </PreviewBlock>
+                </ToolTip>
+                <ToolTip placement="top" tooltip={<>Remove data</>}>
+                  <StyleButton onClick={(e) => onClickRemove(dotArtIdx, e)}>
+                    <DeleteIcon />
+                  </StyleButton>
+                </ToolTip>
               </CardDiv>
             );
           })

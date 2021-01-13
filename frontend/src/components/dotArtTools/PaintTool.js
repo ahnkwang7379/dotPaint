@@ -24,14 +24,22 @@ const PaintButtonBlock = styled.div`
   height: 32px;
 `;
 
-const PaintTool = ({ paintTools, onChangePaintTool, selectedPaintTool }) => {
+const PaintTool = ({
+  paintToolsShortcuts,
+  onChangePaintTool,
+  selectedPaintTool,
+}) => {
   return (
     <PaintToolBlock>
       <PaintButtonBlock>
         <ToolTip
-          direction="bottom"
-          // toolTipWidth="60"
-          toolTipText={<></>}
+          placement="top"
+          tooltip={
+            <div>
+              Pan Tool
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[DOT].key})`}</span>
+            </div>
+          }
         >
           <CustomButton
             selected={selectedPaintTool === DOT}
@@ -41,7 +49,15 @@ const PaintTool = ({ paintTools, onChangePaintTool, selectedPaintTool }) => {
           </CustomButton>
         </ToolTip>
 
-        <ToolTip direction="right" toolTipText={<></>}>
+        <ToolTip
+          placement="top"
+          tooltip={
+            <div>
+              Bucket Tool
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[BUCKET].key})`}</span>
+            </div>
+          }
+        >
           <CustomButton
             selected={selectedPaintTool === BUCKET}
             onClick={() => onChangePaintTool(BUCKET)}
@@ -49,7 +65,15 @@ const PaintTool = ({ paintTools, onChangePaintTool, selectedPaintTool }) => {
             <BsFillBucketFill />
           </CustomButton>
         </ToolTip>
-        <ToolTip direction="left" toolTipWidth="80" toolTipText={<></>}>
+        <ToolTip
+          placement="top"
+          tooltip={
+            <div>
+              Colorpicker Tool
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[PICKER].key})`}</span>
+            </div>
+          }
+        >
           <CustomButton
             selected={selectedPaintTool === PICKER}
             onClick={() => onChangePaintTool(PICKER)}
@@ -59,24 +83,57 @@ const PaintTool = ({ paintTools, onChangePaintTool, selectedPaintTool }) => {
         </ToolTip>
       </PaintButtonBlock>
       <PaintButtonBlock>
-        <CustomButton
-          selected={selectedPaintTool === ERASER}
-          onClick={() => onChangePaintTool(ERASER)}
+        <ToolTip
+          placement="top"
+          tooltip={
+            <div>
+              Eraser Tool
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[ERASER].key})`}</span>
+            </div>
+          }
         >
-          <FaEraser />
-        </CustomButton>
-        <CustomButton
-          selected={selectedPaintTool === MOVE}
-          onClick={() => onChangePaintTool(MOVE)}
+          <CustomButton
+            selected={selectedPaintTool === ERASER}
+            onClick={() => onChangePaintTool(ERASER)}
+          >
+            <FaEraser />
+          </CustomButton>
+        </ToolTip>
+        <ToolTip
+          placement="top"
+          tooltip={
+            <div>
+              Move Tool
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[MOVE].key})`}</span>
+              <div className="tooltip-name">
+                <span className="tooltip-key">ALT</span>Wrap mod
+              </div>
+            </div>
+          }
         >
-          <FaHandPaper />
-        </CustomButton>
-        <CustomButton
-          selected={selectedPaintTool === SAMECOLOR}
-          onClick={() => onChangePaintTool(SAMECOLOR)}
+          <CustomButton
+            selected={selectedPaintTool === MOVE}
+            onClick={() => onChangePaintTool(MOVE)}
+          >
+            <FaHandPaper />
+          </CustomButton>
+        </ToolTip>
+        <ToolTip
+          placement="top"
+          tooltip={
+            <div>
+              Bucket all same color pixel
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[SAMECOLOR].key})`}</span>
+            </div>
+          }
         >
-          <FaBorderAll />
-        </CustomButton>
+          <CustomButton
+            selected={selectedPaintTool === SAMECOLOR}
+            onClick={() => onChangePaintTool(SAMECOLOR)}
+          >
+            <FaBorderAll />
+          </CustomButton>
+        </ToolTip>
       </PaintButtonBlock>
     </PaintToolBlock>
   );
