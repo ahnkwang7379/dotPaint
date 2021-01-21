@@ -13,6 +13,7 @@ import {
 import TextField from '@material-ui/core/TextField';
 import { useSnackbar } from 'notistack';
 import ToolTip from '../common/ToolTip';
+import { DownloadDialog, CssDialog } from '../../modules/dialog';
 
 const Wrapper = styled.div`
   display: flex;
@@ -156,7 +157,7 @@ const DownLoadDialog = ({
             gif
           </CustomButton>
         </ToolTip>
-        {dialog === 'DownLoad' && (
+        {dialog === DownloadDialog && (
           <ToolTip placement="bottom" tooltip={<>View in spritesheet format</>}>
             <CustomButton
               selected={type === 'spritesheet'}
@@ -187,7 +188,7 @@ const DownLoadDialog = ({
           />
         </PreviewBlock>
       </PreviewScrollWrapper>
-      {dialog === 'DownLoad' && (
+      {dialog === DownloadDialog && (
         <ToolTip
           placement="top"
           tooltip={
@@ -209,7 +210,7 @@ const DownLoadDialog = ({
           </CustomButton>
         </ToolTip>
       )}
-      {dialog === 'Css' && (
+      {dialog === CssDialog && (
         <>
           <ToolTip placement="top" tooltip={<>Copy your Clipboard</>}>
             <CustomButton width="120" height="40" onClick={copyToClipboard}>

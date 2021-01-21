@@ -1,72 +1,61 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Palettes from '../../components/dotArtTools/Palettes';
 import {
   selectLeftColor,
   selectRightColor,
-  reorderPalettes,
-  reorderPaletteCell,
-  movePaletteToTrashCan,
-  moveCellToTrashCan,
-  moveCellFromTrashCan,
-  selectColorCell,
+  loadPalettes,
 } from '../../modules/palettes';
+import {
+  getPalettesDataFromStorage,
+  initialStoragePalette,
+  selectPalette,
+} from '../../util/localStorage';
 import { useSelector, useDispatch } from 'react-redux';
-import { savePalettesToStorage } from '../../util/localStorage';
+import { changeTypeAndOpen } from '../../modules/dialog';
 
 const PalettesConatiner = () => {
   const dispatch = useDispatch();
-  const { palettes, trashCan, selectColorId } = useSelector(({ palettes }) => ({
+  const {
+    palettes,
+    paletteNames,
+    selectPaletteId,
+    selectPaletteLine,
+  } = useSelector(({ palettes }) => ({
     palettes: palettes.palettes,
-    trashCan: palettes.trashCan,
-    selectColorId: palettes.selectColorId,
+    paletteNames: palettes.paletteNames,
+    selectPaletteId: palettes.selectPaletteId,
+    selectPaletteLine: palettes.selectPaletteLine,
   }));
 
-  const handleReorderPalettes = useCallback(
-    (startIdx, endIdx) => {
-      dispatch(reorderPalettes({ startIdx, endIdx }));
-    },
-    [dispatch],
-  );
+  useEffect(() => {
+    let loadedPalette = getPalettesDataFromStorage(localStorage);
+    if (loadedPalette && loadedPalette.palettes) {
+      dispatch(loadPalettes(loadedPalette.palettes[loadedPalette.current]));
+    } else {
+      initialStoragePalette(localStorage);
+      loadedPalette = getPalettesDataFromStorage(localStorage);
+      dispatch(loadPalettes(loadedPalette.palettes[loadedPalette.current]));
+    }
+  }, []);
 
-  const handleReorderCell = useCallback(
-    (startPaletteId, endPaletteId, startIdx, endIdx) => {
-      dispatch(
-        reorderPaletteCell({ startPaletteId, endPaletteId, startIdx, endIdx }),
-      );
+  const handleChange = useCallback(
+    (event) => {
+      if (selectPalette(localStorage, event.target.value)) {
+        let loadedPalette = getPalettesDataFromStorage(localStorage);
+        if (loadedPalette && loadedPalette.palettes) {
+          dispatch(loadPalettes(loadedPalette.palettes[loadedPalette.current]));
+        } else {
+          initialStoragePalette(localStorage);
+          loadedPalette = getPalettesDataFromStorage(localStorage);
+          dispatch(loadPalettes(loadedPalette.palettes[loadedPalette.current]));
+        }
+      }
     },
-    [dispatch],
-  );
-
-  const handleMovePaletteToTrashCan = useCallback(
-    (dragIdx) => {
-      dispatch(movePaletteToTrashCan({ dragIdx }));
-    },
-    [dispatch],
-  );
-
-  const handleMoveCellToTrashCan = useCallback(
-    (paletteId, dragIdx) => {
-      dispatch(moveCellToTrashCan({ paletteId, dragIdx }));
-    },
-    [dispatch],
-  );
-
-  const handleMoveCellFromTrashCan = useCallback(
-    (endPaletteId, startIdx, endIdx) => {
-      dispatch(moveCellFromTrashCan({ endPaletteId, startIdx, endIdx }));
-    },
-    [dispatch],
-  );
-
-  const handleSelectColorCell = useCallback(
-    (paletteId, selectIdx) =>
-      dispatch(selectColorCell({ paletteId, selectIdx })),
     [dispatch],
   );
 
   const handleSelectLeftColor = useCallback(
-    (paletteId, selectIdx, color) =>
-      dispatch(selectLeftColor({ paletteId, selectIdx, color })),
+    (color) => dispatch(selectLeftColor({ color })),
     [dispatch],
   );
 
@@ -78,32 +67,26 @@ const PalettesConatiner = () => {
     [dispatch],
   );
 
-  const handleSavePalettes = useCallback(
-    (palettesName) => {
-      const palettesData = {
-        palettesName: palettesName,
-        palettes: [...palettes],
-      };
-      savePalettesToStorage(localStorage, palettesData);
+  const handleOpenPaletteDialog = useCallback(
+    (type) => {
+      dispatch(changeTypeAndOpen(type));
     },
-    [palettes],
+    [dispatch],
   );
 
   return (
-    <Palettes
-      palettes={palettes}
-      trashCan={trashCan}
-      selectColorId={selectColorId}
-      handleSelectLeftColor={handleSelectLeftColor}
-      handleSelectRightColor={handleSelectRightColor}
-      handleReorderPalettes={handleReorderPalettes}
-      handleReorderCell={handleReorderCell}
-      handleMovePaletteToTrashCan={handleMovePaletteToTrashCan}
-      handleMoveCellToTrashCan={handleMoveCellToTrashCan}
-      handleMoveCellFromTrashCan={handleMoveCellFromTrashCan}
-      handleSelectColorCell={handleSelectColorCell}
-      handleSavePalettes={handleSavePalettes}
-    />
+    palettes && (
+      <Palettes
+        palettes={palettes}
+        paletteNames={paletteNames}
+        selectPaletteId={selectPaletteId}
+        selectPaletteLine={selectPaletteLine}
+        handleChange={handleChange}
+        handleSelectLeftColor={handleSelectLeftColor}
+        handleSelectRightColor={handleSelectRightColor}
+        handleOpenPaletteDialog={handleOpenPaletteDialog}
+      />
+    )
   );
 };
 

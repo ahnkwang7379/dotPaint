@@ -15,7 +15,7 @@ const CustomButtonStyled = styled.button`
       color: #fff;
     `}
   width: ${(props) => (props.width ? `${props.width}px` : `100%`)};
-  height: ${(props) => (props.height ? `${props.height}px` : `auto`)};
+  height: ${(props) => (props.height ? `${props.height}px` : `100%`)};
   border: 2px solid #59564f;
   outline: none;
   border-radius: 0.5rem;

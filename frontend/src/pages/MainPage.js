@@ -12,7 +12,6 @@ const MainPage = ({ match }) => {
             path={[match.path, `${match.path}/dot`]}
             component={DotArtPage}
           />
-          {/* <Route path={`${match.path}/community`} component={} exact /> */}
         </Switch>
       </HeaderContainer>
     </BrowserRouter>

@@ -7,6 +7,7 @@ export const PICKER = 'PICKER';
 export const ERASER = 'ERASER';
 export const MOVE = 'MOVE';
 export const SAMECOLOR = 'SAMECOLOR';
+export const DITHERING = 'DITHERING';
 
 export const CHANGE_PAINT_TOOL = 'paintTool/CHANGE_PAINT_TOOL';
 const CHANGE_PAINT_STATE = 'paintTool/CHANGE_PAINT_STATE';

@@ -7,31 +7,42 @@ import TextField from '@material-ui/core/TextField';
 const DotAreaWrapper = styled.div`
   border: 2px solid #59564f;
   border-radius: 3px;
-  padding: 4px 6px;
+  padding: 4px 1px;
   background-color: #f2e8dc;
 `;
 
 const DotAreaBlock = styled.div`
   display: flex;
   width: 100%;
-  height: 40px;
+  height: fit-content;
+  line-height: 55px;
+  align-items: center;
+  & > div {
+    width: 70px;
+    margin: 8px;
+  }
 `;
 
-const DotAreaControl = ({ onChangeArea, rowCount, columnCount }) => {
-  const [row, setRow] = useState(rowCount);
-  const [column, setColumn] = useState(columnCount);
+const DotAreaControl = ({
+  onChangeArea,
+  rowCount,
+  columnCount,
+  changeTypingHandle,
+}) => {
+  const [width, setWidth] = useState(columnCount);
+  const [height, setHeight] = useState(rowCount);
 
   useEffect(() => {
-    setRow(rowCount);
-    setColumn(columnCount);
+    setWidth(columnCount);
+    setHeight(rowCount);
   }, [rowCount, columnCount]);
 
-  const onChangeRow = (e) => {
-    setRow(e.target.value);
+  const onChangeWidth = (e) => {
+    setWidth(e.target.value);
   };
 
-  const onChangeColumn = (e) => {
-    setColumn(e.target.value);
+  const onChangeHeight = (e) => {
+    setHeight(e.target.value);
   };
 
   return (
@@ -41,24 +52,27 @@ const DotAreaControl = ({ onChangeArea, rowCount, columnCount }) => {
           size="small"
           variant="outlined"
           type="number"
-          label="Row"
+          label="Width"
           color="secondary"
-          value={row}
-          onChange={(e) => onChangeRow(e)}
+          value={width}
+          onChange={(e) => onChangeWidth(e)}
+          onFocus={() => changeTypingHandle(true)}
+          onBlur={() => changeTypingHandle(false)}
         />
+        X
         <TextField
           size="small"
           variant="outlined"
           type="number"
-          label="Column"
+          label="Height"
           color="secondary"
-          value={column}
-          onChange={(e) => onChangeColumn(e)}
+          value={height}
+          onChange={(e) => onChangeHeight(e)}
+          onFocus={() => changeTypingHandle(true)}
+          onBlur={() => changeTypingHandle(false)}
         />
-      </DotAreaBlock>
-      <DotAreaBlock>
         <ToolTip placement="top" tooltip={<>Apply dot area size</>}>
-          <CustomButton onClick={() => onChangeArea(row, column)}>
+          <CustomButton onClick={() => onChangeArea(height, width)}>
             Apply
           </CustomButton>
         </ToolTip>

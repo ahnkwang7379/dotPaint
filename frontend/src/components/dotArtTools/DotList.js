@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 
 const DotListDiv = styled.div`
-  z-index: 10;
+  z-index: 1;
   max-height: 92vh;
   width: 130px;
   display: flex;

@@ -7,9 +7,19 @@ import IconButton from '@material-ui/core/IconButton';
 import PreviewDialogContainer from '../../containers/dialog/PreviewDialogContainer';
 import LoadDialogContainer from '../../containers/dialog/LoadDialogContainer';
 import DownLoadDialogContainer from '../../containers/dialog/DownLoadDialogContainer';
-import KeyBindDialogConainter from '../../containers/dialog/KeyBindDialogContainer';
+import KeyBindDialogContainer from '../../containers/dialog/KeyBindDialogContainer';
+import PaletteDialogContainer from '../../containers/dialog/PaletteDialogContainer';
 import { useSelector } from 'react-redux';
 import MuiDialog from '@material-ui/core/Dialog';
+import {
+  PreviewDialog,
+  DownloadDialog,
+  LoadDialog,
+  CssDialog,
+  KeybindDialog,
+  EditPalette,
+  CreatePalette,
+} from '../../modules/dialog';
 
 const useStyles = makeStyles((theme) => ({
   closeButton: {
@@ -58,26 +68,30 @@ const Dialogs = ({ dialogType, open, handleCloseDialog }) => {
           {open &&
             (() => {
               switch (dialogType) {
-                case 'Preview':
+                case PreviewDialog:
                   return <PreviewDialogContainer dot={dot} />;
-                case 'DownLoad':
+                case DownloadDialog:
                   return (
                     <DownLoadDialogContainer
                       dot={dot}
                       dialogType={dialogType}
                     />
                   );
-                case 'Load':
+                case LoadDialog:
                   return <LoadDialogContainer />;
-                case 'Css':
+                case CssDialog:
                   return (
                     <DownLoadDialogContainer
                       dot={dot}
                       dialogType={dialogType}
                     />
                   );
-                case 'KeyBind':
-                  return <KeyBindDialogConainter />;
+                case KeybindDialog:
+                  return <KeyBindDialogContainer />;
+                case EditPalette:
+                  return <PaletteDialogContainer dialogType={dialogType} />;
+                case CreatePalette:
+                  return <PaletteDialogContainer dialogType={dialogType} />;
                 default:
                   return null;
               }

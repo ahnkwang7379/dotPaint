@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import SaveLoad from '../../components/dotArtTools/SaveLoad';
 import {
   saveDotArtToStorage,
@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeTypeAndOpen } from '../../modules/dialog';
 import {
   getDotArtDataFromStorage,
-  initialStorage,
+  initialStorageDotArt,
 } from '../../util/localStorage';
 import { newDotArtProject, loadDotArt, clearDot } from '../../modules/dot';
 import { loadData, saveStart } from '../../modules/observer';
@@ -45,15 +45,16 @@ const SaveLoadContainer = () => {
 
   // first load
   useEffect(() => {
-    let loadedData = getDotArtDataFromStorage(localStorage);
+    let loadedDotArt = getDotArtDataFromStorage(localStorage);
     let loadedPrivateData = getPrivateSettingFromStorage(localStorage);
-    if (loadedData) {
-      dispatch(loadDotArt(loadedData.dotArt[loadedData.current].dot));
+    if (loadedDotArt) {
+      dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current].dot));
     } else {
-      initialStorage(localStorage);
-      loadedData = getDotArtDataFromStorage(localStorage);
-      dispatch(loadDotArt(loadedData.dotArt[loadedData.current].dot));
+      initialStorageDotArt(localStorage);
+      loadedDotArt = getDotArtDataFromStorage(localStorage);
+      dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current].dot));
     }
+
     // observer는 상관없음
     dispatch(loadData(loadedPrivateData));
   }, []);

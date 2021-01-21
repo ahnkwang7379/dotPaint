@@ -11,7 +11,7 @@ const modifiers = [
   },
 ];
 
-const Tooltip = ({ children, tooltip, disable, ...props }) => (
+const Tooltip = ({ children, tooltip, ...props }) => (
   <TooltipTrigger
     {...props}
     tooltip={({

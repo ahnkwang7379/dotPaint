@@ -5,7 +5,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = ({ children, history, user, onLogout }) => {
+const Header = ({ children }) => {
   const classes = useStyles();
 
   return (
@@ -46,18 +45,6 @@ const Header = ({ children, history, user, onLogout }) => {
           <Typography variant="h6" className={classes.title} noWrap>
             Dot Art
           </Typography>
-          {user ? (
-            <>
-              <Typography variant="h6">{user.username}</Typography>
-              <Button color="inherit" onClick={onLogout}>
-                Logout
-              </Button>
-            </>
-          ) : (
-            <Button color="inherit" onClick={() => history.push('/login')}>
-              Login
-            </Button>
-          )}
         </Toolbar>
       </AppBar>
       <main className={classes.content}>

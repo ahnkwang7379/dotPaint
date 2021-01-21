@@ -56,18 +56,17 @@ const StyledButton = styled.button`
   color: #0d0d0d;
   background: #f2e8dc;
   ${(props) =>
-    !props.disable &&
-    css`
-      &:hover {
-        color: #1261a6;
-      }
-    `}
-
-  &:disabled {
-    cursor: no-drop;
-    background: #a69e94;
-    color: #59564f;
-  }
+    !props.disable
+      ? css`
+          &:hover {
+            color: #1261a6;
+          }
+        `
+      : css`
+          cursor: no-drop;
+          background: #a69e94;
+          color: #59564f;
+        `}
 `;
 
 const LayerBox = styled.div`
@@ -228,12 +227,10 @@ const LayerControl = ({
               </span>
             </>
           }
-          disable={layerSelectIdx === layerData.length - 1}
         >
           <StyledButton
             onClick={onClickMoveUp}
             disable={layerSelectIdx === layerData.length - 1}
-            disabled={layerSelectIdx === layerData.length - 1}
           >
             <TiArrowUpThick />
           </StyledButton>
@@ -248,12 +245,10 @@ const LayerControl = ({
               </span>
             </>
           }
-          disable={layerSelectIdx === 0}
         >
           <StyledButton
             onClick={onClickMoveDown}
             disable={layerSelectIdx === 0}
-            disabled={layerSelectIdx === 0}
           >
             <TiArrowDownThick />
           </StyledButton>
@@ -263,28 +258,18 @@ const LayerControl = ({
             <TiPen />
           </StyledButton>
         </ToolTip>
-        <ToolTip
-          placement="top"
-          tooltip={<>Merge with below layer</>}
-          disable={layerSelectIdx === 0}
-        >
+        <ToolTip placement="top" tooltip={<>Merge with below layer</>}>
           <StyledButton
             onClick={mergeLayerHandle}
             disable={layerSelectIdx === 0}
-            disabled={layerSelectIdx === 0}
           >
             <TiFlowMerge />
           </StyledButton>
         </ToolTip>
-        <ToolTip
-          placement="top"
-          tooltip={<>Delete selected layer</>}
-          disable={layerData.length === 1}
-        >
+        <ToolTip placement="top" tooltip={<>Delete selected layer</>}>
           <StyledButton
             onClick={removeLayerHandle}
             disable={layerData.length === 1}
-            disabled={layerData.length === 1}
           >
             <TiDelete />
           </StyledButton>

@@ -9,6 +9,7 @@ import {
   ERASER,
   MOVE,
   SAMECOLOR,
+  DITHERING,
 } from '../../modules/paintTool';
 import { ActionCreators } from 'redux-undo';
 import {
@@ -24,12 +25,11 @@ import {
 } from '../../modules/observer';
 import {
   swapLeftRightColor,
-  moveUpPaletteCell,
-  moveDownPaletteCell,
-  moveLeftPaletteCell,
-  moveRightPaletteCell,
+  moveUpPaletteSelectLine,
+  moveDownPaletteSelectLine,
+  selectColorCellShortcut,
 } from '../../modules/palettes';
-import { changeTypeAndOpen } from '../../modules/dialog';
+import { changeTypeAndOpen, LoadDialog } from '../../modules/dialog';
 import { TiKeyboard } from 'react-icons/ti';
 import styled from 'styled-components';
 import tinykeys from 'tinykeys';
@@ -93,17 +93,32 @@ const KeyBindings = ({
         case 'SWAP':
           dispatch(swapLeftRightColor());
           return;
-        case 'PALETTE_UP':
-          dispatch(moveUpPaletteCell());
+        case 'PALETTE_LINE_UP':
+          dispatch(moveUpPaletteSelectLine());
           return;
-        case 'PALETTE_DOWN':
-          dispatch(moveDownPaletteCell());
+        case 'PALETTE_LINE_DOWN':
+          dispatch(moveDownPaletteSelectLine());
           return;
-        case 'PALETTE_LEFT':
-          dispatch(moveLeftPaletteCell());
+        case 'PALETTE_SELECT_1':
+          dispatch(selectColorCellShortcut(0));
           return;
-        case 'PALETTE_RIGHT':
-          dispatch(moveRightPaletteCell());
+        case 'PALETTE_SELECT_2':
+          dispatch(selectColorCellShortcut(1));
+          return;
+        case 'PALETTE_SELECT_3':
+          dispatch(selectColorCellShortcut(2));
+          return;
+        case 'PALETTE_SELECT_4':
+          dispatch(selectColorCellShortcut(3));
+          return;
+        case 'PALETTE_SELECT_5':
+          dispatch(selectColorCellShortcut(4));
+          return;
+        case 'PALETTE_SELECT_6':
+          dispatch(selectColorCellShortcut(5));
+          return;
+        case 'PALETTE_SELECT_7':
+          dispatch(selectColorCellShortcut(6));
           return;
         case DOT:
           dispatch(changePaintTool(DOT));
@@ -122,6 +137,9 @@ const KeyBindings = ({
           return;
         case SAMECOLOR:
           dispatch(changePaintTool(SAMECOLOR));
+          return;
+        case DITHERING:
+          dispatch(changePaintTool(DITHERING));
           return;
         case 'INCREASE_COLUMN':
           dispatch(increaseColumn());
@@ -157,8 +175,7 @@ const KeyBindings = ({
           dispatch(saveStart(true));
           return;
         case 'LOAD_DOTART':
-          console.log('?');
-          dispatch(changeTypeAndOpen('Load'));
+          dispatch(changeTypeAndOpen(LoadDialog));
           return;
         default:
           return console.log('bind error');

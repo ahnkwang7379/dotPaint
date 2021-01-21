@@ -14,6 +14,7 @@ import {
   layerListMerge,
   mergeLayersByDotFrameList,
 } from '../../util/dotArrayUtil';
+import { PreviewDialog } from '../../modules/dialog';
 import ToolTip from '../common/ToolTip';
 import White from '../../img/white.png';
 import Black from '../../img/black.png';
@@ -295,7 +296,7 @@ const PreViewTools = ({
           </StyledButton>
         </ToolTip>
         <ToolTip placement="bottom" tooltip={<>Open preview dialog</>}>
-          <StyledButton onClick={() => handleOpenDialog('Preview')}>
+          <StyledButton onClick={() => handleOpenDialog(PreviewDialog)}>
             <MdContentCopy />
           </StyledButton>
         </ToolTip>
@@ -325,10 +326,8 @@ const PreViewTools = ({
         placement="bottom"
         tooltip={
           <>
-            Show animation for {animationDuration} seconds
-            <span>
-              and animation divided by each frame what you set interval
-            </span>
+            Show animation for {animationDuration}s
+            <span>frame duration can be manipulated indivodually</span>
           </>
         }
       >

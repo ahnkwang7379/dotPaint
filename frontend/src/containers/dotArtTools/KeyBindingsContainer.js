@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import KeyBingings from '../../components/dotArtTools/KeyBindings';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeTypeAndOpen } from '../../modules/dialog';
+import { changeTypeAndOpen, KeybindDialog } from '../../modules/dialog';
 
 const KeyBindingsContainer = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const KeyBindingsContainer = () => {
   }));
 
   const openKeyBindDialog = useCallback(() => {
-    dispatch(changeTypeAndOpen('KeyBind'));
+    dispatch(changeTypeAndOpen(KeybindDialog));
   }, [dispatch]);
 
   return (

@@ -7,21 +7,28 @@ import {
   ERASER,
   MOVE,
   SAMECOLOR,
+  DITHERING,
 } from '../../modules/paintTool';
 import CustomButton from '../common/CustomButton';
 import { TiPencil, TiPipette } from 'react-icons/ti';
 import { BsFillBucketFill } from 'react-icons/bs';
+import { CgColorBucket } from 'react-icons/cg';
 import { FaEraser, FaHandPaper, FaBorderAll } from 'react-icons/fa';
 import ToolTip from '../common/ToolTip';
 
-const PaintToolBlock = styled.div`
-  /* display: flex; */
-  /* height: 64px; */
+const PaintToolWrapper = styled.div`
+  width: 100%;
+  padding: 4px;
 `;
 
 const PaintButtonBlock = styled.div`
+  height: 40px;
   display: flex;
-  height: 32px;
+  margin-bottom: 8px;
+
+  & > * {
+    margin-right: 1px;
+  }
 `;
 
 const PaintTool = ({
@@ -30,18 +37,20 @@ const PaintTool = ({
   selectedPaintTool,
 }) => {
   return (
-    <PaintToolBlock>
+    <PaintToolWrapper>
+      <span>Paint Tools</span>
       <PaintButtonBlock>
         <ToolTip
           placement="top"
           tooltip={
             <div>
-              Pan Tool
+              {paintToolsShortcuts[DOT].helpText}
               <span className="tooltip-shortcut">{`(${paintToolsShortcuts[DOT].key})`}</span>
             </div>
           }
         >
           <CustomButton
+            width="40"
             selected={selectedPaintTool === DOT}
             onClick={() => onChangePaintTool(DOT)}
           >
@@ -53,12 +62,13 @@ const PaintTool = ({
           placement="top"
           tooltip={
             <div>
-              Bucket Tool
+              {paintToolsShortcuts[BUCKET].helpText}
               <span className="tooltip-shortcut">{`(${paintToolsShortcuts[BUCKET].key})`}</span>
             </div>
           }
         >
           <CustomButton
+            width="40"
             selected={selectedPaintTool === BUCKET}
             onClick={() => onChangePaintTool(BUCKET)}
           >
@@ -69,16 +79,34 @@ const PaintTool = ({
           placement="top"
           tooltip={
             <div>
-              Colorpicker Tool
-              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[PICKER].key})`}</span>
+              {paintToolsShortcuts[SAMECOLOR].helpText}
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[SAMECOLOR].key})`}</span>
             </div>
           }
         >
           <CustomButton
-            selected={selectedPaintTool === PICKER}
-            onClick={() => onChangePaintTool(PICKER)}
+            width="40"
+            selected={selectedPaintTool === SAMECOLOR}
+            onClick={() => onChangePaintTool(SAMECOLOR)}
           >
-            <TiPipette />
+            <CgColorBucket />
+          </CustomButton>
+        </ToolTip>
+        <ToolTip
+          placement="top"
+          tooltip={
+            <div>
+              {paintToolsShortcuts[ERASER].helpText}
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[ERASER].key})`}</span>
+            </div>
+          }
+        >
+          <CustomButton
+            width="40"
+            selected={selectedPaintTool === ERASER}
+            onClick={() => onChangePaintTool(ERASER)}
+          >
+            <FaEraser />
           </CustomButton>
         </ToolTip>
       </PaintButtonBlock>
@@ -87,23 +115,24 @@ const PaintTool = ({
           placement="top"
           tooltip={
             <div>
-              Eraser Tool
-              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[ERASER].key})`}</span>
+              {paintToolsShortcuts[PICKER].helpText}
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[PICKER].key})`}</span>
             </div>
           }
         >
           <CustomButton
-            selected={selectedPaintTool === ERASER}
-            onClick={() => onChangePaintTool(ERASER)}
+            width="40"
+            selected={selectedPaintTool === PICKER}
+            onClick={() => onChangePaintTool(PICKER)}
           >
-            <FaEraser />
+            <TiPipette />
           </CustomButton>
         </ToolTip>
         <ToolTip
           placement="top"
           tooltip={
             <div>
-              Move Tool
+              {paintToolsShortcuts[MOVE].helpText}
               <span className="tooltip-shortcut">{`(${paintToolsShortcuts[MOVE].key})`}</span>
               <div className="tooltip-name">
                 <span className="tooltip-key">ALT</span>Wrap mod
@@ -112,6 +141,7 @@ const PaintTool = ({
           }
         >
           <CustomButton
+            width="40"
             selected={selectedPaintTool === MOVE}
             onClick={() => onChangePaintTool(MOVE)}
           >
@@ -122,20 +152,21 @@ const PaintTool = ({
           placement="top"
           tooltip={
             <div>
-              Bucket all same color pixel
-              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[SAMECOLOR].key})`}</span>
+              {paintToolsShortcuts[DITHERING].helpText}
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[DITHERING].key})`}</span>
             </div>
           }
         >
           <CustomButton
-            selected={selectedPaintTool === SAMECOLOR}
-            onClick={() => onChangePaintTool(SAMECOLOR)}
+            width="40"
+            selected={selectedPaintTool === DITHERING}
+            onClick={() => onChangePaintTool(DITHERING)}
           >
             <FaBorderAll />
           </CustomButton>
         </ToolTip>
       </PaintButtonBlock>
-    </PaintToolBlock>
+    </PaintToolWrapper>
   );
 };
 

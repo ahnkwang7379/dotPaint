@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import PaintColor from '../../components/dotArtTools/PaintColor';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectLeftColor, selectRightColor } from '../../modules/palettes';
+import { swapLeftRightColor } from '../../modules/palettes';
 
 const PaintColorContainer = () => {
   const dispatch = useDispatch();
@@ -9,27 +10,36 @@ const PaintColorContainer = () => {
     leftColor: palettes.leftColor,
     rightColor: palettes.rightColor,
   }));
+  const { colorShortcut } = useSelector(({ keybind }) => ({
+    colorShortcut: keybind.color,
+  }));
 
-  const changeLeftColor = useCallback(
+  const changeLeftColorHandle = useCallback(
     (color) => {
       dispatch(selectLeftColor({ color }));
     },
     [dispatch],
   );
 
-  const changeRightColor = useCallback(
+  const changeRightColorHandle = useCallback(
     (color) => {
       dispatch(selectRightColor({ color }));
     },
     [dispatch],
   );
 
+  const swapLeftRightColorHandle = useCallback(() => {
+    dispatch(swapLeftRightColor());
+  }, [dispatch]);
+
   return (
     <PaintColor
       leftColor={leftColor}
       rightColor={rightColor}
-      changeLeftColor={changeLeftColor}
-      changeRightColor={changeRightColor}
+      colorShortcut={colorShortcut}
+      changeLeftColorHandle={changeLeftColorHandle}
+      changeRightColorHandle={changeRightColorHandle}
+      swapLeftRightColorHandle={swapLeftRightColorHandle}
     />
   );
 };

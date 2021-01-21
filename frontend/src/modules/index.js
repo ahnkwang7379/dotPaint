@@ -34,10 +34,11 @@ import paintTool, {
   CHANGE_PAINT_TOOL,
   MOVE,
   SAMECOLOR,
+  DITHERING,
 } from './paintTool';
 import loading from './loading';
-import auth, { authSaga } from './auth';
-import user, { userSaga } from './user';
+// import auth, { authSaga } from './auth';
+// import user, { userSaga } from './user';
 import palettes from './palettes';
 import dialog from './dialog';
 import observer from './observer';
@@ -94,9 +95,9 @@ const combineReducer = combineReducers({
   }),
   palettes,
   paintTool,
-  auth,
+  // auth,
   dialog,
-  user,
+  // user,
   loading,
   observer,
   keybind,
@@ -433,6 +434,37 @@ const dotActionsHandler = (
           },
         };
       } else return { ...state };
+    case DITHERING:
+      if (paintToolState === 'DRAGGING') {
+        let flag = 1;
+
+        if (rowIdx % 2 === 1) flag = flag * -1;
+        if (columnIdx % 2 === 1) flag = flag * -1;
+
+        if (direction === 'RIGHT') flag = flag * -1;
+
+        const color =
+          flag === 1 ? state.palettes.rightColor : state.palettes.leftColor;
+
+        let fakeDotSet = state.dotArt.present.dot.fakeDotArt.map((arr) =>
+          arr.slice(),
+        );
+        fakeDotSet[rowIdx][columnIdx] = color;
+
+        return {
+          ...state,
+          dotArt: {
+            ...state.dotArt,
+            present: {
+              ...state.dotArt.present,
+              dot: {
+                ...state.dotArt.present.dot,
+                fakeDotArt: fakeDotSet,
+              },
+            },
+          },
+        };
+      } else return { ...state };
     default:
       return { ...state };
   }
@@ -467,6 +499,7 @@ const fakeDotArtSetHandle = (state) => {
     case SAMECOLOR:
     case PICKER:
     case MOVE:
+    case DITHERING:
       const { activeIdx, layerSelectIdx, layerData } = state.dotArt.present.dot;
       const layerIdx = layerData[layerSelectIdx].dotFrameIdx;
 
@@ -591,8 +624,8 @@ function rootReducer(state, action) {
   return finalState;
 }
 
-export function* rootSaga() {
-  yield all([authSaga(), userSaga()]);
-}
+// export function* rootSaga() {
+//   yield all([authSaga(), userSaga()]);
+// }
 
 export default rootReducer;

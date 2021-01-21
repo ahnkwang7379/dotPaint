@@ -1,21 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const selectBorder = '#000000';
-const defaultBorder = '#ffffff';
-
 const Cell = styled.div`
   cursor: pointer;
   box-sizing: border-box;
   position: relative;
+  align-items: center;
+  justify-content: center;
+  display: flex;
   width: 30px;
   height: 17.32px;
   margin-left: 0px;
   background-color: ${(props) => props.color || ''};
-  border-left: solid 3px
-    ${(props) => (props.selected ? selectBorder : defaultBorder)};
-  border-right: solid 3px
-    ${(props) => (props.selected ? selectBorder : defaultBorder)};
   outline: none;
 
   :before,
@@ -30,23 +26,14 @@ const Cell = styled.div`
     -ms-transform: scaleY(0.5774) rotate(-45deg);
     transform: scaleY(0.5774) rotate(-45deg);
     background-color: ${(props) => props.color || ''};
-    left: 1.3934px;
   }
 
   :before {
     top: -10.6066px;
-    border-top: solid 4.2426px
-      ${(props) => (props.selected ? selectBorder : defaultBorder)};
-    border-right: solid 4.2426px
-      ${(props) => (props.selected ? selectBorder : defaultBorder)};
   }
 
   :after {
     bottom: -10.6066px;
-    border-bottom: solid 4.2426px
-      ${(props) => (props.selected ? selectBorder : defaultBorder)};
-    border-left: solid 4.2426px
-      ${(props) => (props.selected ? selectBorder : defaultBorder)};
   }
 
   &:hover {
@@ -54,9 +41,22 @@ const Cell = styled.div`
   }
 `;
 
-const ColorCell = ({ children, innerRef, ...rest }) => {
+const IndexBox = styled.div`
+  background-color: black;
+  color: gold;
+  font-size: 0.5em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 9px;
+  z-index: 10;
+  padding: 2px;
+  border-radius: 3px;
+`;
+
+const ColorCell = ({ children, selectedPalette, cellIdx, ...rest }) => {
   return (
-    <Cell ref={innerRef} {...rest}>
+    <Cell {...rest}>
+      {selectedPalette && <IndexBox>{cellIdx + 1}</IndexBox>}
       {children}
     </Cell>
   );

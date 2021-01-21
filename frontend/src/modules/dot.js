@@ -1,7 +1,15 @@
 import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 import shortid from 'shortid';
-import { DOT, ERASER, BUCKET, PICKER, MOVE, SAMECOLOR } from './paintTool';
+import {
+  DOT,
+  ERASER,
+  BUCKET,
+  PICKER,
+  MOVE,
+  SAMECOLOR,
+  DITHERING,
+} from './paintTool';
 import { defaultDotMaker, dotArrayMerge } from '../util/dotArrayUtil';
 
 export const CLEAR_DOT = 'dot/CLEAR_DOT';
@@ -185,43 +193,46 @@ const dot = handleActions(
         if (newRow < 1 || newColumn < 1) {
           return;
         }
+        const rowLength = newRow > 256 ? 256 : newRow;
+        const columnLength = newColumn > 256 ? 256 : newColumn;
+
         const originRow = draft.rowCount;
         const originColumn = draft.columnCount;
 
         for (let listIdx = 0; listIdx < draft.dotFrameList.length; listIdx++) {
-          if (newColumn > originColumn) {
-            for (let i = originColumn; i < newColumn; i++) {
+          if (columnLength > originColumn) {
+            for (let i = originColumn; i < columnLength; i++) {
               draft.dotFrameList[listIdx].layerList.map((layer) =>
                 layer.map((column) => column.push('')),
               );
             }
           }
 
-          if (newColumn < originColumn) {
-            for (let i = newColumn; i < originColumn; i++) {
+          if (columnLength < originColumn) {
+            for (let i = columnLength; i < originColumn; i++) {
               draft.dotFrameList[listIdx].layerList.map((layer) =>
                 layer.map((column) => column.pop()),
               );
             }
           }
 
-          if (newRow > originRow) {
-            for (let i = originRow; i < newRow; i++) {
+          if (rowLength > originRow) {
+            for (let i = originRow; i < rowLength; i++) {
               draft.dotFrameList[listIdx].layerList.map((layer) =>
-                layer.push(new Array(newColumn).fill('')),
+                layer.push(new Array(columnLength).fill('')),
               );
             }
           }
 
-          if (newRow < originRow) {
-            for (let i = newRow; i < originRow; i++) {
+          if (rowLength < originRow) {
+            for (let i = rowLength; i < originRow; i++) {
               draft.dotFrameList[listIdx].layerList.map((layer) => layer.pop());
             }
           }
         }
 
-        draft.rowCount = newRow;
-        draft.columnCount = newColumn;
+        draft.rowCount = rowLength;
+        draft.columnCount = columnLength;
         draft.fakeDotArt = defaultDotMaker(draft.rowCount, draft.columnCount);
       }),
     [CHANGE_ACTIVE_IDX]: (state, { payload: idx }) => ({
@@ -362,6 +373,9 @@ const dot = handleActions(
         newDotArt = state.fakeDotArt;
       }
       if (selectedPaintTool === SAMECOLOR) {
+        newDotArt = state.fakeDotArt;
+      }
+      if (selectedPaintTool === DITHERING) {
         newDotArt = state.fakeDotArt;
       }
 

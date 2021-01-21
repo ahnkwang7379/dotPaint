@@ -1,3 +1,12 @@
+import {
+  DOT,
+  BUCKET,
+  PICKER,
+  ERASER,
+  MOVE,
+  SAMECOLOR,
+  DITHERING,
+} from '../modules/paintTool';
 export const initShortcut = {
   paintTools: {
     DOT: { key: 'Q', code: 'KeyQ', helpText: 'Pen tool' },
@@ -10,7 +19,12 @@ export const initShortcut = {
       code: 'KeyA',
       helpText: 'Bucket all same colors pixel',
     },
-    category: ['DOT', 'BUCKET', 'PICKER', 'ERASER', 'MOVE', 'SAMECOLOR'],
+    DITHERING: {
+      key: 'D',
+      code: 'KeyD',
+      helpText: 'Dithering tool',
+    },
+    category: [DOT, BUCKET, PICKER, ERASER, MOVE, SAMECOLOR, DITHERING],
   },
   color: {
     SWAP: {
@@ -18,32 +32,62 @@ export const initShortcut = {
       code: 'KeyX',
       helpText: 'Swap first/second Color',
     },
-    PALETTE_UP: {
+    PALETTE_LINE_UP: {
       key: '↑',
       code: 'ArrowUp',
-      helpText: 'Select palette move up',
+      helpText: 'Select palette line move up',
     },
-    PALETTE_DOWN: {
+    PALETTE_LINE_DOWN: {
       key: '↓',
       code: 'ArrowDown',
-      helpText: 'Select palette move down',
+      helpText: 'Select palette line move down',
     },
-    PALETTE_LEFT: {
-      key: '←',
-      code: 'ArrowLeft',
-      helpText: 'Select palette move left',
+    PALETTE_SELECT_1: {
+      key: '1',
+      code: 'Digit1',
+      helpText: 'Select palette cell 1',
     },
-    PALETTE_RIGHT: {
-      key: '→',
-      code: 'ArrowRight',
-      helpText: 'Select palette move right',
+    PALETTE_SELECT_2: {
+      key: '2',
+      code: 'Digit2',
+      helpText: 'Select palette cell 2',
+    },
+    PALETTE_SELECT_3: {
+      key: '3',
+      code: 'Digit3',
+      helpText: 'Select palette cell 3',
+    },
+    PALETTE_SELECT_4: {
+      key: '4',
+      code: 'Digit4',
+      helpText: 'Select palette cell 4',
+    },
+    PALETTE_SELECT_5: {
+      key: '5',
+      code: 'Digit5',
+      helpText: 'Select palette cell 5',
+    },
+    PALETTE_SELECT_6: {
+      key: '6',
+      code: 'Digit6',
+      helpText: 'Select palette cell 6',
+    },
+    PALETTE_SELECT_7: {
+      key: '7',
+      code: 'Digit7',
+      helpText: 'Select palette cell 7',
     },
     category: [
       'SWAP',
-      'PALETTE_UP',
-      'PALETTE_DOWN',
-      'PALETTE_LEFT',
-      'PALETTE_RIGHT',
+      'PALETTE_LINE_UP',
+      'PALETTE_LINE_DOWN',
+      'PALETTE_SELECT_1',
+      'PALETTE_SELECT_2',
+      'PALETTE_SELECT_3',
+      'PALETTE_SELECT_4',
+      'PALETTE_SELECT_5',
+      'PALETTE_SELECT_6',
+      'PALETTE_SELECT_7',
     ],
   },
   storage: {

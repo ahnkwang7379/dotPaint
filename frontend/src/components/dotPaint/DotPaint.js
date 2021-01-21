@@ -65,7 +65,6 @@ const DotPaint = ({
   border,
   dotSize,
   rowCount,
-  columnCount,
   backgroundImg,
   onWheelHandle,
   onChangePaintStateHandle,
@@ -115,7 +114,13 @@ const DotPaint = ({
         <DotPaintBlock
           dotSize={dotSize}
           borderColor={border.color}
-          borderSize={dotSize > 16 ? border.size : dotSize > 4 ? 1 : 0}
+          borderSize={
+            border.size === 0 || dotSize < 5
+              ? 0
+              : dotSize < 17
+              ? 1
+              : border.size
+          }
           backgroundImg={backgroundImg}
           onMouseLeave={onLeavesPaintAreaHandle}
           onMouseDownCapture={onMouseDownHandler} // 캡쳐링으로 state를 먼저 바꿔줘야함

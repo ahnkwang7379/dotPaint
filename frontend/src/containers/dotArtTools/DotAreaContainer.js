@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeDotArea } from '../../modules/dot';
+import { changeTypingState } from '../../modules/observer';
 import DotAreaControl from '../../components/dotArtTools/DotAreaControl';
 
 const DotAreaContainer = () => {
@@ -19,12 +20,20 @@ const DotAreaContainer = () => {
     [dispatch],
   );
 
+  const changeTypingHandle = useCallback(
+    (type) => {
+      dispatch(changeTypingState(type));
+    },
+    [dispatch],
+  );
+
   return (
     <>
       <DotAreaControl
         rowCount={rowCount}
         columnCount={columnCount}
         onChangeArea={onChangeArea}
+        changeTypingHandle={changeTypingHandle}
       />
     </>
   );

@@ -3,9 +3,6 @@ import styled from 'styled-components';
 import Preview from '../common/Preview';
 import { DOT } from '../../modules/paintTool';
 
-const LayerWrapper = styled.div``;
-const Layer = styled.div``;
-
 const DotLayer = ({
   layerList,
   fakeDotArt,
@@ -16,7 +13,7 @@ const DotLayer = ({
   showLayers,
 }) => {
   return (
-    <LayerWrapper>
+    <div>
       {layerList.map((layer, idx) => {
         if (idx !== layerIdx) {
           // 선택된 레이어가 아니면
@@ -34,7 +31,7 @@ const DotLayer = ({
         } else {
           // 선택된 레이어면
           return (
-            <Layer key="selectLayer" id="selectLayer">
+            <div key="selectLayer" id="selectLayer">
               {selectedPaintTool === DOT && (
                 <>
                   <Preview
@@ -49,7 +46,7 @@ const DotLayer = ({
                     dotSet={fakeDotArt}
                     column={columnCount}
                     size={dotSize}
-                    zIndex={10}
+                    zIndex={100}
                   />
                 </>
               )}
@@ -63,11 +60,11 @@ const DotLayer = ({
                   />
                 </>
               )}
-            </Layer>
+            </div>
           );
         }
       })}
-    </LayerWrapper>
+    </div>
   );
 };
 

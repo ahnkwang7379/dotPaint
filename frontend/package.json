@@ -19,7 +19,7 @@
     "react-beautiful-dnd": "^13.0.0",
     "react-color": "^2.18.1",
     "react-dom": "^16.13.1",
-    "react-icons": "^3.10.0",
+    "react-icons": "^4.1.0",
     "react-popper-tooltip": "^3.1.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
@@ -62,5 +62,7 @@
   "devDependencies": {
     "gh-pages": "^3.1.0"
   },
-  "homepage": "https://ahnkwang7379.github.io/dotPaint"
+  "homepage": "https://ahnkwang7379.github.io/dotPaint",
+  "main": "index.js",
+  "license": "MIT"
 }

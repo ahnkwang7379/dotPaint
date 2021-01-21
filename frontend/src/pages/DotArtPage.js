@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import DialogContainer from '../containers/dialog/DialogContainer';
 import DotListContainer from '../containers/dotArtTools/DotListContainer';
 import PreViewContainer from '../containers/dotArtTools/PreViewContainer';
@@ -22,13 +22,12 @@ const LeftToolBox = styled.div`
   display: flex;
   flex-direction: column;
   left: 0px;
-  width: 200px;
+  width: 250px;
+  min-width: 250px;
   margin-right: 4px;
-  /* & > * {
-    margin: 8px 0px;
-    max-width: 240px;
-    width: 200px;
-  } */
+  & > * {
+    margin-bottom: 16px;
+  }
 `;
 
 const RightToolBox = styled.div`
@@ -41,21 +40,14 @@ const RightToolBox = styled.div`
 `;
 
 const DotArtPage = () => {
-  // toolTip의 위치 조절을 위해 넣어둠
-  useEffect(() => {
-    const toolTipLeftRight = document.getElementsByClassName('toolTip');
-    for (let toolTip of toolTipLeftRight) {
-      toolTip.style.marginTop = `-${toolTip.clientHeight / 2}px`;
-    }
-  }, []);
   return (
     <React.Fragment>
       <DialogContainer />
       <MainWrapper>
         <LeftToolBox>
           <SaveLoadContainer />
-          <PaintToolContainer />
           <DotAreaContainer />
+          <PaintToolContainer />
           <PalettesContainer />
           <PaintColorContainer />
         </LeftToolBox>
