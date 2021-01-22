@@ -18,6 +18,7 @@ const PaletteDialogContainer = ({ dialogType }) => {
   const [palette, setPalette] = useState('');
   const [paletteName, setPaletteName] = useState('');
   const [paletteId, setPaletteId] = useState('');
+  const [paletteIdx, setPaletteIdx] = useState('');
   const [loadedPaletteData, setLoadedPaletteData] = useState('');
 
   useEffect(() => {
@@ -28,6 +29,7 @@ const PaletteDialogContainer = ({ dialogType }) => {
       loadedPalette = paletteData.palettes[paletteData.current].palette;
       loadedPaletteId = paletteData.palettes[paletteData.current].id;
       loadedPaletteName = paletteData.palettes[paletteData.current].name;
+      setPaletteIdx(paletteData.current);
     } else {
       loadedPalette = [
         { id: shortid.generate(), colors: ['#ffffff', '#000000'] },
@@ -58,7 +60,7 @@ const PaletteDialogContainer = ({ dialogType }) => {
   };
 
   const deletePaletteHandle = () => {
-    let result = removePalettesFromStorage(localStorage, paletteId);
+    let result = removePalettesFromStorage(localStorage, paletteIdx);
     if (result) {
       enqueueSnackbar('Delete Palette To LocalStorage', { variant: 'success' });
       let paletteData = getPalettesDataFromStorage(localStorage);
