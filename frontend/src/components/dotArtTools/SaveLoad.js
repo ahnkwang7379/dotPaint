@@ -58,7 +58,7 @@ const SaveLoad = ({
         placement="top"
         tooltip={
           <div>
-            Load from localStorage
+            Open load dialog
             <span className="tooltip-shortcut">{`(${storageShortcuts['LOAD_DOTART'].key})`}</span>
           </div>
         }

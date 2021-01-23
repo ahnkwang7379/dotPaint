@@ -4,6 +4,8 @@ import {
   getDotArtDataFromStorage,
   removeDotArtFromStorage,
   clearSavedDotArtFromStorage,
+  saveDotArtToStorage,
+  currentMoveDotArt,
 } from '../../util/localStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
@@ -24,13 +26,24 @@ const LoadDialogContainer = () => {
     setLoadedData(getDotArtDataFromStorage(localStorage));
   };
   const loadDotArtHandle = useCallback(
-    (loadedData) => {
+    (loadedData, dotArtIdx) => {
       dispatch(loadDotArt(loadedData.dot));
       dispatch(closeDialog());
+      currentMoveDotArt(localStorage, dotArtIdx);
       enqueueSnackbar('Load DotArt From LocalStorage', { variant: 'success' });
     },
     [dispatch, enqueueSnackbar],
   );
+  const ImportDotArtFileHandle = useCallback(
+    (importData) => {
+      // saveDotArtToStorage(localStorage, importData);
+      dispatch(loadDotArt(importData));
+      dispatch(closeDialog());
+      enqueueSnackbar('Import sucess', { variant: 'success' });
+    },
+    [dispatch, enqueueSnackbar],
+  );
+
   const clearStorageHandler = () => {
     clearSavedDotArtFromStorage(localStorage);
     setLoadedData(getDotArtDataFromStorage(localStorage));
@@ -43,6 +56,7 @@ const LoadDialogContainer = () => {
       removeDotArtHandle={removeDotArtHandle}
       loadDotArtHandle={loadDotArtHandle}
       clearStorageHandler={clearStorageHandler}
+      ImportDotArtFileHandle={ImportDotArtFileHandle}
     />
   );
 };

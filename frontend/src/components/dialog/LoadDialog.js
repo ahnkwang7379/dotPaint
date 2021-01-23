@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomButton from '../common/CustomButton';
 import Preview from '../common/Preview';
 import styled from 'styled-components';
@@ -10,36 +10,36 @@ import White from '../../img/white.png';
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
   height: 100%;
 `;
 
 const ButtonWrapper = styled.div`
+  width: 100%;
+  height: 30px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-bottom: 8px;
-  & > * {
-    margin: 8px;
-    max-width: 160px;
-  }
 `;
 
 const PreviewWrapper = styled.div`
+  place-content: flex-start;
   display: flex;
   flex-wrap: wrap;
   & > * {
-    margin: 8px;
+    margin: 2px;
   }
-  overflow: auto;
+  overflow-y: auto;
 `;
 
 const PreviewBlock = styled.div`
+  overflow: hidden;
+  max-width: 300px;
+  max-height: 300px;
   background-image: ${(props) =>
     props.backgroundImg === 1 ? `url(${White})` : `url(${Black})`};
   width: ${(props) => props.columnCount * props.size}px;
   height: ${(props) => props.rowCount * props.size}px;
+  margin: 2px;
 `;
 
 const CardDiv = styled.div`
@@ -68,31 +68,76 @@ const StyleButton = styled.div`
   }
 `;
 
+const FileLoadWrapper = styled.div`
+  border: 2px solid #59564f;
+  border-radius: 3px;
+  padding: 16px;
+  max-width: 400px;
+  max-height: 500px;
+`;
+
+const InputLabel = styled.label`
+  background-color: #7f9ccb;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px ridge black;
+  font-size: 0.8rem;
+  height: auto;
+
+  &:hover {
+    background-color: #2d5ba3;
+    color: white;
+  }
+`;
+
+const InputFile = styled.input`
+  opacity: 0;
+`;
+
 const LoadDialog = ({
   backgroundImg,
   loadedData,
   removeDotArtHandle,
   loadDotArtHandle,
   clearStorageHandler,
+  ImportDotArtFileHandle,
 }) => {
+  const [dotFile, setDotFile] = useState('');
   const onClickRemove = (dotArtIdx, e) => {
     e.stopPropagation();
     removeDotArtHandle(dotArtIdx);
   };
+  const handleFile = (e) => {
+    if (e.target.files.length !== 0) {
+      let reader = new FileReader();
+      reader.readAsText(e.target.files[0], 'EUC-KR');
+
+      reader.onload = () => {
+        let text = reader.result;
+        setDotFile(JSON.parse(text));
+      };
+    }
+  };
+
   return (
     <Wrapper>
-      <ButtonWrapper>
-        <CustomButton width="150" height="50" onClick={clearStorageHandler}>
-          Clear
-        </CustomButton>
-      </ButtonWrapper>
       <PreviewWrapper>
+        <ButtonWrapper>
+          <ToolTip
+            placement="top"
+            tooltip="Clear all dotArt data from localStorage"
+          >
+            <CustomButton width="100" height="30" onClick={clearStorageHandler}>
+              Clear
+            </CustomButton>
+          </ToolTip>
+        </ButtonWrapper>
         {loadedData && loadedData.dotArt.length !== 0 ? (
           loadedData.dotArt.map((dotArt, dotArtIdx) => {
             return (
               <CardDiv
-                key={dotArt.dot.id}
-                onClick={() => loadDotArtHandle(dotArt)}
+                key={dotArtIdx}
+                onClick={() => loadDotArtHandle(dotArt, dotArtIdx)}
               >
                 <ToolTip placement="top" tooltip={<>Load this save data</>}>
                   <PreviewBlock
@@ -100,7 +145,7 @@ const LoadDialog = ({
                     backgroundImg={backgroundImg}
                     columnCount={dotArt.dot.columnCount}
                     rowCount={dotArt.dot.rowCount}
-                    key={dotArt.dot.id}
+                    key={dotArtIdx}
                   >
                     <Preview
                       dotList={mergeLayersByDotFrameList(
@@ -110,7 +155,7 @@ const LoadDialog = ({
                       column={dotArt.dot.columnCount}
                       size="4"
                       duration={dotArt.dot.animationDuration}
-                      key={dotArt.dot.id}
+                      key={dotArtIdx}
                       animation={true}
                     />
                   </PreviewBlock>
@@ -127,6 +172,46 @@ const LoadDialog = ({
           <h1>No Save Data</h1>
         )}
       </PreviewWrapper>
+      <FileLoadWrapper>
+        <div>
+          <InputLabel htmlFor="dotart_uploads">Import .dotart file</InputLabel>
+          <InputFile
+            accept=".dotart"
+            id="dotart_uploads"
+            type="file"
+            onChange={handleFile}
+          />
+          {dotFile && (
+            <>
+              <PreviewBlock
+                size="2"
+                backgroundImg={backgroundImg}
+                columnCount={dotFile.dot.columnCount}
+                rowCount={dotFile.dot.rowCount}
+              >
+                <Preview
+                  dotList={mergeLayersByDotFrameList(
+                    dotFile.dot.dotFrameList,
+                    dotFile.dot.layerData,
+                  )}
+                  column={dotFile.dot.columnCount}
+                  size="2"
+                  duration={dotFile.dot.animationDuration}
+                  key={dotFile.dot.id}
+                  animation={true}
+                />
+              </PreviewBlock>
+              <CustomButton
+                width="100"
+                height="30"
+                onClick={() => ImportDotArtFileHandle(dotFile)}
+              >
+                Load
+              </CustomButton>
+            </>
+          )}
+        </div>
+      </FileLoadWrapper>
     </Wrapper>
   );
 };

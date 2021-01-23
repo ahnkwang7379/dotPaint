@@ -63,12 +63,13 @@ function renderImageToCanvas(type, canvasInfo, currentDotArtInfo, dotList) {
   return ctx.getImageData(0, 0, canvasWidth, canvasHeight).data;
 }
 
-const saveCanvasToDisk = (blob, fileExtension) => {
+const saveToDisk = (blob, fileExtension) => {
   saveAs(blob, `${randomName()}.${fileExtension}`);
 };
 
 const saveFileDotArt = (type, dotArtData) => {
   const {
+    id,
     dotFrameList,
     layerData,
     columnCount,
@@ -77,6 +78,24 @@ const saveFileDotArt = (type, dotArtData) => {
     activeIdx,
     pixelSize,
   } = dotArtData;
+
+  if (type === 'dotart') {
+    let jsonTypeDotArt = {
+      dot: {
+        dotFrameList: dotFrameList,
+        animationDuration: animationDuration,
+        columnCount: columnCount,
+        rowCount: rowCount,
+        layerData: layerData,
+        id: id,
+      },
+    };
+    const blob = new Blob([JSON.stringify(jsonTypeDotArt)], {
+      type: 'application/json',
+    });
+    return saveToDisk(blob, 'dotart');
+  }
+
   const dotList = mergeLayersByDotFrameList(dotFrameList, layerData);
 
   const durationInMillisecond = animationDuration * 1000;
@@ -89,7 +108,7 @@ const saveFileDotArt = (type, dotArtData) => {
   const canvas = document.createElement('canvas');
   const gif = new GIFEncoder(canvasWidth, canvasHeight);
   gif.pipe(blobStream()).on('finish', function () {
-    saveCanvasToDisk(this.toBlob(), 'gif');
+    saveToDisk(this.toBlob(), 'gif');
   });
 
   gif.setRepeat(0); // loop indefinitely
@@ -115,7 +134,7 @@ const saveFileDotArt = (type, dotArtData) => {
         dotList,
       );
       canvas.toBlob(function (blob) {
-        saveCanvasToDisk(blob, 'png');
+        saveToDisk(blob, 'png');
       });
       break;
     default: {

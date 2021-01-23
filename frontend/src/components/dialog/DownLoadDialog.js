@@ -141,7 +141,7 @@ const DownLoadDialog = ({
           value={pixelSize}
           onChange={(e) => onChangePixelSize(e)}
         />
-        <ToolTip placement="bottom" tooltip={<>View in single</>}>
+        <ToolTip placement="bottom" tooltip="View in single">
           <CustomButton
             selected={type === 'single'}
             onClick={() => setType('single')}
@@ -149,7 +149,7 @@ const DownLoadDialog = ({
             single
           </CustomButton>
         </ToolTip>
-        <ToolTip placement="bottom" tooltip={<>View in gif format</>}>
+        <ToolTip placement="bottom" tooltip="View in gif format">
           <CustomButton
             selected={type === 'gif'}
             onClick={() => setType('gif')}
@@ -158,14 +158,24 @@ const DownLoadDialog = ({
           </CustomButton>
         </ToolTip>
         {dialog === DownloadDialog && (
-          <ToolTip placement="bottom" tooltip={<>View in spritesheet format</>}>
-            <CustomButton
-              selected={type === 'spritesheet'}
-              onClick={() => setType('spritesheet')}
-            >
-              sprite
-            </CustomButton>
-          </ToolTip>
+          <>
+            <ToolTip placement="bottom" tooltip="View in spritesheet format">
+              <CustomButton
+                selected={type === 'spritesheet'}
+                onClick={() => setType('spritesheet')}
+              >
+                sprite
+              </CustomButton>
+            </ToolTip>
+            <ToolTip placement="bottom" tooltip="dotart file">
+              <CustomButton
+                selected={type === 'dotart'}
+                onClick={() => setType('dotart')}
+              >
+                json
+              </CustomButton>
+            </ToolTip>
+          </>
         )}
       </ButtonWrapper>
 
@@ -204,6 +214,7 @@ const DownLoadDialog = ({
           <CustomButton
             baseColor="#0f0f0f"
             width="160"
+            height="50"
             onClick={() => saveFileHandler(type)}
           >
             Download

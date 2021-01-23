@@ -566,6 +566,9 @@ const crossSilceReducer = handleActions(
     [NEW_DOT_ART_PROJECT]: (state) => {
       return fakeDotArtSetHandle(state);
     },
+    [REMOVE_ACTIVE_DOT_ART]: (state) => {
+      return fakeDotArtSetHandle(state);
+    },
     [CHANGE_PAINT_TOOL]: (state) => {
       return fakeDotArtSetHandle(state);
     },

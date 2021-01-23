@@ -61,7 +61,7 @@ export function saveDotArtToStorage(storage, dotArtData) {
 }
 
 export function removeDotArtFromStorage(storage, dotArtIdx) {
-  const storageData = getDotArtDataFromStorage(storage);
+  let storageData = getDotArtDataFromStorage(storage);
   if (storageData) {
     let newCurrent = 0;
     storageData.dotArt.splice(dotArtIdx, 1);
@@ -71,6 +71,15 @@ export function removeDotArtFromStorage(storage, dotArtIdx) {
       newCurrent = storageData.current - 1;
     }
     storageData.current = newCurrent;
+    return saveDataToStorage(STORAGE_DOTART_KEY, storage, storageData);
+  }
+  return false;
+}
+
+export function currentMoveDotArt(storage, dotArtIdx) {
+  let storageData = getDotArtDataFromStorage(storage);
+  if (storageData) {
+    storageData.current = dotArtIdx;
     return saveDataToStorage(STORAGE_DOTART_KEY, storage, storageData);
   }
   return false;
