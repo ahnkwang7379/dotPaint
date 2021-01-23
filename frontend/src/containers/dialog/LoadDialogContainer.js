@@ -37,7 +37,7 @@ const LoadDialogContainer = () => {
   const ImportDotArtFileHandle = useCallback(
     (importData) => {
       // saveDotArtToStorage(localStorage, importData);
-      dispatch(loadDotArt(importData));
+      dispatch(loadDotArt(importData.dot));
       dispatch(closeDialog());
       enqueueSnackbar('Import sucess', { variant: 'success' });
     },
