@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CustomButton from '../common/CustomButton';
 import Preview from '../common/Preview';
 import styled from 'styled-components';
@@ -11,6 +11,27 @@ import White from '../../img/white.png';
 const Wrapper = styled.div`
   display: flex;
   height: 100%;
+  justify-content: center;
+  & > * {
+    margin: 8px;
+  }
+`;
+
+const PreviewWrapper = styled.div`
+  border: 2px solid #59564f;
+  border-radius: 3px;
+  place-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  & > * {
+    margin: 2px;
+  }
+  overflow-y: auto;
+`;
+
+const HeaderSpan = styled.span`
+  font-size: 20px;
+  font-weight: bold;
 `;
 
 const ButtonWrapper = styled.div`
@@ -19,16 +40,6 @@ const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-`;
-
-const PreviewWrapper = styled.div`
-  place-content: flex-start;
-  display: flex;
-  flex-wrap: wrap;
-  & > * {
-    margin: 2px;
-  }
-  overflow-y: auto;
 `;
 
 const PreviewBlock = styled.div`
@@ -81,7 +92,7 @@ const InputLabel = styled.label`
   padding: 5px 10px;
   border-radius: 5px;
   border: 1px ridge black;
-  font-size: 0.8rem;
+  font-size: 1.3rem;
   height: auto;
 
   &:hover {
@@ -123,6 +134,7 @@ const LoadDialog = ({
     <Wrapper>
       <PreviewWrapper>
         <ButtonWrapper>
+          <HeaderSpan>Local Storage Datas</HeaderSpan>
           <ToolTip
             placement="top"
             tooltip="Clear all dotArt data from localStorage"
