@@ -94,7 +94,7 @@ const PaletteDialog = ({
         selectId.color
       ],
     );
-  }, [selectId]);
+  }, [selectId, paletteColors]);
 
   const onChangeName = (e) => {
     let newName = e.target.value;

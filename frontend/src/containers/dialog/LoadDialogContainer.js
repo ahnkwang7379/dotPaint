@@ -4,7 +4,7 @@ import {
   getDotArtDataFromStorage,
   removeDotArtFromStorage,
   clearSavedDotArtFromStorage,
-  saveDotArtToStorage,
+  // saveDotArtToStorage,
   currentMoveDotArt,
 } from '../../util/localStorage';
 import { useDispatch, useSelector } from 'react-redux';

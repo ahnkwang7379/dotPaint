@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { all } from 'redux-saga/effects';
+// import { all } from 'redux-saga/effects';
 import { defaultDotMaker } from '../util/dotArrayUtil';
 import { createAction, handleActions } from 'redux-actions';
 import dot, {

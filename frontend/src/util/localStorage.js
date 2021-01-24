@@ -1,5 +1,5 @@
 import shortid from 'shortid';
-import { exampleCat, exampleJellyppi, examplePalette } from './json-example';
+import { exampleJellyppi, examplePalette } from './json-example';
 
 const STORAGE_DOTART_KEY = 'dotArt_storage_v1';
 const STORAGE_PALETTES_KEY = 'dotArt_palettes_storage_v1';

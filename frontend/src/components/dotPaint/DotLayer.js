@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import Preview from '../common/Preview';
 import { DOT } from '../../modules/paintTool';
 
