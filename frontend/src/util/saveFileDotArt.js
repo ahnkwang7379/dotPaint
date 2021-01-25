@@ -11,7 +11,7 @@ function randomName() {
 }
 
 function fillCanvasWithDotArt(canvas, dotArtInfo) {
-  const { dotArt, cols, pixelSize, dotArtHeight, dotArtIdx } = dotArtInfo;
+  const { dotArt, cols, pixelSize, dotArtWidth, dotArtIdx } = dotArtInfo;
   const ctx = canvas;
   dotArt.layer.flat().forEach((fillStyle, pixelIdx) => {
     if (!fillStyle) {
@@ -22,8 +22,8 @@ function fillCanvasWithDotArt(canvas, dotArtInfo) {
     const col = pixelIdx % cols;
     const row = Math.floor(pixelIdx / cols);
     ctx.fillRect(
-      col * pixelSize,
-      row * pixelSize + dotArtHeight * dotArtIdx,
+      col * pixelSize + dotArtWidth * dotArtIdx,
+      row * pixelSize,
       pixelSize,
       pixelSize,
     );
@@ -45,7 +45,7 @@ function renderImageToCanvas(type, canvasInfo, currentDotArtInfo, dotList) {
           dotArt: currentDotArt,
           cols,
           pixelSize,
-          dotArtHeight,
+          dotArtWidth,
           dotArtIdx,
         });
       });
@@ -55,7 +55,7 @@ function renderImageToCanvas(type, canvasInfo, currentDotArtInfo, dotList) {
         dotArt,
         cols,
         pixelSize,
-        dotArtHeight,
+        dotArtWidth,
         dotArtIdx: 0,
       });
       break;
@@ -101,9 +101,12 @@ const saveFileDotArt = (type, dotArtData) => {
   const durationInMillisecond = animationDuration * 1000;
   const dotArtWidth = columnCount * pixelSize;
   const dotArtHeight = rowCount * pixelSize;
-  const canvasWidth = dotArtWidth;
-  const canvasHeight =
-    type === 'spritesheet' ? dotArtHeight * dotList.length : dotArtHeight;
+  const canvasWidth =
+    type === 'spritesheet' ? dotArtWidth * dotList.length : dotArtWidth;
+  const canvasHeight = dotArtHeight;
+  // const canvasWidth = dotArtWidth;
+  // const canvasHeight =
+  //   type === 'spritesheet' ? dotArtHeight * dotList.length : dotArtHeight;
 
   const canvas = document.createElement('canvas');
   const gif = new GIFEncoder(canvasWidth, canvasHeight);
