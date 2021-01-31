@@ -1,6 +1,13 @@
 import React from 'react';
 import Preview from '../common/Preview';
-import { DOT } from '../../modules/paintTool';
+import {
+  BUCKET,
+  DITHERING,
+  DOT,
+  ERASER,
+  MOVE,
+  RECTANGLE,
+} from '../../modules/paintTool';
 
 const DotLayer = ({
   layerList,
@@ -31,7 +38,9 @@ const DotLayer = ({
           // 선택된 레이어면
           return (
             <div key="selectLayer" id="selectLayer">
-              {selectedPaintTool === DOT && (
+              {selectedPaintTool === DOT ||
+              selectedPaintTool === RECTANGLE ||
+              selectedPaintTool === DITHERING ? (
                 <>
                   <Preview
                     key={idx}
@@ -39,7 +48,6 @@ const DotLayer = ({
                     column={columnCount}
                     size={dotSize}
                     zIndex={2}
-                    opacity={1}
                   />
                   <Preview
                     dotSet={fakeDotArt}
@@ -48,8 +56,7 @@ const DotLayer = ({
                     zIndex={100}
                   />
                 </>
-              )}
-              {selectedPaintTool !== DOT && (
+              ) : (
                 <>
                   <Preview
                     dotSet={fakeDotArt}

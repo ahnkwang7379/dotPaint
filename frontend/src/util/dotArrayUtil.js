@@ -52,3 +52,11 @@ export function mergeLayersByDotFrameList(dotFrameList, layerData) {
 
   return returnDotFrameList;
 }
+
+export function cloneDotSet(dotArt) {
+  let clone = [];
+  for (let i in dotArt) {
+    clone.push(dotArt[i]);
+  }
+  return clone;
+}

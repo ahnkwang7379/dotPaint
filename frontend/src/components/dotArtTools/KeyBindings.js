@@ -10,6 +10,7 @@ import {
   MOVE,
   SAMECOLOR,
   DITHERING,
+  RECTANGLE,
 } from '../../modules/paintTool';
 import { ActionCreators } from 'redux-undo';
 import {
@@ -140,6 +141,9 @@ const KeyBindings = ({
           return;
         case DITHERING:
           dispatch(changePaintTool(DITHERING));
+          return;
+        case RECTANGLE:
+          dispatch(changePaintTool(RECTANGLE));
           return;
         case 'INCREASE_COLUMN':
           dispatch(increaseColumn());

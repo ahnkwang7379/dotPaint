@@ -9,6 +9,7 @@ import {
   MOVE,
   SAMECOLOR,
   DITHERING,
+  RECTANGLE,
 } from './paintTool';
 import { defaultDotMaker, dotArrayMerge } from '../util/dotArrayUtil';
 
@@ -350,11 +351,16 @@ const dot = handleActions(
         }
       }),
     [UPDATE_DOT_ART]: (state, { payload: selectedPaintTool }) => {
+      // 마우스를 떼면 발생하는 액션
       if (selectedPaintTool === PICKER) return { ...state };
 
       let newDotArt;
 
-      if (selectedPaintTool === DOT) {
+      if (
+        selectedPaintTool === DOT ||
+        selectedPaintTool === RECTANGLE ||
+        selectedPaintTool === DITHERING
+      ) {
         const layerIdx = state.layerData[state.layerSelectIdx].dotFrameIdx;
         newDotArt = dotArrayMerge(
           state.fakeDotArt,
@@ -362,28 +368,20 @@ const dot = handleActions(
           state.rowCount,
           state.columnCount,
         );
-      }
-      if (selectedPaintTool === ERASER) {
+        return produce(state, (draft) => {
+          draft.dotFrameList[draft.activeIdx].layerList[
+            draft.layerData[draft.layerSelectIdx].dotFrameIdx
+          ] = newDotArt;
+        });
+      } else {
         newDotArt = state.fakeDotArt;
-      }
-      if (selectedPaintTool === BUCKET) {
-        newDotArt = state.fakeDotArt;
-      }
-      if (selectedPaintTool === MOVE) {
-        newDotArt = state.fakeDotArt;
-      }
-      if (selectedPaintTool === SAMECOLOR) {
-        newDotArt = state.fakeDotArt;
-      }
-      if (selectedPaintTool === DITHERING) {
-        newDotArt = state.fakeDotArt;
-      }
 
-      return produce(state, (draft) => {
-        draft.dotFrameList[draft.activeIdx].layerList[
-          draft.layerData[draft.layerSelectIdx].dotFrameIdx
-        ] = newDotArt;
-      });
+        return produce(state, (draft) => {
+          draft.dotFrameList[draft.activeIdx].layerList[
+            draft.layerData[draft.layerSelectIdx].dotFrameIdx
+          ] = newDotArt;
+        });
+      }
     },
     [ADD_NEW_LAYER]: (state, { payload: shiftDown }) => {
       const { layerSelectIdx, layerData } = state;

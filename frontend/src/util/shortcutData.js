@@ -6,6 +6,7 @@ import {
   MOVE,
   SAMECOLOR,
   DITHERING,
+  RECTANGLE,
 } from '../modules/paintTool';
 export const initShortcut = {
   paintTools: {
@@ -24,7 +25,21 @@ export const initShortcut = {
       code: 'KeyD',
       helpText: 'Dithering tool',
     },
-    category: [DOT, BUCKET, PICKER, ERASER, MOVE, SAMECOLOR, DITHERING],
+    RECTANGLE: {
+      key: 'R',
+      code: 'KeyR',
+      helpText: 'Rectangle tool',
+    },
+    category: [
+      DOT,
+      BUCKET,
+      PICKER,
+      ERASER,
+      MOVE,
+      SAMECOLOR,
+      DITHERING,
+      RECTANGLE,
+    ],
   },
   color: {
     SWAP: {

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 // import { all } from 'redux-saga/effects';
-import { defaultDotMaker } from '../util/dotArrayUtil';
+import { cloneDotSet, defaultDotMaker } from '../util/dotArrayUtil';
 import { createAction, handleActions } from 'redux-actions';
 import dot, {
   CLEAR_DOT,
@@ -35,6 +35,7 @@ import paintTool, {
   MOVE,
   SAMECOLOR,
   DITHERING,
+  RECTANGLE,
 } from './paintTool';
 import loading from './loading';
 // import auth, { authSaga } from './auth';
@@ -217,10 +218,9 @@ const dotActionsHandler = (
         const dot = state.dotArt.present.dot;
 
         const { rowCount, columnCount } = dot;
+
         // 2차배열 1차배열로 풀어서 넣어줌
-        const dotArt = state.dotArt.present.dot.fakeDotArt.reduce((acc, cur) =>
-          acc.concat(cur),
-        );
+        const dotArt = dot.fakeDotArt.reduce((acc, cur) => acc.concat(cur));
         const selectedDotId = rowIdx * columnCount + columnIdx;
 
         const dotColor = dotArt[selectedDotId];
@@ -324,12 +324,13 @@ const dotActionsHandler = (
         const { columnCount, layerSelectIdx } = dot;
         const dotFrameIdx = dot.layerData[layerSelectIdx].dotFrameIdx;
 
-        let returnDotArt = dot.dotFrameList[dot.activeIdx].layerList[
-          dotFrameIdx
-        ].slice();
+        let returnDotArt = cloneDotSet(
+          dot.dotFrameList[dot.activeIdx].layerList[dotFrameIdx],
+        );
         let removedDiffY;
 
-        // 그냥 이동
+        // 테두리를 넘어간 부분을 반대편에서 나오게 해줌
+        // y축 범위를 먼저 좁혀주고 X축 계산 후 y축에 빈 배열을 추가해주는 방식
         if (state.observer.altDown) {
           if (diffY > 0) {
             removedDiffY = returnDotArt.slice(returnDotArt.length - diffY);
@@ -351,8 +352,7 @@ const dotActionsHandler = (
             );
           }
         } else {
-          // 테두리를 넘어간 부분을 반대편에서 나오게 해줌
-          // y축 범위를 먼저 좁혀주고 X축 계산 후 y축에 빈 배열을 추가해주는 방식
+          // 그냥 이동
           if (diffY > 0) {
             returnDotArt = returnDotArt.slice(0, returnDotArt.length - diffY);
           } else if (diffY < 0) {
@@ -446,10 +446,71 @@ const dotActionsHandler = (
         const color =
           flag === 1 ? state.palettes.rightColor : state.palettes.leftColor;
 
-        let fakeDotSet = state.dotArt.present.dot.fakeDotArt.map((arr) =>
-          arr.slice(),
-        );
+        let fakeDotSet = cloneDotSet(state.dotArt.present.dot.fakeDotArt);
         fakeDotSet[rowIdx][columnIdx] = color;
+
+        return {
+          ...state,
+          dotArt: {
+            ...state.dotArt,
+            present: {
+              ...state.dotArt.present,
+              dot: {
+                ...state.dotArt.present.dot,
+                fakeDotArt: fakeDotSet,
+              },
+            },
+          },
+        };
+      } else return { ...state };
+    case RECTANGLE:
+      if (paintToolState === 'DRAGGING') {
+        const color =
+          direction === 'LEFT'
+            ? state.palettes.leftColor
+            : state.palettes.rightColor;
+
+        const dot = state.dotArt.present.dot;
+
+        let fakeDotSet = defaultDotMaker(dot.rowCount, dot.columnCount);
+
+        let startX = state.observer.startPosition.x;
+        let startY = state.observer.startPosition.y;
+
+        let mouseX = state.observer.mousePosition.x;
+        let mouseY = state.observer.mousePosition.y;
+
+        // 시작점이 마우스위치보다 높으면 반전해준다
+        if (startX > mouseX) {
+          let tempX = mouseX;
+          mouseX = startX;
+          startX = tempX;
+        }
+        if (startY > mouseY) {
+          let tempY = mouseY;
+          mouseY = startY;
+          startY = tempY;
+        }
+
+        const diffX = mouseX - startX;
+
+        // 맨 위와 맨 아래
+        let colors = [].concat(new Array(diffX + 1).fill(color));
+
+        fakeDotSet[startY] = []
+          .concat(fakeDotSet[startY].slice(0, startX))
+          .concat(colors)
+          .concat(fakeDotSet[startY].slice(mouseX + 1));
+        fakeDotSet[mouseY] = []
+          .concat(fakeDotSet[mouseY].slice(0, startX))
+          .concat(colors)
+          .concat(fakeDotSet[mouseY].slice(mouseX + 1));
+
+        // 맨 위 맨 아래 그 사이 (좌 우 1칸씩)
+        for (let i = startY + 1; i < mouseY; i++) {
+          fakeDotSet[i][startX] = color;
+          fakeDotSet[i][mouseX] = color;
+        }
 
         return {
           ...state,
@@ -471,12 +532,16 @@ const dotActionsHandler = (
 };
 
 const fakeDotArtSetHandle = (state) => {
+  const defaultDot = defaultDotMaker(
+    state.dotArt.present.dot.rowCount,
+    state.dotArt.present.dot.columnCount,
+  );
+  const { activeIdx, layerSelectIdx, layerData } = state.dotArt.present.dot;
+  const layerIdx = layerData[layerSelectIdx].dotFrameIdx;
   switch (state.paintTool.selectedPaintTool) {
     case DOT:
-      const defaultDot = defaultDotMaker(
-        state.dotArt.present.dot.rowCount,
-        state.dotArt.present.dot.columnCount,
-      );
+    case RECTANGLE:
+    case DITHERING:
       return {
         ...state,
         dotArt: {
@@ -494,15 +559,11 @@ const fakeDotArtSetHandle = (state) => {
           startPosition: { x: '', y: '' },
         },
       };
-    case BUCKET:
     case ERASER:
+    case BUCKET:
+    case MOVE:
     case SAMECOLOR:
     case PICKER:
-    case MOVE:
-    case DITHERING:
-      const { activeIdx, layerSelectIdx, layerData } = state.dotArt.present.dot;
-      const layerIdx = layerData[layerSelectIdx].dotFrameIdx;
-
       return {
         ...state,
         dotArt: {

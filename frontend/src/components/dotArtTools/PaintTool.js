@@ -8,11 +8,13 @@ import {
   MOVE,
   SAMECOLOR,
   DITHERING,
+  RECTANGLE,
 } from '../../modules/paintTool';
 import CustomButton from '../common/CustomButton';
 import { TiPencil, TiPipette } from 'react-icons/ti';
 import { BsFillBucketFill } from 'react-icons/bs';
 import { CgColorBucket } from 'react-icons/cg';
+import { BiRectangle } from 'react-icons/bi';
 import { FaEraser, FaHandPaper, FaBorderAll } from 'react-icons/fa';
 import ToolTip from '../common/ToolTip';
 
@@ -146,6 +148,23 @@ const PaintTool = ({
             onClick={() => onChangePaintTool(MOVE)}
           >
             <FaHandPaper />
+          </CustomButton>
+        </ToolTip>
+        <ToolTip
+          placement="top"
+          tooltip={
+            <div>
+              {paintToolsShortcuts[RECTANGLE].helpText}
+              <span className="tooltip-shortcut">{`(${paintToolsShortcuts[RECTANGLE].key})`}</span>
+            </div>
+          }
+        >
+          <CustomButton
+            width="40"
+            selected={selectedPaintTool === RECTANGLE}
+            onClick={() => onChangePaintTool(RECTANGLE)}
+          >
+            <BiRectangle />
           </CustomButton>
         </ToolTip>
         <ToolTip

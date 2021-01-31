@@ -24,15 +24,17 @@ const DotLayerContainer = () => {
   }));
 
   return (
-    <DotLayer
-      layerList={layerList}
-      fakeDotArt={fakeDotArt}
-      columnCount={columnCount}
-      dotSize={dotSize}
-      layerIdx={layerIdx}
-      selectedPaintTool={selectedPaintTool}
-      showLayers={showLayers}
-    />
+    <>
+      <DotLayer
+        layerList={layerList}
+        fakeDotArt={fakeDotArt}
+        columnCount={columnCount}
+        dotSize={dotSize}
+        layerIdx={layerIdx}
+        selectedPaintTool={selectedPaintTool}
+        showLayers={showLayers}
+      />
+    </>
   );
 };
 

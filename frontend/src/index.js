@@ -5,21 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-// import createSagaMiddleware from 'redux-saga';
+import { createStore } from 'redux';
 import rootReducer from './modules';
-// import { check, tempSetUser } from './modules/user';
 
-// const sagaMiddleware = createSagaMiddleware();
-
-const store = createStore(
-  rootReducer,
-  // composeWithDevTools(applyMiddleware(sagaMiddleware)),
-  // applyMiddleware(sagaMiddleware),
-);
-
-// sagaMiddleware.run(rootSaga);
+const store = createStore(rootReducer);
 
 ReactDOM.render(
   <Provider store={store}>
