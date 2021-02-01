@@ -104,9 +104,6 @@ const saveFileDotArt = (type, dotArtData) => {
   const canvasWidth =
     type === 'spritesheet' ? dotArtWidth * dotList.length : dotArtWidth;
   const canvasHeight = dotArtHeight;
-  // const canvasWidth = dotArtWidth;
-  // const canvasHeight =
-  //   type === 'spritesheet' ? dotArtHeight * dotList.length : dotArtHeight;
 
   const canvas = document.createElement('canvas');
   const gif = new GIFEncoder(canvasWidth, canvasHeight);

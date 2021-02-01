@@ -1,13 +1,6 @@
 import React from 'react';
 import Preview from '../common/Preview';
-import {
-  BUCKET,
-  DITHERING,
-  DOT,
-  ERASER,
-  MOVE,
-  RECTANGLE,
-} from '../../modules/paintTool';
+import { DITHERING, DOT, RECTANGLE } from '../../modules/paintTool';
 
 const DotLayer = ({
   layerList,

@@ -57,25 +57,6 @@ const getImageData = function getImageData(grid, opt) {
       }, []);
     }
     default: {
-      // return grid
-      //   .reduce(
-      //     (acc, cur, rowIdx) =>
-      //       acc.concat(
-      //         cur.reduce(
-      //           (bsString, color, columnIdx) =>
-      //             color !== ''
-      //               ? ''
-      //                   .concat(bsString, ' ')
-      //                   .concat(opt.pSize * columnIdx + opt.pSize, 'px ')
-      //                   .concat(opt.pSize * rowIdx + opt.pSize, 'px ')
-      //                   .concat(color, ',')
-      //               : bsString,
-      //           '',
-      //         ),
-      //       ),
-      //     '',
-      //   )
-      //   .slice(1, -1);
       return grid
         .reduce(function (bsString, color, i) {
           if (color !== '') {

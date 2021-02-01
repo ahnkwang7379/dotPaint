@@ -62,7 +62,6 @@ const combineDotArt = combineReducers({
 const combineReducer = combineReducers({
   dotArt: undoable(combineDotArt, {
     limit: 100,
-    // debug: true,
     ignoreInitialState: true,
     filter: includeAction([
       CLEAR_DOT,
@@ -132,7 +131,7 @@ const bucketDotArt = (
   columnCount,
 ) => {
   const queue = [dotIdx];
-  let newDotArt = dotArt.slice();
+  let newDotArt = cloneDotSet(dotArt);
   let currentId;
   let adjacents;
   let adjacentId;

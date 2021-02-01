@@ -4,7 +4,6 @@ import {
   getDotArtDataFromStorage,
   removeDotArtFromStorage,
   clearSavedDotArtFromStorage,
-  // saveDotArtToStorage,
   currentMoveDotArt,
 } from '../../util/localStorage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,7 +35,6 @@ const LoadDialogContainer = () => {
   );
   const ImportDotArtFileHandle = useCallback(
     (importData) => {
-      // saveDotArtToStorage(localStorage, importData);
       dispatch(loadDotArt(importData.dot));
       dispatch(closeDialog());
       enqueueSnackbar('Import sucess', { variant: 'success' });

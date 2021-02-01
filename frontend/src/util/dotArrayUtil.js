@@ -53,6 +53,7 @@ export function mergeLayersByDotFrameList(dotFrameList, layerData) {
   return returnDotFrameList;
 }
 
+// dotart 복사 함수
 export function cloneDotSet(dotArt) {
   let clone = [];
   for (let i in dotArt) {
