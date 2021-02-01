@@ -47,7 +47,7 @@ merge시 선택한 layer와 그 아래 layer를 합치게 되며, 선택한 laye
 ## Palette
 
 <img src="./frontend/screenshots/palette.gif" width="200px"/>
-<img src="./frontend/screenshots/palette.png" width="600px"/>
+<img src="./frontend/screenshots/privatePalette.png" width="600px"/>
 
 한 라인에 최대 7개까지 색이 지정 가능하며 키보드 위 아래 방향키를 이용해 라인을 이동할 수 있습니다.
 
@@ -83,7 +83,7 @@ localStorage에 세이브 / 로드가 가능합니다.
 
 ### 완성된 작업물 다운로드
 
-<img src="./frontend/screenshots/jellyppi.png" width="60px"/>
+<img src="./frontend/screenshots/jelly.png" width="60px"/>
 <img src="./frontend/screenshots/jellyppi.gif" width="60px"/>
 <img src="./frontend/screenshots/jellysprite.png" width="300px"/>
 
