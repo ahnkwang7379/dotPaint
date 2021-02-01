@@ -46,8 +46,10 @@ merge시 선택한 layer와 그 아래 layer를 합치게 되며, 선택한 laye
 
 ## Palette
 
-<img src="./frontend/screenshots/palette.gif" width="200px"/>
-<img src="./frontend/screenshots/privatePalette.png" width="600px"/>
+<p>
+  <img src="./frontend/screenshots/palette.gif" width="200px"/>
+  <img src="./frontend/screenshots/privatePalette.png" width="600px"/>
+</p>
 
 한 라인에 최대 7개까지 색이 지정 가능하며 키보드 위 아래 방향키를 이용해 라인을 이동할 수 있습니다.
 
@@ -82,10 +84,11 @@ frame list의 하단 숫자를 바꾸는 것으로 각 frame이 애니메이션�
 localStorage에 세이브 / 로드가 가능합니다.
 
 ### 완성된 작업물 다운로드
-
-<img src="./frontend/screenshots/jelly.png" width="60px"/>
-<img src="./frontend/screenshots/jellyppi.gif" width="60px"/>
-<img src="./frontend/screenshots/jellysprite.png" width="300px"/>
+<p>
+  <img src="./frontend/screenshots/jelly.png" width="60px"/>
+  <img src="./frontend/screenshots/jellyppi.gif" width="60px"/>
+  <img src="./frontend/screenshots/jellysprite.png" width="300px"/>
+</p>
 
 작업물을 png, gif형식으로 다운로드 가능하며 sprite 형식으로도 가능합니다.
 
@@ -96,8 +99,9 @@ localStorage에 세이브 / 로드가 가능합니다.
 웹에서 사용 가능한 CSS 코드도 지원합니다. 복사 후 html 요소에 class 이름으로 .dotArt-to-css를 붙여주면 됩니다.
 
 ### JSON file 다운로드
+[예시 보러가기](https://github.com/ahnkwang7379/dotArt/blob/master/frontend/screenshots/jellyppi.dotart)
 
-또한 dotArt를 JSON 형식으로 다운로드 받을 수 있으며 (.dotart 파일로 다운로드 됩니다) 다른 곳에서 import해 작업을 이어나갈 수 있습니다.
+자신의 dotArt를 JSON 형식으로 다운로드 받을 수 있으며 (.dotart 파일로 다운로드 됩니다) 다른 곳에서 import해 작업을 이어나갈 수 있습니다.
 
 # 기술 스택
 
