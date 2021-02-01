@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-// import { all } from 'redux-saga/effects';
 import { cloneDotSet, defaultDotMaker } from '../util/dotArrayUtil';
 import { createAction, handleActions } from 'redux-actions';
 import dot, {
@@ -37,9 +36,6 @@ import paintTool, {
   DITHERING,
   RECTANGLE,
 } from './paintTool';
-import loading from './loading';
-// import auth, { authSaga } from './auth';
-// import user, { userSaga } from './user';
 import palettes from './palettes';
 import dialog from './dialog';
 import observer from './observer';
@@ -92,14 +88,10 @@ const combineReducer = combineReducers({
       SELECT_LAYER_IDX,
       RENAME_LAYER,
     ]),
-    // filter: excludeAction(DOT_ACTIONS),
   }),
   palettes,
   paintTool,
-  // auth,
   dialog,
-  // user,
-  loading,
   observer,
   keybind,
 });
