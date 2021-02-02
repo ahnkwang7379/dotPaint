@@ -29,8 +29,10 @@ CSS의 box-shadow를 이용해 도트 그림을 표현할 수 있습니다.
 
 move 툴은 일반 이동과 wrap모드 이동이 가능합니다.
 
-<img src="./frontend/screenshots/move.gif" width="100px"/>
-<img src="./frontend/screenshots/moveWrap.gif" width="100px"/>
+<p>
+  <img src="./frontend/screenshots/move.gif" width="100px"/>
+  <img src="./frontend/screenshots/moveWrap.gif" width="100px"/>
+</p>
 
 ---
 
@@ -105,9 +107,14 @@ localStorage에 세이브 / 로드가 가능합니다.
 
 # 기술 스택
 
-- [react](https://facebook.github.io/react/) : 인터페이스 구현을 위한 react
-- [react-hooks](https://ko.reactjs.org/docs/hooks-reference.html) : 함수형으로 설계되었습니다.
-- [redux](http://redux.js.org/) : 넓은 범위에서 쓰이는 state를 편하게 관리하기 위해 적용
-- [redux-actions](https://redux-actions.js.org/) : redux의 action을 더 간단하게 만들었습니다.
-- [style-components](https://styled-components.com/) : CSS IN JS 라이브러리
-- [immer](https://immerjs.github.io/immer/docs/introduction) : 불변성 + 코드 가독성을 위해 적용
+[react](https://facebook.github.io/react/) : 인터페이스 구현을 위한 react
+
+[react-hooks](https://ko.reactjs.org/docs/hooks-reference.html) : 함수형으로 설계되었습니다.
+
+[redux](http://redux.js.org/) : 넓은 범위에서 쓰이는 state를 편하게 관리하기 위해 적용
+
+[redux-actions](https://redux-actions.js.org/) : redux의 action을 더 간단하게 만들었습니다.
+
+[style-components](https://styled-components.com/) : CSS IN JS 라이브러리
+
+[immer](https://immerjs.github.io/immer/docs/introduction) : 불변성 + 코드 가독성을 위해 적용
