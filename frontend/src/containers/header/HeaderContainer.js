@@ -1,8 +1,15 @@
 import React from 'react';
-import Header from '../../components/header/Header';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../modules/user';
+import Header from '../../components/common/Header';
 
-const HeaderContainer = ({ children }) => {
-  return <Header>{children}</Header>;
+const HeaderContainer = () => {
+  const { user } = useSelector(({ user }) => ({ user: user.user }));
+  const dispatch = useDispatch();
+  const onLogout = () => {
+    dispatch(logout());
+  };
+  return <Header user={user} onLogout={onLogout} />;
 };
 
-export default React.memo(HeaderContainer);
+export default HeaderContainer;

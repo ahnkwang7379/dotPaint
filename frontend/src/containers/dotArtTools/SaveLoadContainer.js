@@ -48,11 +48,11 @@ const SaveLoadContainer = () => {
     let loadedDotArt = getDotArtDataFromStorage(localStorage);
     let loadedPrivateData = getPrivateSettingFromStorage(localStorage);
     if (loadedDotArt) {
-      dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current].dot));
+      dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current]));
     } else {
       initialStorageDotArt(localStorage);
       loadedDotArt = getDotArtDataFromStorage(localStorage);
-      dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current].dot));
+      dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current]));
     }
 
     // observer는 상관없음
@@ -77,14 +77,12 @@ const SaveLoadContainer = () => {
   useEffect(() => {
     if (saveState) {
       const saveDotArtData = {
-        dot: {
-          id: shortid.generate(),
-          dotFrameList: dotFrameList,
-          columnCount: columnCount,
-          rowCount: rowCount,
-          animationDuration: animationDuration,
-          layerData: layerData,
-        },
+        id: shortid.generate(),
+        dotFrameList: dotFrameList,
+        columnCount: columnCount,
+        rowCount: rowCount,
+        animationDuration: animationDuration,
+        layerData: layerData,
       };
 
       const result = saveDotArtToStorage(localStorage, saveDotArtData);

@@ -68,11 +68,10 @@ const StyledButton = styled(CustomButton)`
 `;
 
 const SliderBox = styled.div`
-  width: 200px;
-  height: 40px;
+  height: 32px;
   display: flex;
   background: #f2e8dc;
-  padding: 8px;
+  padding: 4px 8px 0px 8px;
   font-size: 8px;
 `;
 
@@ -135,6 +134,7 @@ const PreViewTools = ({
     viewBox.style.border = '3px solid red';
     viewBox.style.display = 'none';
     viewBox.style.cursor = 'pointer';
+    viewBox.style.boxSizing = 'border-box';
     viewBox.attributes.draggable = false;
 
     previewBlock.appendChild(viewBox);

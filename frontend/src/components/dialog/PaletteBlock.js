@@ -41,8 +41,8 @@ const RemovePaletteButton = styled.button`
 `;
 
 const IconBox = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
   cursor: pointer;
   border: 3px solid #59564f;
   color: #59564f;

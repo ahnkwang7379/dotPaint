@@ -33,7 +33,7 @@ function fillCanvasWithDotArt(canvas, dotArtInfo) {
 
 function renderImageToCanvas(type, canvasInfo, currentDotArtInfo, dotList) {
   const { canvas, canvasHeight, canvasWidth } = canvasInfo;
-  const { dotArt, dotArtHeight, dotArtWidth, pixelSize } = currentDotArtInfo;
+  const { dotArt, dotArtWidth, pixelSize } = currentDotArtInfo;
   const cols = Math.floor(dotArtWidth / pixelSize);
   let ctx = canvas.getContext('2d');
   ctx.canvas.width = canvasWidth;
@@ -81,14 +81,12 @@ const saveFileDotArt = (type, dotArtData) => {
 
   if (type === 'dotart') {
     let jsonTypeDotArt = {
-      dot: {
-        dotFrameList: dotFrameList,
-        animationDuration: animationDuration,
-        columnCount: columnCount,
-        rowCount: rowCount,
-        layerData: layerData,
-        id: id,
-      },
+      dotFrameList: dotFrameList,
+      animationDuration: animationDuration,
+      columnCount: columnCount,
+      rowCount: rowCount,
+      layerData: layerData,
+      id: id,
     };
     const blob = new Blob([JSON.stringify(jsonTypeDotArt)], {
       type: 'application/json',

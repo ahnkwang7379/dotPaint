@@ -25,4 +25,4 @@ const DialogContainer = () => {
   );
 };
 
-export default React.memo(DialogContainer);
+export default DialogContainer;

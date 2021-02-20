@@ -18,11 +18,7 @@ function saveDataToStorage(key, storage, data) {
 
 export function initialStorageDotArt(storage) {
   saveDataToStorage(STORAGE_DOTART_KEY, storage, {
-    dotArt: [
-      {
-        dot: { ...exampleJellyppi },
-      },
-    ],
+    dotArt: [{ ...exampleJellyppi }],
     current: 0,
   });
 }

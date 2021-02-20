@@ -26,7 +26,7 @@ const LoadDialogContainer = () => {
   };
   const loadDotArtHandle = useCallback(
     (loadedData, dotArtIdx) => {
-      dispatch(loadDotArt(loadedData.dot));
+      dispatch(loadDotArt(loadedData));
       dispatch(closeDialog());
       currentMoveDotArt(localStorage, dotArtIdx);
       enqueueSnackbar('Load DotArt From LocalStorage', { variant: 'success' });
@@ -35,7 +35,7 @@ const LoadDialogContainer = () => {
   );
   const ImportDotArtFileHandle = useCallback(
     (importData) => {
-      dispatch(loadDotArt(importData.dot));
+      dispatch(loadDotArt(importData));
       dispatch(closeDialog());
       enqueueSnackbar('Import sucess', { variant: 'success' });
     },
@@ -47,6 +47,7 @@ const LoadDialogContainer = () => {
     setLoadedData(getDotArtDataFromStorage(localStorage));
     enqueueSnackbar('Clear DotArt From LocalStorage', { variant: 'success' });
   };
+
   return (
     <LoadDialog
       backgroundImg={backgroundImg}

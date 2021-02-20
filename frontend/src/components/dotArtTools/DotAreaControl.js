@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import CustomButton from '../common/CustomButton';
+import Button from '../common/Button';
 import ToolTip from '../common/ToolTip';
 import TextField from '@material-ui/core/TextField';
 
@@ -72,9 +72,7 @@ const DotAreaControl = ({
           onBlur={() => changeTypingHandle(false)}
         />
         <ToolTip placement="top" tooltip={<>Apply dot area size</>}>
-          <CustomButton onClick={() => onChangeArea(height, width)}>
-            Apply
-          </CustomButton>
+          <Button onClick={() => onChangeArea(height, width)}>Apply</Button>
         </ToolTip>
       </DotAreaBlock>
     </DotAreaWrapper>

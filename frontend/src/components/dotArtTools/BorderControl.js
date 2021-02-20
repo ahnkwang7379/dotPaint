@@ -43,6 +43,7 @@ const BorderBlock = styled.div`
 `;
 
 const BorderPickBox = styled.div`
+  box-sizing: border-box;
   cursor: pointer;
   margin-right: 3px;
   border: 2px solid ${(props) => (props.selected ? `orange` : `#afafaf`)};
@@ -129,7 +130,7 @@ const BorderControl = ({
         <ToolTip placement="bottom" tooltip={<>Set border color</>}>
           <GithubPicker
             onChange={onChangeDotBorderColor}
-            width={190}
+            width={180}
             colors={[
               '#B80000',
               '#DB3E00',

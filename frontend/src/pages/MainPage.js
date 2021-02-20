@@ -1,21 +1,23 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
-import HeaderContainer from '../containers/header/HeaderContainer';
-import DotArtPage from '../pages/DotArtPage';
+import { Route } from 'react-router-dom';
+import DotArtPage from './DotArtPage';
+import CommunityPage from './CommunityPage';
+import DotArtViewPage from './DotArtViewPage';
+import LoginPage from './LoignPage';
+import SignUpPage from './SignUpPage';
+import WritePage from './WritePage';
 
-const MainPage = ({ match }) => {
+const MainPage = () => {
   return (
-    <BrowserRouter>
-      <HeaderContainer path={match.path}>
-        <Switch>
-          <Route
-            path={[match.path, `${match.path}/dot`]}
-            component={DotArtPage}
-          />
-        </Switch>
-      </HeaderContainer>
-    </BrowserRouter>
+    <>
+      <Route path={['/', '/@:username']} component={CommunityPage} exact />
+      <Route path="/dot" component={DotArtPage} />
+      <Route path={'/@:username/:dotArtId'} component={DotArtViewPage} />
+      <Route path="/login" component={LoginPage} />
+      <Route path="/signup" component={SignUpPage} />
+      <Route path="/write" component={WritePage} />
+    </>
   );
 };
 
-export default withRouter(MainPage);
+export default MainPage;

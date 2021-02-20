@@ -1,7 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { Link } from 'react-router-dom';
 
-const CustomButtonStyled = styled.button`
+const CustomStyle = css`
   background-color: #f2f2f2;
   font-size: 20px;
   display: flex;
@@ -53,8 +54,20 @@ const CustomButtonStyled = styled.button`
     `}
 `;
 
+const CustomButtonStyled = styled.button`
+  ${CustomStyle}
+`;
+
+const CustomLinkStyled = styled(Link)`
+  ${CustomStyle}
+`;
+
 const CustomButton = ({ children, ...rest }) => {
-  return <CustomButtonStyled {...rest}>{children}</CustomButtonStyled>;
+  return rest.to ? (
+    <CustomLinkStyled {...rest}>{children}</CustomLinkStyled>
+  ) : (
+    <CustomButtonStyled {...rest}>{children}</CustomButtonStyled>
+  );
 };
 
 export default React.memo(CustomButton);

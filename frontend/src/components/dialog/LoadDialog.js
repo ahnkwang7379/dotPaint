@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CustomButton from '../common/CustomButton';
+import Button from '../common/Button';
 import Preview from '../common/Preview';
 import styled from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -139,9 +139,9 @@ const LoadDialog = ({
             placement="top"
             tooltip="Clear all dotArt data from localStorage"
           >
-            <CustomButton width="100" height="30" onClick={clearStorageHandler}>
+            <Button width="100" height="30" onClick={clearStorageHandler}>
               Clear
-            </CustomButton>
+            </Button>
           </ToolTip>
         </ButtonWrapper>
         {loadedData && loadedData.dotArt.length !== 0 ? (
@@ -155,18 +155,18 @@ const LoadDialog = ({
                   <PreviewBlock
                     size="4"
                     backgroundImg={backgroundImg}
-                    columnCount={dotArt.dot.columnCount}
-                    rowCount={dotArt.dot.rowCount}
+                    columnCount={dotArt.columnCount}
+                    rowCount={dotArt.rowCount}
                     key={dotArtIdx}
                   >
                     <Preview
                       dotList={mergeLayersByDotFrameList(
-                        dotArt.dot.dotFrameList,
-                        dotArt.dot.layerData,
+                        dotArt.dotFrameList,
+                        dotArt.layerData,
                       )}
-                      column={dotArt.dot.columnCount}
+                      column={dotArt.columnCount}
                       size="4"
-                      duration={dotArt.dot.animationDuration}
+                      duration={dotArt.animationDuration}
                       key={dotArtIdx}
                       animation={true}
                     />
@@ -198,28 +198,28 @@ const LoadDialog = ({
               <PreviewBlock
                 size="2"
                 backgroundImg={backgroundImg}
-                columnCount={dotFile.dot.columnCount}
-                rowCount={dotFile.dot.rowCount}
+                columnCount={dotFile.columnCount}
+                rowCount={dotFile.rowCount}
               >
                 <Preview
                   dotList={mergeLayersByDotFrameList(
-                    dotFile.dot.dotFrameList,
-                    dotFile.dot.layerData,
+                    dotFile.dotFrameList,
+                    dotFile.layerData,
                   )}
-                  column={dotFile.dot.columnCount}
+                  column={dotFile.columnCount}
                   size="2"
-                  duration={dotFile.dot.animationDuration}
-                  key={dotFile.dot.id}
+                  duration={dotFile.animationDuration}
+                  key={dotFile.id}
                   animation={true}
                 />
               </PreviewBlock>
-              <CustomButton
+              <Button
                 width="100"
                 height="30"
                 onClick={() => ImportDotArtFileHandle(dotFile)}
               >
                 Load
-              </CustomButton>
+              </Button>
             </>
           )}
         </div>
