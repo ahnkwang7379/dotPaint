@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import PaletteIcon from '@material-ui/icons/Palette';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import LockIcon from '@material-ui/icons/Lock';
-import MoodIcon from '@material-ui/icons/Mood';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
@@ -95,9 +94,7 @@ const AuthTemplate = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            OK
-          </Button>
+          <Button onClick={handleClose}>OK</Button>
         </DialogActions>
       </Dialog>
 

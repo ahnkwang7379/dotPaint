@@ -6,10 +6,14 @@ import DotArtViewPage from './DotArtViewPage';
 import LoginPage from './LoignPage';
 import SignUpPage from './SignUpPage';
 import WritePage from './WritePage';
+import { Helmet } from 'react-helmet-async';
 
 const MainPage = () => {
   return (
     <>
+      <Helmet>
+        <title>DOTART</title>
+      </Helmet>
       <Route path={['/', '/@:username']} component={CommunityPage} exact />
       <Route path="/dot" component={DotArtPage} />
       <Route path={'/@:username/:dotArtId'} component={DotArtViewPage} />

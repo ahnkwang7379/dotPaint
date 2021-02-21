@@ -23,6 +23,7 @@ const Wrapper = styled.div`
     font-size: 1.125rem;
     font-weight: 800;
     letter-spacing: 2px;
+    margin-right: 32px;
   }
   .right {
     display: flex;
@@ -44,9 +45,14 @@ const Header = ({ user, onLogout }) => {
     <>
       <HeaderBlock>
         <Wrapper>
-          <Link to="/" className="logo">
-            DOTART
-          </Link>
+          <div>
+            <Link to="/" className="logo">
+              DOTART
+            </Link>
+            <Button>
+              <Link to="/dot">go Editor</Link>
+            </Button>
+          </div>
           {user ? (
             <div className="right">
               <UserInfo>{user.username}</UserInfo>

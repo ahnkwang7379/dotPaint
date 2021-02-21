@@ -19,7 +19,7 @@ export const saveDotArt = ({ dotArtId, title, dotArt, tags }) => {
 };
 
 // DotArt 삭제
-export const deleteDotArt = ({ dotArtId }) =>
+export const deleteDotArt = (dotArtId) =>
   client.delete(`/api/dotArt/${dotArtId}`);
 
 // DotArt 포스트 읽기

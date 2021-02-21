@@ -2,8 +2,10 @@ import React from 'react';
 import Tags from '../common/Tags';
 import styled from 'styled-components';
 import Preview from '../common/Preview';
+import SubInfo from '../common/SubInfo';
 import { Helmet } from 'react-helmet-async';
 import { mergeLayersByDotFrameList } from '../../util/dotArrayUtil';
+import Button from '../common/Button';
 
 const DotArtBlock = styled.div`
   margin-top: 3rem;
@@ -21,12 +23,29 @@ const DotArtBlock = styled.div`
   }
 `;
 
-const PreviewBlock = styled.div`
-  width: 400px;
-  height: 400px;
+const DotArtHead = styled.div`
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+  h1 {
+    font-size: 3rem;
+    line-height: 1.5;
+    margin: 0;
+  }
 `;
 
-const DotArtView = ({ dotArt, error, loading }) => {
+const PreviewBlock = styled.div`
+  width: 500px;
+  height: 500px;
+`;
+
+const DotArtView = ({
+  dotArt,
+  error,
+  loading,
+  onLoadDotArt,
+  actionButtons,
+}) => {
   if (error) {
     if (error.response && error.response.status === 404) {
       return <DotArtBlock>존재하지 않는 포스트입니다.</DotArtBlock>;
@@ -46,7 +65,17 @@ const DotArtView = ({ dotArt, error, loading }) => {
       <Helmet>
         <title>{title} - DOTART</title>
       </Helmet>
-      <h2>{title}</h2>
+      <DotArtHead>
+        <h1>{title}</h1>
+        <SubInfo
+          username={dotArt.user.username}
+          publishedDate={dotArt.createdAt}
+          hasMarginTop
+        />
+        <Tags tags={tags} />
+        <Button onClick={onLoadDotArt}>에디터에서 열기</Button>
+      </DotArtHead>
+      {actionButtons}
       <PreviewBlock>
         <Preview
           dotList={mergeLayersByDotFrameList(
@@ -57,14 +86,13 @@ const DotArtView = ({ dotArt, error, loading }) => {
           column={dotArtData.columnCount}
           animation={true}
           size={
-            400 /
+            500 /
             (dotArtData.columnCount > dotArtData.rowCount
               ? dotArtData.columnCount
               : dotArtData.rowCount)
           }
         />
       </PreviewBlock>
-      <Tags tags={tags} />
     </DotArtBlock>
   );
 };

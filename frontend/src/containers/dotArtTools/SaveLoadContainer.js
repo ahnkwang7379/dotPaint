@@ -25,12 +25,14 @@ const SaveLoadContainer = () => {
     rowCount,
     animationDuration,
     layerData,
+    originalDotArtId,
   } = useSelector(({ dotArt: { present: { dot } } }) => ({
     dotFrameList: dot.dotFrameList,
     columnCount: dot.columnCount,
     rowCount: dot.rowCount,
     animationDuration: dot.animationDuration,
     layerData: dot.layerData,
+    originalDotArtId: dot.originalDotArtId,
   }));
   const { dotBorder, backgroundImg, saveState } = useSelector(
     ({ observer }) => ({
@@ -45,17 +47,19 @@ const SaveLoadContainer = () => {
 
   // first load
   useEffect(() => {
-    let loadedDotArt = getDotArtDataFromStorage(localStorage);
-    let loadedPrivateData = getPrivateSettingFromStorage(localStorage);
-    if (loadedDotArt) {
-      dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current]));
-    } else {
-      initialStorageDotArt(localStorage);
-      loadedDotArt = getDotArtDataFromStorage(localStorage);
-      dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current]));
+    if (!originalDotArtId) {
+      let loadedDotArt = getDotArtDataFromStorage(localStorage);
+      if (loadedDotArt) {
+        dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current]));
+      } else {
+        initialStorageDotArt(localStorage);
+        loadedDotArt = getDotArtDataFromStorage(localStorage);
+        dispatch(loadDotArt(loadedDotArt.dotArt[loadedDotArt.current]));
+      }
     }
 
     // observer는 상관없음
+    let loadedPrivateData = getPrivateSettingFromStorage(localStorage);
     dispatch(loadData(loadedPrivateData));
   }, []);
 

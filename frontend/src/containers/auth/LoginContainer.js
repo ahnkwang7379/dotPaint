@@ -86,7 +86,8 @@ const LoginContainer = ({ history }) => {
       } catch (e) {
         console.log('localStorage is not working!');
       }
-      history.push('/');
+      // history.push('/');
+      history.goBack();
     }
   }, [history, user]);
 

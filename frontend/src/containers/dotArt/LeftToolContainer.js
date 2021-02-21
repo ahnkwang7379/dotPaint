@@ -12,6 +12,7 @@ const LeftToolBox = styled.div`
   left: 0px;
   width: 250px;
   min-width: 250px;
+  margin-left: 8px;
   margin-right: 4px;
   & > * {
     margin-bottom: 16px;

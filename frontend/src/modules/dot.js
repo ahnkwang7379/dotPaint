@@ -47,7 +47,7 @@ export const clearDot = createAction(CLEAR_DOT);
 export const newDotArtProject = createAction(NEW_DOT_ART_PROJECT);
 export const loadDotArt = createAction(
   LOAD_DOT_ART,
-  (loadedData) => loadedData,
+  (loadedData, originalDotArtId) => ({ loadedData, originalDotArtId }),
 );
 export const increaseColumn = createAction(INCREASE_COLUMN);
 export const decreaseColumn = createAction(DECREASE_COLUMN);
@@ -128,6 +128,7 @@ const initialState = {
   layerSelectIdx: 0,
   layerData: [{ layerName: 'Layer 1', dotFrameIdx: 0 }],
   pixelSize: 32,
+  originalDotArtId: '',
 };
 
 const dot = handleActions(
@@ -142,11 +143,12 @@ const dot = handleActions(
     [NEW_DOT_ART_PROJECT]: () => ({
       ...initialState,
     }),
-    [LOAD_DOT_ART]: (state, { payload: loadedData }) => ({
+    [LOAD_DOT_ART]: (state, { payload: { loadedData, originalDotArtId } }) => ({
       ...state,
       activeIdx: 0,
       fakeDotArt: defaultDotMaker(loadedData.rowCount, loadedData.columnCount),
       layerSelectIdx: 0,
+      originalDotArtId: originalDotArtId,
       ...loadedData,
     }),
     [INCREASE_COLUMN]: (state) =>

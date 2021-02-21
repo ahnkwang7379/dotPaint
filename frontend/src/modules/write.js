@@ -23,9 +23,9 @@ const REQUIRED_VALUE_EMPTY_ERROR = 'write/REQUIRED_VALUE_EMPTY_ERROR'; // title,
 const LOAD_DOTART = 'write/LOAD_DOTART';
 const UNLOAD_DOTART = 'write/UNLOAD_DOTART';
 
-export const setOriginalPost = createAction(
+export const setOriginalDotArtPost = createAction(
   SET_ORIGINAL_DOTART_POST,
-  (post) => post,
+  (dotArtPost) => dotArtPost,
 );
 export const initialize = createAction(INITIALIZE);
 export const changeField = createAction(CHANGE_FIELD, ({ key, value }) => ({
@@ -42,7 +42,7 @@ export const writeDotArtPost = createAction(
 );
 export const updateDotArtPost = createAction(
   UPDATE_DOTART_POST,
-  ({ id, title, dotArt, tags }) => ({ id, title, dotArt, tags }),
+  ({ dotArtId, title, dotArt, tags }) => ({ dotArtId, title, dotArt, tags }),
 );
 export const postRequiredValueCheck = createAction(
   REQUIRED_VALUE_EMPTY_ERROR,
@@ -86,13 +86,13 @@ const write = handleActions(
     [WRITE_DOTART_POST]: (state) => ({
       ...state,
       // post와 postError를 초기화
-      post: null,
-      postError: null,
+      dotArtPost: null,
+      dotArtPostError: null,
     }),
     // 포스트 작성 성공
-    [WRITE_DOTART_POST_SUCCESS]: (state, { payload: dotArt }) => ({
+    [WRITE_DOTART_POST_SUCCESS]: (state, { payload: dotArtPost }) => ({
       ...state,
-      dotArt,
+      dotArtPost,
     }),
     // 포스트 작성 실패
     [WRITE_DOTART_POST_FAILURE]: (state, { payload: dotArtPostError }) => ({
@@ -106,9 +106,9 @@ const write = handleActions(
       tags: dotArtPost.tags,
       originalDotArtPostId: dotArtPost._id,
     }),
-    [UPDATE_DOTART_POST_SUCCESS]: (state, { payload: dotArt }) => ({
+    [UPDATE_DOTART_POST_SUCCESS]: (state, { payload: dotArtPost }) => ({
       ...state,
-      dotArt,
+      dotArtPost,
     }),
     [UPDATE_DOTART_POST_FAILURE]: (state, { payload: dotArtPostError }) => ({
       ...state,
@@ -123,13 +123,6 @@ const write = handleActions(
     }),
     [LOAD_DOTART]: (state, { payload: dotArt }) => ({
       ...state,
-      // dotArt: {
-      //   ...dotArt,
-      //   dotFrameList: mergeLayersByDotFrameList(
-      //     dotArt.dotFrameList,
-      //     dotArt.layerData,
-      //   ),
-      // },
       dotArt: dotArt,
     }),
     [UNLOAD_DOTART]: (state) => ({ ...state, dotArt: '' }),
