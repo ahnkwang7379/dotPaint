@@ -91,7 +91,7 @@ export const createDotArt = async (ctx) => {
 };
 
 /*
-  GET /api/dotArt
+  GET /api/dotArt?username=&tag=&page=
 */
 export const getDotArtsList = async (ctx) => {
   const page = parseInt(ctx.query.page || '1', 10);

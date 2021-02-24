@@ -49,7 +49,7 @@ const AddPaletteBlock = styled.div`
 `;
 
 const ColorPickerBox = styled.div`
-  width: 240px;
+  width: 225px;
   height: 310px;
   padding: 4px;
   border: 4px solid #a69e94;

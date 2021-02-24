@@ -67,11 +67,7 @@ const DotArtItem = ({ dotArtData }) => {
       <h1>
         <Link to={`/@${user.username}/${_id}`}>{title}</Link>
       </h1>
-      <SubInfo
-        username={user.username}
-        publishedDate={createdAt}
-        hasMarginTop
-      />
+      <SubInfo username={user.username} publishedDate={createdAt} />
       <PreviewBlock>
         <Preview
           dotList={mergeLayersByDotFrameList(

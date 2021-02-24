@@ -13,10 +13,7 @@ import { tempSetUser, check } from './modules/user';
 import { HelmetProvider } from 'react-helmet-async';
 
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware)),
-);
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 
 function loadUser() {
   try {

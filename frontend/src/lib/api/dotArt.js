@@ -2,8 +2,8 @@ import qs from 'qs';
 import client from './client';
 
 // 도트 리스트 들고오기
-export const getDotArtsList = ({ tag, page }) => {
-  const queryString = qs.stringify({ tag, page });
+export const getDotArtsList = ({ page, username, tag }) => {
+  const queryString = qs.stringify({ page, username, tag });
   return client.get(`/api/dotArt?${queryString}`);
 };
 

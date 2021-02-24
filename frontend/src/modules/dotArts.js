@@ -17,10 +17,14 @@ const [
 ] = createRequestActionTypes('dotArts/READ_DOTART');
 const UNLOAD_DOTART = 'dotArts/UNLOAD_DOTART';
 
-export const listDotArts = createAction(LIST_DOTARTS, ({ tag, page }) => ({
-  tag,
-  page,
-}));
+export const listDotArts = createAction(
+  LIST_DOTARTS,
+  ({ tag, username, page }) => ({
+    tag,
+    username,
+    page,
+  }),
+);
 export const readDotArt = createAction(READ_DOTART, (id) => id);
 export const unloadDotArt = createAction(UNLOAD_DOTART);
 

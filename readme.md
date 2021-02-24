@@ -11,7 +11,7 @@
 CSS의 box-shadow를 이용해 도트 그림을 표현할 수 있습니다.
 또한 여러 프레임을 CSS animation과 keyframes를 이용하여 하나의 애니메이션으로 만들 수 있죠.
 
-귀여운 젤리가 그려진 데모 사이트 [직접 해보러 가기](https://ahnkwang7379.github.io/dotArt/) :pencil2:
+귀여운 젤리가 그려진 데모 사이트 [직접 해보러 가기](https://academic-diode-305303.du.r.appspot.com/dot) :pencil2:
 
 <p align="center"> 
   <img src="./frontend/screenshots/dotArt.png" width="600px"/> 
@@ -48,16 +48,15 @@ merge시 선택한 layer와 그 아래 layer를 합치게 되며, 선택한 laye
 
 ## Palette
 
-<p>
-  <img src="./frontend/screenshots/palette.gif" width="200px"/>
-  <img src="./frontend/screenshots/privatePalette.png" width="600px"/>
-</p>
+<img src="./frontend/screenshots/palette.gif" width="200px"/>
 
 한 라인에 최대 7개까지 색이 지정 가능하며 키보드 위 아래 방향키를 이용해 라인을 이동할 수 있습니다.
 
 키보드 위쪽 숫자 키패드 1 ~ 7까지 단축키가 지정되어 각 라인별 색상을 바로바로 사용 가능합니다.
 
 localStorage를 이용하여 사용자 정의 팔레트를 만들고 저장할 수 있습니다.
+
+<img src="./frontend/screenshots/paletteEdit.gif" width="600px"/>
 
 ---
 
@@ -86,6 +85,7 @@ frame list의 하단 숫자를 바꾸는 것으로 각 frame이 애니메이션�
 localStorage에 세이브 / 로드가 가능합니다.
 
 ### 완성된 작업물 다운로드
+
 <p>
   <img src="./frontend/screenshots/jelly.png" width="60px"/>
   <img src="./frontend/screenshots/jellyppi.gif" width="60px"/>
@@ -101,6 +101,7 @@ localStorage에 세이브 / 로드가 가능합니다.
 웹에서 사용 가능한 CSS 코드도 지원합니다. 복사 후 html 요소에 class 이름으로 .dotArt-to-css를 붙여주면 됩니다.
 
 ### JSON file 다운로드
+
 [예시 보러가기](https://github.com/ahnkwang7379/dotArt/blob/master/frontend/screenshots/jellyppi.dotart)
 
 자신의 dotArt를 JSON 형식으로 다운로드 받을 수 있으며 (.dotart 파일로 다운로드 됩니다) 다른 곳에서 import해 작업을 이어나갈 수 있습니다.
@@ -113,8 +114,18 @@ localStorage에 세이브 / 로드가 가능합니다.
 
 [redux](http://redux.js.org/) : 넓은 범위에서 쓰이는 state를 편하게 관리하기 위해 적용
 
-[redux-actions](https://redux-actions.js.org/) : redux의 action을 더 간단하게 만들었습니다.
+[redux-saga](https://redux-saga.js.org/) : redux 상태관리 중 비동기 api요청을 관리하고 다시 state에 적용하기 위한 미들웨어
 
-[style-components](https://styled-components.com/) : CSS IN JS 라이브러리
+[axios](https://github.com/axios/axios) : node.js와 비동기 api통신을 하기 위한 라이브러리. 로그인 / 로그아웃과 도트 공유 등의 기능을 위해 서버와 통신하는데 이용
 
-[immer](https://immerjs.github.io/immer/docs/introduction) : 불변성 + 코드 가독성을 위해 적용
+[style-components](https://styled-components.com/) : CSS IN JS 라이브러리. 대부분의 컴포넌트를 구성하는데 이용하였습니다.
+
+[material-ui](https://material-ui.com/) : material 디자인 프레임워크. input, modal, slider 등 일부분 사용했습니다.
+
+[immer](https://immerjs.github.io/immer/docs/introduction) : 불변성 + 코드 가독성을 위해 적용. 퍼포먼스가 필요한 부분에는 사용하지 않음
+
+[node.js](https://nodejs.org/ko/) : 자바스크립트 런타임
+
+[koa](https://www.npmjs.com/package/koa) : node.js 프레임워크 중 koa를 채택
+
+[google cloud](https://cloud.google.com/gcp) : 간편한 초기 설정과 배포로 빠르게 적용 가능한 구글 클라우드를 사용했습니다.
