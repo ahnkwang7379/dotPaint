@@ -61,6 +61,23 @@ const DotPaintBlock = styled.div`
   }
 `;
 
+const DotLines = React.memo(
+  ({ rowCount, onMouseDownHandler, onMouseOverHandler }) => {
+    let dotLineArr = [];
+    for (let i = 0; i < rowCount; i++) {
+      dotLineArr.push(
+        <DotPaintLine
+          key={i}
+          dotLineIdx={i}
+          onMouseDownHandler={onMouseDownHandler}
+          onMouseOverHandler={onMouseOverHandler}
+        />,
+      );
+    }
+    return dotLineArr;
+  },
+);
+
 const DotPaint = ({
   border,
   dotSize,
@@ -90,21 +107,6 @@ const DotPaint = ({
     [onDotActionHandle],
   );
 
-  const dotLineMaker = useCallback(() => {
-    let dotLineArr = [];
-    for (let i = 0; i < rowCount; i++) {
-      dotLineArr.push(
-        <DotPaintLine
-          key={i}
-          dotLineIdx={i}
-          onMouseDownHandler={onMouseDownHandler}
-          onMouseOverHandler={onMouseOverHandler}
-        />,
-      );
-    }
-    return dotLineArr;
-  }, [rowCount, onMouseDownHandler, onMouseOverHandler]);
-
   return (
     <DotPaintWrapper
       onWheel={(e) => onWheelHandle(e)}
@@ -127,7 +129,11 @@ const DotPaint = ({
           onContextMenu={(e) => e.preventDefault()}
         >
           <DotLayerContainer />
-          {dotLineMaker()}
+          <DotLines
+            rowCount={rowCount}
+            onMouseDownHandler={onMouseDownHandler}
+            onMouseOverHandler={onMouseOverHandler}
+          />
         </DotPaintBlock>
       </DotPaintBox>
     </DotPaintWrapper>

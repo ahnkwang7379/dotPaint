@@ -128,4 +128,6 @@ localStorage에 세이브 / 로드가 가능합니다.
 
 [koa](https://www.npmjs.com/package/koa) : node.js 프레임워크 중 koa를 채택
 
+[mongoDB](https://www.mongodb.com/) : mongoDB Altas를 이용해 계정과 도트게시판 데이터를 저장 중입니다.
+
 [google cloud](https://cloud.google.com/gcp) : 간편한 초기 설정과 배포로 빠르게 적용 가능한 구글 클라우드를 사용했습니다.
