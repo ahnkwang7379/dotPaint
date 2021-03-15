@@ -34,7 +34,8 @@ const DotpaintContainer = () => {
   );
 
   const onDotActionHandle = useCallback(
-    (rowIdx, columnIdx) => dispatch(dotActions({ rowIdx, columnIdx })),
+    (rowIdx, columnIdx, altDown) =>
+      dispatch(dotActions({ rowIdx, columnIdx, altDown })),
     [dispatch],
   );
 

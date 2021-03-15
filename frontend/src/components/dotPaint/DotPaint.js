@@ -102,7 +102,7 @@ const DotPaint = ({
   const onMouseOverHandler = useCallback(
     (e, rowIdx, columnIdx) => {
       e.preventDefault();
-      onDotActionHandle(rowIdx, columnIdx);
+      onDotActionHandle(rowIdx, columnIdx, e.altKey);
     },
     [onDotActionHandle],
   );

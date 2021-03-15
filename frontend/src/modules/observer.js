@@ -7,8 +7,6 @@ const CHANGE_DOT_BORDER_COLOR = 'observer/CHANGE_DOT_BORDER_COLOR';
 const INCREASE_DOT_SIZE = 'observer/INCREASE_DOT_SIZE';
 const DECREASE_DOT_SIZE = 'observer/DECREASE_DOT_SIZE';
 const CHANGE_DOT_SIZE = 'observer/CHANGE_DOT_SIZE';
-const ALT_DOWN = 'observer/ALT_DOWN';
-const SHIFT_DOWN = 'observer/SHIFT_DOWN';
 const LOAD_DATA = 'observer/LOAD_DATA';
 const CHANGE_SHOW_LAYERS = 'observer/CHANGE_SHOW_LAYERS';
 const CHANGE_BACKGROUND_IMG = 'observer/CHANGE_BACKGROUND_IMG';
@@ -34,8 +32,6 @@ export const changeDotSize = createAction(
   CHANGE_DOT_SIZE,
   (dotSize) => dotSize,
 );
-export const altDown = createAction(ALT_DOWN, (bool) => bool);
-export const shiftDown = createAction(SHIFT_DOWN, (bool) => bool);
 export const loadData = createAction(LOAD_DATA, (observerData) => observerData);
 export const changeShowLayers = createAction(CHANGE_SHOW_LAYERS);
 export const changeBackgroundImg = createAction(
@@ -53,8 +49,6 @@ const initialState = {
   showLayers: true,
   backgroundImg: 1,
   saveState: false,
-  altDown: false,
-  shiftDown: false,
 };
 
 const observer = handleActions(
@@ -92,14 +86,6 @@ const observer = handleActions(
     [CHANGE_DOT_SIZE]: (state, { payload: dotSize }) => ({
       ...state,
       dotSize: dotSize,
-    }),
-    [ALT_DOWN]: (state, { payload: bool }) => ({
-      ...state,
-      altDown: bool,
-    }),
-    [SHIFT_DOWN]: (state, { payload: bool }) => ({
-      ...state,
-      shiftDown: bool,
     }),
     [LOAD_DATA]: (state, { payload: observerData }) => ({
       ...state,

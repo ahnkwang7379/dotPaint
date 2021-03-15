@@ -154,6 +154,7 @@ export const dotActionsHandler = (
   direction,
   rowIdx,
   columnIdx,
+  altDown,
 ) => {
   // selectedPaintTool -> PaintToolState -> rowIdx, columnIdx 체크 순
   if (paintToolState === 'IDLE' || paintToolState !== 'DRAGGING')
@@ -308,7 +309,7 @@ export const dotActionsHandler = (
 
         // 테두리를 넘어간 부분을 반대편에서 나오게 해줌
         // y축 범위를 먼저 좁혀주고 X축 계산 후 y축에 빈 배열을 추가해주는 방식
-        if (state.observer.altDown) {
+        if (altDown) {
           if (diffY > 0) {
             removedDiffY = returnDotArt.slice(returnDotArt.length - diffY);
             returnDotArt = removedDiffY.concat(

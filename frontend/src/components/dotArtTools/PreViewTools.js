@@ -143,56 +143,53 @@ const PreViewTools = ({
       const overTop = paintBox.offsetTop === parentNode.offsetTop;
       const overLeft = paintBox.offsetLeft === childNode.offsetLeft;
 
-      if (overTop || overLeft) {
-        viewBox.style.display = 'block';
-
-        if (overTop) {
-          viewBox.style.top = `${
-            (paintBox.scrollTop / paintBox.scrollHeight) *
-            previewBlock.clientHeight
-          }px`;
-          viewBox.style.height = `${
-            (paintBox.clientHeight / paintBox.scrollHeight) *
-            previewBlock.clientHeight
-          }px`;
-        } else {
-          let viewBoxHeight = Math.min(
-            (parentNode.clientHeight / paintBox.clientHeight) *
-              previewBlock.clientHeight,
-            200,
-          );
-
-          viewBox.style.height = `${viewBoxHeight}px`;
-          viewBox.style.top = `-${
-            (viewBoxHeight - previewBlock.clientHeight) / 2
-          }px`;
-        }
-
-        if (overLeft) {
-          viewBox.style.left = `${
-            (paintBox.scrollLeft / paintBox.scrollWidth) *
-            previewBlock.clientWidth
-          }px`;
-          viewBox.style.width = `${
-            (paintBox.clientWidth / paintBox.scrollWidth) *
-            previewBlock.clientWidth
-          }px`;
-        } else {
-          let viewBoxWidth = Math.min(
-            (paintBox.clientWidth / childNode.clientWidth) *
-              previewBlock.clientWidth,
-            200,
-          );
-
-          viewBox.style.width = `${viewBoxWidth}px`;
-          viewBox.style.left = `-${
-            (viewBoxWidth - previewBlock.clientWidth) / 2
-          }px`;
-        }
-      } else {
-        // viewBox가 표시 될 필요 없을 때
+      if (!overTop && !overLeft) {
         viewBox.style.display = 'none';
+        return;
       }
+
+      viewBox.style.display = 'block';
+
+      let left,
+        top = 0;
+      let height,
+        width = 0;
+
+      if (overTop) {
+        top =
+          (paintBox.scrollTop / paintBox.scrollHeight) *
+          previewBlock.clientHeight;
+        height =
+          (paintBox.clientHeight / paintBox.scrollHeight) *
+          previewBlock.clientHeight;
+      } else {
+        height = Math.min(
+          (parentNode.clientHeight / paintBox.clientHeight) *
+            previewBlock.clientHeight,
+          200,
+        );
+        top = -((height - previewBlock.clientHeight) / 2);
+      }
+
+      if (overLeft) {
+        left =
+          (paintBox.scrollLeft / paintBox.scrollWidth) *
+          previewBlock.clientWidth;
+        width =
+          (paintBox.clientWidth / paintBox.scrollWidth) *
+          previewBlock.clientWidth;
+      } else {
+        width = Math.min(
+          (paintBox.clientWidth / childNode.clientWidth) *
+            previewBlock.clientWidth,
+          200,
+        );
+        left = -((width - previewBlock.clientWidth) / 2);
+      }
+
+      viewBox.style.width = `${width}px`;
+      viewBox.style.height = `${height}px`;
+      viewBox.style.transform = `translate(${left}px, ${top}px)`;
     };
 
     let isClick = false;

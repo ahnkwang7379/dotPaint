@@ -22,8 +22,7 @@ const LayerControlContainer = () => {
       layerData: dotArt.present.dot.layerData,
     }),
   );
-  const { shiftDown, showLayers } = useSelector(({ observer }) => ({
-    shiftDown: observer.shiftDown,
+  const { showLayers } = useSelector(({ observer }) => ({
     showLayers: observer.showLayers,
   }));
 
@@ -86,7 +85,6 @@ const LayerControlContainer = () => {
       layerList={layerList}
       layerSelectIdx={layerSelectIdx}
       layerData={layerData}
-      shiftDown={shiftDown}
       showLayers={showLayers}
       addNewLayerHandle={addNewLayerHandle}
       removeLayerHandle={removeLayerHandle}

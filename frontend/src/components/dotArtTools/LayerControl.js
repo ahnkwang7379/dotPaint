@@ -129,7 +129,6 @@ const LayerNameInput = styled.input`
 const LayerControl = ({
   layerSelectIdx,
   layerData,
-  shiftDown,
   showLayers,
   addNewLayerHandle,
   removeLayerHandle,
@@ -149,16 +148,16 @@ const LayerControl = ({
     setName(layerData[layerSelectIdx].layerName);
   }, [layerSelectIdx, layerData]);
 
-  const onClickAddNewLayer = () => {
-    addNewLayerHandle(shiftDown);
+  const onClickAddNewLayer = (e) => {
+    addNewLayerHandle(e.shiftKey);
   };
 
-  const onClickMoveUp = () => {
-    moveUpHandle(shiftDown);
+  const onClickMoveUp = (e) => {
+    moveUpHandle(e.shiftKey);
   };
 
-  const onClickMoveDown = () => {
-    moveDownHandle(shiftDown);
+  const onClickMoveDown = (e) => {
+    moveDownHandle(e.shiftKey);
   };
 
   const onClickReName = () => {

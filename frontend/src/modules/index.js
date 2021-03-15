@@ -25,9 +25,10 @@ const CLEAR_FAKE_DOT_ART = 'index/CLEAR_FAKE_DOT_ART';
 
 export const dotActions = createAction(
   DOT_ACTIONS,
-  ({ rowIdx, columnIdx }) => ({
+  ({ rowIdx, columnIdx, altDown }) => ({
     rowIdx,
     columnIdx,
+    altDown,
   }),
 );
 // redo, undo 이후 fackDotArt에 남아있는 데이터를 지워주기 위한 액션
@@ -58,7 +59,7 @@ const combineReducer = combineReducers({
 
 const crossSilceReducer = (state, action) => {
   if (action.type === DOT_ACTIONS) {
-    const { columnIdx, rowIdx } = action.payload;
+    const { columnIdx, rowIdx, altDown } = action.payload;
     let newState = {
       ...state,
       observer: {
@@ -79,6 +80,7 @@ const crossSilceReducer = (state, action) => {
       state.paintTool.direction,
       rowIdx,
       columnIdx,
+      altDown,
     );
   }
   if (
